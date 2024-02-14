@@ -18,6 +18,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _pickup = false;
 
+  var pickupFrom ="";
+
   final TextEditingController _appointmentDate = TextEditingController();
   final TextEditingController _noOfRooms = TextEditingController();
   final TextEditingController _noOfPeople = TextEditingController();
@@ -39,16 +41,17 @@ class _AppointmentPageState extends State<AppointmentPage> {
         "phone": _registeredPhone.text,
         "appointmentDate": _appointmentDate.text,
         "num_of_people": numOfPeople,
-        "pickup": _pickup,
+        "pickup": _pickup ,
         "room": _noOfRooms.text,
-        "from": _pickupPoint.text,
+        "from": pickupFrom.isEmpty ? "No Data":pickupFrom,
         "emergencyNumber": _emergencyContact.text,
         "appointment_time": "${time.hour}:${time.minute}",
         "appointment_reason": _reason.text,
         "register_date": "${date.day}-${date.month}-${date.year}"
       };
       prefsSet("phone",_registeredPhone.text);
-      postAppointment(context, data);
+     await postAppointment(context, data);
+
     }
   }
 
@@ -120,7 +123,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       "Registered Phone",
                       style: TextStyle(color: textBoxBorder),
                     ),
-                    hintStyle: TextStyle(
+                    labelStyle: TextStyle(
                       color: textBoxBorder,
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
@@ -170,7 +173,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                               firstDate: DateTime.now(),
                               dateFormat: "dd-MM-yyyy",
                               locale: DateTimePickerLocale.en_us,
-                              backgroundColor: Colors.red
                             );
                             if (datePicked != null) {
                               var date = DateFormat('dd-MM-yyyy').format(datePicked);
@@ -188,7 +190,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           style: TextStyle(color: textBoxBorder),
                         ),
                         hintText: ddMmYyyy,
-                        hintStyle: TextStyle(
+                        labelStyle: TextStyle(
                           color: textBoxBorder,
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
@@ -225,7 +227,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                 "No. of people",
                                 style: TextStyle(color: textBoxBorder),
                               ),
-                              hintStyle: TextStyle(
+                              labelStyle: TextStyle(
                                 color: textBoxBorder,
                                 fontSize: 16,
                                 fontWeight: FontWeight.normal,
@@ -273,7 +275,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                                 "No. of rooms",
                                 style: TextStyle(color: textBoxBorder),
                               ),
-                              hintStyle: TextStyle(
+                              labelStyle: TextStyle(
                                 color: textBoxBorder,
                                 fontSize: 16,
                                 fontWeight: FontWeight.normal,
@@ -313,6 +315,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Checkbox(
+                          // fillColor: MaterialStatePropertyAll(textBoxBorder),
+                          activeColor: textBoxBorder,
                             value: _pickup,
                             onChanged: (val) {
                               setState(() {
@@ -328,7 +332,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         decoration: InputDecoration(
                           label: Text("Pickup Point",
                               style: TextStyle(color: textBoxBorder)),
-                          hintStyle: TextStyle(
+                          labelStyle: TextStyle(
                               color: textBoxBorder,
                               fontSize: 16,
                               fontWeight: FontWeight.normal),
@@ -346,6 +350,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             borderSide: BorderSide(color: textBoxBorder),
                           ),
                         ),
+                        onChanged: (val){
+                          pickupFrom = val;
+                        },
                       ),
                     if (_pickup == true) spaceBetween,
                     if (_pickup == true)
@@ -355,7 +362,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         decoration: InputDecoration(
                           label: Text("Destination",
                               style: TextStyle(color: textBoxBorder)),
-                          hintStyle: TextStyle(
+                          labelStyle: TextStyle(
                               color: textBoxBorder,
                               fontSize: 16,
                               fontWeight: FontWeight.normal),
@@ -382,7 +389,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       decoration: InputDecoration(
                         label: Text("Emergency Contact",
                             style: TextStyle(color: textBoxBorder)),
-                        hintStyle: TextStyle(
+                        labelStyle: TextStyle(
                             color: textBoxBorder,
                             fontSize: 16,
                             fontWeight: FontWeight.normal),
@@ -400,16 +407,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           borderSide: BorderSide(color: textBoxBorder),
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Phone number is required';
-                        }
-                        if (value.length < 7) {
-                          return 'Phone number must be grater than 7 digits';
-                        }
-                        // You can add more specific phone number validation logic if needed
-                        return null; // Return null if validation succeeds
-                      },
                     ),
                     spaceBetween,
                     TextFormField(
@@ -422,7 +419,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           "Reason",
                           style: TextStyle(color: textBoxBorder),
                         ),
-                        hintStyle: TextStyle(
+                        labelStyle: TextStyle(
                           color: textBoxBorder,
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
