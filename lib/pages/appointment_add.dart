@@ -1,19 +1,33 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_holo_date_picker/date_picker.dart';
 import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import '../constant/constant.dart'; // Assuming this file contains the 'appTheam' constant
+import 'package:shared_preferences/shared_preferences.dart';
+import '../constant/appointment_constant.dart'; // Assuming this file contains the 'appTheam' constant
 import 'package:flutter/material.dart';
 import '../services/appointment_api.dart';
 
+
 class AppointmentPage extends StatefulWidget {
   const AppointmentPage({Key? key}) : super(key: key);
-
   @override
   State<AppointmentPage> createState() => _AppointmentPageState();
 }
 
 class _AppointmentPageState extends State<AppointmentPage> {
+  void initState() {
+    super.initState();
+    fetchDta();
+  }
+
+  Future<void> fetchDta() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    phone = prefs.getString("phone")!;
+    fetchAppointments(phone);
+  }
+
+  String phone = "";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _pickup = false;
@@ -21,14 +35,14 @@ class _AppointmentPageState extends State<AppointmentPage> {
   var pickupFrom ="";
 
   final TextEditingController _appointmentDate = TextEditingController();
-  final TextEditingController _noOfRooms = TextEditingController();
+  final TextEditingController _noOfDays = TextEditingController();
   final TextEditingController _noOfPeople = TextEditingController();
   final TextEditingController _pickupPoint = TextEditingController();
-  final TextEditingController _destination =
+   TextEditingController _destination =
       TextEditingController(text: "Asramam");
-  final TextEditingController _emergencyContact = TextEditingController();
-  final TextEditingController _reason = TextEditingController();
-  final TextEditingController _registeredPhone = TextEditingController();
+   TextEditingController _emergencyContact = TextEditingController();
+   TextEditingController _reason = TextEditingController();
+   TextEditingController _registeredPhone = TextEditingController();
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -38,18 +52,17 @@ class _AppointmentPageState extends State<AppointmentPage> {
       int? numOfPeople = int.tryParse(_noOfPeople.text);
       print("${time.hour}:${time.minute}");
       Map<String, dynamic> data = {
-        "phone": _registeredPhone.text,
+        "phone": phone,
         "appointmentDate": _appointmentDate.text,
         "num_of_people": numOfPeople,
         "pickup": _pickup ,
-        "room": _noOfRooms.text,
+        "room": _noOfDays.text,
         "from": pickupFrom.isEmpty ? "No Data":pickupFrom,
         "emergencyNumber": _emergencyContact.text,
         "appointment_time": "${time.hour}:${time.minute}",
         "appointment_reason": _reason.text,
         "register_date": "${date.day}-${date.month}-${date.year}"
       };
-      prefsSet("phone",_registeredPhone.text);
      await postAppointment(context, data);
 
     }
@@ -57,7 +70,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
   void clearTextControllers() {
     _appointmentDate.clear();
-    _noOfRooms.clear();
+    _noOfDays.clear();
     _noOfPeople.clear();
     _pickupPoint.clear();
     _emergencyContact.clear();
@@ -77,8 +90,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
     int maxCharacters = 100; // Maximum characters allowed
     int digitLimit = 2; // Maximum characters allowed
 
-    const spaceBetween = SizedBox(
-      height: 16,
+     spaceBetween = SizedBox(
+      height: 16.h,
     );
     return SafeArea(
       child: Scaffold(
@@ -93,16 +106,16 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 Icons.arrow_back,
                 color: pageBackground,
               )),
-          backgroundColor: textBoxBorder,
+          backgroundColor: appbar,
           title: Text(
             bookAppointment,
             style: TextStyle(color: pageBackground),
           ),
-          centerTitle: true,
+          // centerTitle: true,
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+            padding:  EdgeInsets.fromLTRB(10.sp, 15.sp, 10.sp, 10.sp),
             child: Form(
               key: _formKey,
               child:  Container(
@@ -111,51 +124,19 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     spaceBetween,
-                  TextFormField(
-                  controller: _registeredPhone,
-                  keyboardType: TextInputType.phone,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly, // Allow only digits
-                    LengthLimitingTextInputFormatter(10), // Limit length to 10 digits
-                  ],
-                  decoration: InputDecoration(
-                    label: Text(
-                      "Registered Phone",
-                      style: TextStyle(color: textBoxBorder),
-                    ),
-                    labelStyle: TextStyle(
-                      color: textBoxBorder,
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                    ),
-                    suffix: InkWell(
-                      onTap: () {
-                        _registeredPhone.clear();
-                      },
-                      child: Icon(Icons.highlight_off_outlined),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide: BorderSide(color: textBoxBorder),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide: BorderSide(color: textBoxBorder),
-                    ),
-                  ),
-                ),
-
                   spaceBetween,
                     TextFormField(
+                      style: TextStyle(color: inputText),
                       onTap: () async {
                         var datePicked = await DatePicker.showSimpleDatePicker(
                           context,
                           firstDate: DateTime.now(),
-                          dateFormat: "dd-MM-yyyy",
+                          dateFormat: "dd/MM/yyyy",
                           locale: DateTimePickerLocale.en_us,
+                          lastDate:DateTime(DateTime.now().year, 12, 31),
                         );
                         if (datePicked != null) {
-                          var date = DateFormat('dd-MM-yyyy').format(datePicked);
+                          var date = DateFormat('dd/MM/yyyy').format(datePicked);
                           _appointmentDate.text = date;
                           setState(() {});
                         }
@@ -163,7 +144,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       controller: _appointmentDate,
                       readOnly: true,
                       keyboardType: TextInputType.datetime,
-                      cursorColor: textBoxBorder,
+                      cursorColor: textFieldOutline,
                       inputFormatters: [DateTextFormatter()],
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
@@ -171,37 +152,39 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             var datePicked = await DatePicker.showSimpleDatePicker(
                               context,
                               firstDate: DateTime.now(),
-                              dateFormat: "dd-MM-yyyy",
+                              dateFormat: "dd/MM/yyyy",
                               locale: DateTimePickerLocale.en_us,
+                              lastDate:DateTime(DateTime.now().year, 12, 31),
                             );
                             if (datePicked != null) {
-                              var date = DateFormat('dd-MM-yyyy').format(datePicked);
+                              var date = DateFormat('dd/MM/yyyy').format(datePicked);
                               _appointmentDate.text = date;
                               setState(() {});
                             }
                           },
                           icon: Icon(
-                            Icons.calendar_month,
-                            size: 20,
+                            Icons.calendar_month,color: iconColor,
+                            size: 20.sp,
                           ),
                         ),
                         label: Text(
                           appointmentDate,
-                          style: TextStyle(color: textBoxBorder),
+                          style: TextStyle(color: placeHolder),
                         ),
                         hintText: ddMmYyyy,
                         labelStyle: TextStyle(
-                          color: textBoxBorder,
-                          fontSize: 16,
+                          color: placeHolder,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.normal,
+
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: textBoxBorder),
+                          borderSide: BorderSide(color: textFieldOutline),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: textBoxBorder),
+                          borderSide: BorderSide(color: onSelectTextFieldOutline),
                         ),
                       ),
                       validator: (value) {
@@ -217,6 +200,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                       children: [
                         Flexible(
                           child: TextFormField(
+                            style: TextStyle(color: inputText),
                             controller: _noOfPeople,
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(digitLimit),
@@ -224,32 +208,32 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               label: Text(
-                                "No. of people",
-                                style: TextStyle(color: textBoxBorder),
+                                noOfPeople,
+                                style: TextStyle(color: placeHolder),
                               ),
                               labelStyle: TextStyle(
-                                color: textBoxBorder,
-                                fontSize: 16,
+                                color: textFieldOutline,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.normal,
                               ),
                               suffix: InkWell(
                                 onTap: () {
                                   _noOfPeople.clear();
                                 },
-                                child: Icon(Icons.highlight_off_outlined),
+                                child: Icon(Icons.highlight_off_outlined,color: iconColor,),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: textBoxBorder),
+                                borderSide: BorderSide(color: textFieldOutline),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: textBoxBorder),
+                                borderSide: BorderSide(color: onSelectTextFieldOutline),
                               ),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Number of people required';
+                                return 'No. of people required';
                               }
                               // Validate if the entered value is a valid integer
                               final intValue = int.tryParse(value);
@@ -261,43 +245,44 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           ),
                         ),
                         SizedBox(
-                          width: 16,
+                          width: 16.w,
                         ),
                         Flexible(
                           child: TextFormField(
-                            controller: _noOfRooms,
+                            style: TextStyle(color: inputText),
+                            controller: _noOfDays,
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(digitLimit),
                             ],
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               label: Text(
-                                "No. of rooms",
-                                style: TextStyle(color: textBoxBorder),
+                                noOfDays,
+                                style: TextStyle(color: placeHolder),
                               ),
                               labelStyle: TextStyle(
-                                color: textBoxBorder,
+                                color: textFieldOutline,
                                 fontSize: 16,
                                 fontWeight: FontWeight.normal,
                               ),
                               suffix: InkWell(
                                 onTap: () {
-                                  _noOfRooms.clear();
+                                  _noOfDays.clear();
                                 },
-                                child: Icon(Icons.highlight_off_outlined),
+                                child: Icon(Icons.highlight_off_outlined,color: iconColor,),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: textBoxBorder),
+                                borderSide: BorderSide(color: textFieldOutline),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: textBoxBorder),
+                                borderSide: BorderSide(color: onSelectTextFieldOutline),
                               ),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'number of rooms required';
+                                return 'No. of days required';
                               }
                               // Validate if the entered value is a valid integer
                               final intValue = int.tryParse(value);
@@ -312,44 +297,50 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     ),
 
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Checkbox(
-                          // fillColor: MaterialStatePropertyAll(textBoxBorder),
-                          activeColor: textBoxBorder,
+                          side:  BorderSide(color:textFieldOutline,width: 2),
+                          activeColor: textFieldOutline,
                             value: _pickup,
                             onChanged: (val) {
                               setState(() {
                                 _pickup = !_pickup;
                               });
                             }),
-                        Text("Pick Up ?")
+                        const Text(pickupCheckbox)
                       ],
                     ),
                     if (_pickup == true)
-                      TextField(
+                      TextFormField(
+                        style: TextStyle(color: inputText),
                         controller: _pickupPoint,
                         decoration: InputDecoration(
-                          label: Text("Pickup Point",
-                              style: TextStyle(color: textBoxBorder)),
+                          label: Text(pickUpPoint,),
                           labelStyle: TextStyle(
-                              color: textBoxBorder,
-                              fontSize: 16,
+                              color: placeHolder,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.normal),
                           suffix: InkWell(
                               onTap: () {
                                 _pickupPoint.clear();
                               },
-                              child: Icon(Icons.highlight_off_outlined)),
+                              child: Icon(Icons.highlight_off_outlined,color: iconColor,)),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: textBoxBorder),
+                            borderSide: BorderSide(color: textFieldOutline),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: textBoxBorder),
+                            borderSide: BorderSide(color: onSelectTextFieldOutline),
                           ),
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a Valid Pickup Point';
+                          }
+                          return null;
+                        },
                         onChanged: (val){
                           pickupFrom = val;
                         },
@@ -357,14 +348,15 @@ class _AppointmentPageState extends State<AppointmentPage> {
                     if (_pickup == true) spaceBetween,
                     if (_pickup == true)
                       TextField(
+                        style: TextStyle(color: inputText),
                         controller: _destination,
                         readOnly: true,
                         decoration: InputDecoration(
-                          label: Text("Destination",
-                              style: TextStyle(color: textBoxBorder)),
+                          label: Text(destination,
+                             ),
                           labelStyle: TextStyle(
-                              color: textBoxBorder,
-                              fontSize: 16,
+                              color: placeHolder,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.normal),
                           // suffix: InkWell(
                           //     onTap: () {
@@ -373,54 +365,68 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           //     child: Icon(Icons.highlight_off_outlined)),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: textBoxBorder),
+                            borderSide: BorderSide(color: textFieldOutline),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: textBoxBorder),
+                            borderSide: BorderSide(color: onSelectTextFieldOutline),
                           ),
                         ),
                       ),
                     if (_pickup == true)
                       spaceBetween,
                     TextFormField(
+                      style: TextStyle(color: inputText),
                       controller: _emergencyContact,
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
-                        label: Text("Emergency Contact",
-                            style: TextStyle(color: textBoxBorder)),
+                        label: Text(emergencyContact),
                         labelStyle: TextStyle(
-                            color: textBoxBorder,
-                            fontSize: 16,
+                            color: placeHolder,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.normal),
                         suffix: InkWell(
                             onTap: () {
                               _emergencyContact.clear();
                             },
-                            child: Icon(Icons.highlight_off_outlined)),
+                            child: Icon(Icons.highlight_off_outlined,color: iconColor,)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: textBoxBorder),
+                          borderSide: BorderSide(color: textFieldOutline),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: textBoxBorder),
+                          borderSide: BorderSide(color: onSelectTextFieldOutline),
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Phone number is required';
+                        }
+                        // Define a regular expression for validating phone numbers
+                        final RegExp phoneRegex = RegExp(r'^(?:\+91)?[0-9]{10}$'); // Allows for optional '+91' country code followed by 10 digits
+
+                        // Check if the entered value matches the phone number format
+                        if (!phoneRegex.hasMatch(value)) {
+                          return 'Enter a valid phone number';
+                        }
+                        return null;
+                      },
+
                     ),
                     spaceBetween,
                     TextFormField(
+                      style: TextStyle(color: inputText),
                       controller: _reason,
                       maxLength: maxCharacters,
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
                       decoration: InputDecoration(
                         label: Text(
-                          "Reason",
-                          style: TextStyle(color: textBoxBorder),
+                          remark,
                         ),
                         labelStyle: TextStyle(
-                          color: textBoxBorder,
+                          color: placeHolder,
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
                         ),
@@ -428,21 +434,20 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           onTap: () {
                             _reason.clear();
                           },
-                          child: Icon(Icons.highlight_off_outlined),
+                          child: Icon(Icons.highlight_off_outlined,color: iconColor,),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: textBoxBorder),
+                          borderSide: BorderSide(color: textFieldOutline),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: textBoxBorder),
+                          borderSide: BorderSide(color: onSelectTextFieldOutline),
                         ),
                       ),
                     ),
-
                     SizedBox(
-                      height: 36,
+                      height: 36.h,
                     ),
                     SizedBox(
                       height: 56,
@@ -465,11 +470,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           children: [
                             Icon(
                               Icons.check,
-                              color: Colors.black,
+                              color: buttonText,
                             ),
                             Text(
                               confirmBooking,
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(color: buttonText),
                             ),
                           ],
                         ),

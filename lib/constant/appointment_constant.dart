@@ -2,7 +2,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 //Const Api link
 
@@ -14,27 +13,60 @@ const String alertDeleted = "assets/images/Alert Delete.png";
 const String logo = "assets/images/Tasmai logo.png";
 
 // appbarColor
- Color appBackground = Color.fromRGBO(255, 251, 255, 1);
- Color pageBackground = Color.fromRGBO(234, 225, 217, 1);
- Color  textFieldOutline = Color.fromRGBO(129, 117, 103, 1);
- Color  tabIndicator = Color.fromRGBO(79, 69, 57, 1);
- Color textBoxBorder = Color.fromRGBO(31, 27, 22, 1);
- Color  buttonColor = Color.fromRGBO(254,185,77,1);
+Color pageBackground = Color.fromRGBO(255, 251, 255, 1);
+Color  textFieldOutline = Color.fromRGBO(129, 117, 103, 1);
+Color  iconColor = Color.fromRGBO(79, 69, 57, 1);
+Color  placeHolder = Color.fromRGBO(79, 69, 57, 1);
+Color  buttonColor = Color.fromRGBO(255, 185, 76,1);
+Color  buttonText = Color.fromRGBO(68, 43, 0,1);
+Color  dividerLine = Color.fromRGBO(240, 224, 207,1);
+Color  heading = Color.fromRGBO(31, 27, 22,1);
+Color  subtext = Color.fromRGBO(79, 69, 57,1);
+Color  appbar = Color.fromRGBO(31, 27, 22, 1);
+Color  inputText = Color.fromRGBO(31, 27, 22, 1);
+
+
+// Text box when Clicked/Selected
+Color  onSelectTextFieldOutline = Color.fromRGBO(31, 27, 22,1);
+Color  textContainer = Color.fromRGBO(240, 224, 207,1);
+
+
+
+ // other
+ // Color textFieldOutline =
 
 // Text
-const String bookAppointment = "Book Appointment";
-const String appointmentDate = "Appointment Date";
 const String ddMmYyyy = "DD/MM/YYYY";
 const String tryAgain = "Try Again Later";
 const String noData = "No data";
-const String confirmBooking = "Confirm Booking";
-const String bookingCompleted = "Booking Complete";
-const String bookingFailed = "Booking Failed";
-const String deleteSucess = "Delete Sucess";
-const String deleteFailed = "Delete Failed";
 const String overview = " Overview";
 const String appointment = " Appointment";
 const String pageNotAvailable = " Page Not Avilable";
+const String registeredPhone = "Registered Phone";
+const String noAppointmentsBooked =  "No Appointments Booked !";
+
+
+
+
+// Dialog box
+const String bookingCompleted = "Booking Complete";
+const String bookingFailed = "Booking Failed";
+const String deleteFailed = "Delete Failed";
+const String deleteSucess = "Delete Sucess";
+
+
+
+// Appointment Add Page
+const String bookAppointment = "Book Appointment";
+const String appointmentDate = "Appointment Date";
+const String noOfDays = "No. of days";
+const String noOfPeople = "No. of people";
+const String pickupCheckbox = "Pick Up ?";
+const String pickUpPoint = "Pickup Point";
+const String destination =  "Destination";
+const String emergencyContact =  "Emergency Contact";
+const String remark = "Remarks";
+const String confirmBooking = "Confirm Booking";
 
 
 //Space between textFields
@@ -75,14 +107,3 @@ class DateTextFormatter extends TextInputFormatter {
   }
 }
 
-prefsSet(str,val)async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString("$str",val);
-}
-
-
-prefsGet(str)async{
-  SharedPreferences prefs = await SharedPreferences.getInstance();
- String? data = prefs.getString(str);
-  return data;
-}

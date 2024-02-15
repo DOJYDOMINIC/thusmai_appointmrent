@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:thusmai_appointmrent/constant/constant.dart';
+import 'package:thusmai_appointmrent/constant/appointment_constant.dart';
 import '../models/appointment_model.dart';
 import '../widgets/dialogbox.dart';
+
 
 Future<List<ListElement>> fetchAppointments(String phone) async {
   try {
@@ -78,8 +79,6 @@ var decode = jsonDecode(response.body);
     print(sessionId);
 
     if (response.statusCode == 200) {
-      showPlatformDialog(context,alertCompleted,deleteSucess,decode["message"].toString(),"OK",Color.fromRGBO(81, 100, 64, 1) );
-
     } else {
       showPlatformDialog(context,alertDeleted,deleteFailed,decode["error"].toString(),"cancel",Color.fromRGBO(186, 26, 26, 1));
       print('Failed to delete appointment. Status code: ${response.statusCode}');

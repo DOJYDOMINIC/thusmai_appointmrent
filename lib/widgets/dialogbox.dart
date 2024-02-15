@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../constant/constant.dart';
+import '../constant/appointment_constant.dart';
 
 
 void showPlatformDialog(BuildContext context, String firstImage, String title, String body,String buttonText,Color color) {
@@ -35,10 +35,11 @@ void showPlatformDialog(BuildContext context, String firstImage, String title, S
                   height: 56,
                   child: ElevatedButton(
                     onPressed: () {
-                      if(buttonText == "Continue"){
+                      // if(buttonText == "Continue"){
+                      //   Navigator.of(context).pop();
+                      // }else{
                         Navigator.of(context).pop();
-                      }
-                      Navigator.of(context).pop();
+                      // }
                     },
                     style: ElevatedButton.styleFrom(
                       // shadowColor: Colors.red, // Customize the shadow color
