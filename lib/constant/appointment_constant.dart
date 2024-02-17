@@ -11,11 +11,13 @@ const  baseUrl = "http://94.176.237.33:3000/api/v1/User";
 const String alertCompleted = "assets/images/Alert Completed.png";
 const String alertDeleted = "assets/images/Alert Delete.png";
 const String logo = "assets/images/Tasmai logo.png";
+const String error = "assets/images/error.svg";
+const String guruji = "assets/images/guruji.png";
 
 // appbarColor
-Color pageBackground = Color.fromRGBO(255, 251, 255, 1);
+const Color pageBackground = Color.fromRGBO(255, 251, 255, 1);
 Color  textFieldOutline = Color.fromRGBO(129, 117, 103, 1);
-Color  iconColor = Color.fromRGBO(79, 69, 57, 1);
+const Color  iconColor = Color.fromRGBO(79, 69, 57, 1);
 Color  placeHolder = Color.fromRGBO(79, 69, 57, 1);
 Color  buttonColor = Color.fromRGBO(255, 185, 76,1);
 Color  buttonText = Color.fromRGBO(68, 43, 0,1);
@@ -24,6 +26,12 @@ Color  heading = Color.fromRGBO(31, 27, 22,1);
 Color  subtext = Color.fromRGBO(79, 69, 57,1);
 Color  appbar = Color.fromRGBO(31, 27, 22, 1);
 Color  inputText = Color.fromRGBO(31, 27, 22, 1);
+
+
+Color  bottomNavLabel = Color.fromRGBO(234, 225, 217, 1);
+Color  iconContainer = Color.fromRGBO(86, 68, 42, 1);
+Color  navIcon = Color.fromRGBO(250, 222, 188, 1);
+Color  bottomNavLabelUnSelected = Color.fromRGBO(211, 196, 180, 1);
 
 
 // Text box when Clicked/Selected
@@ -44,7 +52,8 @@ const String appointment = " Appointment";
 const String pageNotAvailable = " Page Not Avilable";
 const String registeredPhone = "Registered Phone";
 const String noAppointmentsBooked =  "No Appointments Booked !";
-
+const String somethingWentWrong =  "Something went wrong. ";
+const String pageUnderWork =  "Page Not Available. ";
 
 
 

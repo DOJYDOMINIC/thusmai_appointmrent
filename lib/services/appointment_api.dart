@@ -84,8 +84,8 @@ var decode = jsonDecode(response.body);
       print('Failed to delete appointment. Status code: ${response.statusCode}');
     }
   } catch (error) {
-    print(error);
-    // showPlatformDialog(context,alertDeleted,deleteFailed,"unable to delete","cancel",Color.fromRGBO(186, 26, 26, 1));
+    print( "This ERROR $error");
+    showPlatformDialog(context,alertDeleted,deleteFailed,"unable to delete","cancel",Color.fromRGBO(186, 26, 26, 1));
     // throw Exception('Failed to delete appointment');
   }
 }
