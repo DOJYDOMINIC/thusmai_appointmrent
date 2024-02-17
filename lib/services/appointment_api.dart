@@ -32,7 +32,7 @@ Future<List<ListElement>> fetchAppointments(String phone) async {
       print('Failed to load appointments: ${response.reasonPhrase}');
       return [];
     }
-  } catch (e) {
+  }catch (e) {
     print('Error fetching appointments: $e');
     return [];
   }
@@ -52,10 +52,11 @@ Future<void> postAppointment(BuildContext context,Map<String, dynamic> data) asy
       showPlatformDialog(context,alertCompleted,bookingCompleted,message["message"].toString(),"Continue",Color.fromRGBO(81, 100, 64, 1) );
     } else {
       showPlatformDialog(context,alertDeleted,bookingFailed,message["error"].toString(),"cancel",Color.fromRGBO(186, 26, 26, 1));
-
       print('Failed to create appointment. Status code: ${response.statusCode}');
     }
-  } catch (error) {
+  }on http.ClientException catch (_) {
+    showPlatformDialog(context,alertDeleted,bookingFailed,"something went wrong","cancel",Color.fromRGBO(186, 26, 26, 1));
+  }  catch (error) {
     showPlatformDialog(context,alertDeleted,bookingFailed,"something went wrong","cancel",Color.fromRGBO(186, 26, 26, 1));
 
     print('Error creating appointment: $error');
@@ -83,27 +84,11 @@ var decode = jsonDecode(response.body);
       showPlatformDialog(context,alertDeleted,deleteFailed,decode["error"].toString(),"cancel",Color.fromRGBO(186, 26, 26, 1));
       print('Failed to delete appointment. Status code: ${response.statusCode}');
     }
-  } catch (error) {
+  }on http.ClientException catch (_) {
+    showPlatformDialog(context,alertDeleted,bookingFailed,"something went wrong","cancel",Color.fromRGBO(186, 26, 26, 1));
+  }  catch (error) {
     print( "This ERROR $error");
     showPlatformDialog(context,alertDeleted,deleteFailed,"unable to delete","cancel",Color.fromRGBO(186, 26, 26, 1));
     // throw Exception('Failed to delete appointment');
   }
 }
-
-// Future<http.Response> deleteAp(String id) async {
-//   final http.Response response = await http.delete(
-//     Uri.parse('$baseUrl/appointment/$id'),
-//     headers: <String, String>{
-//       'Content-Type': 'application/json; charset=UTF-8',
-//     },
-//   );
-// if(response.statusCode == 200){
-//   print("sucess");
-//   print(response.body);
-//   return response;
-// }else{
-//   print("object");
-//   print(response.body);
-//   return response;
-// }
-// }

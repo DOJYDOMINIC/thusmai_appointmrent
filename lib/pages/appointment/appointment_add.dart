@@ -102,7 +102,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
    const int maxCharacters = 100; // Maximum characters allowed
    const int digitLimit = 2; // Maximum characters allowed
 
-   spaceBetween = SizedBox(height: 16.h,);
+     spaceBetween = SizedBox(height: 16.h,);
 
     return SafeArea(
       child:GestureDetector(
