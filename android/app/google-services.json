@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "203849519222",
+    "project_id": "thasmai-star-life",
+    "storage_bucket": "thasmai-star-life.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203849519222:android:2ff1effdc8aeeace3e4f57",
+        "android_client_info": {
+          "package_name": "com.vconsol.thasmai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPpsiT8utxKgdqsi8k7EH_0NVwj1qGtno"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
