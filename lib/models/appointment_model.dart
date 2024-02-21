@@ -1,5 +1,5 @@
 // To parse this JSON data, do
-//
+
 //     final appointmentListdata = appointmentListdataFromJson(jsonString);
 
 import 'dart:convert';
@@ -36,7 +36,7 @@ class ListElement {
   int? numOfPeople;
   bool? pickup;
   String? from;
-  String? room;
+  String? days;
   String? emergencyNumber;
   String? appointmentTime;
   String? appointmentReason;
@@ -56,7 +56,7 @@ class ListElement {
     this.numOfPeople,
     this.pickup,
     this.from,
-    this.room,
+    this.days,
     this.emergencyNumber,
     this.appointmentTime,
     this.appointmentReason,
@@ -77,7 +77,7 @@ class ListElement {
     numOfPeople: json["num_of_people"],
     pickup: json["pickup"],
     from: json["from"],
-    room: json["room"],
+    days: json["days"],
     emergencyNumber: json["emergencyNumber"],
     appointmentTime: json["appointment_time"],
     appointmentReason: json["appointment_reason"],
@@ -98,7 +98,7 @@ class ListElement {
     "num_of_people": numOfPeople,
     "pickup": pickup,
     "from": from,
-    "room": room,
+    "days": days,
     "emergencyNumber": emergencyNumber,
     "appointment_time": appointmentTime,
     "appointment_reason": appointmentReason,

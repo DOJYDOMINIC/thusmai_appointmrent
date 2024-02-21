@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../constant/appointment_constant.dart';
+import '../constant/constant.dart';
 
 
 void showPlatformDialog(BuildContext context, String firstImage, String title, String body,String buttonText,Color color) {
@@ -18,6 +18,7 @@ void showPlatformDialog(BuildContext context, String firstImage, String title, S
             width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 size,
                 Image.asset(
@@ -27,7 +28,7 @@ void showPlatformDialog(BuildContext context, String firstImage, String title, S
                   fit: BoxFit.cover, // Fill the space
                 ),
                 size,
-                Text(title,style: TextStyle(fontWeight: FontWeight.normal,fontSize: 24,),),
+                Text(title,style: TextStyle(fontWeight: FontWeight.normal,fontSize: 24,),textAlign: TextAlign.center,),
                 SizedBox(height: 16,),
                 Text(body,style: TextStyle(fontWeight: FontWeight.normal,fontSize: 14,),textAlign: TextAlign.center,),
                 size,
@@ -35,11 +36,11 @@ void showPlatformDialog(BuildContext context, String firstImage, String title, S
                   height: 56,
                   child: ElevatedButton(
                     onPressed: () {
-                      // if(buttonText == "Continue"){
-                      //   Navigator.of(context).pop();
-                      // }else{
+                      if(buttonText == "Continue"){
                         Navigator.of(context).pop();
-                      // }
+                      }else{
+                        Navigator.of(context).pop();
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       // shadowColor: Colors.red, // Customize the shadow color

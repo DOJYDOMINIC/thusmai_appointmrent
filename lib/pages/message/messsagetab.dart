@@ -5,11 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/main.dart';
-import '../../constant/appointment_constant.dart';
-import '../../controller/appointment_controller.dart';
+import '../../constant/constant.dart';
+import '../../controller/providerdata.dart';
 import 'message_guru.dart';
-
-
 
 class MessageTab extends StatefulWidget {
   const MessageTab({Key? key}) : super(key: key);
@@ -18,41 +16,20 @@ class MessageTab extends StatefulWidget {
   State<MessageTab> createState() => _MessageTabState();
 }
 
-
-
 class _MessageTabState extends State<MessageTab> {
 
 
-  TextEditingController _phoneRegistered = TextEditingController(text: phone);
-
+  int _currentindex = 0;
   @override
   void initState() {
     super.initState();
-    // Listen for connectivity changes
-    // Connectivity().onConnectivityChanged.listen((result) {
-    //   if (result == ConnectivityResult.none) {
-    //     // No internet connection
-    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //       backgroundColor: Colors.red,
-    //       content: Text('No internet connection'),
-    //     ));
-    //   } else {
-    //     // Internet connection established
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //         SnackBar(
-    //       backgroundColor: Colors.green,
-    //       content: Text('Connected to the internet'),
-    //     ));
-    //   }
-    // });
-  }
 
+  }
 
   @override
   Widget build(BuildContext context) {
-    var pro = Provider.of<AppointmentProvider>(context);
+    var pro = Provider.of<ProviderController>(context);
     return Scaffold(
-
       body: SafeArea(
         child: Scaffold(
           body: Container(
@@ -110,27 +87,32 @@ class _MessageTabState extends State<MessageTab> {
                   child: Container(
                     color: pageBackground,
                     child: Center(
-                        child: Text(
-                          pageUnderWork,
-                          style: GoogleFonts.schoolbell(
-                              fontSize: 24.sp, color: Color.fromRGBO(67, 44, 0, .3)),
-                        )),
+                      child: Text(
+                        pageUnderWork,
+                        style: GoogleFonts.schoolbell(
+                          fontSize: 24.sp,
+                          color: Color.fromRGBO(67, 44, 0, .3),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 ChatScreen(),
-                  Container(
-                    color: pageBackground,
-                    child: Center(
-                        child: Text(
-                          pageUnderWork,
-                          style: GoogleFonts.schoolbell(
-                              fontSize: 24.sp, color: Color.fromRGBO(67, 44, 0, .3)),
-                        )),
+                Container(
+                  color: pageBackground,
+                  child: Center(
+                    child: Text(
+                      pageUnderWork,
+                      style: GoogleFonts.schoolbell(
+                        fontSize: 24.sp,
+                        color: Color.fromRGBO(67, 44, 0, .3),
+                      ),
+                    ),
                   ),
+                ),
               ],
               onChange: (index) {
-                pro.selectedIndex = index;
-                print(index);
+               pro.selectedIndex = index;
               },
             ),
           ),

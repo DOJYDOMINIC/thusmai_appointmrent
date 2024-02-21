@@ -3,9 +3,12 @@ import 'package:flutter_holo_date_picker/date_picker.dart';
 import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../constant/appointment_constant.dart'; // Assuming this file contains the 'appTheam' constant
+import '../../constant/constant.dart'; // Assuming this file contains the 'appTheam' constant
 import 'package:flutter/material.dart';
+import '../../controller/providerdata.dart';
+import '../../main.dart';
 import '../../services/appointment_api.dart';
 
 
@@ -18,7 +21,7 @@ class AppointmentPage extends StatefulWidget {
 class _AppointmentPageState extends State<AppointmentPage> {
   // Variables
   var pickupFrom ="";
-  String phone = "";
+  // String phone = "";
   bool _pickup = false;
 
   // validation Key
@@ -41,7 +44,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
   @override
   void initState() {
     super.initState();
-    fetchDta();
   }
 
   @override
@@ -50,13 +52,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
     super.dispose();
   }
 
-
-  // Functions
-  Future<void> fetchDta() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    phone = prefs.getString("phone")!;
-    fetchAppointments(phone);
-  }
 
 
   Future<void> _submitForm() async {
@@ -67,11 +62,10 @@ class _AppointmentPageState extends State<AppointmentPage> {
       int? numOfPeople = int.tryParse(_noOfPeople.text);
       print("${time.hour}:${time.minute}");
       Map<String, dynamic> data = {
-        "phone": phone,
         "appointmentDate": _appointmentDate.text,
         "num_of_people": numOfPeople,
         "pickup": _pickup ,
-        "room": _noOfDays.text,
+        "days": _noOfDays.text,
         "from": pickupFrom.isEmpty ? "No Data":pickupFrom,
         "emergencyNumber": _emergencyContact.text,
         "appointment_time": "${time.hour}:${time.minute}",
@@ -79,7 +73,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
         "register_date": "${date.day}-${date.month}-${date.year}"
       };
      await postAppointment(context, data);
-
     }
   }
 
@@ -117,7 +110,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
             leading: IconButton(
                 onPressed: () {
                   clearTextControllers();
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                  Navigator.pop(context);
                 },
                 icon: Icon(
                   Icons.arrow_back,
@@ -424,7 +417,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             return 'Phone number is required';
                           }
                           // Define a regular expression for validating phone numbers
-                          final RegExp phoneRegex = RegExp(r'^(?:\+91)?[0-9]{10}$'); // Allows for optional '+91' country code followed by 10 digits
+                          final RegExp phoneRegex = RegExp(r'^\+?[0-9]{7,13}$');
+                          // Allows for optional '+91' country code followed by 7 to 13 digits
 
                           // Check if the entered value matches the phone number format
                           if (!phoneRegex.hasMatch(value)) {
@@ -432,6 +426,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           }
                           return null;
                         },
+
 
                       ),
                       spaceBetween,
@@ -474,6 +469,8 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         child: ElevatedButton(
                             onPressed: ()async{
                               await _submitForm();
+                             await Provider.of<ProviderController>(context, listen: false).fetchAppointments();
+                              // fetchAppointments();
                             },
                           style: ElevatedButton.styleFrom(
                             shadowColor: Colors.black, // Customize the shadow color

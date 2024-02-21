@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:thusmai_appointmrent/constant/appointment_constant.dart';
+import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:http/http.dart' as http;
 class Message {
   final String content;
@@ -68,66 +68,74 @@ Timer? _timer;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: ListView.builder(
-            reverse: true, // Start from the bottom of the list
-            itemCount: _messages.length,
-            itemBuilder: (BuildContext context, int index) {
-              final message = _messages[index];
-              return _buildMessageBubble(message);
-            },
+    return GestureDetector(
+      onTap: () {
+        if (!FocusScope.of(context).hasPrimaryFocus) {
+          FocusScope.of(context).unfocus();
+        }
+      },
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView.builder(
+              reverse: true, // Start from the bottom of the list
+              itemCount: _messages.length,
+              itemBuilder: (BuildContext context, int index) {
+                final message = _messages[index];
+                return _buildMessageBubble(message);
+              },
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(right: 8.sp),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 3,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 5, top: 5, bottom: 5),
-                    child: TextField(
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      cursorHeight: 20,
-                      controller: _userMessageController,
-                      decoration: InputDecoration(
-                        hintText: 'Type your message...',
-                        border: InputBorder.none,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(right: 8.sp),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 1,
+                          blurRadius: 3,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 5, top: 5, bottom: 5),
+                      child: TextField(
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                        cursorColor: Colors.black,
+                        // cursorHeight: 20,
+                        controller: _userMessageController,
+                        decoration: InputDecoration(
+                          hintText: 'Type your message...',
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: buttonColor,
-                child: IconButton(
-                  icon: Icon(Icons.send,color: appbar,),
-                  onPressed: () {
-                    _addUserMessage(_userMessageController.text);
-                  },
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: buttonColor,
+                  child: IconButton(
+                    icon: Icon(Icons.send,color: appbar,),
+                    onPressed: () {
+                      _addUserMessage(_userMessageController.text);
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

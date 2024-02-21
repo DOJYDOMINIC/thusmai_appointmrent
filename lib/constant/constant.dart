@@ -5,7 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 //Const Api link
 
-const  baseUrl = "http://94.176.237.33:3000/api/v1/User";
+const  baseUrl = "https://thasmai.tstsvc.in/api/v1/User";
+// const  baseUrl = "https://192.168.1.70:5000/api/v1/User";
 
 // images
 const String alertCompleted = "assets/images/Alert Completed.png";

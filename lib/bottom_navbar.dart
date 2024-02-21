@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:thusmai_appointmrent/constant/appointment_constant.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:thusmai_appointmrent/pages/hometab.dart';
-import 'package:thusmai_appointmrent/pages/message/message_guru.dart';
+import 'package:thusmai_appointmrent/pages/login_register_otp/login.dart';
 import 'package:thusmai_appointmrent/pages/message/messsagetab.dart';
 
-class CustomBottomNavBar extends StatefulWidget {
-  const CustomBottomNavBar({Key? key}) : super(key: key);
+import 'controller/providerdata.dart';
 
+class CustomBottomNavBar extends StatefulWidget {
+  const CustomBottomNavBar({Key? key,}) : super(key: key);
   @override
   State<CustomBottomNavBar> createState() => _CustomBottomNavBarState();
 }
 
 class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   int _currentIndex = 1;
+
   final List<Widget> _pages = [
     MessageTab(),
     HomeTab(),
@@ -40,8 +44,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    var pro = Provider.of<ProviderController>(context);
     return Scaffold(
-      appBar: AppBar(
+      appBar:_currentIndex != 0 ? AppBar(
         backgroundColor: appbar,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -51,25 +56,38 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         ),
         actions: [
           IconButton(
+            onPressed: () async{
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.clear();
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
+            },
+            icon: Icon(
+              Icons.circle_notifications_outlined,
+              color: navIcon,
+            ),
+          ),
+          IconButton(
             onPressed: () {
 
             },
             icon: Icon(
-              Icons.circle_notifications_outlined,
-              color: iconColor,
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
               Icons.account_circle,
-              color: iconColor,
+              color: navIcon,
             ),
           ),
         ],
+      ):AppBar(
+        backgroundColor: appbar,
+        title: Text(pro.messageTabHead.toString(),style: TextStyle(color: Colors.white),),
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(onPressed: (){
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomBottomNavBar(),));
+          }, icon: Icon(Icons.arrow_back,color: Colors.white,),),
+          ),
       ),
       body: _pages[_currentIndex],
-      bottomNavigationBar: Container(
+      bottomNavigationBar: _currentIndex == 0 ? null : Container(
         height: 80,
         color: appbar, // Background color of the bottom navigation bar
         child: Row(
