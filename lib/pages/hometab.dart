@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,28 +20,27 @@ class HomeTab extends StatefulWidget {
 
 class _HomeTabState extends State<HomeTab> {
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Listen for connectivity changes
-  //   // Connectivity().onConnectivityChanged.listen((result) {
-  //   //   if (result == ConnectivityResult.none) {
-  //   //     // No internet connection
-  //   //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //   //       backgroundColor: Colors.red,
-  //   //       content: Text('No internet connection'),
-  //   //     ));
-  //   //   } else {
-  //   //     // Internet connection established
-  //   //     ScaffoldMessenger.of(context).showSnackBar(
-  //   //         SnackBar(
-  //   //       backgroundColor: Colors.green,
-  //   //       content: Text('Connected to the internet'),
-  //   //     ));
-  //   //   }
-  //   // });
-  // }
-
+  @override
+  void initState() {
+    super.initState();
+    // Listen for connectivity changes
+    // Connectivity().onConnectivityChanged.listen((result) {
+    //   if (result == ConnectivityResult.none) {
+    //     // No internet connection
+    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //       backgroundColor: Colors.red,
+    //       content: Text('No internet connection'),
+    //     ));
+    //   } else {
+    //     // Internet connection established
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //         SnackBar(
+    //       backgroundColor: Colors.green,
+    //       content: Text('Connected to the internet'),
+    //     ));
+    //   }
+    // });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,14 +100,14 @@ class _HomeTabState extends State<HomeTab> {
                   child: Container(
                     color: pageBackground,
                     child: Center(child: Text(
-                      noAppointmentsBooked,
+                      pageUnderWork,
                       style: GoogleFonts.schoolbell(
                           fontSize: 24.sp,
                           color: Color.fromRGBO(67, 44, 0, .3)),
                     ),),
                   ),
                 ),
-                AppointmentListPage()
+                AppointmentListPage(),
               ],
               onChange: (index) {
                 pro.selectedIndex = index;
@@ -119,5 +119,4 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
-
 }

@@ -2,12 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:thusmai_appointmrent/pages/login_register_otp/register.dart';
+import 'package:thusmai_appointmrent/pages/login_register_otp/reset_password.dart';
 import '../../bottom_navbar.dart';
 import '../../constant/constant.dart';
 import 'package:http/http.dart' as http;
 
-import '../../widgets/dialogbox.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -46,7 +45,7 @@ class _LoginState extends State<Login> {
             MaterialPageRoute(
               builder: (context) => CustomBottomNavBar(),
             ));
-      } else if (response.statusCode == 401) {
+      } else if (response.statusCode == 404) {
         Navigator.push(
             context,
             MaterialPageRoute(
@@ -292,29 +291,29 @@ class _LoginState extends State<Login> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                  },
-                                  child: Text(
-                                    "Forgot Password.",
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      color: buttonColor,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  " Don’t have an account?",
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: Colors.white,
-                                  ),
-                                ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //   },
+                                //   child: Text(
+                                //     "Forgot Password.",
+                                //     style: TextStyle(
+                                //       fontSize: 14.sp,
+                                //       color: buttonColor,
+                                //       decoration: TextDecoration.underline,
+                                //     ),
+                                //   ),
+                                // ),
+                                // Text(
+                                //   " Don’t have an account?",
+                                //   style: TextStyle(
+                                //     fontSize: 14.sp,
+                                //     color: Colors.white,
+                                //   ),
+                                // ),
                                 GestureDetector(onTap: (){
                                  Navigator.push(context, MaterialPageRoute(builder: (context) =>Register(),)) ;
                                 }, child: Text(
-                                  " SignUp",
+                                  " Forgot Password",
                                   style: TextStyle(
                                     fontSize: 14.sp,
                                     color: buttonColor,

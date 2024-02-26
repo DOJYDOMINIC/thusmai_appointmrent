@@ -60,7 +60,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
       var time = TimeOfDay.now();
       var date = DateTime.now();
       int? numOfPeople = int.tryParse(_noOfPeople.text);
-      print("${time.hour}:${time.minute}");
+      // print("${time.hour}:${time.minute}");
       Map<String, dynamic> data = {
         "appointmentDate": _appointmentDate.text,
         "num_of_people": numOfPeople,
@@ -470,7 +470,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             onPressed: ()async{
                               await _submitForm();
                              await Provider.of<ProviderController>(context, listen: false).fetchAppointments();
-                              // fetchAppointments();
                             },
                           style: ElevatedButton.styleFrom(
                             shadowColor: Colors.black, // Customize the shadow color

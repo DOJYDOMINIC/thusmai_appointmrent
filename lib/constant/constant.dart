@@ -6,7 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 //Const Api link
 
 const  baseUrl = "https://thasmai.tstsvc.in/api/v1/User";
-// const  baseUrl = "https://192.168.1.70:5000/api/v1/User";
+
+// const  baseUrl = "https://192.168.1.45:5000/api/v1/User";
 
 // images
 const String alertCompleted = "assets/images/Alert Completed.png";
@@ -14,6 +15,7 @@ const String alertDeleted = "assets/images/Alert Delete.png";
 const String logo = "assets/images/Tasmai logo.png";
 const String error = "assets/images/error.svg";
 const String guruji = "assets/images/guruji.png";
+
 
 // appbarColor
 const Color pageBackground = Color.fromRGBO(255, 251, 255, 1);
@@ -77,6 +79,7 @@ const String destination =  "Destination";
 const String emergencyContact =  "Emergency Contact";
 const String remark = "Remarks";
 const String confirmBooking = "Confirm Booking";
+
 
 
 //Space between textFields

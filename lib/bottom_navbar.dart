@@ -7,6 +7,7 @@ import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:thusmai_appointmrent/pages/hometab.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/login.dart';
 import 'package:thusmai_appointmrent/pages/message/messsagetab.dart';
+import 'package:thusmai_appointmrent/pages/rasorpay.dart';
 
 import 'controller/providerdata.dart';
 
@@ -28,18 +29,19 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           child: Text(
             pageUnderWork,
             style: GoogleFonts.schoolbell(
-                fontSize: 24.sp, color: Color.fromRGBO(67, 44, 0, .3)),
+                fontSize: 24.sp, color: const Color.fromRGBO(67, 44, 0, .3)),
           )),
     ),
-    Container(
-      color: pageBackground,
-      child: Center(
-          child: Text(
-            pageUnderWork,
-            style: GoogleFonts.schoolbell(
-                fontSize: 24.sp, color: Color.fromRGBO(67, 44, 0, .3)),
-          )),
-    ),
+    PaymentPage(title: 'Payment',),
+    // Container(
+    //   color: pageBackground,
+    //   child: Center(
+    //       child: Text(
+    //         pageUnderWork,
+    //         style: GoogleFonts.schoolbell(
+    //             fontSize: 24.sp, color: Color.fromRGBO(67, 44, 0, .3)),
+    //       )),
+    // ),
   ];
 
   @override
@@ -56,10 +58,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         ),
         actions: [
           IconButton(
-            onPressed: () async{
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.clear();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
+            onPressed: () {
+
             },
             icon: Icon(
               Icons.circle_notifications_outlined,
@@ -67,8 +67,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             ),
           ),
           IconButton(
-            onPressed: () {
-
+            onPressed: () async{
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.clear();
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
             },
             icon: Icon(
               Icons.account_circle,
@@ -84,7 +86,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           child: IconButton(onPressed: (){
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomBottomNavBar(),));
           }, icon: Icon(Icons.arrow_back,color: Colors.white,),),
-          ),
+        ),
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: _currentIndex == 0 ? null : Container(

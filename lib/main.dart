@@ -5,12 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thusmai_appointmrent/pages/appointment/appointment_add.dart';
-import 'package:thusmai_appointmrent/pages/hometab.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/login.dart';
-import 'package:thusmai_appointmrent/pages/login_register_otp/otpPage.dart';
 import 'package:thusmai_appointmrent/services/firebase_notification.dart';
 import 'bottom_navbar.dart';
 import 'controller/providerdata.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,12 +22,13 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key, this.cookies,}) : super(key: key);
-final cookies;
+  final cookies;
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+
 
   void handleNotification(RemoteMessage message) {
     if (message == null) return;
@@ -40,6 +40,7 @@ class _MyAppState extends State<MyApp> {
       Navigator.push(context, MaterialPageRoute(builder: (context) => AppointmentPage(),));
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -57,12 +58,11 @@ class _MyAppState extends State<MyApp> {
             theme: ThemeData(
               fontFamily: 'Roboto',
             ),
-            // home: widget.cookies == null || widget.cookies == "" ?  Login() :CustomBottomNavBar() ,
-            home: Login() ,
+            home: widget.cookies == null || widget.cookies == "" ?  Login() :CustomBottomNavBar() ,
+            // home: Register(),
           );
         },
       ),
     );
   }
 }
-

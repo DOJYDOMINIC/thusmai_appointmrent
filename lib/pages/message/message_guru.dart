@@ -4,8 +4,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:http/http.dart' as http;
+
 class Message {
   final String content;
   final bool isAdminMessage;
@@ -22,6 +24,7 @@ class ChatScreen extends StatefulWidget {
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
+
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _userMessageController = TextEditingController();
   final TextEditingController _adminMessageController = TextEditingController();
@@ -29,8 +32,16 @@ class _ChatScreenState extends State<ChatScreen> {
   final List<Message> _messages = []; // Initialize list of messages
 
   Future<void> _fetchMessages() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
     try {
-      final response = await http.get(Uri.parse("$baseUrl/get-messages"));
+      final response = await http.get(
+        Uri.parse("$baseUrl/get-messages"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
         final List<Message> messages = responseData.map((data) {
@@ -51,15 +62,18 @@ class _ChatScreenState extends State<ChatScreen> {
       print('Error: $e');
     }
   }
-Timer? _timer;
+
+  Timer? _timer;
+
   @override
   void initState() {
     super.initState();
     _fetchMessages();
-  _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
       _fetchMessages();
     });
   }
+
   @override
   void dispose() {
     _timer?.cancel(); // Cancel the timer to prevent memory leaks
@@ -106,7 +120,8 @@ Timer? _timer;
                       ],
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 5, top: 5, bottom: 5),
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 5, top: 5, bottom: 5),
                       child: TextField(
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
@@ -125,7 +140,10 @@ Timer? _timer;
                   radius: 30,
                   backgroundColor: buttonColor,
                   child: IconButton(
-                    icon: Icon(Icons.send,color: appbar,),
+                    icon: Icon(
+                      Icons.send,
+                      color: appbar,
+                    ),
                     onPressed: () {
                       _addUserMessage(_userMessageController.text);
                     },
@@ -140,6 +158,8 @@ Timer? _timer;
   }
 
   Future<void> _addUserMessage(String text) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
     String formattedTime = DateFormat.jm().format(DateTime.now());
     final newMessage = Message(
       content: text,
@@ -154,9 +174,8 @@ Timer? _timer;
     Map<String, dynamic> messagePayload = {
       "message": text,
       "messageTime": formattedTime,
-      "isAdminMessage": false,
-      "message_priority": "high",
-      "UId": 0,
+      "isAdminMessage": "false",
+      "message_priority": "Guru",
     };
 
     // Convert the payload to JSON
@@ -165,9 +184,10 @@ Timer? _timer;
     // Make the API call
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl/message"),
+        Uri.parse("$baseUrl/messages"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          if (cookies != null) 'Cookie': cookies,
         },
         body: jsonEncode(messagePayload),
       );
@@ -183,7 +203,8 @@ Timer? _timer;
         setState(() {
           _messages.insert(0, newMessage);
         });
-        _userMessageController.clear(); // Clear the text field after sending message
+        _userMessageController
+            .clear(); // Clear the text field after sending message
       } else {
         // If request failed, show an error message
         throw Exception('Failed to send message');
@@ -197,7 +218,8 @@ Timer? _timer;
   Widget _buildMessageBubble(Message message) {
     final isUserMessage = !message.isAdminMessage;
     return Column(
-      crossAxisAlignment: isUserMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment:
+          isUserMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         Container(
           margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
