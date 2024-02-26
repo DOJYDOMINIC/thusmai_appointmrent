@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCW4RnSjNFIh4hq6LoxZTcH_ns-EnJhWBc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>203849519222</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.vconsol.thasmai</string>
+	<key>PROJECT_ID</key>
+	<string>thasmai-star-life</string>
+	<key>STORAGE_BUCKET</key>
+	<string>thasmai-star-life.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:203849519222:ios:d9d33c6903a958293e4f57</string>
+</dict>
+</plist>
