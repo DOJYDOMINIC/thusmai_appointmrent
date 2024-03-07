@@ -4,12 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:thusmai_appointmrent/main.dart';
 import '../../constant/constant.dart';
-import '../../controller/providerdata.dart';
+import '../../controller/appointmentontroller_api.dart';
 import 'message_guru.dart';
 
 class MessageTab extends StatefulWidget {
+
   const MessageTab({Key? key}) : super(key: key);
 
   @override
@@ -28,7 +28,7 @@ class _MessageTabState extends State<MessageTab> {
 
   @override
   Widget build(BuildContext context) {
-    var pro = Provider.of<ProviderController>(context);
+    var pro = Provider.of<AppointmentController>(context);
     return Scaffold(
       body: SafeArea(
         child: Scaffold(

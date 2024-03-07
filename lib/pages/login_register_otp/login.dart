@@ -1,15 +1,17 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/reset_password.dart';
-import '../../bottom_navbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../constant/constant.dart';
-import 'package:http/http.dart' as http;
+
+import '../../constant/global functions.dart';
+import '../../controller/login_register_otp_api.dart';
 
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
+
 
   @override
   State<Login> createState() => _LoginState();
@@ -21,48 +23,7 @@ class _LoginState extends State<Login> {
   late String _email;
   late String _password;
 
-  Future<void> loginApi() async {
-    Map<String, dynamic> data = {"email": _email, "password": _password};
 
-    final response = await http.post(Uri.parse("$baseUrl/login"),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(data));
-    // final String specificCookie = response.headers['set-cookie']?.split(';')[0] ?? "";
-    // final sessionId = specificCookie.split('=')[1];
-    var decode = jsonDecode(response.body);
-    try {
-      if (response.statusCode == 200){
-        print(decode);
-        final String? specificCookie = response.headers['set-cookie'];
-        final sessionId = specificCookie;
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString("cookie", sessionId!);
-        print(sessionId);
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CustomBottomNavBar(),
-            ));
-      } else if (response.statusCode == 404) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Register(),
-            ));
-      }else{
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: Colors.red,
-            content: Text(decode["message"]),
-            duration: Duration(seconds: 1),
-          ),
-        );
-      }
-    } catch (e) {
-      // print("Login Error : $e");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +221,8 @@ class _LoginState extends State<Login> {
                                   // If the form is valid, save the form state
                                   _formKey.currentState!.save();
                                   // Here you can perform your login logic
-                                  loginApi();
+                                  Map<String, dynamic> data = {"email": _email, "password": _password};
+                                  Provider.of<AppLogin>(context, listen: false).loginApi(context,data);
                                 }
                               },
                               style: ElevatedButton.styleFrom(
@@ -287,36 +249,40 @@ class _LoginState extends State<Login> {
                           ),
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            physics: NeverScrollableScrollPhysics(),
+                            // physics: NeverScrollableScrollPhysics(),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // GestureDetector(
-                                //   onTap: () {
-                                //   },
-                                //   child: Text(
-                                //     "Forgot Password.",
-                                //     style: TextStyle(
-                                //       fontSize: 14.sp,
-                                //       color: buttonColor,
-                                //       decoration: TextDecoration.underline,
-                                //     ),
-                                //   ),
-                                // ),
-                                // Text(
-                                //   " Don’t have an account?",
-                                //   style: TextStyle(
-                                //     fontSize: 14.sp,
-                                //     color: Colors.white,
-                                //   ),
-                                // ),
-                                GestureDetector(onTap: (){
-                                 Navigator.push(context, MaterialPageRoute(builder: (context) =>Register(),)) ;
-                                }, child: Text(
-                                  " Forgot Password",
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(context,  MaterialPageRoute(builder:  (context) => Register(),));
+                                  },
+                                  child: Text(
+                                    "Forgot Password.",
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: buttonColor,
+                                      fontWeight: FontWeight.normal,
+
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "Don’t have an account?",
                                   style: TextStyle(
-                                    fontSize: 14.sp,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: (){_launchURL();}, child: Text(
+                                  "Register",
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
                                     color: buttonColor,
+                                    fontWeight: FontWeight.normal,
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),)
@@ -339,4 +305,12 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+  _launchURL() async {
+    final Uri url = Uri.parse("https://thasmai.tstsvc.in");
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch url');
+    }
+  }
 }
+
+

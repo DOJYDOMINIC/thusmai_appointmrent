@@ -1,90 +1,72 @@
-import 'dart:convert';
-
+import 'dart:async';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
-
 import '../../constant/constant.dart';
-import 'package:http/http.dart' as http;
-
-import '../../controller/providerdata.dart';
-import 'changepassword.dart';
-import 'login.dart';
-
-
+import '../../controller/login_register_otp_api.dart';
 
 class otpPage extends StatefulWidget {
-  const otpPage({Key? key,  this.data}) : super(key: key);
-final data;
+  const otpPage({Key? key, this.data}) : super(key: key);
+
+  final data;
+
   @override
   State<otpPage> createState() => _otpPageState();
 }
 
 class _otpPageState extends State<otpPage> {
-  var  focusedBorderColor = buttonColor;
+  var focusedBorderColor = buttonColor;
   var fillColor = inputText;
   var borderColor = buttonColor;
-
-
-
 
   final pinController = TextEditingController();
   final focusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
   var otpNumber;
 
+  int secondsRemaining = 30;
+  bool enableResend = false;
+  late Timer timer;
 
-
-  Future<void> otpVerification() async {
-    print(otpNumber.toString());
-    print(widget.data["email"].toString());
-    final response = await http.post(Uri.parse("$baseUrl/verify-userotp"),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({"otp":otpNumber,"email": widget.data["email"],}));
-
-    var decode = jsonDecode(response.body);
-    try {
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: Colors.green,
-            content: Text(decode["message"]),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChangePassword(data: widget.data["email"]),
-            ));
-      }else{
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: Colors.red,
-            content: Text(decode["error"]),
-            duration: Duration(seconds: 1),
-          ),
-        );
+  @override
+  initState() {
+    super.initState();
+    timer = Timer.periodic(Duration(seconds: 1), (_) {
+      if (secondsRemaining != 0) {
+        setState(() {
+          secondsRemaining--;
+        });
+      } else {
+        setState(() {
+          enableResend = true;
+        });
       }
-    } catch (e) {
-      print("Login Error : $e");
-    }
+    });
   }
 
   @override
   void dispose() {
     pinController.dispose();
     focusNode.dispose();
+    timer.cancel();
     super.dispose();
   }
 
+  void _resendCode() {
+    //other code here
+    setState(() {
+      secondsRemaining = 30;
+      enableResend = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    var pro = Provider.of<ProviderController>(context,listen: false);
-    String phoneNumber = widget.data["phone"]??"+910000001234";
-    String formattedPhoneNumber = phoneNumber.substring(0, 3) + "******" + phoneNumber.substring(9);
+    // var pro = Provider.of<AppointmentController>(context,listen: false);
+    // String phoneNumber = widget.data["phone"]??"+910000001234";
+    // String formattedPhoneNumber = phoneNumber.substring(0, 3) + "******" + phoneNumber.substring(9);
 
     final defaultPinTheme = PinTheme(
       width: 56,
@@ -100,7 +82,7 @@ class _otpPageState extends State<otpPage> {
     );
 
     /// Optionally you can use form to validate the Pinput
-    return  GestureDetector(
+    return GestureDetector(
       onTap: () {
         if (!FocusScope.of(context).hasPrimaryFocus) {
           FocusScope.of(context).unfocus();
@@ -148,20 +130,29 @@ class _otpPageState extends State<otpPage> {
                         children: [
                           Row(
                             children: [
-                              IconButton(onPressed: (){
-                                // Navigator.push(context, MaterialPageRoute(builder: (context) => Login(),));
-                                // Navigator.pop(context);
-                                Navigator.pop(context);
-                              }, icon: Icon(Icons.arrow_back_ios,color: Colors.white)),
-                              SizedBox(width: 20.w,),
-                              Text("OTP Verification",style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal),),
+                              IconButton(
+                                  onPressed: () {
+                                    // Navigator.push(context, MaterialPageRoute(builder: (context) => Login(),));
+                                    // Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                  icon: Icon(Icons.arrow_back_ios,
+                                      color: Colors.white)),
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                              Text(
+                                "OTP Verification",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.normal),
+                              ),
                             ],
                           ),
                           Image(
                             height: 48.h,
                             image: const AssetImage(logo),
                           ),
-
                         ],
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       ),
@@ -169,7 +160,11 @@ class _otpPageState extends State<otpPage> {
                         padding: const EdgeInsets.only(left: 10),
                         child: Row(
                           children: [
-                            Text("Enter the four digit code we sent to",style:TextStyle(fontSize: 12.sp,color: Colors.white),),
+                            Text(
+                              "Enter the four digit code we sent to",
+                              style: TextStyle(
+                                  fontSize: 12.sp, color: Colors.white),
+                            ),
                           ],
                         ),
                       ),
@@ -177,7 +172,7 @@ class _otpPageState extends State<otpPage> {
                         padding: const EdgeInsets.only(left: 10),
                         child: Row(
                           children: [
-                            Text(formattedPhoneNumber,style:TextStyle(fontSize: 12.sp,color: Colors.white),),
+                            // Text(formattedPhoneNumber,style:TextStyle(fontSize: 12.sp,color: Colors.white),),
                           ],
                         ),
                       ),
@@ -191,14 +186,16 @@ class _otpPageState extends State<otpPage> {
                           controller: pinController,
                           focusNode: focusNode,
                           androidSmsAutofillMethod:
-                          AndroidSmsAutofillMethod.smsUserConsentApi,
+                              AndroidSmsAutofillMethod.smsUserConsentApi,
                           listenForMultipleSmsOnAndroid: true,
                           defaultPinTheme: defaultPinTheme,
                           separatorBuilder: (index) => const SizedBox(width: 8),
                           disabledPinTheme: defaultPinTheme.copyWith(
-                            textStyle: TextStyle(color: Colors.white,fontSize: 24),
+                            textStyle:
+                                TextStyle(color: Colors.white, fontSize: 24),
                             decoration: defaultPinTheme.decoration!.copyWith(
-                              borderRadius: BorderRadius.circular(8), // Set border radius here
+                              borderRadius: BorderRadius.circular(
+                                  8), // Set border radius here
                             ),
                           ),
                           // validator: (value) {
@@ -236,19 +233,23 @@ class _otpPageState extends State<otpPage> {
                             ],
                           ),
                           focusedPinTheme: defaultPinTheme.copyWith(
-                            textStyle: TextStyle(color: Colors.white,fontSize: 24),
+                            textStyle:
+                                TextStyle(color: Colors.white, fontSize: 24),
                             decoration: defaultPinTheme.decoration!.copyWith(
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: focusedBorderColor,width: 2),
+                              border: Border.all(
+                                  color: focusedBorderColor, width: 2),
                             ),
                           ),
-                    
+
                           submittedPinTheme: defaultPinTheme.copyWith(
-                            textStyle: TextStyle(color: Colors.white,fontSize: 24),
+                            textStyle:
+                                TextStyle(color: Colors.white, fontSize: 24),
                             decoration: defaultPinTheme.decoration!.copyWith(
                               color: fillColor,
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: focusedBorderColor,width: 2),
+                              border: Border.all(
+                                  color: focusedBorderColor, width: 2),
                             ),
                           ),
                           enabled: true,
@@ -260,15 +261,23 @@ class _otpPageState extends State<otpPage> {
                       SizedBox(
                         height: 40.h,
                       ),
-                      Text("Resend OTP in 00:${pro.seconds} ",style: TextStyle(fontSize: 16.sp,color: Colors.white),),
-                      // TextButton(
-                      //   onPressed: () {
-                      //     focusNode.unfocus();
-                      //     formKey.currentState!.validate();
-                      //
-                      //   },
-                      //   child: const Text('Validate'),
-                      // ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            enableResend
+                                ? 'Resend OTP in '
+                                : 'Resend OTP in ',
+                            style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                          ),
+                          Text(
+                            enableResend
+                                ? '00:30'
+                                : '00:$secondsRemaining',
+                            style: TextStyle(color: buttonColor, fontSize: 16.sp),
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         height: 40.h,
                       ),
@@ -277,12 +286,16 @@ class _otpPageState extends State<otpPage> {
                         width: 304.w,
                         child: ElevatedButton(
                           onPressed: () {
-                            otpVerification();
+                            Map<String, dynamic> data = {
+                              "otp": otpNumber,
+                              "email": widget.data,
+                            };
+                            Provider.of<AppLogin>(context, listen: false).otpVerification(context, data);
                           },
                           style: ElevatedButton.styleFrom(
                             shadowColor: Colors.black,
                             elevation: 4,
-                            primary: pro.seconds == 20 ? buttonColor : Colors.grey,
+                            primary: 20 == 20 ? buttonColor : Colors.grey,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(100),
                             ),
@@ -298,18 +311,28 @@ class _otpPageState extends State<otpPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.h,),
+                      SizedBox(
+                        height: 10.h,
+                      ),
                       TextButton(
                         onPressed: () {
-
+                          if (enableResend == true) {
+                            Provider.of<AppLogin>(context, listen: false).requestPasswordReset(context,widget.data.toString(),);
+                            _resendCode();
+                          }else{
+                            null;
+                          }
                         },
                         child: Text(
                           "Resend OTP",
                           style: TextStyle(
-                            color: buttonColor,
-                            fontWeight: FontWeight.bold, // Make text bold
-                            decoration: TextDecoration.underline, // Add underline decoration
-                            decorationColor:buttonColor, // Set underline color to red
+                            color: enableResend ? buttonColor : Colors.grey,
+                            fontWeight: FontWeight.bold,
+                            // Make text bold
+                            decoration: TextDecoration.underline,
+                            // Add underline decoration
+                            decorationColor:
+                                buttonColor, // Set underline color to red
                           ),
                         ),
                       )

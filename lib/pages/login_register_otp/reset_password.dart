@@ -1,11 +1,10 @@
 
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import '../../constant/constant.dart';
-import 'package:http/http.dart' as http;
 
-import 'otpPage.dart';
+import '../../controller/login_register_otp_api.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -16,38 +15,10 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
+
   late String _email;
 
-  Future<void> requestPasswordReset() async {
-    Map<String, dynamic> data = {"email": _email};
-    final response = await http.post(Uri.parse("$baseUrl/requestPasswordReset"),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(data));
-    var decode = jsonDecode(response.body);
-    try {
-      if (response.statusCode == 200) {
-        var data = {
-          "email": _email,
-        };
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => otpPage(data: data),
-              ));
-      }else{
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: Colors.red,
-            content: Text(decode["message"]),
-            duration: Duration(seconds: 1),
-          ),
-        );
-      }
-    } catch (e) {
-      print("Login Error : $e");
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +87,6 @@ class _RegisterState extends State<Register> {
                               Row(
                                 children: [
                                   IconButton(onPressed: (){
-                                    // Navigator.pop(context);
                                     Navigator.of(context).popUntil((route) => route.isFirst);
 
                                   }, icon: Icon(Icons.arrow_back_ios,color: Colors.white)),
@@ -200,8 +170,7 @@ class _RegisterState extends State<Register> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                //   _formKey.currentState!.save();
-                                  requestPasswordReset();
+                                  Provider.of<AppLogin>(context, listen: false).requestPasswordReset(context,_email.toString(),);
                                 }
                               },
                               style: ElevatedButton.styleFrom(

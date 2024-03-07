@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import '../../constant/constant.dart';
-import '../../controller/providerdata.dart';
-import '../../services/appointment_api.dart';
+import '../../controller/appointmentontroller_api.dart';
 import 'appointment_add.dart';
+
 
 class AppointmentListPage extends StatefulWidget {
   const AppointmentListPage({Key? key}) : super(key: key);
@@ -19,14 +18,16 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ProviderController>(context, listen: false).fetchAppointments();
+    if(Provider.of<AppointmentController>(context, listen: false).appointments.isEmpty){
+      Provider.of<AppointmentController>(context, listen: false).fetchAppointments();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: pageBackground,
-      body: Consumer<ProviderController>(
+      body: Consumer<AppointmentController>(
         builder: (context, pro, _) {
           if (pro.appointments.isEmpty) {
             return Center(
@@ -95,15 +96,18 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           size,
-                                          Image.asset(
-                                            "assets/images/Alert Delete.png",
-                                            height: 100.h,
+                                          Container(
+                                            height: 105.h,
                                             width: 100.w,
-                                            fit: BoxFit.cover,
+                                            decoration: BoxDecoration(
+                                              image:DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  image: AssetImage(alertDeleted)) ,
+                                            ),
                                           ),
                                           size,
                                           Text(
-                                            "Are you sure to delete ? ",
+                                            areYouSure,
                                             style: TextStyle(
                                               fontWeight: FontWeight.normal,
                                               fontSize: 20.sp,
@@ -114,7 +118,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                                             height: 16,
                                           ),
                                           Text(
-                                            "Booking cancellation occurs when an \nappointment is deleted. ",
+                                            bookingCancelMessage,
                                             style: TextStyle(
                                               fontWeight: FontWeight.normal,
                                               fontSize: 12.sp,
@@ -127,8 +131,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                                             child: ElevatedButton(
                                               onPressed: () async {
                                                 Navigator.of(context).pop();
-                                                await deleteAppointment(context,
-                                                    appointment.id.toString());
+                                                await Provider.of<AppointmentController>(context, listen: false).deleteAppointment(context, appointment.id.toString());
                                                 await pro.fetchAppointments();
                                               },
                                               style: ElevatedButton.styleFrom(
@@ -144,7 +147,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    "Confirm",
+                                                    confirm,
                                                     style: TextStyle(
                                                         color: Colors.white),
                                                   ),
@@ -155,7 +158,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                                           size,
                                           TextButton(
                                             child: const Text(
-                                              'Cancel',
+                                              cancel,
                                               style: TextStyle(
                                                   color: Color.fromRGBO(
                                                       186, 26, 26, 1)),
@@ -212,7 +215,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
               },
               pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secAnimation) {
-                return AppointmentPage();
+                return AppointmentAddPage();
               },
             ),
           );

@@ -1,44 +1,41 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_holo_date_picker/date_picker.dart';
-import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thusmai_appointmrent/pages/appointment/termsandconditions.dart';
 import '../../constant/constant.dart'; // Assuming this file contains the 'appTheam' constant
 import 'package:flutter/material.dart';
-import '../../controller/providerdata.dart';
-import '../../main.dart';
-import '../../services/appointment_api.dart';
+import '../../controller/appointmentontroller_api.dart';
 
 
-class AppointmentPage extends StatefulWidget {
-  const AppointmentPage({Key? key}) : super(key: key);
+class AppointmentAddPage extends StatefulWidget {
+  const AppointmentAddPage({Key? key}) : super(key: key);
+
   @override
-  State<AppointmentPage> createState() => _AppointmentPageState();
+  State<AppointmentAddPage> createState() => _AppointmentAddPageState();
 }
 
-class _AppointmentPageState extends State<AppointmentPage> {
+class _AppointmentAddPageState extends State<AppointmentAddPage> {
+
   // Variables
   var pickupFrom ="";
-  // String phone = "";
   bool _pickup = false;
+  bool _appointmentForOther = false;
+  bool _termsAndCondition = false;
 
   // validation Key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // text Controllers
-
   final TextEditingController _appointmentDate = TextEditingController();
   final TextEditingController _noOfDays = TextEditingController();
   final TextEditingController _noOfPeople = TextEditingController();
   final TextEditingController _pickupPoint = TextEditingController();
-  final  TextEditingController _destination = TextEditingController(text: "Asramam");
+  // final  TextEditingController _destination = TextEditingController(text: "Asramam");
   final  TextEditingController _emergencyContact = TextEditingController();
   final TextEditingController _reason = TextEditingController();
   final TextEditingController _registeredPhone = TextEditingController();
-
-
 
   // ViewState
   @override
@@ -46,6 +43,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     super.initState();
   }
 
+  // dispose
   @override
   void dispose() {
     _appointmentDate.dispose();
@@ -54,13 +52,42 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
 
 
+
+  // DatePicker
+  DateTime _selectedDate = DateTime.now();
+  final List<DateTime> _disabledDates = [
+    DateTime(2024, 3, 10),
+    DateTime(2024, 3, 15),
+    DateTime(2024, 3, 20),
+  ];
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? datePicked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+        firstDate: DateTime.now(),
+        lastDate:DateTime(DateTime.now().year, 12, 31),
+      selectableDayPredicate: (DateTime date) {
+        // Disable dates from the _disabledDates list
+        return !_disabledDates.contains(date);
+      },
+    );
+    if (datePicked != null) {
+      var date = DateFormat('dd/MM/yyyy').format(datePicked);
+      _appointmentDate.text = date;
+      setState(() {});
+    }
+  }
+
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      // If the form is valid, proceed with form submission
+
+      // Date time pick
       var time = TimeOfDay.now();
       var date = DateTime.now();
+      // convert to int
       int? numOfPeople = int.tryParse(_noOfPeople.text);
-      // print("${time.hour}:${time.minute}");
+
+      // Appointment Post Data
       Map<String, dynamic> data = {
         "appointmentDate": _appointmentDate.text,
         "num_of_people": numOfPeople,
@@ -72,10 +99,12 @@ class _AppointmentPageState extends State<AppointmentPage> {
         "appointment_reason": _reason.text,
         "register_date": "${date.day}-${date.month}-${date.year}"
       };
-     await postAppointment(context, data);
+     //  Api call
+     await Provider.of<AppointmentController>(context, listen: false).postAppointment(context, data);
     }
   }
 
+  // Clear fields After Appointment
   void clearTextControllers() {
     _appointmentDate.clear();
     _noOfDays.clear();
@@ -89,9 +118,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
 
   // WidgetTree
-
   @override
   Widget build(BuildContext context) {
+
    const int maxCharacters = 100; // Maximum characters allowed
    const int digitLimit = 2; // Maximum characters allowed
 
@@ -129,27 +158,14 @@ class _AppointmentPageState extends State<AppointmentPage> {
               child: Form(
                 key: _formKey,
                 child:  Container(
-                  // height: height / 1.15,
                   child: Column(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       spaceBetween,
                     spaceBetween,
                       TextFormField(
                         style: TextStyle(color: inputText),
-                        onTap: () async {
-                          var datePicked = await DatePicker.showSimpleDatePicker(
-                            context,
-                            firstDate: DateTime.now(),
-                            dateFormat: "dd/MM/yyyy",
-                            locale: DateTimePickerLocale.en_us,
-                            lastDate:DateTime(DateTime.now().year, 12, 31),
-                          );
-                          if (datePicked != null) {
-                            var date = DateFormat('dd/MM/yyyy').format(datePicked);
-                            _appointmentDate.text = date;
-                            setState(() {});
-                          }
+                        onTap: () {
+                          _selectDate(context);
                         },
                         controller: _appointmentDate,
                         readOnly: true,
@@ -159,18 +175,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         decoration: InputDecoration(
                           suffixIcon: IconButton(
                             onPressed: () async {
-                              var datePicked = await DatePicker.showSimpleDatePicker(
-                                context,
-                                firstDate: DateTime.now(),
-                                dateFormat: "dd/MM/yyyy",
-                                locale: DateTimePickerLocale.en_us,
-                                lastDate:DateTime(DateTime.now().year, 12, 31),
-                              );
-                              if (datePicked != null) {
-                                var date = DateFormat('dd/MM/yyyy').format(datePicked);
-                                _appointmentDate.text = date;
-                                setState(() {});
-                              }
+                              _selectDate(context);
                             },
                             icon: Icon(
                               Icons.calendar_month,color: iconColor,
@@ -186,7 +191,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             color: placeHolder,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.normal,
-
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
@@ -203,6 +207,27 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           }
                           return null;
                         },
+                      ),
+                      // spaceBetween,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Checkbox(
+                              side:  BorderSide(color:textFieldOutline,width: 2),
+                              activeColor: buttonText,
+                              value: _appointmentForOther,
+                              onChanged: (val) {
+                                setState(() {
+                                  _appointmentForOther = !_appointmentForOther;
+                                });
+                              }),
+                          const Text(appointmentForOther)
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text("Personal Details"),
+                        ],
                       ),
                       spaceBetween,
                       Row(
@@ -305,13 +330,12 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           ),
                         ],
                       ),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Checkbox(
                             side:  BorderSide(color:textFieldOutline,width: 2),
-                            activeColor: textFieldOutline,
+                            activeColor: buttonText,
                               value: _pickup,
                               onChanged: (val) {
                                 setState(() {
@@ -358,34 +382,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             pickupFrom = val;
                           },
                         ),
-                      if (_pickup == true) spaceBetween,
-                      if (_pickup == true)
-                        TextField(
-                          style: TextStyle(color: inputText),
-                          controller: _destination,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            label: Text(destination,
-                               ),
-                            labelStyle: TextStyle(
-                                color: placeHolder,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.normal),
-                            // suffix: InkWell(
-                            //     onTap: () {
-                            //       _destination.clear();
-                            //     },
-                            //     child: Icon(Icons.highlight_off_outlined)),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(color: textFieldOutline),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(color: onSelectTextFieldOutline,width: 2),
-                            ),
-                          ),
-                        ),
                       if (_pickup == true)
                         spaceBetween,
                       TextFormField(
@@ -426,8 +422,6 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           }
                           return null;
                         },
-
-
                       ),
                       spaceBetween,
                       TextFormField(
@@ -461,6 +455,68 @@ class _AppointmentPageState extends State<AppointmentPage> {
                           ),
                         ),
                       ),
+                      spaceBetween,
+                      Row(
+                        children: [
+                          Checkbox(
+                            activeColor: inputText,
+                            value: _termsAndCondition,
+                            onChanged: (value) {
+                              _termsAndCondition = !_termsAndCondition;
+                              setState(() {});
+                            },
+                          ),
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "I hereby acknowledge that I have read and accept the ",
+                                    style: TextStyle(fontSize: 14, color: inputText),
+                                  ),
+                                  TextSpan(
+                                    text: "terms and conditions",
+                                    style: TextStyle(fontSize: 14, color: buttonColor,fontWeight: FontWeight.bold),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Navigator.push(
+                                          context,
+                                          PageRouteBuilder(
+                                            transitionDuration: Duration(milliseconds: 500),
+                                            transitionsBuilder: (BuildContext context,
+                                                Animation<double> animation,
+                                                Animation<double> secAnimation,
+                                                Widget child) {
+                                              return SlideTransition(
+                                                position: Tween<Offset>(
+                                                  begin: Offset(1.0, 0.0),
+                                                  end: Offset.zero,
+                                                ).animate(animation),
+                                                child: child,
+                                              );
+                                            },
+                                            pageBuilder: (BuildContext context, Animation<double> animation,
+                                                Animation<double> secAnimation) {
+                                              return TermsAndConditions();
+                                            },
+                                          ),
+                                        );
+                                        // Add your code here to handle tap
+                                        // print("Terms and conditions tapped!");
+
+                                      },
+                                  ),
+                                  TextSpan(
+                                    text: "governing appointments.",
+                                    style: TextStyle(fontSize: 14, color: inputText),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
                       SizedBox(
                         height: 36.h,
                       ),
@@ -469,13 +525,13 @@ class _AppointmentPageState extends State<AppointmentPage> {
                         child: ElevatedButton(
                             onPressed: ()async{
                               await _submitForm();
-                             await Provider.of<ProviderController>(context, listen: false).fetchAppointments();
+                             await Provider.of<AppointmentController>(context, listen: false).fetchAppointments();
                             },
                           style: ElevatedButton.styleFrom(
                             shadowColor: Colors.black, // Customize the shadow color
                             elevation: 4, // Adjust the elevation for the shadow
                             // Customize the background color
-                            primary: buttonColor,
+                            primary:_termsAndCondition == true? buttonColor : Colors.grey.shade700,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   16), // Adjust the radius as needed
@@ -486,11 +542,11 @@ class _AppointmentPageState extends State<AppointmentPage> {
                             children: [
                               Icon(
                                 Icons.check,
-                                color: buttonText,
+                                color:_termsAndCondition == true? buttonText: Colors.white,
                               ),
                               Text(
                                 confirmBooking,
-                                style: TextStyle(color: buttonText),
+                                style: TextStyle(color: _termsAndCondition == true? buttonText: Colors.white),
                               ),
                             ],
                           ),

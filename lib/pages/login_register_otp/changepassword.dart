@@ -1,15 +1,18 @@
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/login.dart';
 import '../../constant/constant.dart';
 import 'package:http/http.dart' as http;
+
+import '../../controller/login_register_otp_api.dart';
 
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key, this.data}) : super(key: key);
 final data;
+
   @override
   State<ChangePassword> createState() => _ChangePasswordState();
 }
@@ -17,46 +20,13 @@ final data;
 class _ChangePasswordState extends State<ChangePassword> {
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
-  bool _isnewPasswordVisible = false;
+  bool _isNewPasswordVisible = false;
   late String _newPassword;
 
-  Future<void> requestPasswordReset() async {
-    print(widget.data.toString());
-    var data = {
-      "email":  widget.data.toString(),
-      "new_password": _newPassword,
-    };
-    final response = await http.post(Uri.parse("$baseUrl/resetPassword"),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(data));
-    var decode = jsonDecode(response.body);
-    try {
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: Colors.green,
-            content: Text(decode["message"]),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Login(),
-            ));
-      }else{
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: Colors.red,
-            content: Text(decode["message"]),
-            duration: Duration(seconds: 1),
-          ),
-        );
-      }
-    } catch (e) {
-      print("Login Error : $e");
-    }
-  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +141,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               fontSize: 16,
                             ),
                             cursorColor: Colors.white,
-                            obscureText: !_isnewPasswordVisible,
+                            obscureText: !_isNewPasswordVisible,
                             decoration: InputDecoration(
                               hintText: "Password",
                               hintStyle: TextStyle(
@@ -184,15 +154,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                               ),
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _isnewPasswordVisible
+                                  _isNewPasswordVisible
                                       ? Icons.visibility
                                       : Icons.visibility_off,
                                   color: buttonColor,
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    _isnewPasswordVisible =
-                                        !_isnewPasswordVisible; // Toggle password visibility
+                                    _isNewPasswordVisible = !_isNewPasswordVisible; // Toggle password visibility
                                   });
                                 },
                               ),
@@ -283,8 +252,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                    // _formKey.currentState!.save();
-                                  requestPasswordReset();
+                                  var data = {
+                                    "email":  widget.data.toString(),
+                                    "new_password": _newPassword,
+                                  };
+                                  Provider.of<AppLogin>(context, listen: false).resetPassword(context,data);
                                 }
                               },
                               style: ElevatedButton.styleFrom(

@@ -35,10 +35,8 @@ class _ChatScreenState extends State<ChatScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     try {
-      final response = await http.get(
-        Uri.parse("$baseUrl/get-messages"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+      final response = await http.get(Uri.parse("$baseUrl/get-messages"),
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
         },
       );

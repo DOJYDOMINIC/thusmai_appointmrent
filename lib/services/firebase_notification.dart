@@ -17,6 +17,16 @@ Future handleBackgroundMessage(RemoteMessage message) async {
   }
 }
 
+void handleNotification(RemoteMessage message) {
+  if (message == null) return;
+  // Extract any data from the notification
+  final notificationData = message.data;
+  // Check if there is a specific action to take based on the notification data
+  if (notificationData != null && notificationData['navigateTo'] == 'appointment') {
+    // If the notification data specifies to navigate to the details page, push the route
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => AppointmentPage(),));
+  }
+}
 
 void handleMessage(RemoteMessage? message) {
   if (message == null) return;
