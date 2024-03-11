@@ -20,12 +20,12 @@ class Message {
   });
 }
 
-class ChatScreen extends StatefulWidget {
+class ChatScreenGuru extends StatefulWidget {
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _ChatScreenGuruState createState() => _ChatScreenGuruState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenGuruState extends State<ChatScreenGuru> {
   final TextEditingController _userMessageController = TextEditingController();
   final TextEditingController _adminMessageController = TextEditingController();
 

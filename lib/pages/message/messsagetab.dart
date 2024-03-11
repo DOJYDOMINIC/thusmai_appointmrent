@@ -20,6 +20,7 @@ class _MessageTabState extends State<MessageTab> {
 
 
   int _currentindex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -97,7 +98,7 @@ class _MessageTabState extends State<MessageTab> {
                     ),
                   ),
                 ),
-                ChatScreen(),
+                ChatScreenGuru(),
                 Container(
                   color: pageBackground,
                   child: Center(

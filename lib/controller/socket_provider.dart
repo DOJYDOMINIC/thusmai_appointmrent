@@ -10,9 +10,9 @@ class SocketProvider extends ChangeNotifier {
 
   void connectToSocket() {
     try {
-      socket = IO.io('http://192.168.1.78:5000', <String, dynamic>{
+      socket = IO.io('http://192.168.1.78:5000/chat', <String, dynamic>{
         'transports': ['websocket'],
-        'autoConnect': false,
+        'autoConnect': true,
       });
 
       socket.connect();
@@ -26,7 +26,7 @@ class SocketProvider extends ChangeNotifier {
         notifyListeners();
       });
 
-      socket.on('chat_message', (data) {
+      socket.on('private_message', (data) {
         print('Received chat message: $data');
         // Handle incoming chat message here
         notifyListeners();
@@ -38,7 +38,8 @@ class SocketProvider extends ChangeNotifier {
 
   void sendMessage(Map<String, dynamic> jsonData) {
     try {
-      socket.emit('chat_message', jsonData);
+      socket.emit('private_message', jsonData);
+      print("${jsonData.toString()}");
     } catch (e) {
       print('Error occurred while sending message: $e');
     }

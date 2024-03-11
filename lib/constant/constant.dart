@@ -42,6 +42,10 @@ Color bottomNavLabelUnSelected = Color.fromRGBO(211, 196, 180, 1);
 Color onSelectTextFieldOutline = Color.fromRGBO(31, 27, 22, 1);
 Color textContainer = Color.fromRGBO(240, 224, 207, 1);
 
+// Delete
+Color red = Color.fromRGBO(186,26,26, 1);
+
+
 // other
 // Color textFieldOutline =
 

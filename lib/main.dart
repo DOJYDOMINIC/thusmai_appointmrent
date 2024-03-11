@@ -7,6 +7,9 @@ import 'package:thusmai_appointmrent/controller/login_register_otp_api.dart';
 import 'package:thusmai_appointmrent/controller/socket_provider.dart';
 import 'package:thusmai_appointmrent/pages/bottom_navbar.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/login.dart';
+import 'package:thusmai_appointmrent/pages/message/socket_io.dart';
+// import 'package:thusmai_appointmrent/pages/message/message_guru.dart';
+// import 'package:thusmai_appointmrent/pages/message/socket_io.dart';
 import 'package:thusmai_appointmrent/services/firebase_notification.dart';
 import 'controller/appointmentontroller_api.dart';
 
@@ -52,7 +55,7 @@ class _MyAppState extends State<MyApp> {
             home: widget.cookies == null || widget.cookies == ""
                 ? Login()
                 : CustomBottomNavBar(),
-            // home: AnimatedContainerWidget(),
+            // home: ChatScreen(),
           );
         },
       ),

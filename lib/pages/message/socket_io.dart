@@ -101,31 +101,42 @@ class _ChatScreenState extends State<ChatScreen> {
     Provider.of<SocketProvider>(context, listen: false).socket.connect();
   }
   final TextEditingController _message = TextEditingController();
+  final TextEditingController _id = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Socket.io Chat'),
+        title: Text("SocketIO"),
       ),
       body: Center(
-        child: Column(
-          children: [
-            TextFormField(
-              controller: _message,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final jsonData = {
-                  'id': '123456',
-                  'isAdmin': false,
-                  'message': 'Connecting Socket io'
-                };
-                Provider.of<SocketProvider>(context, listen: false).sendMessage(jsonData);
-              },
-              child: Text('Send Message'),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _id,
+                decoration: InputDecoration(label: Text("id")),
+              ),
+              TextFormField(
+                decoration: InputDecoration(label: Text("message")),
+                controller: _message,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final jsonData = {
+                    // 'message': '123456',
+                    // 'priority': "false",
+                    // 'time': 'Connecting Socket io'
+                    "recipientUID":_id.text,
+                    "message":_message.text
+                  };
+                  Provider.of<SocketProvider>(context, listen: false).sendMessage(jsonData);
+                },
+                child: Text('Send Message'),
+              ),
+            ],
+          ),
         ),
       ),
     );

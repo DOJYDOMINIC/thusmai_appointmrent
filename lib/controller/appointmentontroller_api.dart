@@ -11,13 +11,16 @@ import '../widgets/dialogbox.dart';
 class AppointmentController extends ChangeNotifier {
 
   int _selectedIndex = 0;
-
   int get selectedIndex => _selectedIndex;
-
-
-
   set selectedIndex(int value) {
     _selectedIndex = value;
+    notifyListeners();
+  }
+
+  int _countOfPeople = 0;
+  int get countOfPeople => _countOfPeople;
+  set countOfPeople(int value) {
+    _countOfPeople = value;
     notifyListeners();
   }
 
@@ -38,6 +41,7 @@ class AppointmentController extends ChangeNotifier {
         },
       );
       if (response.statusCode == 200) {
+
         Map<String, dynamic> dataList = jsonDecode(response.body);
         var data = dataList["appointments"];
         if (data is List) {
@@ -74,6 +78,7 @@ class AppointmentController extends ChangeNotifier {
       var message = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
+        countOfPeople = 0;
         if(response.statusCode == 401){
           prefs.clear();
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
