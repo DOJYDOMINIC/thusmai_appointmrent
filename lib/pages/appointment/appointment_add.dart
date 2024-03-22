@@ -1,12 +1,782 @@
+// import 'package:flutter/gestures.dart';
+// import 'package:flutter/services.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:intl/intl.dart';
+// import 'package:provider/provider.dart';
+// import 'package:thusmai_appointmrent/models/appointment_model.dart';
+// import 'package:thusmai_appointmrent/pages/appointment/termsandconditions.dart';
+// import '../../constant/constant.dart'; // Assuming this file contains the 'appTheam' constant
+// import 'package:flutter/material.dart';
+// import '../../controller/appointmentontroller.dart';
+// import '../../models/userdata.dart';
+//
+// class AppointmentEditPage extends StatefulWidget {
+//   const AppointmentEditPage({super.key, required this.data,});
+//   final ListElement  data;
+//
+//   @override
+//   State<AppointmentEditPage> createState() => _AppointmentEditPageState();
+// }
+//
+// class _AppointmentEditPageState extends State<AppointmentEditPage> {
+//   // Variables
+//   var pickupFrom = "";
+//   bool _pickup = true;
+//   bool _appointmentForOther = false;
+//   bool _termsAndCondition = false;
+//
+//   // validation Key
+//   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+//
+//   // text Controllers
+//   final TextEditingController _appointmentDate = TextEditingController();
+//   final TextEditingController _noOfDays = TextEditingController();
+//   final TextEditingController _noOfPeople = TextEditingController();
+//   final TextEditingController _pickupPoint = TextEditingController();
+//   final TextEditingController _emergencyContact = TextEditingController();
+//   final TextEditingController _reason = TextEditingController();
+//
+//   // var pro;
+//
+//   // ViewState
+//   @override
+//   void initState() {
+//     super.initState();
+//   }
+//
+//
+//   // dispose
+//   @override
+//   void dispose() {
+//     _appointmentDate.dispose();
+//     _noOfDays.dispose();
+//     _noOfPeople.dispose();
+//     _pickupPoint.dispose();
+//     _emergencyContact.dispose();
+//     _reason.dispose();
+//     // for (var controller in _groupMemberControllers) {
+//     //   controller.dispose();
+//     // }
+//     // for (var controller in _groupMemberAgeControllers) {
+//     //   controller.dispose();
+//     // }
+//     // for (var controller in _groupMemberRelationControllers) {
+//     //   controller.dispose();
+//     // }
+//     super.dispose();
+//   }
+//
+//   // DatePicker
+//   DateTime _selectedDate = DateTime.now();
+//   final List<DateTime> _disabledDates = [
+//     DateTime(2024, 3, 10),
+//     DateTime(2024, 3, 15),
+//     DateTime(2024, 3, 20),
+//   ];
+//
+//   Future<void> _selectDate(BuildContext context) async {
+//     final DateTime? datePicked = await showDatePicker(
+//       context: context,
+//       initialDate: _selectedDate,
+//       firstDate: DateTime.now(),
+//       lastDate: DateTime(DateTime.now().year, 12, 31),
+//       selectableDayPredicate: (DateTime date) {
+//         // Disable dates from the _disabledDates list
+//         return !_disabledDates.contains(date);
+//       },
+//     );
+//     if (datePicked != null) {
+//       var date = DateFormat('dd/MM/yyyy').format(datePicked);
+//       _appointmentDate.text = date;
+//       setState(() {});
+//     }
+//   }
+//
+//   Future<void> _submitForm(List<Map<String, String>> dataList) async {
+//     if (_formKey.currentState!.validate()) {
+//       // Date time pick
+//       var time = TimeOfDay.now();
+//       var date = DateTime.now();
+//       // convert to int
+//       int? numOfPeople = int.tryParse(_noOfPeople.text);
+//       // Appointment Post Data
+//
+//
+//
+//       Map<String, dynamic> data = {
+//         "id":widget.data.id,
+//         "appointmentDate":_appointmentDate.text.isNotEmpty ? _appointmentDate.text : widget.data.appointmentDate,
+//         "num_of_people":numOfPeople ?? widget.data.numOfPeople ,
+//         "pickup": _pickup,
+//         "days": _noOfDays.text.isNotEmpty ? _noOfDays.text : widget.data.days,
+//         "from": pickupFrom.isEmpty ? "No Data" : pickupFrom,
+//         "emergencyNumber": _emergencyContact.text.isNotEmpty ? _emergencyContact.text : widget.data.emergencyNumber,
+//         "appointment_time":widget.data.appointmentTime,
+//         "appointment_reason": _reason.text.isNotEmpty? _reason.text: widget.data.appointmentReason,
+//         "register_date":widget.data.appointmentDate.isNotEmpty? widget.data.appointmentDate: "${date.day}/${date.month}/${date.year}",
+//         "groupmembers":dataList
+//       };
+//       debugPrint(data.toString());
+//       //  Api call
+//       await Provider.of<AppointmentController>(context, listen: false).updateAppointment(context, data);
+//     }
+//   }
+//
+//   List<String> _groupMemberAgeControllers = [];
+//   List<String> _groupMemberRelationControllers = [];
+//   List<String> _groupMemberControllers = [];
+//
+//
+//   // WidgetTree
+//   @override
+//   Widget build(BuildContext context) {
+//     var pro = Provider.of<AppointmentController>(context);
+//     List<Map<String, String>> dataList = [];
+// // Iterate through each index
+//     const int maxCharacters = 100; // Maximum characters allowed
+//     // const int peopleDigitLimit = 1; // Maximum characters allowed
+//     const int daysDigitLimit = 2; // Maximum characters allowed
+//     debugPrint("rebuild tree");
+//     spaceBetween = SizedBox(
+//       height: 16.h,
+//     );
+//     return SafeArea(
+//       child: Scaffold(
+//         backgroundColor: pageBackground,
+//         appBar: AppBar(
+//           leading: IconButton(
+//               onPressed: () {
+//                 pro.countOfPeople = 0;
+//                 Navigator.pop(context);
+//               },
+//               icon: Icon(
+//                 Icons.arrow_back,
+//                 color: pageBackground,
+//               )),
+//           backgroundColor: appbar,
+//           title: Text(
+//             "Edit Appointment",
+//             style: TextStyle(color: pageBackground),
+//           ),
+//           // centerTitle: true,
+//         ),
+//         body: SingleChildScrollView(
+//           child: Padding(
+//             padding: EdgeInsets.fromLTRB(10.sp, 15.sp, 10.sp, 10.sp),
+//             child: Form(
+//               key: _formKey,
+//               child: Container(
+//                 child: Column(
+//                   children: [
+//                     spaceBetween,
+//                     spaceBetween,
+//                     TextFormField(
+//                       style: TextStyle(color: inputText),
+//                       onTap: () {
+//                         _selectDate(context);
+//                       },
+//                       // controller: _appointmentDate,
+//                       readOnly: true,
+//                       keyboardType: TextInputType.datetime,
+//                       cursorColor: textFieldOutline,
+//                       initialValue: widget.data.appointmentDate,
+//                       inputFormatters: [DateTextFormatter()],
+//                       decoration: InputDecoration(
+//                         prefixIcon: IconButton(
+//                           onPressed: () async {
+//                             _selectDate(context);
+//                           },
+//                           icon: Icon(
+//                             Icons.calendar_month,
+//                             color: iconColor,
+//                             size: 20.sp,
+//                           ),
+//                         ),
+//                         label: Text(
+//                           appointmentDate,
+//                           style: TextStyle(color: placeHolder),
+//                         ),
+//                         hintText: ddMmYyyy,
+//                         labelStyle: TextStyle(
+//                           color: placeHolder,
+//                           fontSize: 16.sp,
+//                           fontWeight: FontWeight.normal,
+//                         ),
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(5),
+//                           borderSide: BorderSide(color: textFieldOutline),
+//                         ),
+//                         focusedBorder: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(5),
+//                           borderSide: BorderSide(
+//                               color: onSelectTextFieldOutline, width: 2),
+//                         ),
+//                       ),
+//                       validator: (value) {
+//                         if (value == null || value.isEmpty) {
+//                           return 'Please select appointment date';
+//                         }
+//                         return null;
+//                       },
+//                     ),
+//                     // spaceBetween,
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.start,
+//                       children: [
+//                         Checkbox(
+//                             side: BorderSide(color: textFieldOutline, width: 2),
+//                             activeColor: buttonText,
+//                             value: _appointmentForOther,
+//                             onChanged: (val) {
+//                               setState(() {
+//                                 _appointmentForOther = !_appointmentForOther;
+//                               });
+//                             }),
+//                         Expanded(child: Text(appointmentForOther))
+//                       ],
+//                     ),
+//
+//                     // spaceBetween,
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.center,
+//                       children: [
+//                         Row(
+//                           children: [
+//                             Text(noOfPeople),
+//                             Padding(
+//                               padding: EdgeInsets.fromLTRB(8.sp,0.sp,8.sp,0.sp),
+//                               child: GestureDetector(
+//                                 onTap: () {
+//                                   pro.subtract();
+//                                   _noOfPeople.text = pro.countOfPeople.toString();
+//                                 },
+//                                 child: Container(
+//                                     color:inputText,
+//                                     child:Icon(Icons.remove,color: Colors.white,)
+//                                 ),
+//                               ),
+//                             ),
+//                             Text("${pro.countOfPeople.toString()}"),
+//                             Padding(
+//                               padding: EdgeInsets.fromLTRB(8.sp,0.sp,8.sp,0.sp),
+//                               child: GestureDetector(
+//                                 onTap: () {
+//                                   pro.addCount();
+//                                   _noOfPeople.text = pro.countOfPeople.toString();
+//                                 },
+//                                 child: Container(
+//                                     color:pro.countOfPeople != 5? inputText : Colors.grey,
+//                                     child: Icon(Icons.add,color:pro.countOfPeople != 5? Colors.white:Colors.grey.shade700,)
+//                                 ),
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                         SizedBox(
+//                           width: 16.w,
+//                         ),
+//                         Flexible(
+//                           child: TextFormField(
+//                             initialValue: widget.data.days,
+//                             style: TextStyle(color: inputText),
+//                             // controller: _noOfDays,
+//                             inputFormatters: [
+//                               LengthLimitingTextInputFormatter(daysDigitLimit),
+//                             ],
+//                             keyboardType: TextInputType.number,
+//                             decoration: InputDecoration(
+//                               label: Text(
+//                                 noOfDays,
+//                                 style: TextStyle(color: placeHolder),
+//                               ),
+//                               labelStyle: TextStyle(
+//                                 color: textFieldOutline,
+//                                 fontSize: 16,
+//                                 fontWeight: FontWeight.normal,
+//                               ),
+//                               suffix: InkWell(
+//                                 onTap: () {
+//                                   _noOfDays.clear();
+//                                 },
+//                                 child: Icon(
+//                                   Icons.highlight_off_outlined,
+//                                   color: iconColor,
+//                                 ),
+//                               ),
+//                               border: OutlineInputBorder(
+//                                 borderRadius: BorderRadius.circular(5),
+//                                 borderSide: BorderSide(color: textFieldOutline),
+//                               ),
+//                               focusedBorder: OutlineInputBorder(
+//                                 borderRadius: BorderRadius.circular(5),
+//                                 borderSide: BorderSide(
+//                                     color: onSelectTextFieldOutline, width: 2),
+//                               ),
+//                             ),
+//                             validator: (value) {
+//                               if (value == null || value.isEmpty) {
+//                                 return 'No. of days required';
+//                               }
+//                               // Validate if the entered value is a valid integer
+//                               final intValue = int.tryParse(value);
+//                               if (intValue == null || intValue <= 0) {
+//                                 return 'Valid number please';
+//                               }
+//                               return null;
+//                             },
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                     if (pro.countOfPeople != 0)
+//                       Padding(
+//                         padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+//                         child: Row(
+//                           children: [
+//                             Text("Personal Details"),
+//                           ],
+//                         ),
+//                       ),
+//                     Container(
+//                       height: pro.countOfPeople * 190.0,
+//                       // Adjust the height based on the number of items
+//                       child: ListView.builder(
+//                         physics: NeverScrollableScrollPhysics(),
+//                         itemCount: pro.countOfPeople,
+//                         itemBuilder: (context, index) {
+//                           _groupMemberControllers.addAll([""]);
+//                           _groupMemberAgeControllers.addAll([""]);
+//                           _groupMemberRelationControllers.addAll([""]);
+//                           print("rebuild");
+//                           return Padding(
+//                             padding: EdgeInsets.only(bottom: 16.0),
+//                             child: Row(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Padding(
+//                                   padding: EdgeInsets.only(top: 23.0, right: 10.0),
+//                                   child: Text("#${index + 1}"),
+//                                 ),
+//                                 Expanded(
+//                                   child: Column(
+//                                     children: [
+//                                       TextFormField(
+//                                         style: TextStyle(color: inputText),
+//                                         // controller: groupMemberControllers[index],
+//                                         initialValue: _groupMemberControllers[index],
+//                                         decoration: InputDecoration(
+//                                           labelText: "Name",
+//                                           labelStyle: TextStyle(color: placeHolder),
+//                                           suffixIcon: InkWell(
+//                                             onTap: () {
+//                                               // _groupMemberControllers[index].clear();
+//                                             },
+//                                             child: Icon(
+//                                               Icons.highlight_off_outlined,
+//                                               color: iconColor,
+//                                             ),
+//                                           ),
+//                                           border: OutlineInputBorder(
+//                                             borderRadius: BorderRadius.circular(5.0),
+//                                             borderSide: BorderSide(color: textFieldOutline),
+//                                           ),
+//                                           focusedBorder: OutlineInputBorder(
+//                                             borderRadius: BorderRadius.circular(5.0),
+//                                             borderSide: BorderSide(
+//                                               color: onSelectTextFieldOutline,
+//                                               width: 2.0,
+//                                             ),
+//                                           ),
+//                                         ),
+//                                         onChanged: (val) {
+//                                           _groupMemberControllers[index] = val;
+//
+//                                           // Handle onChanged
+//                                         },
+//                                       ),
+//                                       SizedBox(height: 8.0),
+//                                       Row(
+//                                         children: [
+//                                           Expanded(
+//                                             child: TextFormField(
+//                                               style: TextStyle(color: inputText),
+//                                               initialValue: _groupMemberAgeControllers[index],
+//                                               // controller: _groupMemberAgeControllers[index],
+//                                               decoration: InputDecoration(
+//                                                 labelText: "Age",
+//                                                 labelStyle: TextStyle(color: placeHolder),
+//                                                 suffixIcon: InkWell(
+//                                                   onTap: () {
+//                                                     // _groupMemberAgeControllers[index].clear();
+//                                                   },
+//                                                   child: Icon(
+//                                                     Icons.highlight_off_outlined,
+//                                                     color: iconColor,
+//                                                   ),
+//                                                 ),
+//                                                 border: OutlineInputBorder(
+//                                                   borderRadius: BorderRadius.circular(5.0),
+//                                                   borderSide: BorderSide(color: textFieldOutline),
+//                                                 ),
+//                                                 focusedBorder: OutlineInputBorder(
+//                                                   borderRadius: BorderRadius.circular(5.0),
+//                                                   borderSide: BorderSide(
+//                                                     color: onSelectTextFieldOutline,
+//                                                     width: 2.0,
+//                                                   ),
+//                                                 ),
+//                                               ),
+//                                               onChanged: (val) {
+//                                                 _groupMemberAgeControllers[index] = val;
+//                                                 // Handle onChanged
+//                                               },
+//                                             ),
+//                                           ),
+//                                           SizedBox(width: 16.0),
+//                                           Expanded(
+//                                             child: TextFormField(
+//                                               style: TextStyle(color: inputText),
+//                                               // controller: _groupMemberRelationControllers[index],
+//                                               initialValue: _groupMemberRelationControllers[index],
+//                                               decoration: InputDecoration(
+//                                                 labelText: "Relation",
+//                                                 labelStyle: TextStyle(color: placeHolder),
+//                                                 suffixIcon: InkWell(
+//                                                   onTap: () {
+//                                                     // _groupMemberRelationControllers[index].clear();
+//                                                   },
+//                                                   child: Icon(
+//                                                     Icons.highlight_off_outlined,
+//                                                     color: iconColor,
+//                                                   ),
+//                                                 ),
+//                                                 border: OutlineInputBorder(
+//                                                   borderRadius: BorderRadius.circular(5.0),
+//                                                   borderSide: BorderSide(color: textFieldOutline),
+//                                                 ),
+//                                                 focusedBorder: OutlineInputBorder(
+//                                                   borderRadius: BorderRadius.circular(5.0),
+//                                                   borderSide: BorderSide(
+//                                                     color: onSelectTextFieldOutline,
+//                                                     width: 2.0,
+//                                                   ),
+//                                                 ),
+//                                               ),
+//                                               onChanged: (val) {
+//                                                 _groupMemberRelationControllers[index] = val;
+//
+//                                                 // Handle onChanged
+//                                               },
+//                                             ),
+//                                           ),
+//                                         ],
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           );
+//                         },
+//                       ),
+//                     ),
+//
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.start,
+//                       children: [
+//                         Checkbox(
+//                             side: BorderSide(color: textFieldOutline, width: 2),
+//                             activeColor: buttonText,
+//                             value: _pickup,
+//                             onChanged: (val) {
+//                               setState(() {
+//                                 _pickup = !_pickup;
+//                               });
+//                             }),
+//                         const Text(pickupCheckbox)
+//                       ],
+//                     ),
+//
+//                     if (_pickup == true)
+//                       TextFormField(
+//                         initialValue: widget.data.from,
+//                         style: TextStyle(color: inputText),
+//                         // controller: _pickupPoint,
+//                         maxLength: maxCharacters,
+//                         maxLines: null,
+//                         keyboardType: TextInputType.multiline,
+//                         decoration: InputDecoration(
+//                           label: Text(
+//                             pickUpPoint,
+//                           ),
+//                           labelStyle: TextStyle(
+//                               color: placeHolder,
+//                               fontSize: 16.sp,
+//                               fontWeight: FontWeight.normal),
+//                           suffix: InkWell(
+//                               onTap: () {
+//                                 _pickupPoint.clear();
+//                               },
+//                               child: Icon(
+//                                 Icons.highlight_off_outlined,
+//                                 color: iconColor,
+//                               )),
+//                           border: OutlineInputBorder(
+//                             borderRadius: BorderRadius.circular(5),
+//                             borderSide: BorderSide(color: textFieldOutline),
+//                           ),
+//                           focusedBorder: OutlineInputBorder(
+//                             borderRadius: BorderRadius.circular(5),
+//                             borderSide: BorderSide(
+//                                 color: onSelectTextFieldOutline, width: 2),
+//                           ),
+//                         ),
+//                         validator: (value) {
+//                           if (value == null || value.isEmpty) {
+//                             return 'Please enter a Valid Pickup Point';
+//                           }
+//                           return null;
+//                         },
+//                         onChanged: (val) {
+//                           pickupFrom = val;
+//                         },
+//                       ),
+//                     if (_pickup == true) spaceBetween,
+//                     TextFormField(
+//                       style: TextStyle(color: inputText),
+//                       // controller: _emergencyContact,
+//                       initialValue: widget.data.emergencyNumber,
+//                       keyboardType: TextInputType.phone,
+//                       decoration: InputDecoration(
+//                         label: Text(emergencyContact),
+//                         labelStyle: TextStyle(
+//                             color: placeHolder,
+//                             fontSize: 16.sp,
+//                             fontWeight: FontWeight.normal),
+//                         suffix: InkWell(
+//                             onTap: () {
+//                               _emergencyContact.clear();
+//                             },
+//                             child: Icon(
+//                               Icons.highlight_off_outlined,
+//                               color: iconColor,
+//                             )),
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(5),
+//                           borderSide: BorderSide(color: textFieldOutline),
+//                         ),
+//                         focusedBorder: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(5),
+//                           borderSide: BorderSide(
+//                               color: onSelectTextFieldOutline, width: 2),
+//                         ),
+//                       ),
+//                       validator: (value) {
+//                         if (value == null || value.isEmpty) {
+//                           return 'Phone number is required';
+//                         }
+//                         // Define a regular expression for validating phone numbers
+//                         final RegExp phoneRegex = RegExp(r'^\+?[0-9]{7,13}$');
+//                         // Allows for optional '+91' country code followed by 7 to 13 digits
+//
+//                         // Check if the entered value matches the phone number format
+//                         if (!phoneRegex.hasMatch(value)) {
+//                           return 'Enter a valid phone number';
+//                         }
+//                         return null;
+//                       },
+//                     ),
+//                     spaceBetween,
+//                     TextFormField(
+//                       style: TextStyle(color: inputText),
+//                       // controller: _reason,
+//                       initialValue: widget.data.appointmentReason,
+//                       maxLength: maxCharacters,
+//                       maxLines: null,
+//                       keyboardType: TextInputType.multiline,
+//                       decoration: InputDecoration(
+//                         label: Text(
+//                           remark,
+//                         ),
+//                         labelStyle: TextStyle(
+//                           color: placeHolder,
+//                           fontSize: 16,
+//                           fontWeight: FontWeight.normal,
+//                         ),
+//                         suffix: InkWell(
+//                           onTap: () {
+//                             _reason.clear();
+//                           },
+//                           child: Icon(
+//                             Icons.highlight_off_outlined,
+//                             color: iconColor,
+//                           ),
+//                         ),
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(5),
+//                           borderSide: BorderSide(color: textFieldOutline),
+//                         ),
+//                         focusedBorder: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(5),
+//                           borderSide: BorderSide(
+//                               color: onSelectTextFieldOutline, width: 2),
+//                         ),
+//                       ),
+//                     ),
+//                     spaceBetween,
+//                     Row(
+//                       children: [
+//                         Checkbox(
+//                           activeColor: inputText,
+//                           value: _termsAndCondition,
+//                           onChanged: (value) {
+//                             _termsAndCondition = !_termsAndCondition;
+//                             setState(() {});
+//                           },
+//                         ),
+//                         Expanded(
+//                           child: RichText(
+//                             text: TextSpan(
+//                               children: [
+//                                 TextSpan(
+//                                   text:
+//                                   "I hereby acknowledge that I have read and accept the ",
+//                                   style:
+//                                   TextStyle(fontSize: 14, color: inputText),
+//                                 ),
+//                                 TextSpan(
+//                                   text: "Terms and conditions ",
+//                                   style: TextStyle(
+//                                       fontSize: 14,
+//                                       color: buttonColor,
+//                                       fontWeight: FontWeight.bold),
+//                                   recognizer: TapGestureRecognizer()
+//                                     ..onTap = () {
+//                                       Navigator.push(
+//                                         context,
+//                                         PageRouteBuilder(
+//                                           transitionDuration:
+//                                           Duration(milliseconds: 500),
+//                                           transitionsBuilder: (BuildContext
+//                                           context,
+//                                               Animation<double> animation,
+//                                               Animation<double> secAnimation,
+//                                               Widget child) {
+//                                             return SlideTransition(
+//                                               position: Tween<Offset>(
+//                                                 begin: Offset(1.0, 0.0),
+//                                                 end: Offset.zero,
+//                                               ).animate(animation),
+//                                               child: child,
+//                                             );
+//                                           },
+//                                           pageBuilder: (BuildContext context,
+//                                               Animation<double> animation,
+//                                               Animation<double> secAnimation) {
+//                                             return TermsAndConditions();
+//                                           },
+//                                         ),
+//                                       );
+//                                       // Add your code here to handle tap
+//                                       // print("Terms and conditions tapped!");
+//                                     },
+//                                 ),
+//                                 TextSpan(
+//                                   text: "governing appointments.",
+//                                   style:
+//                                   TextStyle(fontSize: 14, color: inputText),
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//
+//                     SizedBox(
+//                       height: 36.h,
+//                     ),
+//                     SizedBox(
+//                       height: 56.sp,
+//                       child: ElevatedButton(
+//                         onPressed: _termsAndCondition != true? null : () async {
+//                           for (int i = 0; i < pro.countOfPeople; i++) {
+//                             // Create a map to store data for each index
+//                             for (GroupMember member in widget.data.groupMembers) {
+//                               int memberId = member.id;
+//                               // Now you can use memberId as needed
+//                               print("Group Member ID: $memberId");
+//                               Map<String, String> dataMap = {
+//                                 "id":memberId.toString(),
+//                                 'name': _groupMemberControllers[i],
+//                                 'age': _groupMemberAgeControllers[i],
+//                                 'relation': _groupMemberRelationControllers[i],
+//                               };
+//                               // Add the map to the list
+//                               dataList.add(dataMap);
+//                             }
+//                             print(dataList.toString());
+//                             await _submitForm(dataList);
+//                             await Provider.of<AppointmentController>(context, listen: false).fetchAppointments();
+//                           }
+//                         },
+//                         style: ElevatedButton.styleFrom(
+//                           shadowColor: Colors.black,
+//                           // Customize the shadow color
+//                           elevation: 4,
+//                           // Adjust the elevation for the shadow
+//                           // Customize the background color
+//                           primary:
+//                           buttonColor,
+//                           shape: RoundedRectangleBorder(
+//                             borderRadius: BorderRadius.circular(
+//                                 16), // Adjust the radius as needed
+//                           ), // Example color, change it according to your preference
+//                         ),
+//                         child: Row(
+//                           mainAxisAlignment: MainAxisAlignment.center,
+//                           children: [
+//                             Icon(
+//                                 Icons.check,
+//                                 color:  _termsAndCondition == true
+//                                     ? buttonText
+//                                     : Colors.white
+//                             ),
+//                             Text(
+//                               confirmBooking,
+//                               style: TextStyle(
+//                                   color: _termsAndCondition == true
+//                                       ? buttonText
+//                                       : Colors.white),
+//                             ),
+//                           ],
+//                         ),
+//                       ),
+//                     ),
+//                     spaceBetween,
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:thusmai_appointmrent/models/appointment_model.dart';
 import 'package:thusmai_appointmrent/pages/appointment/termsandconditions.dart';
 import '../../constant/constant.dart'; // Assuming this file contains the 'appTheam' constant
 import 'package:flutter/material.dart';
-import '../../controller/appointmentontroller_api.dart';
+import '../../controller/appointmentontroller.dart';
+import '../../models/appointment_add_model.dart';
 
 class AppointmentAddPage extends StatefulWidget {
   const AppointmentAddPage({Key? key}) : super(key: key);
@@ -17,10 +787,11 @@ class AppointmentAddPage extends StatefulWidget {
 
 class _AppointmentAddPageState extends State<AppointmentAddPage> {
   // Variables
-  var pickupFrom = "";
+  String pickupFrom = "";
   bool _pickup = false;
-  bool _appointmentForOther = false;
+  bool _externalUser = false;
   bool _termsAndCondition = false;
+  // bool PersonalDetailExpand = false;
 
   // validation Key
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -33,15 +804,21 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   final TextEditingController _emergencyContact = TextEditingController();
   final TextEditingController _reason = TextEditingController();
 
-  // var pro;
+  List<TextEditingController> _GroupMembersDataAgeControllers = [];
+  List<TextEditingController> _GroupMembersDataRelationControllers = [];
+  List<TextEditingController> _GroupMembersDataControllers = [];
 
-  // ViewState
+  // Define a list to store the expansion state of each item
+  List<bool> itemExpandedList = [];
+
+  // init State
   @override
   void initState() {
     super.initState();
+
   }
 
-  // dispose
+  // dispose controllers
   @override
   void dispose() {
     _appointmentDate.dispose();
@@ -50,36 +827,45 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
     _pickupPoint.dispose();
     _emergencyContact.dispose();
     _reason.dispose();
-    for (var controller in _groupMemberControllers) {
+    for (var controller in _GroupMembersDataControllers) {
       controller.dispose();
     }
-    for (var controller in _groupMemberAgeControllers) {
+    for (var controller in _GroupMembersDataAgeControllers) {
       controller.dispose();
     }
-    for (var controller in _groupMemberRelationControllers) {
+    for (var controller in _GroupMembersDataRelationControllers) {
       controller.dispose();
     }
     super.dispose();
   }
 
-  // DatePicker
-  DateTime _selectedDate = DateTime.now();
+  // disabledDates from Operator
+
   final List<DateTime> _disabledDates = [
     DateTime(2024, 3, 10),
     DateTime(2024, 3, 15),
-    DateTime(2024, 3, 20),
+    DateTime(2024, 3, 18),
   ];
 
   Future<void> _selectDate(BuildContext context) async {
+    DateTime selectedDate = DateTime.now();
+
+    // Check if the selected date is disabled
+    if (_disabledDates.contains(selectedDate)) {
+      // If selected date is disabled, find the next available date
+      selectedDate = selectedDate.add(const Duration(days: 1));
+      while (_disabledDates.contains(selectedDate)) {
+        selectedDate = selectedDate.add(const Duration(days: 1));
+      }
+    }
+
     final DateTime? datePicked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: selectedDate,
       firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year, 12, 31),
-      selectableDayPredicate: (DateTime date) {
-        // Disable dates from the _disabledDates list
-        return !_disabledDates.contains(date);
-      },
+      lastDate: DateTime(DateTime.now().year + 1, 12, 31),
+      // Add one more year
+      selectableDayPredicate: selectableDayPredicate,
     );
     if (datePicked != null) {
       var date = DateFormat('dd/MM/yyyy').format(datePicked);
@@ -88,61 +874,50 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
     }
   }
 
-  Future<void> _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      // Date time pick
-      var time = TimeOfDay.now();
-      var date = DateTime.now();
-      // convert to int
-      int? numOfPeople = int.tryParse(_noOfPeople.text);
-      // Appointment Post Data
-      Map<String, dynamic> data = {
-        "appointmentDate": _appointmentDate.text,
-        "num_of_people": numOfPeople,
-        "pickup": _pickup,
-        "days": _noOfDays.text,
-        "from": pickupFrom.isEmpty ? "No Data" : pickupFrom,
-        "emergencyNumber": _emergencyContact.text,
-        "appointment_time": "${time.hour}:${time.minute}",
-        "appointment_reason": _reason.text,
-        "register_date": "${date.day}/${date.month}/${date.year}"
-      };
-      debugPrint(data.toString());
-      //  Api call
-      await Provider.of<AppointmentController>(context, listen: false).postAppointment(context, data);
-    }
+// Define the selectableDayPredicate outside _selectDate
+  bool selectableDayPredicate(DateTime date) {
+    // Disable dates from the _disabledDates list
+    return !_disabledDates.contains(date);
   }
 
-  List<TextEditingController> _groupMemberAgeControllers = [];
-  List<TextEditingController> _groupMemberRelationControllers = [];
-  List<TextEditingController> _groupMemberControllers = [];
+  // Submit data For Appointment
+  Future<void> _submitForm(List<GroupMemberAdd> dataList) async {
+    if (_formKey.currentState!.validate()) {
+      // Date time pick
+      String time = DateFormat('hh:mm a').format(DateTime.now());
+      var date = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
-  // late List<TextEditingController> _groupMemberAgeControllers = List.generate(
-  //   Provider.of<AppointmentController>(context).countOfPeople,
-  //   (index) => TextEditingController(),
-  // );
-  // late List<TextEditingController> _groupMemberRelationControllers =
-  //     List.generate(
-  //       Provider.of<AppointmentController>(context).countOfPeople,
-  //   (index) => TextEditingController(),
-  // );
-  // late List<TextEditingController> _groupMemberControllers = List.generate(
-  //   Provider.of<AppointmentController>(context).countOfPeople,
-  //   (index) => TextEditingController(),
-  // );
+      // convert numOfPeople to int
+      int? numOfPeople = int.tryParse(_noOfPeople.text);
 
+      // Appointment Post Data
+      AppointmentAddData data = AppointmentAddData(
+        appointmentDate: _appointmentDate.text,
+        numOfPeople: numOfPeople,
+        pickup: _pickup,
+        days: _noOfDays.text,
+        from: pickupFrom.isEmpty ? "No Data" : pickupFrom,
+        emergencyNumber: _emergencyContact.text,
+        appointmentTime: time,
+        appointmentReason: _reason.text,
+        registerDate: date,
+        groupMembers: dataList,
+        externalUser: _externalUser,
+      );
+      await Provider.of<AppointmentController>(context, listen: false)
+          .postAppointment(context, data);
+    }
+  }
 
   // WidgetTree
   @override
   Widget build(BuildContext context) {
     var pro = Provider.of<AppointmentController>(context);
-
-    List<Map<String, String>> dataList = [];
+    List<GroupMemberAdd> dataList = [];
 // Iterate through each index
     const int maxCharacters = 100; // Maximum characters allowed
-    const int peopleDigitLimit = 1; // Maximum characters allowed
+    // const int peopleDigitLimit = 1; // Maximum characters allowed
     const int daysDigitLimit = 2; // Maximum characters allowed
-    print("rebuild tree");
     spaceBetween = SizedBox(
       height: 16.h,
     );
@@ -187,7 +962,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                       cursorColor: textFieldOutline,
                       inputFormatters: [DateTextFormatter()],
                       decoration: InputDecoration(
-                        suffixIcon: IconButton(
+                        prefixIcon: IconButton(
                           onPressed: () async {
                             _selectDate(context);
                           },
@@ -231,13 +1006,13 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         Checkbox(
                             side: BorderSide(color: textFieldOutline, width: 2),
                             activeColor: buttonText,
-                            value: _appointmentForOther,
+                            value: _externalUser,
                             onChanged: (val) {
                               setState(() {
-                                _appointmentForOther = !_appointmentForOther;
+                                _externalUser = !_externalUser;
                               });
                             }),
-                        const Text(appointmentForOther)
+                        Expanded(child: Text(appointmentForOther))
                       ],
                     ),
 
@@ -245,64 +1020,60 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Flexible(
-                          child: TextFormField(
-                            style: TextStyle(color: inputText),
-                            onChanged: (value) {
-                              if (_noOfPeople.text.isNotEmpty) {
-                                pro.countOfPeople = int.parse(value);
-                              } else {
-                                pro.countOfPeople = 0;
-                              }
-                            },
-                            controller: _noOfPeople,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(
-                                  peopleDigitLimit),
-                            ],
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              label: Text(
-                                noOfPeople,
-                                style: TextStyle(color: placeHolder),
-                              ),
-                              labelStyle: TextStyle(
-                                color: textFieldOutline,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.normal,
-                              ),
-                              suffix: InkWell(
+                        Row(
+                          children: [
+                            Text(noOfPeople),
+                            Padding(
+                              padding:
+                                  EdgeInsets.fromLTRB(8.sp, 0.sp, 8.sp, 0.sp),
+                              child: GestureDetector(
                                 onTap: () {
-                                  pro.countOfPeople = 0;
-                                  _noOfPeople.clear();
+                                  pro.subtract();
+                                  // You also need to decrement the countOfPeople variable if needed
+                                  _noOfPeople.text =
+                                      pro.countOfPeople.toString();
+                                  if (pro.countOfPeople < 0) {
+                                    pro.countOfPeople--;
+                                    pro.countOfPeople = 0;
+                                  }
+                                  itemExpandedList.removeAt(pro.countOfPeople);
                                 },
-                                child: Icon(
-                                  Icons.highlight_off_outlined,
-                                  color: iconColor,
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: textFieldOutline),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                    color: onSelectTextFieldOutline, width: 2),
+                                child: Container(
+                                    color: inputText,
+                                    child: Icon(
+                                      Icons.remove,
+                                      color: Colors.white,
+                                    )),
                               ),
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'No. of people required';
-                              }
-                              // Validate if the entered value is a valid integer
-                              final intValue = int.tryParse(value);
-                              if (intValue == null || intValue <= 0) {
-                                return 'Valid number please';
-                              }
-                              return null;
-                            },
-                          ),
+                            Text("${pro.countOfPeople}"),
+                            Padding(
+                              padding:
+                                  EdgeInsets.fromLTRB(8.sp, 0.sp, 8.sp, 0.sp),
+                              child: GestureDetector(
+                                onTap: () {
+                                  pro.addCount();
+                                  // Set all existing items to true
+                                  itemExpandedList.forEach((element) {
+                                    element = true;
+                                  });
+                                  itemExpandedList.add(false);
+                                  print(itemExpandedList.toString());
+                                  _noOfPeople.text = pro.countOfPeople.toString();
+                                },
+                                child: Container(
+                                    color: pro.countOfPeople != 5
+                                        ? inputText
+                                        : Colors.grey,
+                                    child: Icon(
+                                      Icons.add,
+                                      color: pro.countOfPeople != 5
+                                          ? Colors.white
+                                          : Colors.grey.shade700,
+                                    )),
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           width: 16.w,
@@ -359,7 +1130,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         ),
                       ],
                     ),
-                    if (_noOfPeople.text.isNotEmpty)
+                    if (pro.countOfPeople != 0)
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
                         child: Row(
@@ -368,165 +1139,361 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                           ],
                         ),
                       ),
-                    Container(
-                      height: pro.countOfPeople * 205.h,
-                      // Adjust the height based on the number of items
+                    SizedBox(
+                      height: calculateTotalHeight(itemExpandedList),
                       child: ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: pro.countOfPeople,
                         itemBuilder: (context, index) {
-                          _groupMemberControllers.add(TextEditingController());
-                          _groupMemberAgeControllers
+                          _GroupMembersDataControllers.add(TextEditingController());
+                          _GroupMembersDataAgeControllers
                               .add(TextEditingController());
-                          _groupMemberRelationControllers
+                          _GroupMembersDataRelationControllers
                               .add(TextEditingController());
-                          print("rebuild");
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 16.sp),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                          return Column(
+                            children: [
+                              if (!itemExpandedList[index])
                                 Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 23.sp, right: 10.sp),
-                                  child: Text("#${index + 1}"),
-                                ),
-                                Expanded(
-                                  child: Column(
+                                  padding: EdgeInsets.only(bottom: 16.sp),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      TextFormField(
-                                        style: TextStyle(color: inputText),
-                                        controller:
-                                            _groupMemberControllers[index],
-                                        decoration: InputDecoration(
-                                          label: Text(
-                                            "Name",
-                                            style: TextStyle(color: placeHolder),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            top: 23.sp, right: 10.sp),
+                                        child: Text("#${index + 1}"),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          height: 260.h,
+                                          decoration: BoxDecoration(
+                                            color: bottomNavLabel,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
                                           ),
-                                          labelStyle: TextStyle(
-                                            color: textFieldOutline,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                          suffix: InkWell(
-                                            onTap: () {
-                                              _groupMemberControllers[index].clear();
-                                            },
-                                            child: Icon(
-                                              Icons.highlight_off_outlined,
-                                              color: iconColor,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Column(
+                                              children: [
+                                                TextFormField(
+                                                  style: TextStyle(
+                                                      color: inputText),
+                                                  controller:
+                                                      _GroupMembersDataControllers[
+                                                          index],
+                                                  decoration: InputDecoration(
+                                                    labelText: "Name",
+                                                    labelStyle: TextStyle(
+                                                        color: placeHolder),
+                                                    suffixIcon: InkWell(
+                                                      onTap: () {
+                                                        _GroupMembersDataControllers[
+                                                                index]
+                                                            .clear();
+                                                      },
+                                                      child: Icon(
+                                                        Icons
+                                                            .highlight_off_outlined,
+                                                        color: iconColor,
+                                                      ),
+                                                    ),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      borderSide: BorderSide(
+                                                          color:
+                                                              textFieldOutline),
+                                                    ),
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            onSelectTextFieldOutline,
+                                                        width: 2,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onChanged: (val) {
+                                                    // Handle onChanged
+                                                  },
+                                                ),
+                                                spaceBetween,
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: TextFormField(
+                                                        inputFormatters: [
+                                                          LengthLimitingTextInputFormatter(daysDigitLimit),
+                                                        ],
+                                                        keyboardType: TextInputType.number,
+                                                        style: TextStyle(
+                                                            color: inputText),
+                                                        controller:
+                                                            _GroupMembersDataAgeControllers[
+                                                                index],
+                                                        decoration:
+                                                            InputDecoration(
+                                                          labelText: "Age",
+                                                          labelStyle: TextStyle(
+                                                              color:
+                                                                  placeHolder),
+                                                          suffixIcon: InkWell(
+                                                            onTap: () {
+                                                              _GroupMembersDataAgeControllers[
+                                                                      index]
+                                                                  .clear();
+                                                            },
+                                                            child: Icon(
+                                                              Icons
+                                                                  .highlight_off_outlined,
+                                                              color: iconColor,
+                                                            ),
+                                                          ),
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                            borderSide: BorderSide(
+                                                                color:
+                                                                    textFieldOutline),
+                                                          ),
+                                                          focusedBorder:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                            borderSide:
+                                                                BorderSide(
+                                                              color:
+                                                                  onSelectTextFieldOutline,
+                                                              width: 2,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        onChanged: (val) {
+                                                          // Handle onChanged
+                                                        },
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 16.sp),
+                                                    Expanded(
+                                                      child: TextFormField(
+                                                        style: TextStyle(
+                                                            color: inputText),
+                                                        controller:
+                                                            _GroupMembersDataRelationControllers[
+                                                                index],
+                                                        decoration:
+                                                            InputDecoration(
+                                                          labelText: "Relation",
+                                                          labelStyle: TextStyle(
+                                                              color:
+                                                                  placeHolder),
+                                                          suffixIcon: InkWell(
+                                                            onTap: () {
+                                                              _GroupMembersDataRelationControllers[index]
+                                                                  .clear();
+                                                            },
+                                                            child: Icon(
+                                                              Icons
+                                                                  .highlight_off_outlined,
+                                                              color: iconColor,
+                                                            ),
+                                                          ),
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                            borderSide: BorderSide(
+                                                                color:
+                                                                    textFieldOutline),
+                                                          ),
+                                                          focusedBorder:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                            borderSide:
+                                                                BorderSide(
+                                                              color:
+                                                                  onSelectTextFieldOutline,
+                                                              width: 2,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        onChanged: (val) {
+                                                          // Handle onChanged
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      5.sp, 16.sp, 5.sp, 5.sp),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          shadowColor:
+                                                              Colors.black,
+                                                          elevation: 4,
+                                                          primary: inputText,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100),
+                                                          ),
+                                                        ),
+                                                        onPressed: () {
+                                                          _GroupMembersDataControllers[
+                                                                  index]
+                                                              .clear();
+                                                          _GroupMembersDataAgeControllers[
+                                                                  index]
+                                                              .clear();
+                                                          _GroupMembersDataRelationControllers[
+                                                                  index]
+                                                              .clear();
+                                                        },
+                                                        child: Text(
+                                                          "Clear",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  bottomNavLabel),
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 16.w),
+                                                      ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          shadowColor:
+                                                              Colors.black,
+                                                          elevation: 4,
+                                                          primary: inputText,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        100),
+                                                          ),
+                                                        ),
+                                                        onPressed: () {
+                                                          itemExpandedList[
+                                                              index] = true;
+                                                          setState(() {});
+                                                        },
+                                                        child: Text(
+                                                          "Save",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  bottomNavLabel),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5),
-                                            borderSide: BorderSide(color: textFieldOutline),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(5),
-                                            borderSide: BorderSide(
-                                                color: onSelectTextFieldOutline, width: 2),
                                           ),
                                         ),
-                                        onChanged: (val) {
-                                          // Handle onChanged
-                                        },
-                                      ),
-                                      spaceBetween,
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextFormField(
-                                              style:
-                                                  TextStyle(color: inputText),
-                                              controller:
-                                                  _groupMemberAgeControllers[
-                                                      index],
-                                              decoration: InputDecoration(
-                                                label: Text(
-                                                  "Age",
-                                                  style: TextStyle(color: placeHolder),
-                                                ),
-                                                labelStyle: TextStyle(
-                                                  color: textFieldOutline,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                                suffix: InkWell(
-                                                  onTap: () {
-                                                    _groupMemberAgeControllers[
-                                                    index].clear();
-                                                  },
-                                                  child: Icon(
-                                                    Icons.highlight_off_outlined,
-                                                    color: iconColor,
-                                                  ),
-                                                ),
-                                                border: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(5),
-                                                  borderSide: BorderSide(color: textFieldOutline),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(5),
-                                                  borderSide: BorderSide(
-                                                      color: onSelectTextFieldOutline, width: 2),
-                                                ),
-                                              ),
-
-                                              onChanged: (val) {
-                                                // Handle onChanged
-                                              },
-                                            ),
-                                          ),
-                                          SizedBox(width: 16.sp),
-                                          Expanded(
-                                            child: TextFormField(
-                                              style:
-                                                  TextStyle(color: inputText),
-                                              controller:
-                                                  _groupMemberRelationControllers[
-                                                      index],
-                                              decoration: InputDecoration(
-                                                label: Text(
-                                                  "Relation",
-                                                  style: TextStyle(color: placeHolder),
-                                                ),
-                                                labelStyle: TextStyle(
-                                                  color: textFieldOutline,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                                suffix: InkWell(
-                                                  onTap: () {
-                                                    _groupMemberRelationControllers[
-                                                    index].clear();
-                                                  },
-                                                  child: Icon(
-                                                    Icons.highlight_off_outlined,
-                                                    color: iconColor,
-                                                  ),
-                                                ),
-                                                border: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(5),
-                                                  borderSide: BorderSide(color: textFieldOutline),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(5),
-                                                  borderSide: BorderSide(
-                                                      color: onSelectTextFieldOutline, width: 2),
-                                                ),
-                                              ),
-                                              onChanged: (val) {
-                                                // Handle onChanged
-                                              },
-                                            ),
-                                          ),
-                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              if (itemExpandedList[index])
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 16.sp),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 8),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(4),
+                                          child: Text("#${index + 1}"),
+                                        ),
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              itemExpandedList[index] = false;
+                                              setState(() {});
+                                            },
+                                            child: Container(
+                                              height: 56.h,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  color: bottomNavLabel),
+                                              child: Row(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8),
+                                                    child: Text(
+                                                        "${_GroupMembersDataControllers[index].text},"),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8),
+                                                    child: Text(
+                                                        "${_GroupMembersDataAgeControllers[index].text},"),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8),
+                                                    child: Text(
+                                                        "${_GroupMembersDataRelationControllers[index].text}"),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        IconButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                // // // Remove the item at the given index from each TextEditingController list
+                                                _GroupMembersDataControllers
+                                                    .removeAt(index);
+                                                _GroupMembersDataAgeControllers
+                                                    .removeAt(index);
+                                                _GroupMembersDataRelationControllers
+                                                    .removeAt(index);
+                                                // // You also need to decrement the countOfPeople variable if needed
+                                                pro.countOfPeople -= 1;
+                                                itemExpandedList.removeAt(index);
+                                                calculateTotalHeight(itemExpandedList);
+                                              });
+                                            },
+                                            icon: Icon(
+                                                Icons.highlight_off_outlined))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            ],
                           );
                         },
                       ),
@@ -546,7 +1513,6 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         const Text(pickupCheckbox)
                       ],
                     ),
-
                     if (_pickup == true)
                       TextFormField(
                         style: TextStyle(color: inputText),
@@ -739,38 +1705,37 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         ),
                       ],
                     ),
-
                     SizedBox(
                       height: 36.h,
                     ),
                     SizedBox(
                       height: 56.sp,
                       child: ElevatedButton(
-                        onPressed: () async {
-                          for (int i = 0; i < pro.countOfPeople; i++) {
-                            // Create a map to store data for each index
-                            Map<String, String> dataMap = {
-                              'name': _groupMemberControllers[i].text,
-                              'age': _groupMemberAgeControllers[i].text,
-                              'relation':
-                                  _groupMemberRelationControllers[i].text,
-                            };
-                            // Add the map to the list
-                            dataList.add(dataMap);
-                          }
-                          print(dataList.toString());
-                          await _submitForm();
-                          await Provider.of<AppointmentController>(context, listen: false).fetchAppointments();
-                        },
+                        onPressed: _termsAndCondition != true
+                            ? null
+                            : () async {
+
+                                for (int i = 0; i < pro.countOfPeople; i++) {
+                                  // Create a map to store data for each index
+                                  GroupMemberAdd dataMap = GroupMemberAdd(
+                                    name: _GroupMembersDataControllers[i].text,
+                                    age: _GroupMembersDataAgeControllers[i].text,
+                                    relation: _GroupMembersDataRelationControllers[i].text,
+                                  );
+                                  // Add the map to the list
+                                  dataList.add(dataMap);
+                                }
+                                await _submitForm(dataList);
+                                await Provider.of<AppointmentController>(
+                                        context,
+                                        listen: false)
+                                    .fetchAppointments();
+                              },
                         style: ElevatedButton.styleFrom(
                           shadowColor: Colors.black,
                           // Customize the shadow color
                           elevation: 4,
-                          // Adjust the elevation for the shadow
-                          // Customize the background color
-                          primary: _termsAndCondition == true
-                              ? buttonColor
-                              : Colors.grey.shade700,
+                          primary: buttonColor,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 16), // Adjust the radius as needed
@@ -779,18 +1744,16 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.check,
-                              color: _termsAndCondition == true
-                                  ? buttonText
-                                  : Colors.white,
-                            ),
+                            Icon(Icons.check,
+                                color: _termsAndCondition == true
+                                    ? buttonText
+                                    : Colors.grey),
                             Text(
                               confirmBooking,
                               style: TextStyle(
                                   color: _termsAndCondition == true
                                       ? buttonText
-                                      : Colors.white),
+                                      : Colors.grey),
                             ),
                           ],
                         ),
@@ -805,5 +1768,22 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
         ),
       ),
     );
+  }
+
+  double calculateTotalHeight(List<bool> itemExpandedList) {
+    double trueCount = 0;
+    double falseCount = 0;
+
+    // Iterate through the list and count the number of true and false values
+    for (bool itemExpanded in itemExpandedList) {
+      if (itemExpanded) {
+        trueCount++;
+      } else {
+        falseCount++;
+      }
+    }
+    // Calculate the total height
+    double totalHeight = (trueCount * 80.h) + (falseCount * 280.h);
+    return totalHeight;
   }
 }

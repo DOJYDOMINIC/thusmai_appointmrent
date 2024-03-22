@@ -2,10 +2,9 @@ import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../constant/constant.dart';
-import '../../controller/appointmentontroller_api.dart';
+import '../../controller/appointmentontroller.dart';
 import 'message_guru.dart';
 
 class MessageTab extends StatefulWidget {
@@ -90,7 +89,7 @@ class _MessageTabState extends State<MessageTab> {
                     child: Center(
                       child: Text(
                         pageUnderWork,
-                        style: GoogleFonts.schoolbell(
+                        style:TextStyle(
                           fontSize: 24.sp,
                           color: Color.fromRGBO(67, 44, 0, .3),
                         ),
@@ -104,7 +103,7 @@ class _MessageTabState extends State<MessageTab> {
                   child: Center(
                     child: Text(
                       pageUnderWork,
-                      style: GoogleFonts.schoolbell(
+                      style: TextStyle(
                         fontSize: 24.sp,
                         color: Color.fromRGBO(67, 44, 0, .3),
                       ),

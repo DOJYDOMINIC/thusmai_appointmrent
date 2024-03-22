@@ -5,7 +5,6 @@ import 'package:thusmai_appointmrent/pages/login_register_otp/reset_password.dar
 import 'package:url_launcher/url_launcher.dart';
 import '../../constant/constant.dart';
 
-import '../../constant/global functions.dart';
 import '../../controller/login_register_otp_api.dart';
 
 
@@ -105,20 +104,19 @@ class _LoginState extends State<Login> {
                           SizedBox(height: 20.h,),
                           TextFormField(
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
+                              if (value == null || value.trim().isEmpty) {
                                 return 'Please enter your email';
                               }
                               // Email validation regular expression
                               bool isValidEmail =
-                                  RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                                      .hasMatch(value);
+                              RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim());
                               if (!isValidEmail) {
                                 return 'Please enter a valid email';
                               }
                               return null;
                             },
                             onChanged: (value) {
-                              _email = value;
+                              _email = value.trim();
                             },
                             style: TextStyle(
                               color: Colors.white,
@@ -137,17 +135,17 @@ class _LoginState extends State<Login> {
                               ),
                               fillColor: appbar,
                               filled: true,
-                              enabledBorder:OutlineInputBorder(
+                              enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: buttonColor,width: 1),
+                                borderSide: BorderSide(color: buttonColor, width: 1),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: buttonColor,width: 1),
+                                borderSide: BorderSide(color: buttonColor, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: buttonColor,width: 1),
+                                borderSide: BorderSide(color: buttonColor, width: 1),
                               ),
                             ),
                           ),
@@ -255,7 +253,27 @@ class _LoginState extends State<Login> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.push(context,  MaterialPageRoute(builder:  (context) => Register(),));
+                                    Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        transitionDuration: Duration(milliseconds: 500),
+                                        transitionsBuilder: (BuildContext context, Animation<double> animation,
+                                            Animation<double> secAnimation, Widget child) {
+                                          return SlideTransition(
+                                            position: Tween<Offset>(
+                                              begin: const Offset(-1.0, 0.0),
+                                              end: Offset.zero,
+                                            ).animate(animation),
+                                            child: child,
+                                          );
+                                        },
+                                        pageBuilder: (BuildContext context, Animation<double> animation,
+                                            Animation<double> secAnimation) {
+                                          return Register();
+                                        },
+                                      ),
+                                    );
+                                    // Navigator.push(context,  MaterialPageRoute(builder:  (context) => Register(),));
                                   },
                                   child: Text(
                                     "Forgot Password.",

@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import '../constant/constant.dart';
+import '../controller/appointmentontroller.dart';
 
 
 void showPlatformDialog(BuildContext context, String firstImage, String title,

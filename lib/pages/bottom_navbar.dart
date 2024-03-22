@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:thusmai_appointmrent/pages/hometab.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/login.dart';
 import 'package:thusmai_appointmrent/pages/message/messsagetab.dart';
+import 'package:thusmai_appointmrent/pages/profile/profile.dart';
 import 'package:thusmai_appointmrent/pages/rasorpay.dart';
+
+import '../controller/login_register_otp_api.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({Key? key,}) : super(key: key);
@@ -19,7 +22,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
   bool _videoEnabled = true;
   bool _homeEnabled = true;
-  bool _meditationEnabled = false;
+  bool _meditationEnabled = true;
   bool _paymentsEnabled = true;
 
   final List<Widget> _pages = [
@@ -28,7 +31,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       child: Center(
           child: Text(
             pageUnderWork,
-            style: GoogleFonts.schoolbell(
+            style: TextStyle(
                 fontSize: 24.sp, color: const Color.fromRGBO(67, 44, 0, .3)),
           )),
     ),
@@ -38,7 +41,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       child: Center(
           child: Text(
             pageUnderWork,
-            style: GoogleFonts.schoolbell(
+            style: TextStyle(
                 fontSize: 24.sp, color: const Color.fromRGBO(67, 44, 0, .3)),
           )),
     ),
@@ -77,10 +80,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             ),
           ),
           IconButton(
-            onPressed: () async{
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.clear();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
+            onPressed: () {
+              Provider.of<AppLogin>(context,listen: false).getUserByID(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(),));
             },
             icon: Icon(
               Icons.account_circle,

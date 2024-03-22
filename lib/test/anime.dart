@@ -1,81 +1,66 @@
-import 'package:flutter/material.dart';
-
-import '../constant/constant.dart';
-
-class AnimatedContainerWidget extends StatefulWidget {
-  @override
-  _AnimatedContainerWidgetState createState() =>
-      _AnimatedContainerWidgetState();
-}
-
-class _AnimatedContainerWidgetState extends State<AnimatedContainerWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  bool _isZoomed = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 2), // Change duration according to your requirement
-    );
-
-    final CurvedAnimation curve =
-    CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
-
-    _animation = Tween<double>(
-      begin: 0.5, // Starting from 0.5 (50% size)
-      end: 1.0,
-    ).animate(curve)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed && !_isZoomed) {
-          _controller.reverse();
-          _isZoomed = true;
-        } else if (status == AnimationStatus.dismissed && _isZoomed) {
-          _isZoomed = false;
-        }
-      });
-
-    _controller.forward();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Animated Container'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (BuildContext context, Widget? child) {
-                return Container(
-                  width: 200 * _animation.value,
-                  height: 200 * _animation.value,
-                  // color: Colors.blue,
-                  decoration: BoxDecoration(image: DecorationImage(image: AssetImage(logo))),
-                  // You can add any other properties for the container
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-}
-
+// import 'package:flutter/material.dart';
+//
+// class ListViewBuilderExample extends StatefulWidget {
+//   @override
+//   _ListViewBuilderExampleState createState() => _ListViewBuilderExampleState();
+// }
+//
+// class _ListViewBuilderExampleState extends State<ListViewBuilderExample> {
+//   int? expandedIndex;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         appBar: AppBar(
+//           title: Text('Animated Container ListView'),
+//         ),
+//         body: ListView.builder(
+//           itemCount: 10, // Adjust the item count as needed
+//           itemBuilder: (context, index) {
+//             return GestureDetector(
+//               onTap: () {
+//                 setState(() {
+//                   // If the tapped index is already expanded, collapse it
+//                   if (expandedIndex == index) {
+//                     expandedIndex = null;
+//                   } else {
+//                     // Otherwise, expand the tapped index and collapse the previously expanded index
+//                     expandedIndex = index;
+//                   }
+//                 });
+//               },
+//               child: AnimatedContainer(
+//                 duration: Duration(milliseconds: 500),
+//                 height: expandedIndex == index ? 110 : 50, // Change height based on expansion state
+//                 decoration: BoxDecoration(
+//                   borderRadius: BorderRadius.circular(8),
+//                   color: Colors.blue,
+//                 ),
+//                 margin: EdgeInsets.all(8),
+//                 child: SingleChildScrollView( // Wrap the Column with SingleChildScrollView
+//                   child: Center(
+//                     child: Column(
+//                       children: [
+//                         Text(
+//                           'Item $index',
+//                           style: TextStyle(color: Colors.white, fontSize: 20),
+//                         ),
+//                         if (expandedIndex == index) ...[
+//                           Text("dart"),
+//                           Text("dart"),
+//                           Text("dart"),
+//                         ],
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
 
