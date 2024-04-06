@@ -45,6 +45,7 @@ void showPlatformDialog(BuildContext context, String firstImage, String title,
                 child: CupertinoButton(
                   onPressed: () {
                     if (buttonText == "Continue") {
+                      Provider.of<AppointmentController>(context, listen: false).fetchAppointments();
                       Navigator.of(context).pop();
                     }
                     Navigator.of(context).pop();
@@ -76,7 +77,7 @@ void showPlatformDialog(BuildContext context, String firstImage, String title,
           height: 24.h,
         );
         return AlertDialog(
-          backgroundColor: pageBackground,
+          backgroundColor: shadeOne,
           content: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Column(
@@ -114,15 +115,13 @@ void showPlatformDialog(BuildContext context, String firstImage, String title,
                   child: ElevatedButton(
                     onPressed: () {
                       if (buttonText == "Continue") {
+                        Provider.of<AppointmentController>(context, listen: false).fetchAppointments();
                         Navigator.of(context).pop();
                       }
                       Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
-                      // shadowColor: Colors.red, // Customize the shadow color
-                      // elevation: 4, // Adjust the elevation for the shadow
-                      // Customize the background color
-                      primary: color,
+                      backgroundColor: color,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(
                             16), // Adjust the radius as needed

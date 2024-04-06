@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/controller/login_register_otp_api.dart';
 
 import '../../constant/constant.dart';
+import '../../services/firebase_notification.dart';
 import '../bottom_navbar.dart';
 
 class MeditationData extends StatefulWidget {
@@ -14,6 +15,14 @@ class MeditationData extends StatefulWidget {
 }
 
 class _MeditationDataState extends State<MeditationData> {
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseApi().initNotifications();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     var pro = Provider.of<AppLogin>(context);
@@ -97,13 +106,13 @@ class _MeditationDataState extends State<MeditationData> {
                           width: width,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: buttonColor),
-                              color: inputText),
+                              border: Border.all(color: goldShade),
+                              color: darkShade),
                           child: Row(
                             children: [
                               Icon(
                                 Icons.supervised_user_circle_outlined,
-                                color: buttonColor,
+                                color: goldShade,
                               ),
                               SizedBox(
                                 width: 16,
@@ -125,8 +134,8 @@ class _MeditationDataState extends State<MeditationData> {
                         padding: EdgeInsets.fromLTRB(16.sp, 0.sp, 16.sp, 0.sp),
                         child: Container(
                           decoration: BoxDecoration(
-                              border: Border.all(color: buttonColor),
-                              color: inputText.withOpacity(.75)),
+                              border: Border.all(color: goldShade),
+                              color: darkShade.withOpacity(.75)),
                           child: Padding(
                             padding:
                                 EdgeInsets.fromLTRB(16.sp, 16.sp, 16.sp, 0.sp),
@@ -157,16 +166,16 @@ class _MeditationDataState extends State<MeditationData> {
                                           key: ValueKey(pro.myTiles[i]),
                                           children: [
                                             Container(
-                                              color: inputText.withOpacity(.75),
+                                              color: darkShade.withOpacity(.75),
                                               child: ListTile(
                                                 tileColor:
-                                                    inputText.withOpacity(.75),
+                                                    darkShade.withOpacity(.75),
                                                 title: Row(
                                                   children: [
                                                     Text(
                                                       "0${i + 1} ",
                                                       style: TextStyle(
-                                                          color: buttonColor),
+                                                          color: goldShade),
                                                     ),
                                                     Text(
                                                       "${pro.myTiles[i]}",
@@ -185,7 +194,7 @@ class _MeditationDataState extends State<MeditationData> {
                                               thickness: .3,
                                               height: .2,
                                               color:
-                                                  buttonColor, // Light color underline
+                                                  goldShade, // Light color underline
                                             ),
                                           ],
                                         ),
@@ -212,19 +221,11 @@ class _MeditationDataState extends State<MeditationData> {
                                 MaterialPageRoute(
                                   builder: (context) => CustomBottomNavBar(),
                                 ));
-                            // print({
-                            //   pro.myTiles[0],
-                            //   pro.myTiles[1],
-                            //   pro.myTiles[2],
-                            //   pro.myTiles[3]
-                            // });
-
-
                           },
                           style: ElevatedButton.styleFrom(
                             shadowColor: Colors.black,
                             elevation: 4,
-                            primary: buttonColor,
+                            primary: goldShade,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(100),
                             ),

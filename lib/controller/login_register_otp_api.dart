@@ -17,7 +17,6 @@ class AppLogin extends ChangeNotifier {
 // firstLogin check
 
   bool _firstLogin = true;
-
   bool get firstLogin => _firstLogin;
 
   set firstLogin(bool value) {
@@ -28,8 +27,9 @@ class AppLogin extends ChangeNotifier {
   // updated and manage moving tile
 
   List<String> _myTiles = ["Financial", "Health", "Mental", "Relationship"];
-
   List<String> get myTiles => _myTiles;
+
+
 
   void updateMyTile(int oldIndex, int newIndex) {
     // An adjustment is needed when moving the tile down
@@ -43,11 +43,13 @@ class AppLogin extends ChangeNotifier {
     notifyListeners(); // Notify listeners to rebuild widgets
   }
 
-  User? _userData;
 
+  User? _userData;
   User? get userData => _userData;
 
-  Future<void> getUserByID(BuildContext context,) async {
+
+  Future<void> getUserByID() async {
+    try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     final response = await http.get(
@@ -58,11 +60,9 @@ class AppLogin extends ChangeNotifier {
       },
     );
 
-    try {
       if (response.statusCode == 200) {
         var decode = jsonDecode(response.body);
         _userData = User.fromJson(decode["user"]);
-        debugPrint(decode.toString());
       } else if (response.statusCode == 404) {
         // Handle 404 Not Found error
         _userData = null;
@@ -70,7 +70,7 @@ class AppLogin extends ChangeNotifier {
         // Handle other status codes
       }
     } catch (e) {
-      print("Login Error : $e");
+      print("getUserByID : $e");
     }
     notifyListeners();
   }
@@ -98,7 +98,7 @@ class AppLogin extends ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Login Error : $e");
+      print("meditationData : $e");
     }
   }
 
@@ -117,6 +117,7 @@ class AppLogin extends ChangeNotifier {
     // final String specificCookie = response.headers['set-cookie']?.split(';')[0] ?? "";
     // final sessionId = specificCookie.split('=')[1];
     var decode = jsonDecode(response.body);
+    print(decode.toString());
     try {
       if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -150,7 +151,7 @@ class AppLogin extends ChangeNotifier {
         );
       }
     } catch (e) {
-      // print("Login Error : $e");
+      print("loginApi : $e");
     }
   }
 
@@ -182,7 +183,7 @@ class AppLogin extends ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Login Error : $e");
+      print("requestPasswordReset : $e");
     }
   }
 
@@ -197,13 +198,13 @@ class AppLogin extends ChangeNotifier {
     var decode = jsonDecode(response.body);
     try {
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.green,
-            content: Text(decode["message"]),
-            duration: Duration(seconds: 2),
-          ),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     backgroundColor: Colors.green,
+        //     content: Text(decode["message"]),
+        //     duration: Duration(seconds: 2),
+        //   ),
+        // );
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -219,7 +220,7 @@ class AppLogin extends ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Login Error : $e");
+      print("otpVerification : $e");
     }
   }
 
@@ -256,7 +257,7 @@ class AppLogin extends ChangeNotifier {
         );
       }
     } catch (e) {
-      print("Login Error : $e");
+      print("resetPassword : $e");
     }
   }
 }

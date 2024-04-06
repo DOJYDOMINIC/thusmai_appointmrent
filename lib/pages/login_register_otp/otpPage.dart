@@ -17,9 +17,9 @@ class otpPage extends StatefulWidget {
 }
 
 class _otpPageState extends State<otpPage> {
-  var focusedBorderColor = buttonColor;
-  var fillColor = inputText;
-  var borderColor = buttonColor;
+  var focusedBorderColor = goldShade;
+  var fillColor = darkShade;
+  var borderColor = goldShade;
 
   final pinController = TextEditingController();
   final focusNode = FocusNode();
@@ -64,10 +64,6 @@ class _otpPageState extends State<otpPage> {
 
   @override
   Widget build(BuildContext context) {
-    // var pro = Provider.of<AppointmentController>(context,listen: false);
-    // String phoneNumber = widget.data["phone"]??"+910000001234";
-    // String formattedPhoneNumber = phoneNumber.substring(0, 3) + "******" + phoneNumber.substring(9);
-
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
@@ -198,15 +194,6 @@ class _otpPageState extends State<otpPage> {
                                   8), // Set border radius here
                             ),
                           ),
-                          // validator: (value) {
-                          //   if(otpvalidate == true ){
-                          //     return value == value.toString() ? null : 'Pin is incorrect';
-                          //   }else if (otpvalidate == false){
-                          //     return value == "value" ? null : 'Pin is incorrect';
-                          //   }
-                          //   return null;
-                          //
-                          // },
                           onClipboardFound: (value) {
                             debugPrint('onClipboardFound: $value');
                             pinController.setText(value);
@@ -274,7 +261,7 @@ class _otpPageState extends State<otpPage> {
                             enableResend
                                 ? '00:30'
                                 : '00:$secondsRemaining',
-                            style: TextStyle(color: buttonColor, fontSize: 16.sp),
+                            style: TextStyle(color: goldShade, fontSize: 16.sp),
                           ),
                         ],
                       ),
@@ -295,7 +282,7 @@ class _otpPageState extends State<otpPage> {
                           style: ElevatedButton.styleFrom(
                             shadowColor: Colors.black,
                             elevation: 4,
-                            primary: 20 == 20 ? buttonColor : Colors.grey,
+                            primary: 20 == 20 ? goldShade : Colors.grey,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(100),
                             ),
@@ -326,13 +313,13 @@ class _otpPageState extends State<otpPage> {
                         child: Text(
                           "Resend OTP",
                           style: TextStyle(
-                            color: enableResend ? buttonColor : Colors.grey,
+                            color: enableResend ? goldShade : Colors.grey,
                             fontWeight: FontWeight.bold,
                             // Make text bold
                             decoration: TextDecoration.underline,
                             // Add underline decoration
                             decorationColor:
-                                buttonColor, // Set underline color to red
+                                goldShade, // Set underline color to red
                           ),
                         ),
                       )

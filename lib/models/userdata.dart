@@ -9,72 +9,72 @@ Userdata userdataFromJson(String str) => Userdata.fromJson(json.decode(str));
 String userdataToJson(Userdata data) => json.encode(data.toJson());
 
 class Userdata {
-  User user;
+  User? user;
 
   Userdata({
-    required this.user,
+    this.user,
   });
 
   factory Userdata.fromJson(Map<String, dynamic> json) => Userdata(
-    user: User.fromJson(json["user"]),
+    user: json["user"] == null ? null : User.fromJson(json["user"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "user": user.toJson(),
+    "user": user?.toJson(),
   };
 }
 
 class User {
-  int userId;
-  String firstName;
-  String lastName;
-  String dob;
-  String gender;
-  String email;
-  String address;
-  int pincode;
-  String state;
-  String district;
-  String country;
-  String phone;
-  String reference;
-  String languages;
-  String remark;
-  String verify;
-  int uId;
-  DateTime doj;
-  DateTime expiredDate;
-  String password;
-  String classAttended;
-  String maintananceFee;
-  DateTime createdAt;
-  DateTime updatedAt;
+  int? userId;
+  String? firstName;
+  String? lastName;
+  String? dob;
+  String? gender;
+  String? email;
+  String? address;
+  int? pincode;
+  String? state;
+  String? district;
+  String? country;
+  String? phone;
+  String? reference;
+  String? languages;
+  int? uId;
+  DateTime? doj;
+  DateTime? expiredDate;
+  String? classAttended;
+  bool? isans;
+  List<String>? profilePicUrl;
+  bool? maintananceFee;
+  int? cycle;
+  int? day;
+  int? sessionNum;
 
   User({
-    required this.userId,
-    required this.firstName,
-    required this.lastName,
-    required this.dob,
-    required this.gender,
-    required this.email,
-    required this.address,
-    required this.pincode,
-    required this.state,
-    required this.district,
-    required this.country,
-    required this.phone,
-    required this.reference,
-    required this.languages,
-    required this.remark,
-    required this.verify,
-    required this.uId,
-    required this.doj,
-    required this.expiredDate,
-    required this.password,
-    required this.classAttended,
-    required this.maintananceFee,
-    required this.createdAt,
-    required this.updatedAt,
+    this.userId,
+    this.firstName,
+    this.lastName,
+    this.dob,
+    this.gender,
+    this.email,
+    this.address,
+    this.pincode,
+    this.state,
+    this.district,
+    this.country,
+    this.phone,
+    this.reference,
+    this.languages,
+    this.uId,
+    this.doj,
+    this.expiredDate,
+    this.classAttended,
+    this.isans,
+    this.profilePicUrl,
+    this.maintananceFee,
+    this.cycle,
+    this.day,
+    this.sessionNum,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -92,16 +92,16 @@ class User {
     phone: json["phone"],
     reference: json["reference"],
     languages: json["languages"],
-    remark: json["remark"],
-    verify: json["verify"],
     uId: json["UId"],
-    doj: DateTime.parse(json["DOJ"]),
-    expiredDate: DateTime.parse(json["expiredDate"]),
-    password: json["password"],
+    doj: json["DOJ"] == null ? null : DateTime.parse(json["DOJ"]),
+    expiredDate: json["expiredDate"] == null ? null : DateTime.parse(json["expiredDate"]),
     classAttended: json["classAttended"],
+    isans: json["isans"],
+    profilePicUrl: json["profilePicUrl"] == null ? [] : List<String>.from(json["profilePicUrl"]!.map((x) => x)),
     maintananceFee: json["maintanance_fee"],
-    createdAt: DateTime.parse(json["createdAt"]),
-    updatedAt: DateTime.parse(json["updatedAt"]),
+    cycle: json["cycle"],
+    day: json["day"],
+    sessionNum: json["session_num"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -119,15 +119,15 @@ class User {
     "phone": phone,
     "reference": reference,
     "languages": languages,
-    "remark": remark,
-    "verify": verify,
     "UId": uId,
-    "DOJ": "${doj.year.toString().padLeft(4, '0')}-${doj.month.toString().padLeft(2, '0')}-${doj.day.toString().padLeft(2, '0')}",
-    "expiredDate": expiredDate.toIso8601String(),
-    "password": password,
+    "DOJ": "${doj!.year.toString().padLeft(4, '0')}-${doj!.month.toString().padLeft(2, '0')}-${doj!.day.toString().padLeft(2, '0')}",
+    "expiredDate": expiredDate?.toIso8601String(),
     "classAttended": classAttended,
+    "isans": isans,
+    "profilePicUrl": profilePicUrl == null ? [] : List<dynamic>.from(profilePicUrl!.map((x) => x)),
     "maintanance_fee": maintananceFee,
-    "createdAt": createdAt.toIso8601String(),
-    "updatedAt": updatedAt.toIso8601String(),
+    "cycle": cycle,
+    "day": day,
+    "session_num": sessionNum,
   };
 }

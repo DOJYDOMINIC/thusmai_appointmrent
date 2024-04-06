@@ -150,14 +150,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                               ),
                               prefixIcon: Icon(
                                 Icons.lock_outline,
-                                color: buttonColor,
+                                color: goldShade,
                               ),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _isNewPasswordVisible
                                       ? Icons.visibility
                                       : Icons.visibility_off,
-                                  color: buttonColor,
+                                  color: goldShade,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -165,22 +165,22 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   });
                                 },
                               ),
-                              fillColor: appbar,
+                              fillColor: darkShade,
                               filled: true,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 borderSide:
-                                    BorderSide(color: buttonColor, width: 1),
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 borderSide:
-                                    BorderSide(color: buttonColor, width: 1),
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16),
                                 borderSide:
-                                    BorderSide(color: buttonColor, width: 1),
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                             ),
                           ),
@@ -209,14 +209,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                               ),
                               prefixIcon: Icon(
                                 Icons.lock_outline,
-                                color: buttonColor,
+                                color: goldShade,
                               ),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _isPasswordVisible
                                       ? Icons.visibility
                                       : Icons.visibility_off,
-                                  color: buttonColor,
+                                  color: goldShade,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -224,22 +224,22 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   });
                                 },
                               ),
-                              fillColor: appbar,
+                              fillColor: darkShade,
                               filled: true,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
                                 borderSide:
-                                    BorderSide(color: buttonColor, width: 1),
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
                                 borderSide:
-                                    BorderSide(color: buttonColor, width: 1),
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
                                 borderSide:
-                                    BorderSide(color: buttonColor, width: 1),
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                             ),
                           ),
@@ -262,7 +262,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               style: ElevatedButton.styleFrom(
                                 shadowColor: Colors.black,
                                 elevation: 4,
-                                primary: buttonColor,
+                                primary: goldShade,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100),
                                 ),

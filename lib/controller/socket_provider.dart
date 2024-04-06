@@ -10,7 +10,7 @@ class SocketProvider extends ChangeNotifier {
 
   void connectToSocket() {
     try {
-      socket = IO.io('http://192.168.1.78:5000/chat', <String, dynamic>{
+      socket = IO.io('https://thasmai.tstsvc.in/chat', <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': true,
       });

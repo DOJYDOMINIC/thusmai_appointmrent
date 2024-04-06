@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/controller/connectivitycontroller.dart';
 import 'package:thusmai_appointmrent/pages/appointment/termsandconditions.dart';
 import '../../constant/constant.dart';
 import '../../controller/appointmentontroller.dart';
-import '../../widgets/feedback.dart';
+import '../../controller/payment_controller.dart';
+import '../../widgets/additionnalwidget.dart';
+import '../../widgets/deletedialog.dart';
+import 'feedback.dart';
 import '../refreshpage.dart';
+import 'app_new_edit.dart';
 import 'appointment_add.dart';
-import 'appointment_edit.dart';
+import 'appointment_share.dart';
 
 class AppointmentListPage extends StatefulWidget {
   const AppointmentListPage({Key? key}) : super(key: key);
@@ -18,28 +24,104 @@ class AppointmentListPage extends StatefulWidget {
 }
 
 class _AppointmentListPageState extends State<AppointmentListPage> {
+  String _isPayed = "false";
+
   @override
   void initState() {
     super.initState();
+
+    Provider.of<AppointmentController>(context, listen: false)
+        .fetchAppointments();
+    Provider.of<AppointmentController>(context, listen: false)
+        .termsAndCondition();
     Provider.of<ConnectivityProvider>(context, listen: false).status;
-    Provider.of<AppointmentController>(context, listen: false).fetchAppointments();
+
+    _isPayed = "false";
   }
+
+  final LocalAuthentication auth = LocalAuthentication();
+  bool _isAuthenticating = false;
+
+  Future<void> _authenticate(String id) async {
+    bool authenticated = false;
+    try {
+      setState(() {
+        _isAuthenticating = true;
+      });
+      authenticated = await auth.authenticate(
+        localizedReason: 'Verify to delete',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+        ),
+      );
+      setState(() {
+        _isAuthenticating = false;
+      });
+
+      if (authenticated) {
+        _isAuthenticating = true;
+        print(_isAuthenticating.toString());
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return DeleteDialog(id);
+          },
+        );
+      } else {}
+    } on PlatformException catch (e) {
+      _isAuthenticating = true;
+      print(_isAuthenticating.toString());
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return DeleteDialog(id);
+        },
+      );
+    }
+    if (!mounted) {
+      return;
+    }
+  }
+
+// Function to perform after authentication
+// void _performActionAfterAuthentication() {
+//   // Implement your logic here
+// }
 
   @override
   Widget build(BuildContext context) {
     var connect = Provider.of<ConnectivityProvider>(context);
     var pro = Provider.of<AppointmentController>(context);
     return Scaffold(
-      backgroundColor: pageBackground,
-      body: connect.status == ConnectivityStatus.Offline ? Center(child: RefreshPage(onTap: (){},)): pro.appointments.isEmpty
-              ? Center(child: CircularProgressIndicator())
+      backgroundColor: shadeOne,
+      body: connect.status == ConnectivityStatus.Offline
+          ? Center(
+              child: RefreshPage(
+              onTap: () {},
+            ))
+          : pro.appointments.isEmpty
+              ? Center(
+                  child: Text(
+                    bookAppointment,
+                    style: TextStyle(
+                        fontSize: 24.sp, color: Color.fromRGBO(67, 44, 0, .3)),
+                  ),
+                )
               : ListView.builder(
                   itemCount: pro.appointments.length,
                   itemBuilder: (context, index) {
-                    final appointment = pro.appointments.toList()[index];
+                    final appointment =
+                        pro.appointments.reversed.toList()[index];
                     return Column(
                       children: [
-                        Container(
+                        GestureDetector(
+                          onTap: () {
+                            appointment.appointmentStatus == "Not Arrived"
+                                ?
+                            slidePageRoute(context,  AppointmentShare(
+                                appointment: appointment),
+                            ): null;
+                          },
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -48,7 +130,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                                   title: Text(
                                     'Booking Date (${appointment.registerDate ?? 'N/A'})',
                                     style: TextStyle(
-                                        color: heading, fontSize: 16.sp),
+                                        color: darkShade, fontSize: 16.sp),
                                   ),
                                   subtitle: Column(
                                     crossAxisAlignment:
@@ -57,209 +139,45 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                                       Text(
                                         'Check-in date : ${appointment.appointmentDate ?? 'N/A'}',
                                         style: TextStyle(
-                                            color: subtext, fontSize: 13.sp),
+                                            color: shadeTen, fontSize: 13.sp),
                                       ),
                                       Text(
                                         'Check-out date : ${appointment.checkOut ?? 'N/A'}',
                                         style: TextStyle(
-                                            color: subtext, fontSize: 13.sp),
+                                            color: shadeTen, fontSize: 13.sp),
                                       ),
                                       Text(
                                         'No. of people : ${appointment.numOfPeople}',
                                         style: TextStyle(
-                                            color: subtext, fontSize: 13.sp),
+                                            color: shadeTen, fontSize: 13.sp),
                                       ),
                                     ],
                                   ),
                                 ),
                               ),
-                              // if (appointment.checkOut == null)
                               appointment.appointmentStatus == "Not Arrived"
-                              // appointment.appointmentStatus == "p"
                                   ? Row(
                                       children: [
                                         Padding(
                                           padding: EdgeInsets.fromLTRB(
                                               0.sp, 10, 0, 0),
                                           child: IconButton(
-                                              onPressed: () {},
-                                              icon: Icon(Icons.share,
-                                                  color: iconColor)),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              0.sp, 10, 0, 0),
-                                          child: IconButton(
                                               onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  PageRouteBuilder(
-                                                    transitionDuration: Duration(milliseconds: 500),
-                                                    transitionsBuilder: (BuildContext context, Animation<double> animation,
-                                                        Animation<double> secAnimation, Widget child) {
-                                                      return SlideTransition(
-                                                        position: Tween<Offset>(
-                                                          begin: Offset(1.0, 0.0),
-                                                          end: Offset.zero,
-                                                        ).animate(animation),
-                                                        child: child,
-                                                      );
-                                                    },
-                                                    pageBuilder: (BuildContext context, Animation<double> animation,
-                                                        Animation<double> secAnimation) {
-                                                      return AppointmentEditPage(data:pro.appointments[index]);
-                                                    },
-                                                  ),
-                                                );
+                                                slidePageRoute(
+                                                    context,
+                                                    AppointmentEditPage(
+                                                        data: appointment));
                                               },
                                               icon: Icon(Icons.edit,
-                                                  color: iconColor)),
+                                                  color: shadeTen)),
                                         ),
                                         Padding(
                                           padding: EdgeInsets.fromLTRB(
                                               0.sp, 10, 0, 0),
                                           child: IconButton(
                                             onPressed: () async {
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  var size = SizedBox(
-                                                    height: 24.h,
-                                                  );
-                                                  return AlertDialog(
-                                                    backgroundColor:
-                                                        pageBackground,
-                                                    elevation: 4,
-                                                    shadowColor: Color.fromRGBO(
-                                                        186, 26, 26, 1),
-                                                    content: SizedBox(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          size,
-                                                          Container(
-                                                            height: 105.h,
-                                                            width: 100.w,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              image: DecorationImage(
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                  image: AssetImage(
-                                                                      alertDeleted)),
-                                                            ),
-                                                          ),
-                                                          size,
-                                                          Text(
-                                                            areYouSure,
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                              fontSize: 20.sp,
-                                                            ),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                          SizedBox(
-                                                            height: 16,
-                                                          ),
-                                                          Text(
-                                                            bookingCancelMessage,
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                              fontSize: 12.sp,
-                                                            ),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                          size,
-                                                          SizedBox(
-                                                            height: 56.h,
-                                                            child:
-                                                                ElevatedButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                                await Provider.of<
-                                                                            AppointmentController>(
-                                                                        context,
-                                                                        listen:
-                                                                            false)
-                                                                    .deleteAppointment(
-                                                                        context,
-                                                                        appointment
-                                                                            .id
-                                                                            .toString());
-                                                                await pro
-                                                                    .fetchAppointments();
-                                                              },
-                                                              style:
-                                                                  ElevatedButton
-                                                                      .styleFrom(
-                                                                primary: Color
-                                                                    .fromRGBO(
-                                                                        186,
-                                                                        26,
-                                                                        26,
-                                                                        1),
-                                                                shape:
-                                                                    RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              16),
-                                                                ),
-                                                              ),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Text(
-                                                                    confirm,
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .white),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          size,
-                                                          TextButton(
-                                                            child: const Text(
-                                                              cancel,
-                                                              style: TextStyle(
-                                                                  color: Color
-                                                                      .fromRGBO(
-                                                                          186,
-                                                                          26,
-                                                                          26,
-                                                                          1)),
-                                                            ),
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
+                                              await _authenticate(
+                                                  appointment.id.toString());
                                             },
                                             icon:
                                                 Icon(Icons.delete, color: red),
@@ -269,7 +187,8 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                                     )
                                   : GestureDetector(
                                       onTap: () {
-                                        feedBackDialog(context);
+                                        slidePageRoute(context,
+                                            FeedBack(id: appointment.id));
                                       },
                                       child: Padding(
                                         padding: EdgeInsets.only(
@@ -281,14 +200,14 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                                               child: Text(
                                             "Feedback",
                                             style: TextStyle(
-                                                color: inputText,
+                                                color: darkShade,
                                                 fontSize: 12.sp),
                                           )),
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(16),
-                                              border: Border.all(
-                                                  color: buttonColor)),
+                                              border:
+                                                  Border.all(color: goldShade)),
                                         ),
                                       ),
                                     ),
@@ -296,7 +215,7 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                           ),
                         ),
                         Divider(
-                          color: dividerLine,
+                          color: shadeFour,
                           thickness: 1,
                         ),
                         if (index ==
@@ -312,32 +231,13 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
         children: [
           FloatingActionButton(
             heroTag: 1,
-            backgroundColor: floatingAction,
+            backgroundColor: shadeEight,
             onPressed: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: Duration(milliseconds: 500),
-                  transitionsBuilder: (BuildContext context, Animation<double> animation,
-                      Animation<double> secAnimation, Widget child) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(1.0, 0.0),
-                        end: Offset.zero,
-                      ).animate(animation),
-                      child: child,
-                    );
-                  },
-                  pageBuilder: (BuildContext context, Animation<double> animation,
-                      Animation<double> secAnimation) {
-                    return TermsAndConditions();
-                  },
-                ),
-              );
+              slidePageRoute(context, TermsAndConditions());
             },
             child: Icon(
               Icons.info_outline,
-              color: inputText,
+              color: darkShade,
             ),
             mini: true, // Set mini to true to reduce the size
           ),
@@ -346,35 +246,15 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
           ),
           FloatingActionButton(
             heroTag: 2,
-            backgroundColor: buttonColor,
-            onPressed: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: Duration(milliseconds: 500),
-                  transitionsBuilder: (BuildContext context,
-                      Animation<double> animation,
-                      Animation<double> secAnimation,
-                      Widget child) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(1.0, 0.0),
-                        end: Offset.zero,
-                      ).animate(animation),
-                      child: child,
-                    );
+            backgroundColor: _isPayed != "true" ? goldShade : Colors.grey,
+            onPressed: _isPayed == "true"
+                ? null
+                : () {
+                    slidePageRoute(context, AppointmentAddPage());
                   },
-                  pageBuilder: (BuildContext context,
-                      Animation<double> animation,
-                      Animation<double> secAnimation) {
-                    return const AppointmentAddPage();
-                  },
-                ),
-              );
-            },
             child: Icon(
               Icons.add,
-              color: iconColor,
+              color: _isPayed != "true" ? shadeTen : Colors.white,
               size: 35.sp,
             ),
           ),

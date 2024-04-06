@@ -1,12 +1,11 @@
-import 'package:connectivity/connectivity.dart';
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../constant/constant.dart';
 import '../controller/appointmentontroller.dart';
-import 'appointment/list_appointment.dart';
+import '../pages/appointment/list_appointment.dart';
+import '../pages/meditation/meditationpageview.dart';
+import '../pages/overview/overview.dart';
 
 
 
@@ -22,23 +21,6 @@ class _HomeTabState extends State<HomeTab> {
   @override
   void initState() {
     super.initState();
-    // Listen for connectivity changes
-    // Connectivity().onConnectivityChanged.listen((result) {
-    //   if (result == ConnectivityResult.none) {
-    //     // No internet connection
-    //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //       backgroundColor: Colors.red,
-    //       content: Text('No internet connection'),
-    //     ));
-    //   } else {
-    //     // Internet connection established
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //         SnackBar(
-    //       backgroundColor: Colors.green,
-    //       content: Text('Connected to the internet'),
-    //     ));
-    //   }
-    // });
   }
 
   @override
@@ -50,10 +32,10 @@ class _HomeTabState extends State<HomeTab> {
           body: ContainedTabBarView(
             tabBarProperties: TabBarProperties(
               indicatorSize: TabBarIndicatorSize.tab,
-              indicatorColor: buttonColor,
+              indicatorColor: goldShade,
               indicatorWeight: 2,
               background: Container(
-                color: appbar,
+                color: darkShade,
               ),
             ),
             tabs: [
@@ -62,12 +44,12 @@ class _HomeTabState extends State<HomeTab> {
                 children: [
                   Icon(
                     Icons.dashboard_outlined,
-                    color: pro.selectedIndex == 0 ? navIcon : tabInactive,
+                    color: pro.selectedIndex == 0 ? shadeSix : shadeTwo,
                   ),
                   Text(
                     overview,
                     style: TextStyle(
-                      color: pro.selectedIndex == 0 ? navIcon : tabInactive,
+                      color: pro.selectedIndex == 0 ? shadeSix : shadeTwo,
                     ),
                   ),
                 ],
@@ -77,34 +59,19 @@ class _HomeTabState extends State<HomeTab> {
                 children: [
                   Icon(
                     Icons.event_available,
-                    color: pro.selectedIndex == 1 ? navIcon : tabInactive,
+                    color: pro.selectedIndex == 1 ? shadeSix : shadeTwo,
                   ),
                   Text(
                     appointment,
                     style: TextStyle(
-                      color: pro.selectedIndex == 1 ? navIcon : tabInactive,
+                      color: pro.selectedIndex == 1 ? shadeSix : shadeTwo,
                     ),
                   ),
                 ],
               ),
             ],
             views: [
-              GestureDetector(
-                onTap: () {
-                  if (!FocusScope.of(context).hasPrimaryFocus) {
-                    FocusScope.of(context).unfocus();
-                  }
-                },
-                child: Container(
-                  color: pageBackground,
-                  child: Center(child: Text(
-                    pageUnderWork,
-                    style: TextStyle(
-                        fontSize: 24.sp,
-                        color: Color.fromRGBO(67, 44, 0, .3)),
-                  ),),
-                ),
-              ),
+              Overview(),
               AppointmentListPage(),
             ],
             onChange: (index) {

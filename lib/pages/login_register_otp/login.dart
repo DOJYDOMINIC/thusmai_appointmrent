@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/reset_password.dart';
+import 'package:thusmai_appointmrent/widgets/additionnalwidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../constant/constant.dart';
 
@@ -131,21 +132,21 @@ class _LoginState extends State<Login> {
                               ),
                               prefixIcon: Icon(
                                 Icons.mail_outline,
-                                color: buttonColor,
+                                color: goldShade,
                               ),
-                              fillColor: appbar,
+                              fillColor: darkShade,
                               filled: true,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: buttonColor, width: 1),
+                                borderSide: BorderSide(color: goldShade, width: 1),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: buttonColor, width: 1),
+                                borderSide: BorderSide(color: goldShade, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: buttonColor, width: 1),
+                                borderSide: BorderSide(color: goldShade, width: 1),
                               ),
                             ),
                           ),
@@ -176,14 +177,14 @@ class _LoginState extends State<Login> {
                               ),
                               prefixIcon: Icon(
                                 Icons.lock_outline,
-                                color: buttonColor,
+                                color: goldShade,
                               ),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _isPasswordVisible
                                       ? Icons.visibility_off
                                       : Icons.visibility,
-                                  color: buttonColor,
+                                  color: goldShade,
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -191,19 +192,19 @@ class _LoginState extends State<Login> {
                                   });
                                 },
                               ),
-                              fillColor: appbar,
+                              fillColor: darkShade,
                               filled: true,
                               enabledBorder:OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: buttonColor,width: 1),
+                                borderSide: BorderSide(color: goldShade,width: 1),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: buttonColor,width: 1),
+                                borderSide: BorderSide(color: goldShade,width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: buttonColor,width: 1),
+                                borderSide: BorderSide(color: goldShade,width: 1),
                               ),
                             ),
                           ),
@@ -226,7 +227,7 @@ class _LoginState extends State<Login> {
                               style: ElevatedButton.styleFrom(
                                 shadowColor: Colors.black,
                                 elevation: 4,
-                                primary: buttonColor,
+                                primary: goldShade,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100),
                                 ),
@@ -253,33 +254,14 @@ class _LoginState extends State<Login> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                        transitionDuration: Duration(milliseconds: 500),
-                                        transitionsBuilder: (BuildContext context, Animation<double> animation,
-                                            Animation<double> secAnimation, Widget child) {
-                                          return SlideTransition(
-                                            position: Tween<Offset>(
-                                              begin: const Offset(-1.0, 0.0),
-                                              end: Offset.zero,
-                                            ).animate(animation),
-                                            child: child,
-                                          );
-                                        },
-                                        pageBuilder: (BuildContext context, Animation<double> animation,
-                                            Animation<double> secAnimation) {
-                                          return Register();
-                                        },
-                                      ),
-                                    );
+                                    slidePageRoute(context, Register());
                                     // Navigator.push(context,  MaterialPageRoute(builder:  (context) => Register(),));
                                   },
                                   child: Text(
                                     "Forgot Password.",
                                     style: TextStyle(
                                       fontSize: 12.sp,
-                                      color: buttonColor,
+                                      color: goldShade,
                                       fontWeight: FontWeight.normal,
 
                                       decoration: TextDecoration.underline,
@@ -299,7 +281,7 @@ class _LoginState extends State<Login> {
                                   "Register",
                                   style: TextStyle(
                                     fontSize: 12.sp,
-                                    color: buttonColor,
+                                    color: goldShade,
                                     fontWeight: FontWeight.normal,
                                     decoration: TextDecoration.underline,
                                   ),

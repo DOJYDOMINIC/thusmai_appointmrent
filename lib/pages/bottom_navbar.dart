@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
-import 'package:thusmai_appointmrent/pages/hometab.dart';
-import 'package:thusmai_appointmrent/pages/login_register_otp/login.dart';
-import 'package:thusmai_appointmrent/pages/message/messsagetab.dart';
+import 'package:thusmai_appointmrent/tabs/hometab.dart';
+import 'package:thusmai_appointmrent/tabs/messsagetab.dart';
 import 'package:thusmai_appointmrent/pages/profile/profile.dart';
-import 'package:thusmai_appointmrent/pages/rasorpay.dart';
-
+import 'package:thusmai_appointmrent/widgets/additionnalwidget.dart';
 import '../controller/login_register_otp_api.dart';
+import '../services/firebase_notification.dart';
+import '../tabs/meditationTab.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({Key? key,}) : super(key: key);
@@ -18,8 +17,14 @@ class CustomBottomNavBar extends StatefulWidget {
 }
 
 class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
-  int _currentIndex = 1;
 
+  @override
+  void initState() {
+    super.initState();
+    FirebaseApi().initNotifications();
+
+  }
+  int _currentIndex = 1;
   bool _videoEnabled = true;
   bool _homeEnabled = true;
   bool _meditationEnabled = true;
@@ -27,7 +32,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
   final List<Widget> _pages = [
     Container(
-      color: pageBackground,
+      color: shadeOne,
       child: Center(
           child: Text(
             pageUnderWork,
@@ -36,8 +41,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           )),
     ),
     HomeTab(),
+    MeditationTab(),
     Container(
-      color: pageBackground,
+      color: shadeOne,
       child: Center(
           child: Text(
             pageUnderWork,
@@ -45,15 +51,13 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                 fontSize: 24.sp, color: const Color.fromRGBO(67, 44, 0, .3)),
           )),
     ),
-    PaymentPage(title: 'Payment',),
   ];
-
   @override
   Widget build(BuildContext context) {
     // var pro = Provider.of<AppointmentController>(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appbar,
+        backgroundColor: darkShade,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Image(
@@ -67,26 +71,48 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             },
             icon: Icon(
               Icons.message_outlined,
-              color: navIcon,
+              color: shadeSix,
             ),
           ),
           IconButton(
             onPressed: () {
-
             },
             icon: Icon(
               Icons.circle_notifications_outlined,
-              color: navIcon,
+              color: shadeSix,
             ),
           ),
           IconButton(
             onPressed: () {
-              Provider.of<AppLogin>(context,listen: false).getUserByID(context);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(),));
+              Provider.of<AppLogin>(context,listen: false).getUserByID();
+              slidePageRoute(context,Profile());
+              // Navigator.push(
+              //   context,
+              //   PageRouteBuilder(
+              //     transitionDuration: Duration(milliseconds: 500),
+              //     transitionsBuilder: (BuildContext context,
+              //         Animation<double> animation,
+              //         Animation<double> secAnimation,
+              //         Widget child) {
+              //       return SlideTransition(
+              //         position: Tween<Offset>(
+              //           begin: Offset(1.0, 0.0),
+              //           end: Offset.zero,
+              //         ).animate(animation),
+              //         child: child,
+              //       );
+              //     },
+              //     pageBuilder: (BuildContext context,
+              //         Animation<double> animation,
+              //         Animation<double> secAnimation) {
+              //       return Profile();
+              //     },
+              //   ),
+              // );
             },
             icon: Icon(
               Icons.account_circle,
-              color: navIcon,
+              color: shadeSix,
             ),
           ),
         ],
@@ -94,14 +120,14 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       body: _pages[_currentIndex],
       bottomNavigationBar:  Container(
         height: 80,
-        color: appbar, // Background color of the bottom navigation bar
+        color: darkShade, // Background color of the bottom navigation bar
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            buildNavBarItem(_currentIndex != 0?Icons.videocam_outlined: Icons.videocam, "Videos", 0,_videoEnabled),
-            buildNavBarItem(_currentIndex != 1 ?Icons.home_outlined :Icons.home_rounded , "Home", 1,_homeEnabled),
-            buildNavBarItem(Icons.self_improvement, "Meditation", 2,_meditationEnabled),
-            buildNavBarItem(_currentIndex != 3 ?Icons.payments_outlined:Icons.payments_rounded, "Payments", 3,_paymentsEnabled),
+            buildNavBarItem(_currentIndex != 0?Icons.videocam_outlined: Icons.videocam, videos, 0,_videoEnabled),
+            buildNavBarItem(_currentIndex != 1 ?Icons.home_outlined :Icons.home_rounded , home, 1,_homeEnabled),
+            buildNavBarItem(Icons.self_improvement, meditation, 2,_meditationEnabled),
+            buildNavBarItem(_currentIndex != 3 ?Icons.payments_outlined:Icons.payments_rounded, payment, 3,_paymentsEnabled),
           ],
         ),
       ),
@@ -116,7 +142,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         });
       }
           : (){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text("Please Do payment to enable Meditation")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(enable)));
         if (isEnabled == false) {
           _currentIndex = 3; // Navigate to index 0 when tapping on index 3
           setState(() {
@@ -131,17 +157,17 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             Container(
               width: 64.w,
               height: 32.h,
-              decoration: BoxDecoration(color:_currentIndex == index ? iconContainer : appbar,borderRadius: BorderRadius.circular(20.sp) ),
+              decoration: BoxDecoration(color:_currentIndex == index ? shadeEleven : darkShade,borderRadius: BorderRadius.circular(20.sp) ),
               child: Icon(
                 icon,
-                color:isEnabled? _currentIndex == index ? navIcon: bottomNavLabelUnSelected : Colors.grey, // Icon color
+                color:isEnabled? _currentIndex == index ? shadeSix: shadeFive : Colors.grey, // Icon color
               ),
             ),
             Text(
               label,
               style: TextStyle(
                 fontSize: 12.sp,
-                color:isEnabled?  _currentIndex == index ? bottomNavLabel : bottomNavLabelUnSelected : Colors.grey, // Text color
+                color:isEnabled?  _currentIndex == index ? shadeTwo : shadeFive : Colors.grey, // Text color
               ),
             ),
           ],

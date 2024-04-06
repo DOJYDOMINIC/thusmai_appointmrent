@@ -84,6 +84,33 @@ class AppointmentController extends ChangeNotifier {
 
 
 
+  String tAndC = "";
+
+  Future<void> termsAndCondition() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+    print(cookies);
+    try {
+      var response = await http.get(
+        Uri.parse("$baseUrl/rulesAndConditions"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+      if (response.statusCode == 200) {
+
+        Map<String, dynamic> dataList = jsonDecode(response.body);
+        tAndC = dataList["condition"].toString();
+      } else {
+        print('Failed to load appointments: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Error fetching appointments: $e');
+    }
+    notifyListeners();
+  }
+
 
   Future<void> updateAppointment(BuildContext context,ListElement data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -102,8 +129,6 @@ class AppointmentController extends ChangeNotifier {
       var message = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        Provider.of<AppointmentController>(context, listen: false).fetchAppointments();
-        // countOfPeople = 0;
         if(response.statusCode == 401){
           prefs.clear();
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
@@ -123,6 +148,7 @@ class AppointmentController extends ChangeNotifier {
       throw Exception('Failed to create appointment');
     }
   }
+
   Future<void> postAppointment(BuildContext context,AppointmentAddData data) async {
     print(data.toString());
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -138,8 +164,8 @@ class AppointmentController extends ChangeNotifier {
       );
 
       var message = jsonDecode(response.body);
-
       if (response.statusCode == 200) {
+        Provider.of<AppointmentController>(context, listen: false).fetchAppointments();
         countOfPeople = 0;
         if(response.statusCode == 401){
           prefs.clear();
@@ -174,7 +200,7 @@ class AppointmentController extends ChangeNotifier {
       ).timeout(const Duration(seconds: 10));
       var decode = jsonDecode(response.body);
       if (response.statusCode == 200) {
-
+        fetchAppointments();
       } else {
         showPlatformDialog(context,alertDeleted,deleteFailed,decode["error"].toString(),"cancel",Color.fromRGBO(186, 26, 26, 1));
         // print('Failed to delete appointment. Status code: ${response.statusCode}');
@@ -187,30 +213,72 @@ class AppointmentController extends ChangeNotifier {
       // throw Exception('Failed to delete appointment');
     }
   }
-}
-
-Future<void> deleteMember(BuildContext context,int? id) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var cookies = prefs.getString("cookie");
-  print(cookies);
-  try {
-    final response = await http.delete(Uri.parse('$baseUrl/group-members/$id'),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        if (cookies != null) 'Cookie': cookies,
-      },
-    ).timeout(const Duration(seconds: 10));
-    var decode = jsonDecode(response.body);
-    if (response.statusCode == 200) {
-    } else {
-      showPlatformDialog(context,alertDeleted,deleteFailed,decode["error"].toString(),"cancel",Color.fromRGBO(186, 26, 26, 1));
-      // print('Failed to delete appointment. Status code: ${response.statusCode}');
+  Future<void> deleteMember(BuildContext context,int? id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+    print(cookies);
+    try {
+      final response = await http.delete(Uri.parse('$baseUrl/group-members/$id'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      ).timeout(const Duration(seconds: 10));
+      var decode = jsonDecode(response.body);
+      if (response.statusCode == 200) {} else {
+        showPlatformDialog(
+            context, alertDeleted, deleteFailed, decode["error"].toString(),
+            "cancel", Color.fromRGBO(186, 26, 26, 1));
+        // print('Failed to delete appointment. Status code: ${response.statusCode}');
+      }
+    } on http.ClientException catch (_) {
+      showPlatformDialog(
+          context, alertDeleted, deleteFailed, "something went wrong", "cancel",
+          Color.fromRGBO(186, 26, 26, 1));
+    } catch (error) {
+      print("This ERROR $error");
+      showPlatformDialog(
+          context, alertDeleted, deleteFailed, "unable to delete", "cancel",
+          Color.fromRGBO(186, 26, 26, 1));
+      // throw Exception('Failed to delete appointment');
     }
-  }on http.ClientException catch (_) {
-    showPlatformDialog(context,alertDeleted,bookingFailed,"something went wrong","cancel",Color.fromRGBO(186, 26, 26, 1));
-  }  catch (error) {
-    print( "This ERROR $error");
-    showPlatformDialog(context,alertDeleted,deleteFailed,"unable to delete","cancel",Color.fromRGBO(186, 26, 26, 1));
-    // throw Exception('Failed to delete appointment');
+  }
+
+  Future<void> appointmentFeedback(BuildContext context,var data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+    print(cookies);
+    try {
+      final response = await http.put(Uri.parse("$baseUrl/rating"),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          if (cookies != null) 'Cookie': cookies,
+        },
+        body: jsonEncode(data),
+      );
+
+      // var message = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        Navigator.pop(context);
+        if(response.statusCode == 401){
+          prefs.clear();
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
+        }
+        // else{
+        //   showPlatformDialog(context,alertCompleted,bookingCompleted,message["message"].toString(),"Continue",Color.fromRGBO(81, 100, 64, 1) );
+        // }
+      }else {
+        // showPlatformDialog(context,alertDeleted,bookingFailed,message["error"].toString(),"cancel",Color.fromRGBO(186, 26, 26, 1));
+        // print('Failed to create appointment. Status code: ${response.statusCode}');
+      }
+    }on http.ClientException catch (_) {
+      // showPlatformDialog(context,alertDeleted,bookingFailed,"something went wrong","cancel",Color.fromRGBO(186, 26, 26, 1));
+    }  catch (error) {
+      // showPlatformDialog(context,alertDeleted,bookingFailed,"something went wrong","cancel",Color.fromRGBO(186, 26, 26, 1));
+      print('Error creating appointment: $error');
+      throw Exception('Failed to create appointment');
+    }
   }
 }
+
+

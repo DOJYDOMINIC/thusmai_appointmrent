@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:thusmai_appointmrent/pages/login_register_otp/login.dart';
 import '../../constant/constant.dart';
 
 import '../../controller/login_register_otp_api.dart';
@@ -87,8 +88,7 @@ class _RegisterState extends State<Register> {
                               Row(
                                 children: [
                                   IconButton(onPressed: (){
-                                    Navigator.of(context).popUntil((route) => route.isFirst);
-
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>Login(),));
                                   }, icon: Icon(Icons.arrow_back_ios,color: Colors.white)),
                                   SizedBox(width: 20.w,),
                                   Text("Forgot Password ?",style: TextStyle(color: Colors.white,fontWeight: FontWeight.normal,fontSize: 16),),
@@ -142,24 +142,24 @@ class _RegisterState extends State<Register> {
                               ),
                               prefixIcon: Icon(
                                 Icons.mail_outline,
-                                color: buttonColor,
+                                color: goldShade,
                               ),
-                              fillColor: appbar,
+                              fillColor: darkShade,
                               filled: true,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
                                 borderSide:
-                                    BorderSide(color: buttonColor, width: 1),
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
                                 borderSide:
-                                    BorderSide(color: buttonColor, width: 1),
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
                                 borderSide:
-                                    BorderSide(color: buttonColor, width: 1),
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                             ),
                           ),
@@ -176,7 +176,7 @@ class _RegisterState extends State<Register> {
                               style: ElevatedButton.styleFrom(
                                 shadowColor: Colors.black,
                                 elevation: 4,
-                                primary: buttonColor,
+                                primary: goldShade,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100),
                                 ),

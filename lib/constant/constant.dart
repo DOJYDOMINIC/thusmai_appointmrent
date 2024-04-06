@@ -6,55 +6,65 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const baseUrl = "https://thasmai.tstsvc.in/api/v1/User";
 
-// const  baseUrl = "http://192.168.1.78:5000/api/v1/User";
+const  adminBaseUrl = "https://thasmai.tstsvc.in/api/v1/admin";
 
 // images
 const String alertCompleted = "assets/images/Alert Completed.png";
 const String alertDeleted = "assets/images/Alert Delete.png";
 const String logo = "assets/images/Tasmai logo.png";
-const String error = "assets/images/error.svg";
 const String guruji = "assets/images/guruji.png";
 
-// appbarColor
-Color pageBackground = Color.fromRGBO(255, 251, 255, 1);
-Color textFieldOutline = Color.fromRGBO(129, 117, 103, 1);
-Color tabInactive = Color.fromRGBO(234, 225, 217, 1);
 
-Color iconColor = Color.fromRGBO(79, 69, 57, 1);
-Color iconContainer = Color.fromRGBO(86, 68, 42, 1);
-
-Color placeHolder = Color.fromRGBO(79, 69, 57, 1);
-Color buttonText = Color.fromRGBO(68, 43, 0, 1);
-Color dividerLine = Color.fromRGBO(240, 224, 207, 1);
-
-Color subtext = Color.fromRGBO(79, 69, 57, 1);
-
-Color appbar = Color.fromRGBO(31, 27, 22, 1);
-Color heading = Color.fromRGBO(31, 27, 22, 1);
-Color inputText = Color.fromRGBO(31, 27, 22, 1);
-
-Color bottomNavLabel = Color.fromRGBO(234, 225, 217, 1);
-Color buttonColor = Color.fromRGBO(255, 185, 76, 1);
-
-Color navIcon = Color.fromRGBO(250, 222, 188, 1);
-Color bottomNavLabelUnSelected = Color.fromRGBO(211, 196, 180, 1);
-Color floatingAction = Color.fromRGBO(221,194,161, 1);
+// svg
+const String errorSvg = "assets/svgImage/error.svg";
+const String gift = "assets/svgImage/Gift.svg";
+const String megaphone = "assets/svgImage/Megaphone.svg";
+const String ratingAverage = "assets/svgImage/RatingAverage.svg";
+const String ratingBad = "assets/svgImage/RatingBad.svg";
+const String ratingExcellent = "assets/svgImage/RatingExcellent.svg";
+const String smiley = "assets/svgImage/Smiley.svg";
+const String smileyMeh = "assets/svgImage/SmileyMeh.svg";
+const String smileySad = "assets/svgImage/SmileySad.svg";
 
 
 
-// Text box when Clicked/Selected
-Color onSelectTextFieldOutline = Color.fromRGBO(31, 27, 22, 1);
-Color textContainer = Color.fromRGBO(240, 224, 207, 1);
+// New
+Color shadeOne = Color.fromRGBO(255, 251, 255, 1);
 
-// Delete
+Color shadeTwo = Color.fromRGBO(234, 225, 217, 1);
+
+Color shadeThree = Color.fromRGBO(234,225,217, 1);
+
+Color shadeFour = Color.fromRGBO(240, 224, 207, 1);
+
+Color shadeFive = Color.fromRGBO(211, 196, 180, 1);
+
+Color shadeSix = Color.fromRGBO(250,222,188, 1);
+
+Color shadeSeven = Color.fromRGBO(255,221,178, 1);
+
+Color shadeEight = Color.fromRGBO(221,194,161, 1);
+
+Color shadeNine = Color.fromRGBO(129, 117, 103, 1);
+
+Color shadeTen = Color.fromRGBO(79, 69, 57, 1);
+
+Color shadeEleven = Color.fromRGBO(86, 68, 42, 1);
+
+Color brown = Color.fromRGBO(68, 43, 0, 1);
+
+Color darkShade = Color.fromRGBO(31, 27, 22, 1);
+
+Color goldShade = Color.fromRGBO(255, 185, 76, 1);
+Color lightRed = Color.fromRGBO(255,180,171, 1);
+Color midRed = Color.fromRGBO(105,0,5, 1);
+
 Color red = Color.fromRGBO(186,26,26, 1);
-// profile
 
-Color profileBackground = Color.fromRGBO(234,225,217, 1);
-Color rewardRefer = Color.fromRGBO(250,222,188, 1);
+Color ringColor = Color.fromRGBO(156,143,128, 1);
+Color greenColor = Color.fromRGBO(183,206,162, 1);
 
-// other
-// Color textFieldOutline =
+
 
 // Text
 const String ddMmYyyy = "DD/MM/YYYY";
@@ -77,6 +87,27 @@ const String areYouSure = "Are you sure to delete ? ";
 const String bookingCancelMessage = "Booking cancellation occurs when an \nappointment is deleted. ";
 const String confirm = "Confirm";
 const String cancel = 'Cancel';
+const String save = 'Save';
+const String clear = "Clear";
+const String editAppointment = "Edit Appointment";
+const String na = "N/A";
+
+
+const String appointmentDateValidation = "Please select appointment date";
+const String meditation = "Meditation";
+const String videos = "Videos";
+const String home = "Home";
+const String payment = "Payments";
+const String enable = "Please Do payment to enable Meditation";
+const String name = "Name";
+const String age = "Age";
+const String pickupValidation = 'Please enter a Valid Pickup Point';
+const String termsAndCondition = "Terms and conditions ";
+const String declaration = "I hereby acknowledge that I have read and accept the ";
+const String declarationBalance = "governing appointments.";
+const String phoneRequired = 'Phone number is required';
+const String validNumber = 'Enter a valid phone number';
+
 
 // Appointment Add Page
 const String bookAppointment = "Book Appointment";
@@ -89,7 +120,9 @@ const String destination = "Destination";
 const String emergencyContact = "Emergency Contact";
 const String remark = "Remarks";
 const String confirmBooking = "Confirm Booking";
-const String appointmentForOther = "Appointment booked other than the user";
+const String appointmentForOther = "Who are you booking for ?";
+
+
 
 // default image
 String defaultImage = "/9j/4AAQSkZJRgABAQACWAJYAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/wgALCADIAMgBAREA/8QAHAABAAIDAQEBAAAAAAAAAAAAAAYIAwUHAgEE/9oACAEBAAAAAO/gAAAAAAAAAAAAAAAAAAAAAAAAAD8PDIfMO5/uAAA81AgJPrf+gAAQumgXLmgAAIJTsLiTsAAGGmEVJVc/MAABoq8Q+YWH3oAAB8wZ/oAACH8I53rtj0Tu8wAADjdasIZrK9kAAOfVE8Ae7d9BAAU4g4BOLjgAaWjnkA+3k3QAIvXIALGygAAAAAAAAAAAAAAAAAAAAAAAAAH/xAA5EAABAgQCBgYIBgMAAAAAAAABAgMEBQYRAAcSFyExUWETQFSBlKEUFSAwQVJxsQgWImJwwXOR0f/aAAgBAQABPwD+IJvOICRS52YTKKbhoVoXU4s27hxPLFTfiLWHls03LEFsGwiYu91cwgbu84191z0un6VB6PyejJt/3FM/iLWXkM1JLEBsmxiYS908yg7+44lE4gJ7LmphLYpuJhXRdLiDfuPA8uqOOJabU4tQShIKlKO4AYzSzAia0qJ1DTqhKYVZRDNA7FW2aZ5n7exlbmBE0XUTSHXVGUxSwiJaJ2Jvs0xzH2w24h1tLiFBSFAKSobiD1PNmaOSjLOcxDSilxbQZSR8NMhP2J9rKaaOTfLOTRDqipxDRZUT8dAlI8gOp5xQC5hldOENglTSEvWHBKgT5X9rJ2AXL8rpOhwFKnUKeseClEjyt1OKhmoyFdhn0BbLqChaT8UkWIxmBRsXRVTPwDyFGFUSuFetscbO7vG4+xl/RsXWtTMQDKFCFSQuKetsbbG/vO4YhYZqDhWoZhIQ00gIQkbgkCwHVKqpKUVhKVS+bQ4Wje24nYtpXFJ+GKmyBqWWPLckym5pC70gKCHQOaTsPccas616Xo/y1MNL/Fs/3uxTOQNSzN5Dk5U3K4XeoFQW6RySNg7zilaSlFHylMvlMOEI3uOK2rdVxUfj1ZSkoF1EAcSbY9OhL29KYvw6QYSpKxdJBHEG/VayzJp+imimPieljSLohGLKcP1+UfXFSZ+VRNVrblQalUMdg6Mabluaj/QxH1HOpo4Vx02jYhR39I+o+V8dM5e/SLvx0jiAqOdytwOQM2jYdQ3dG+oeV8U3n5VEqWhuahqaww2HpBoOW5KH9jFG5k0/WrQTARPRRoF1wj9kuD6fMPp1LNnN8U6XJHIHErmhFnnxtEPyHFX2xFRT8bEuRMS8t59xWktxxV1KPEn2oWKfgoluJhnlsvtq0kONqspJ4g4ymzfFRFuRz9xKJoBZl87BEcjwV9+oZs14KLpgiFWPWkZduGHycV933w885EPLeeWpbi1FSlKNyoneT7hl5yHeQ8ytSHEKCkqSbFJG4jGU1eCtaYAilj1pB2biR8/Bff8Af327GbFUKqivY55KyqEhVGGhxfZopNie83Pusp6oVS9ewLy3CmEilCGiBfZoqNge42ON/vavmfqaj5vMQbKh4RxaT+7R2edsKUVqKlG5JuT7pKihQUk2INweBxSEz9c0fKJiTdT8I2tR/do7fO/vcxJRHz+hJpKpYhK4uJbCEJUoJB/UCdp5Y1EV52CG8UjGoivOwQ3ikY1EV52CG8UjGoivOwQ3ikY1EV52CG8UjGoivOwQ3ikY1EV52CG8UjGoivOwQ3ikY1EV52CG8UjGoivOwQ3ikY1EV52CG8UjGXcoj5BQkrlUzQlEXDNlC0pUFAfqJG0crfw7/9k=";
@@ -101,6 +134,8 @@ const String profile = "Profile";
 
 //Space between textFields
 var spaceBetween = SizedBox(height: 16.sp);
+
+
 
 // TextField date format
 class DateTextFormatter extends TextInputFormatter {
@@ -136,55 +171,3 @@ class DateTextFormatter extends TextInputFormatter {
     return TextSelection.fromPosition(TextPosition(offset: text.length));
   }
 }
-
-
-
-
-Map<String,dynamic> tAndC =
-{
-  "content": """The following are some essential things anyone who visit the Ashram to see and stay with Guruji should be aware of.
-
-No entry to Guruji's residence without prior permission. If you have any queries you can call +91 90082 90027.If not, consult Lakshman.
-
-If at all possible, anybody with fever, cough, cold, or any other infectious disease should postpone their visit to the Ashram until a later day.
-
-Intoxicants and foreign food are prohibited from the ashram, apart from fruits and veggies.
-
-4:30 in the morning There will be tea in the kitchen.
-
-You have to sit under the open sky at 5 am to listen to the classes.
-
-Exercise from 6 am to 6:30 am.
-
-Meditating before to 7 am. Special care should be taken to leave the mobile room at the top for meditation and exercise.
-
-Breakfast after eight in the morning. Sleeping during the day is not permitted; ashrama seva is permitted in the later hours.
-
-Lunch at 1 pm and tea at 4 pm.
-
-It is forbidden to leave the ashram and eat after 6 o'clock in the evening.
-
-Unnecessary use of mobile phone, staying in the room all the time etc. are against ashram rules.
-
-Every person who comes here should have the full conviction that they are coming to see the Guru to gain knowledge. The knowledge you gain will be with you as a guide in each of your future lives.Therefore, no one should expect any luxuries in the ashram. Those who come to meet the Guru should try to live seriously, seeing any work they see as a service to the Guru. It is requested that you try to use every moment here in a way that is beneficial to you and those who are with you.
-
-If you find any equipment damaged beyond use while entering the room, you should immediately inform the ashram.
-
-When we use the room, the premises, the toilet, the bathroom bed sheet, etc., clean and wash ourselves, the ego in us will disappear. You will understand how those who have gone before you have used it, and the person who comes after you will be lucky to use clean and tidy rooms, surroundings and things. "It can send a great message to others."
-
-Water and electricity are precious and precious, use only when needed. Take special care to switch off lights, fans, heaters, etc. in and around the ashram rooms when needed.
-
-Special care should be taken to close windows and doors while leaving the room. Monkeys here may be attracted to things like mobiles, purses, gold, etc.
-
-The ashram residents need just inform Lakshman if they wish to see Guruji.
-
-Those who come to see and talk to Guruji should leave their mobiles in the room.
-
-Everyone should understand that the experiences we get are according to the actions we do.
-
-It is good to carry blankets, pillowcases etc. for your own use. If you leave the used cloth and mat material unwashed and go away, it will be considered as Dakshina by you to the Guru.
-
-Minors / women / sick / incapacitated are not allowed to stay alone.
-
-Please be careful not to bring any specially prepared food items or other gifts for Guruji and his family. Those who are interested in donating anything to the Ashram can hand it over to Lakshman"""
-};

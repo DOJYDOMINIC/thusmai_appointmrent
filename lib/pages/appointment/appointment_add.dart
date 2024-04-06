@@ -765,7 +765,6 @@
 //   }
 // }
 
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -777,6 +776,7 @@ import '../../constant/constant.dart'; // Assuming this file contains the 'appTh
 import 'package:flutter/material.dart';
 import '../../controller/appointmentontroller.dart';
 import '../../models/appointment_add_model.dart';
+import '../../widgets/additionnalwidget.dart';
 
 class AppointmentAddPage extends StatefulWidget {
   const AppointmentAddPage({Key? key}) : super(key: key);
@@ -791,6 +791,9 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   bool _pickup = false;
   bool _externalUser = false;
   bool _termsAndCondition = false;
+  bool _internalUser = false;
+  String? selectedValue = "No";
+
   // bool PersonalDetailExpand = false;
 
   // validation Key
@@ -815,7 +818,6 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   @override
   void initState() {
     super.initState();
-
   }
 
   // dispose controllers
@@ -882,31 +884,29 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
 
   // Submit data For Appointment
   Future<void> _submitForm(List<GroupMemberAdd> dataList) async {
-    if (_formKey.currentState!.validate()) {
-      // Date time pick
-      String time = DateFormat('hh:mm a').format(DateTime.now());
-      var date = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    // Date time pick
+    String time = DateFormat('hh:mm a').format(DateTime.now());
+    var date = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
-      // convert numOfPeople to int
-      int? numOfPeople = int.tryParse(_noOfPeople.text);
+    // convert numOfPeople to int
+    int? numOfPeople = int.tryParse(_noOfPeople.text);
 
-      // Appointment Post Data
-      AppointmentAddData data = AppointmentAddData(
-        appointmentDate: _appointmentDate.text,
-        numOfPeople: numOfPeople,
-        pickup: _pickup,
-        days: _noOfDays.text,
-        from: pickupFrom.isEmpty ? "No Data" : pickupFrom,
-        emergencyNumber: _emergencyContact.text,
-        appointmentTime: time,
-        appointmentReason: _reason.text,
-        registerDate: date,
-        groupMembers: dataList,
-        externalUser: _externalUser,
-      );
-      await Provider.of<AppointmentController>(context, listen: false)
-          .postAppointment(context, data);
-    }
+    // Appointment Post Data
+    AppointmentAddData data = AppointmentAddData(
+      appointmentDate: _appointmentDate.text,
+      numOfPeople: numOfPeople,
+      pickup: _pickup,
+      days: _noOfDays.text,
+      from: pickupFrom.isEmpty ? "N/A" : pickupFrom,
+      emergencyNumber: _emergencyContact.text,
+      appointmentTime: time,
+      appointmentReason: _reason.text,
+      registerDate: date,
+      groupMembers: dataList,
+      externalUser: _externalUser,
+    );
+    await Provider.of<AppointmentController>(context, listen: false)
+        .postAppointment(context, data);
   }
 
   // WidgetTree
@@ -923,7 +923,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
     );
     return SafeArea(
       child: Scaffold(
-        backgroundColor: pageBackground,
+        backgroundColor: shadeOne,
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
@@ -932,12 +932,12 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
               },
               icon: Icon(
                 Icons.arrow_back,
-                color: pageBackground,
+                color: shadeOne,
               )),
-          backgroundColor: appbar,
+          backgroundColor: darkShade,
           title: Text(
             bookAppointment,
-            style: TextStyle(color: pageBackground),
+            style: TextStyle(color: shadeOne),
           ),
           // centerTitle: true,
         ),
@@ -952,14 +952,14 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                     spaceBetween,
                     spaceBetween,
                     TextFormField(
-                      style: TextStyle(color: inputText),
+                      style: TextStyle(color: darkShade),
                       onTap: () {
                         _selectDate(context);
                       },
                       controller: _appointmentDate,
                       readOnly: true,
                       keyboardType: TextInputType.datetime,
-                      cursorColor: textFieldOutline,
+                      cursorColor: shadeNine,
                       inputFormatters: [DateTextFormatter()],
                       decoration: InputDecoration(
                         prefixIcon: IconButton(
@@ -968,28 +968,27 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                           },
                           icon: Icon(
                             Icons.calendar_month,
-                            color: iconColor,
+                            color: shadeTen,
                             size: 20.sp,
                           ),
                         ),
                         label: Text(
                           appointmentDate,
-                          style: TextStyle(color: placeHolder),
+                          style: TextStyle(color: shadeTen),
                         ),
                         hintText: ddMmYyyy,
                         labelStyle: TextStyle(
-                          color: placeHolder,
+                          color: shadeTen,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.normal,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: textFieldOutline),
+                          borderSide: BorderSide(color: shadeNine),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
-                              color: onSelectTextFieldOutline, width: 2),
+                          borderSide: BorderSide(color: darkShade, width: 2),
                         ),
                       ),
                       validator: (value) {
@@ -999,24 +998,45 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         return null;
                       },
                     ),
-                    // spaceBetween,
+                    spaceBetween,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Checkbox(
-                            side: BorderSide(color: textFieldOutline, width: 2),
-                            activeColor: buttonText,
-                            value: _externalUser,
-                            onChanged: (val) {
-                              setState(() {
-                                _externalUser = !_externalUser;
-                              });
-                            }),
-                        Expanded(child: Text(appointmentForOther))
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text("Are you attending ?")),
+                        Row(
+                          children: [
+                            Row(
+                              children: [
+                                Radio<String>(
+                                  value: 'Yes',
+                                  groupValue: selectedValue,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedValue = value;
+                                      _externalUser = true;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            Text("Yes"),
+                            Radio<String>(
+                              value: 'No',
+                              groupValue: selectedValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedValue = value;
+                                  _externalUser = false;
+                                });
+                              },
+                            ),
+                            Text("No")
+                          ],
+                        ),
                       ],
                     ),
-
-                    // spaceBetween,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -1030,16 +1050,22 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                 onTap: () {
                                   pro.subtract();
                                   // You also need to decrement the countOfPeople variable if needed
-                                  _noOfPeople.text =
-                                      pro.countOfPeople.toString();
                                   if (pro.countOfPeople < 0) {
                                     pro.countOfPeople--;
                                     pro.countOfPeople = 0;
                                   }
                                   itemExpandedList.removeAt(pro.countOfPeople);
+                                  _noOfPeople.text =
+                                      pro.countOfPeople.toString();
+                                  _GroupMembersDataControllers.removeAt(
+                                      pro.countOfPeople);
+                                  _GroupMembersDataAgeControllers.removeAt(
+                                      pro.countOfPeople);
+                                  _GroupMembersDataRelationControllers.removeAt(
+                                      pro.countOfPeople);
                                 },
                                 child: Container(
-                                    color: inputText,
+                                    color: darkShade,
                                     child: Icon(
                                       Icons.remove,
                                       color: Colors.white,
@@ -1059,11 +1085,12 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                   });
                                   itemExpandedList.add(false);
                                   print(itemExpandedList.toString());
-                                  _noOfPeople.text = pro.countOfPeople.toString();
+                                  _noOfPeople.text =
+                                      pro.countOfPeople.toString();
                                 },
                                 child: Container(
                                     color: pro.countOfPeople != 5
-                                        ? inputText
+                                        ? darkShade
                                         : Colors.grey,
                                     child: Icon(
                                       Icons.add,
@@ -1080,7 +1107,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         ),
                         Flexible(
                           child: TextFormField(
-                            style: TextStyle(color: inputText),
+                            style: TextStyle(color: darkShade),
                             controller: _noOfDays,
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(daysDigitLimit),
@@ -1089,10 +1116,10 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                             decoration: InputDecoration(
                               label: Text(
                                 noOfDays,
-                                style: TextStyle(color: placeHolder),
+                                style: TextStyle(color: shadeTen),
                               ),
                               labelStyle: TextStyle(
-                                color: textFieldOutline,
+                                color: shadeNine,
                                 fontSize: 16,
                                 fontWeight: FontWeight.normal,
                               ),
@@ -1102,17 +1129,17 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                 },
                                 child: Icon(
                                   Icons.highlight_off_outlined,
-                                  color: iconColor,
+                                  color: shadeTen,
                                 ),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(color: textFieldOutline),
+                                borderSide: BorderSide(color: shadeNine),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5),
-                                borderSide: BorderSide(
-                                    color: onSelectTextFieldOutline, width: 2),
+                                borderSide:
+                                    BorderSide(color: darkShade, width: 2),
                               ),
                             ),
                             validator: (value) {
@@ -1145,11 +1172,12 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: pro.countOfPeople,
                         itemBuilder: (context, index) {
-                          _GroupMembersDataControllers.add(TextEditingController());
-                          _GroupMembersDataAgeControllers
-                              .add(TextEditingController());
-                          _GroupMembersDataRelationControllers
-                              .add(TextEditingController());
+                          _GroupMembersDataControllers.add(
+                              TextEditingController());
+                          _GroupMembersDataAgeControllers.add(
+                              TextEditingController());
+                          _GroupMembersDataRelationControllers.add(
+                              TextEditingController());
                           return Column(
                             children: [
                               if (!itemExpandedList[index])
@@ -1168,7 +1196,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                         child: Container(
                                           height: 260.h,
                                           decoration: BoxDecoration(
-                                            color: bottomNavLabel,
+                                            color: shadeTwo,
                                             borderRadius:
                                                 BorderRadius.circular(8),
                                           ),
@@ -1178,14 +1206,14 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                               children: [
                                                 TextFormField(
                                                   style: TextStyle(
-                                                      color: inputText),
+                                                      color: darkShade),
                                                   controller:
                                                       _GroupMembersDataControllers[
                                                           index],
                                                   decoration: InputDecoration(
                                                     labelText: "Name",
                                                     labelStyle: TextStyle(
-                                                        color: placeHolder),
+                                                        color: shadeTen),
                                                     suffixIcon: InkWell(
                                                       onTap: () {
                                                         _GroupMembersDataControllers[
@@ -1195,7 +1223,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                       child: Icon(
                                                         Icons
                                                             .highlight_off_outlined,
-                                                        color: iconColor,
+                                                        color: shadeTen,
                                                       ),
                                                     ),
                                                     border: OutlineInputBorder(
@@ -1203,8 +1231,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                           BorderRadius.circular(
                                                               5),
                                                       borderSide: BorderSide(
-                                                          color:
-                                                              textFieldOutline),
+                                                          color: shadeNine),
                                                     ),
                                                     focusedBorder:
                                                         OutlineInputBorder(
@@ -1212,8 +1239,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                           BorderRadius.circular(
                                                               5),
                                                       borderSide: BorderSide(
-                                                        color:
-                                                            onSelectTextFieldOutline,
+                                                        color: darkShade,
                                                         width: 2,
                                                       ),
                                                     ),
@@ -1228,11 +1254,14 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                     Expanded(
                                                       child: TextFormField(
                                                         inputFormatters: [
-                                                          LengthLimitingTextInputFormatter(daysDigitLimit),
+                                                          LengthLimitingTextInputFormatter(
+                                                              daysDigitLimit),
                                                         ],
-                                                        keyboardType: TextInputType.number,
+                                                        keyboardType:
+                                                            TextInputType
+                                                                .number,
                                                         style: TextStyle(
-                                                            color: inputText),
+                                                            color: darkShade),
                                                         controller:
                                                             _GroupMembersDataAgeControllers[
                                                                 index],
@@ -1240,8 +1269,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                             InputDecoration(
                                                           labelText: "Age",
                                                           labelStyle: TextStyle(
-                                                              color:
-                                                                  placeHolder),
+                                                              color: shadeTen),
                                                           suffixIcon: InkWell(
                                                             onTap: () {
                                                               _GroupMembersDataAgeControllers[
@@ -1251,7 +1279,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                             child: Icon(
                                                               Icons
                                                                   .highlight_off_outlined,
-                                                              color: iconColor,
+                                                              color: shadeTen,
                                                             ),
                                                           ),
                                                           border:
@@ -1262,7 +1290,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                                         5),
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    textFieldOutline),
+                                                                    shadeNine),
                                                           ),
                                                           focusedBorder:
                                                               OutlineInputBorder(
@@ -1272,8 +1300,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                                         5),
                                                             borderSide:
                                                                 BorderSide(
-                                                              color:
-                                                                  onSelectTextFieldOutline,
+                                                              color: darkShade,
                                                               width: 2,
                                                             ),
                                                           ),
@@ -1287,7 +1314,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                     Expanded(
                                                       child: TextFormField(
                                                         style: TextStyle(
-                                                            color: inputText),
+                                                            color: darkShade),
                                                         controller:
                                                             _GroupMembersDataRelationControllers[
                                                                 index],
@@ -1295,17 +1322,17 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                             InputDecoration(
                                                           labelText: "Relation",
                                                           labelStyle: TextStyle(
-                                                              color:
-                                                                  placeHolder),
+                                                              color: shadeTen),
                                                           suffixIcon: InkWell(
                                                             onTap: () {
-                                                              _GroupMembersDataRelationControllers[index]
+                                                              _GroupMembersDataRelationControllers[
+                                                                      index]
                                                                   .clear();
                                                             },
                                                             child: Icon(
                                                               Icons
                                                                   .highlight_off_outlined,
-                                                              color: iconColor,
+                                                              color: shadeTen,
                                                             ),
                                                           ),
                                                           border:
@@ -1316,7 +1343,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                                         5),
                                                             borderSide: BorderSide(
                                                                 color:
-                                                                    textFieldOutline),
+                                                                    shadeNine),
                                                           ),
                                                           focusedBorder:
                                                               OutlineInputBorder(
@@ -1326,8 +1353,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                                         5),
                                                             borderSide:
                                                                 BorderSide(
-                                                              color:
-                                                                  onSelectTextFieldOutline,
+                                                              color: darkShade,
                                                               width: 2,
                                                             ),
                                                           ),
@@ -1352,7 +1378,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                           shadowColor:
                                                               Colors.black,
                                                           elevation: 4,
-                                                          primary: inputText,
+                                                          primary: darkShade,
                                                           shape:
                                                               RoundedRectangleBorder(
                                                             borderRadius:
@@ -1375,8 +1401,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                         child: Text(
                                                           "Clear",
                                                           style: TextStyle(
-                                                              color:
-                                                                  bottomNavLabel),
+                                                              color: shadeTwo),
                                                         ),
                                                       ),
                                                       SizedBox(width: 16.w),
@@ -1386,7 +1411,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                           shadowColor:
                                                               Colors.black,
                                                           elevation: 4,
-                                                          primary: inputText,
+                                                          primary: darkShade,
                                                           shape:
                                                               RoundedRectangleBorder(
                                                             borderRadius:
@@ -1403,8 +1428,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                         child: Text(
                                                           "Save",
                                                           style: TextStyle(
-                                                              color:
-                                                                  bottomNavLabel),
+                                                              color: shadeTwo),
                                                         ),
                                                       ),
                                                     ],
@@ -1442,7 +1466,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(8),
-                                                  color: bottomNavLabel),
+                                                  color: shadeTwo),
                                               child: Row(
                                                 children: [
                                                   Padding(
@@ -1483,8 +1507,10 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                     .removeAt(index);
                                                 // // You also need to decrement the countOfPeople variable if needed
                                                 pro.countOfPeople -= 1;
-                                                itemExpandedList.removeAt(index);
-                                                calculateTotalHeight(itemExpandedList);
+                                                itemExpandedList
+                                                    .removeAt(index);
+                                                calculateTotalHeight(
+                                                    itemExpandedList);
                                               });
                                             },
                                             icon: Icon(
@@ -1502,8 +1528,8 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Checkbox(
-                            side: BorderSide(color: textFieldOutline, width: 2),
-                            activeColor: buttonText,
+                            side: BorderSide(color: shadeNine, width: 2),
+                            activeColor: brown,
                             value: _pickup,
                             onChanged: (val) {
                               setState(() {
@@ -1515,7 +1541,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                     ),
                     if (_pickup == true)
                       TextFormField(
-                        style: TextStyle(color: inputText),
+                        style: TextStyle(color: darkShade),
                         controller: _pickupPoint,
                         maxLength: maxCharacters,
                         maxLines: null,
@@ -1525,7 +1551,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                             pickUpPoint,
                           ),
                           labelStyle: TextStyle(
-                              color: placeHolder,
+                              color: shadeTen,
                               fontSize: 16.sp,
                               fontWeight: FontWeight.normal),
                           suffix: InkWell(
@@ -1534,16 +1560,15 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                               },
                               child: Icon(
                                 Icons.highlight_off_outlined,
-                                color: iconColor,
+                                color: shadeTen,
                               )),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(color: textFieldOutline),
+                            borderSide: BorderSide(color: shadeNine),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5),
-                            borderSide: BorderSide(
-                                color: onSelectTextFieldOutline, width: 2),
+                            borderSide: BorderSide(color: darkShade, width: 2),
                           ),
                         ),
                         validator: (value) {
@@ -1558,13 +1583,13 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                       ),
                     if (_pickup == true) spaceBetween,
                     TextFormField(
-                      style: TextStyle(color: inputText),
+                      style: TextStyle(color: darkShade),
                       controller: _emergencyContact,
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         label: Text(emergencyContact),
                         labelStyle: TextStyle(
-                            color: placeHolder,
+                            color: shadeTen,
                             fontSize: 16.sp,
                             fontWeight: FontWeight.normal),
                         suffix: InkWell(
@@ -1573,16 +1598,15 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                             },
                             child: Icon(
                               Icons.highlight_off_outlined,
-                              color: iconColor,
+                              color: shadeTen,
                             )),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: textFieldOutline),
+                          borderSide: BorderSide(color: shadeNine),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
-                              color: onSelectTextFieldOutline, width: 2),
+                          borderSide: BorderSide(color: darkShade, width: 2),
                         ),
                       ),
                       validator: (value) {
@@ -1602,7 +1626,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                     ),
                     spaceBetween,
                     TextFormField(
-                      style: TextStyle(color: inputText),
+                      style: TextStyle(color: darkShade),
                       controller: _reason,
                       maxLength: maxCharacters,
                       maxLines: null,
@@ -1612,7 +1636,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                           remark,
                         ),
                         labelStyle: TextStyle(
-                          color: placeHolder,
+                          color: shadeTen,
                           fontSize: 16,
                           fontWeight: FontWeight.normal,
                         ),
@@ -1622,17 +1646,16 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                           },
                           child: Icon(
                             Icons.highlight_off_outlined,
-                            color: iconColor,
+                            color: shadeTen,
                           ),
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(color: textFieldOutline),
+                          borderSide: BorderSide(color: shadeNine),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
-                              color: onSelectTextFieldOutline, width: 2),
+                          borderSide: BorderSide(color: darkShade, width: 2),
                         ),
                       ),
                     ),
@@ -1640,7 +1663,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                     Row(
                       children: [
                         Checkbox(
-                          activeColor: inputText,
+                          activeColor: darkShade,
                           value: _termsAndCondition,
                           onChanged: (value) {
                             _termsAndCondition = !_termsAndCondition;
@@ -1655,41 +1678,17 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                   text:
                                       "I hereby acknowledge that I have read and accept the ",
                                   style:
-                                      TextStyle(fontSize: 14, color: inputText),
+                                      TextStyle(fontSize: 14, color: darkShade),
                                 ),
                                 TextSpan(
                                   text: "Terms and conditions ",
                                   style: TextStyle(
                                       fontSize: 14,
-                                      color: buttonColor,
+                                      color: goldShade,
                                       fontWeight: FontWeight.bold),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      Navigator.push(
-                                        context,
-                                        PageRouteBuilder(
-                                          transitionDuration:
-                                              Duration(milliseconds: 500),
-                                          transitionsBuilder: (BuildContext
-                                                  context,
-                                              Animation<double> animation,
-                                              Animation<double> secAnimation,
-                                              Widget child) {
-                                            return SlideTransition(
-                                              position: Tween<Offset>(
-                                                begin: Offset(1.0, 0.0),
-                                                end: Offset.zero,
-                                              ).animate(animation),
-                                              child: child,
-                                            );
-                                          },
-                                          pageBuilder: (BuildContext context,
-                                              Animation<double> animation,
-                                              Animation<double> secAnimation) {
-                                            return TermsAndConditions();
-                                          },
-                                        ),
-                                      );
+                                      slidePageRoute(context,TermsAndConditions());
                                       // Add your code here to handle tap
                                       // print("Terms and conditions tapped!");
                                     },
@@ -1697,7 +1696,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                 TextSpan(
                                   text: "governing appointments.",
                                   style:
-                                      TextStyle(fontSize: 14, color: inputText),
+                                      TextStyle(fontSize: 14, color: darkShade),
                                 ),
                               ],
                             ),
@@ -1714,28 +1713,31 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         onPressed: _termsAndCondition != true
                             ? null
                             : () async {
-
-                                for (int i = 0; i < pro.countOfPeople; i++) {
-                                  // Create a map to store data for each index
-                                  GroupMemberAdd dataMap = GroupMemberAdd(
-                                    name: _GroupMembersDataControllers[i].text,
-                                    age: _GroupMembersDataAgeControllers[i].text,
-                                    relation: _GroupMembersDataRelationControllers[i].text,
-                                  );
-                                  // Add the map to the list
-                                  dataList.add(dataMap);
+                                if (_formKey.currentState!.validate()) {
+                                  for (int i = 0; i < pro.countOfPeople; i++) {
+                                    // Create a map to store data for each index
+                                    GroupMemberAdd dataMap = GroupMemberAdd(
+                                      name:
+                                          _GroupMembersDataControllers[i].text,
+                                      age: _GroupMembersDataAgeControllers[i]
+                                          .text,
+                                      relation:
+                                          _GroupMembersDataRelationControllers[
+                                                  i]
+                                              .text,
+                                    );
+                                    // Add the map to the list
+                                    dataList.add(dataMap);
+                                  }
+                                  await _submitForm(dataList);
+                                  itemExpandedList.clear();
                                 }
-                                await _submitForm(dataList);
-                                await Provider.of<AppointmentController>(
-                                        context,
-                                        listen: false)
-                                    .fetchAppointments();
                               },
                         style: ElevatedButton.styleFrom(
                           shadowColor: Colors.black,
                           // Customize the shadow color
                           elevation: 4,
-                          primary: buttonColor,
+                          primary: goldShade,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
                                 16), // Adjust the radius as needed
@@ -1746,13 +1748,13 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                           children: [
                             Icon(Icons.check,
                                 color: _termsAndCondition == true
-                                    ? buttonText
+                                    ? brown
                                     : Colors.grey),
                             Text(
                               confirmBooking,
                               style: TextStyle(
                                   color: _termsAndCondition == true
-                                      ? buttonText
+                                      ? brown
                                       : Colors.grey),
                             ),
                           ],
