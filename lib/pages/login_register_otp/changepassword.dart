@@ -30,6 +30,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   @override
   Widget build(BuildContext context) {
+
     // Get the height of the status bar
     final statusBarHeight = MediaQuery.of(context).padding.top;
 
@@ -252,8 +253,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
+                                  print(widget.data.toString());
                                   var data = {
-                                    "email":  widget.data.toString(),
+                                    "email":  widget.data["email"].toString(),
                                     "new_password": _newPassword,
                                   };
                                   Provider.of<AppLogin>(context, listen: false).resetPassword(context,data);

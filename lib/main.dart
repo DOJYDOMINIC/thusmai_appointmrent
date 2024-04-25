@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,11 +9,14 @@ import 'package:thusmai_appointmrent/controller/login_register_otp_api.dart';
 import 'package:thusmai_appointmrent/controller/socket_provider.dart';
 import 'package:thusmai_appointmrent/pages/bottom_navbar.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/login.dart';
-import 'package:thusmai_appointmrent/pages/login_register_otp/meditationdata.dart';
 import 'controller/appointmentontroller.dart';
 import 'controller/connectivitycontroller.dart';
 import 'controller/meditationController.dart';
+import 'controller/message_controller.dart';
+import 'controller/overviewController.dart';
 import 'controller/payment_controller.dart';
+import 'controller/profileController.dart';
+import 'controller/videoplayer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +40,13 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 class _MyAppState extends State<MyApp> {
+  bool isAnswer = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -45,6 +57,11 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => ConnectivityProvider(),),
         ChangeNotifierProvider(create: (context) => PaymentController(),),
         ChangeNotifierProvider(create: (context) => MeditationController(),),
+        ChangeNotifierProvider(create: (context) => VideoPlayerState(),),
+        ChangeNotifierProvider(create: (context) => MessageController(),),
+        ChangeNotifierProvider(create: (context) => OverViewController(),),
+        ChangeNotifierProvider(create: (context) => ProfileController(),),
+
       ],
       child: ScreenUtilInit(
         designSize: const Size(400, 880),
@@ -54,9 +71,11 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              fontFamily: 'Roboto'),
-            home: widget.cookies == null || widget.cookies == "" ? Login() : widget.isAnswered != "true" ? MeditationData() : CustomBottomNavBar(),
-            // home: VideoPalayer(),
+                fontFamily: 'Roboto'),
+            home: widget.cookies == null || widget.cookies == ""
+                ? Login()
+                : CustomBottomNavBar(),
+            // home: MyHomePage(),
           );
         },
       ),

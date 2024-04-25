@@ -159,9 +159,7 @@ class _MeditationDataState extends State<MeditationData> {
                                   child: ReorderableListView(
                                     onReorder: pro.updateMyTile,
                                     children: [
-                                      for (int i = 0;
-                                          i < pro.myTiles.length;
-                                          i++)
+                                      for (int i = 0; i < pro.myTiles.length; i++)
                                         Column(
                                           key: ValueKey(pro.myTiles[i]),
                                           children: [

@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import '../constant/constant.dart';
 import '../controller/appointmentontroller.dart';
+import '../pages/message/general_message.dart';
 import '../pages/message/message_guru.dart';
+import '../pages/message/privatemessage.dart';
 
 class MessageTab extends StatefulWidget {
 
@@ -54,17 +56,17 @@ class _MessageTabState extends State<MessageTab> {
             tabs: [
           Tab(
             child: Text(
-              "Private",
+              "My Notes",
             ),
           ),
         Tab(
           child: Text(
-            "Guru",
+            "Guruji",
           ),
         ),
         Tab(
           child: Text(
-            "Global",
+            "General",
           ),
         ),
         ],),
@@ -73,38 +75,9 @@ class _MessageTabState extends State<MessageTab> {
         body: SafeArea(
           child: TabBarView(
             children: [
-              GestureDetector(
-                onTap: () {
-                  if (!FocusScope.of(context).hasPrimaryFocus) {
-                    FocusScope.of(context).unfocus();
-                  }
-                },
-                child: Container(
-                  color: shadeOne,
-                  child: Center(
-                    child: Text(
-                      pageUnderWork,
-                      style:TextStyle(
-                        fontSize: 24.sp,
-                        color: Color.fromRGBO(67, 44, 0, .3),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              ChatScreenGuru(),
-              Container(
-                color: shadeOne,
-                child: Center(
-                  child: Text(
-                    pageUnderWork,
-                    style: TextStyle(
-                      fontSize: 24.sp,
-                      color: Color.fromRGBO(67, 44, 0, .3),
-                    ),
-                  ),
-                ),
-              ),
+              PrivateMessage(),
+              GuruMessage(),
+              GeneralMessage(),
             ],
           ),
         ),

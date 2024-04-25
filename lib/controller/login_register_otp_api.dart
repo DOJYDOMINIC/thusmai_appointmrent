@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thusmai_appointmrent/models/userdata.dart';
 import 'package:thusmai_appointmrent/models/userlogin.dart';
+import 'package:thusmai_appointmrent/pages/profile/profile.dart';
 import '../pages/bottom_navbar.dart';
 import '../constant/constant.dart';
 import '../pages/login_register_otp/changepassword.dart';
@@ -12,6 +13,8 @@ import '../pages/login_register_otp/login.dart';
 import '../pages/login_register_otp/meditationdata.dart';
 import '../pages/login_register_otp/otpPage.dart';
 import '../pages/login_register_otp/reset_password.dart';
+import '../pages/profile/password_reset/resetpage_two.dart';
+import '../pages/profile/password_reset/resetpasge_three.dart';
 
 class AppLogin extends ChangeNotifier {
 // firstLogin check
@@ -44,8 +47,8 @@ class AppLogin extends ChangeNotifier {
   }
 
 
-  User? _userData;
-  User? get userData => _userData;
+  UserClass? _userData;
+  UserClass? get userData => _userData;
 
 
   Future<void> getUserByID() async {
@@ -62,7 +65,7 @@ class AppLogin extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         var decode = jsonDecode(response.body);
-        _userData = User.fromJson(decode["user"]);
+        _userData = UserClass.fromJson(decode["user"]);
       } else if (response.statusCode == 404) {
         // Handle 404 Not Found error
         _userData = null;
@@ -109,38 +112,42 @@ class AppLogin extends ChangeNotifier {
   UserLoginData? get userLoginData => _userLoginData;
 
   Future<void> loginApi(BuildContext context, Map<String, dynamic> data) async {
-    final response = await http.post(Uri.parse("$baseUrl/login"),
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/login"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(data));
-    // final String specificCookie = response.headers['set-cookie']?.split(';')[0] ?? "";
-    // final sessionId = specificCookie.split('=')[1];
-    var decode = jsonDecode(response.body);
-    print(decode.toString());
-    try {
+        body: jsonEncode(data),
+      ).timeout(Duration(seconds: 3)); // Set timeout to 5 seconds
+
+      var decode = jsonDecode(response.body);
+      print(decode.toString());
+
       if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-
         _userLoginData = UserLoginData.fromJson(decode["user"]);
-        print(decode);
         final String? specificCookie = response.headers['set-cookie'];
         final sessionId = specificCookie;
         prefs.setString("cookie", sessionId!);
         prefs.setString("isAnswered", _userLoginData!.isans.toString());
         var isAnswered = prefs.getString("isAnswered");
-      var data = prefs.getString("id");
-      print(data);
+        var data = prefs.getString("id");
+        print(data);
         print(sessionId);
         Navigator.pushReplacement(
-            context, MaterialPageRoute(
-              builder: (context) => isAnswered != "true" ? MeditationData() : CustomBottomNavBar(),));
+          context,
+          MaterialPageRoute(
+            builder: (context) => isAnswered != "true" ? MeditationData() : CustomBottomNavBar(),
+          ),
+        );
       } else if (response.statusCode == 404) {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Register(),
-            ));
+          context,
+          MaterialPageRoute(
+            builder: (context) => Register(),
+          ),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -150,16 +157,33 @@ class AppLogin extends ChangeNotifier {
           ),
         );
       }
+    } on http.ClientException catch (e) {
+      // Handle timeout or other http client exceptions
+      print("HTTP Client Exception: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("Request timed out or other network error occurred."),
+          duration: Duration(seconds: 1),
+        ),
+      );
     } catch (e) {
-      print("loginApi : $e");
+      // Handle other exceptions
+      print("Other Exception: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("An error occurred: $e"),
+          duration: Duration(seconds: 1),
+        ),
+      );
     }
+    notifyListeners();
   }
 
-  Future<void> requestPasswordReset(
-    BuildContext context,
-    String data,
-  ) async {
-    print(data);
+  Future<void> requestPasswordReset(BuildContext context, String data,) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
     final response = await http.post(Uri.parse("$baseUrl/requestPasswordReset"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
@@ -168,11 +192,20 @@ class AppLogin extends ChangeNotifier {
     var decode = jsonDecode(response.body);
     try {
       if (response.statusCode == 200) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => otpPage(data: data),
-            ));
+        if(cookies == null|| cookies == "" || cookies.isEmpty){
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => otpPage(data: data),
+              ));
+        }else{
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ResetPageTwo(data: data),
+              ));
+        }
+
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -189,11 +222,16 @@ class AppLogin extends ChangeNotifier {
 
   Future<void> otpVerification(
       BuildContext context, Map<String, dynamic> data) async {
+    print(data.toString());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
     final response = await http.post(Uri.parse("$baseUrl/verify-userotp"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         },
+
         body: jsonEncode(data));
+
 
     var decode = jsonDecode(response.body);
     try {
@@ -205,11 +243,24 @@ class AppLogin extends ChangeNotifier {
         //     duration: Duration(seconds: 2),
         //   ),
         // );
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChangePassword(data: data["email"]),
-            ));
+        if(cookies == null|| cookies == "" || cookies.isEmpty ){
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChangePassword(data: data),
+              ));
+        }else{
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ResetPageThree(data: data),
+              ));
+        }
+        // Navigator.pushReplacement(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => ChangePassword(data: data["email"]),
+        //     ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -225,8 +276,11 @@ class AppLogin extends ChangeNotifier {
   }
 
 
-  Future<void> resetPassword(
-      BuildContext context, Map<String, dynamic> data) async {
+  Future<void> resetPassword(BuildContext context, Map<String, dynamic> data) async {
+    print(data.toString());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+
     final response = await http.post(Uri.parse("$baseUrl/resetPassword"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
@@ -235,18 +289,25 @@ class AppLogin extends ChangeNotifier {
     var decode = jsonDecode(response.body);
     try {
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.green,
-            content: Text(decode["message"]),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Login(),
-            ));
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     backgroundColor: Colors.green,
+        //     content: Text(decode["message"]),
+        //     duration: Duration(seconds: 2),
+        //   ),
+        // );
+        if(cookies == null|| cookies == "" || cookies.isEmpty ){
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Login(),
+              ));
+        }else{
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+              builder: (context) => Profile()));
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

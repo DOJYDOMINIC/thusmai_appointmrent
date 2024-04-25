@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../constant/constant.dart';
 import '../../controller/login_register_otp_api.dart';
+import '../../controller/meditationController.dart';
 import '../../widgets/additionnalwidget.dart';
 import 'meditationnote.dart';
 
@@ -30,7 +32,8 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var pro = Provider.of<AppLogin>(context);
+    var appLogin = Provider.of<AppLogin>(context);
+    var meditation = Provider.of<MeditationController>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -98,14 +101,14 @@ class _TimerScreenState extends State<TimerScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("cycle"),
-                        Text("   : ${pro.userData?.cycle ?? 0}"),
+                        Text("   : ${appLogin.userData?.cycle ?? 0}"),
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("Day  "),
-                        Text("    : ${pro.userData?.day ?? 0}"),
+                        Text("    : ${appLogin.userData?.day ?? 0}"),
                       ],
                     ),
                   ],
@@ -139,10 +142,13 @@ class _TimerScreenState extends State<TimerScreen> {
                   Colors.white
                 ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
                 onStart: () {
-                  startTime = DateTime.now().toString();
+                  DateTime now = DateTime.now();
+                  startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
+                  print(startTime);
                 },
                 onComplete: () {
-                  endTime = DateTime.now().toString();
+                  DateTime now = DateTime.now();
+                  endTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
                   // Timer completed
                   print('Timer completed');
                   isCompleted = true;
@@ -215,8 +221,8 @@ class _TimerScreenState extends State<TimerScreen> {
                       clipper: HalfCircleClipper(),
                       child: GestureDetector(
                         onTap: (){
+                          meditation.meditationTime(startTime,endTime );
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>MeditationNote(),));
-
                         },
                         child: Container(
                           color: greenColor,

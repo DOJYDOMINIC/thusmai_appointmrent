@@ -1,22 +1,24 @@
 // To parse this JSON data, do
 //
-//     final userdata = userdataFromJson(jsonString);
+//     final user = userFromJson(jsonString);
 
 import 'dart:convert';
 
-Userdata userdataFromJson(String str) => Userdata.fromJson(json.decode(str));
+import 'package:thusmai_appointmrent/constant/constant.dart';
 
-String userdataToJson(Userdata data) => json.encode(data.toJson());
+User userFromJson(String str) => User.fromJson(json.decode(str));
 
-class Userdata {
-  User? user;
+String userToJson(User data) => json.encode(data.toJson());
 
-  Userdata({
+class User {
+  UserClass? user;
+
+  User({
     this.user,
   });
 
-  factory Userdata.fromJson(Map<String, dynamic> json) => Userdata(
-    user: json["user"] == null ? null : User.fromJson(json["user"]),
+  factory User.fromJson(Map<String, dynamic> json) => User(
+    user: json["user"] == null ? null : UserClass.fromJson(json["user"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -24,8 +26,7 @@ class Userdata {
   };
 }
 
-class User {
-  int? userId;
+class UserClass {
   String? firstName;
   String? lastName;
   String? dob;
@@ -42,16 +43,15 @@ class User {
   int? uId;
   DateTime? doj;
   DateTime? expiredDate;
-  String? classAttended;
+  bool? classAttended;
   bool? isans;
-  List<String>? profilePicUrl;
+  String? profilePicUrl;
   bool? maintananceFee;
   int? cycle;
   int? day;
   int? sessionNum;
 
-  User({
-    this.userId,
+  UserClass({
     this.firstName,
     this.lastName,
     this.dob,
@@ -77,8 +77,7 @@ class User {
     this.sessionNum,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-    userId: json["UserId"],
+  factory UserClass.fromJson(Map<String, dynamic> json) => UserClass(
     firstName: json["first_name"],
     lastName: json["last_name"],
     dob: json["DOB"],
@@ -97,7 +96,7 @@ class User {
     expiredDate: json["expiredDate"] == null ? null : DateTime.parse(json["expiredDate"]),
     classAttended: json["classAttended"],
     isans: json["isans"],
-    profilePicUrl: json["profilePicUrl"] == null ? [] : List<String>.from(json["profilePicUrl"]!.map((x) => x)),
+    profilePicUrl: json["profilePicUrl"]?? imgFromFirebase,
     maintananceFee: json["maintanance_fee"],
     cycle: json["cycle"],
     day: json["day"],
@@ -105,7 +104,6 @@ class User {
   );
 
   Map<String, dynamic> toJson() => {
-    "UserId": userId,
     "first_name": firstName,
     "last_name": lastName,
     "DOB": dob,
@@ -124,7 +122,7 @@ class User {
     "expiredDate": expiredDate?.toIso8601String(),
     "classAttended": classAttended,
     "isans": isans,
-    "profilePicUrl": profilePicUrl == null ? [] : List<dynamic>.from(profilePicUrl!.map((x) => x)),
+    "profilePicUrl": profilePicUrl,
     "maintanance_fee": maintananceFee,
     "cycle": cycle,
     "day": day,

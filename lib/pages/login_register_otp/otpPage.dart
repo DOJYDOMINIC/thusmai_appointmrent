@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
@@ -273,10 +272,13 @@ class _otpPageState extends State<otpPage> {
                         width: 304.w,
                         child: ElevatedButton(
                           onPressed: () {
+                            print(widget.data.toString());
                             Map<String, dynamic> data = {
                               "otp": otpNumber,
                               "email": widget.data,
                             };
+                            print(data.toString());
+
                             Provider.of<AppLogin>(context, listen: false).otpVerification(context, data);
                           },
                           style: ElevatedButton.styleFrom(

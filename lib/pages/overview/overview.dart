@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:thusmai_appointmrent/controller/payment_controller.dart';
 import '../../controller/login_register_otp_api.dart';
+import '../../controller/overviewController.dart';
 
 class Overview extends StatefulWidget {
   const Overview({super.key});
@@ -14,19 +16,28 @@ class Overview extends StatefulWidget {
 }
 
 class _OverviewState extends State<Overview> {
-
   @override
   void initState() {
     super.initState();
     Provider.of<AppLogin>(context, listen: false).getUserByID();
+    Provider.of<OverViewController>(context, listen: false).eventList();
   }
+
   @override
   Widget build(BuildContext context) {
-    var pro = Provider.of<AppLogin>(context);
-    String? firstName = pro.userData?.firstName; // Get the first name, if available
-    String? lastName = pro.userData?.lastName; // Get the last name, if available
-    String capitalizedFirstName = firstName != null ? firstName[0].toUpperCase() + firstName.substring(1) : ""; // Capitalize the first letter of first name if not null
-    String capitalizedLastName = lastName != null ? lastName[0].toUpperCase() + lastName.substring(1) : ""; // Capitalize the first letter of last name if not null
+    var appLogin = Provider.of<AppLogin>(context);
+   var overView = Provider.of<OverViewController>(context).eventLIst;
+
+    String? firstName =
+        appLogin.userData?.firstName; // Get the first name, if available
+    String? lastName =
+        appLogin.userData?.lastName; // Get the last name, if available
+    String capitalizedFirstName = firstName != null
+        ? firstName[0].toUpperCase() + firstName.substring(1)
+        : ""; // Capitalize the first letter of first name if not null
+    String capitalizedLastName = lastName != null
+        ? lastName[0].toUpperCase() + lastName.substring(1)
+        : ""; // Capitalize the first letter of last name if not null
     return Scaffold(
       backgroundColor: shadeOne,
       body: SafeArea(
@@ -34,19 +45,22 @@ class _OverviewState extends State<Overview> {
           child: Column(
             children: [
               GestureDetector(
-                onTap: (){
-                  Provider.of<PaymentController>(context, listen: false).paymentStatus(context,pro.userData?.uId);
+                onTap: () {
+                  Provider.of<PaymentController>(context, listen: false)
+                      .paymentStatus(context, appLogin.userData?.uId);
                 },
                 child: Padding(
-                  padding: EdgeInsets.only(left: 16.sp, right: 16.sp,top: 16.sp),
+                  padding:
+                      EdgeInsets.only(left: 16.sp, right: 16.sp, top: 16.sp),
                   child: Container(
                     height: 192.h,
                     decoration: BoxDecoration(
-                        border: Border.fromBorderSide(BorderSide.none),
-                        image: DecorationImage(
-                            fit: BoxFit.fill,
-                            image: AssetImage("assets/images/overviewimg1.jpg")),
-                        borderRadius: BorderRadius.circular(12),),
+                      border: Border.fromBorderSide(BorderSide.none),
+                      image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage("assets/images/overviewimg1.jpg")),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
@@ -66,7 +80,8 @@ class _OverviewState extends State<Overview> {
                         ),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.fromLTRB(16.sp, 16.sp, 32.sp, 16.sp),
+                        padding:
+                            EdgeInsets.fromLTRB(16.sp, 16.sp, 32.sp, 16.sp),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,7 +99,8 @@ class _OverviewState extends State<Overview> {
                                     SizedBox(
                                       width: 2.sp,
                                     ),
-                                    Text("${capitalizedFirstName}  ${capitalizedLastName}",
+                                    Text(
+                                      "${capitalizedFirstName}  ${capitalizedLastName}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 12.sp),
@@ -94,7 +110,7 @@ class _OverviewState extends State<Overview> {
                                 Column(
                                   children: [
                                     Text(
-                                      "Card No : ${pro.userData?.uId}",
+                                      "Card No : ${appLogin.userData?.uId}",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 12.sp),
@@ -107,18 +123,19 @@ class _OverviewState extends State<Overview> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "DOJ : ${pro.userData?.doj != null ? DateFormat('dd/MM/yyyy').format(pro.userData!.doj!) : 'N/A'}",
-
+                                  "DOJ : ${appLogin.userData?.doj != null ? DateFormat('dd/MM/yyyy').format(appLogin.userData!.doj!) : 'N/A'}",
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w500, fontSize: 12.sp),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.sp),
                                 ),
                                 SizedBox(
                                   height: 2,
                                 ),
                                 Text(
-                                  "VALID :  ${pro.userData?.expiredDate != null ? DateFormat('dd/MM/yyyy').format(pro.userData!.expiredDate!) : 'N/A'}",
+                                  "VALID :  ${appLogin.userData?.expiredDate != null ? DateFormat('dd/MM/yyyy').format(appLogin.userData!.expiredDate!) : 'N/A'}",
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w500, fontSize: 12.sp),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.sp),
                                 ),
                               ],
                             )
@@ -131,9 +148,9 @@ class _OverviewState extends State<Overview> {
               ),
               spaceBetween,
               Padding(
-                padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                padding: EdgeInsets.only(left: 16.sp, right: 16.sp),
                 child: Container(
-                  height: 176.0,
+                  height: 176.h,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     gradient: LinearGradient(
@@ -147,10 +164,10 @@ class _OverviewState extends State<Overview> {
                       // stops: [0.0, 1.0],
                     ),
                     border: Border.fromBorderSide(BorderSide.none),
-                    borderRadius: BorderRadius.circular(12.0),
+                    borderRadius: BorderRadius.circular(12.sp),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.fromLTRB(16.sp, 8.sp, 16.sp, 8.sp),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -159,8 +176,15 @@ class _OverviewState extends State<Overview> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(Icons.self_improvement,size: 80.sp,),
-                            Container(height: 104.h,width: 1,color: brown,),
+                            Icon(
+                              Icons.self_improvement,
+                              size: 80.sp,
+                            ),
+                            Container(
+                              height: 100.h,
+                              width: 1.w,
+                              color: brown,
+                            ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -174,11 +198,11 @@ class _OverviewState extends State<Overview> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text("${pro.userData?.cycle??0}"),
+                                Text("${appLogin.userData?.cycle ?? 0}"),
                                 spaceBetween,
-                                Text("${pro.userData?.cycle??0}"),
+                                Text("${appLogin.userData?.cycle ?? 0}"),
                                 spaceBetween,
-                                Text("${pro.userData?.day??0}"),
+                                Text("${appLogin.userData?.day ?? 0}"),
                               ],
                             )
                           ],
@@ -189,10 +213,10 @@ class _OverviewState extends State<Overview> {
                 ),
               ),
               spaceBetween,
-              Padding(
-                padding: EdgeInsets.only(left: 16.0, right: 16.0),
+              overView.isEmpty ? Padding(
+                padding: EdgeInsets.only(left: 16.sp, right: 16.sp),
                 child: Container(
-                  height: 176.0,
+                  height: 176.h,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     gradient: LinearGradient(
@@ -205,11 +229,180 @@ class _OverviewState extends State<Overview> {
                       ],
                     ),
                     border: Border.fromBorderSide(BorderSide.none),
-                    borderRadius: BorderRadius.circular(12.0),
+                    borderRadius: BorderRadius.circular(12),
                   ),
+                child: Center(child: Text("No Events")),
                 ),
-              ),
-              spaceBetween,
+              ) : CarouselSlider.builder(
+                  itemCount: overView.length,
+                  itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                    return  SizedBox(
+                      child: GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet<void>(
+                            backgroundColor: shadeOne,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SizedBox(
+                                height: 400.h,
+                                width: MediaQuery.of(context).size.width,
+                                child: Container(
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Row(
+                                        children: [
+                                          Container(
+                                            height: 150.h,
+                                            width: 100.w,
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(8),image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage("${overView[itemIndex].image}"))),
+                                          ),
+                                          SizedBox(height: 16.h),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "${overView[itemIndex].eventName}",
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "${overView[itemIndex].date != null ? DateFormat('dd/MM/yyyy').format(overView[itemIndex].date!) : 'N/A'} (${overView[itemIndex].eventTime})",
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 8.h),
+                                      Expanded(
+                                        child: Scrollbar(
+                                          thickness: 5,
+                                          radius: Radius.circular(2),
+                                          interactive: true,
+                                          thumbVisibility: true,
+                                          child: SingleChildScrollView(
+                                              child: Text(
+                                            "${overView[itemIndex].eventDescription}",
+                                          )),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 16.sp, right: 16.sp),
+                          child: Container(
+                            height: 176.h,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Colors.amber.shade100, // Lighter color
+                                  Colors.amber.shade50, // Lighter color
+                                  Colors.amber.shade50, // Lighter color
+                                ],
+                              ),
+                              border: Border.fromBorderSide(BorderSide.none),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(4.sp),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.sp),
+                                    child: Container(
+                                        width: 122.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                            image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: NetworkImage("${overView[itemIndex].image}")))),
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Spacer(),
+                                    Text(
+                                      "${overView[itemIndex].eventName}",
+                                      style: TextStyle(
+                                          fontSize: 14.sp,
+                                          color: darkShade,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    Spacer(),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.event_repeat_rounded),
+                                        Text(
+                                          "${overView[itemIndex].date != null ? DateFormat('dd/MM/yyyy').format(overView[itemIndex].date!) : 'N/A'} (${overView[itemIndex].eventTime})",
+                                          style: TextStyle(
+                                              fontSize: 12.sp,
+                                              color: darkShade),
+                                        )
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    Container(
+                                        width: 200.w,
+                                        child: Text(
+                                          "${overView[itemIndex].eventDescription}",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: eventSubText,
+                                            // Maximum number of lines
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          maxLines: 4,
+                                        )),
+                                    Spacer()
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  options: CarouselOptions(
+                    height: 170,
+                    aspectRatio: 16 / 9,
+                    viewportFraction: 1,
+                    initialPage: 0,
+                    enableInfiniteScroll: true,
+                    reverse: false,
+                    autoPlay:overView.length == 1?false: true,
+                    autoPlayInterval: Duration(seconds: 3),
+                    autoPlayAnimationDuration: Duration(milliseconds: 800),
+                    autoPlayCurve: Curves.fastOutSlowIn,
+                    enlargeCenterPage: true,
+                    enlargeFactor: 0.1,
+                    // onPageChanged: callbackFunction,
+                    scrollDirection: Axis.horizontal,
+                  )),
             ],
           ),
         ),

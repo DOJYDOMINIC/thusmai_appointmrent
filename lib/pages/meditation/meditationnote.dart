@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../constant/constant.dart';
 import '../../controller/login_register_otp_api.dart';
+import '../../controller/meditationController.dart';
 import '../../tabs/messsagetab.dart';
 import '../../widgets/additionnalwidget.dart';
 import '../profile/profile.dart';
@@ -16,11 +18,15 @@ class MeditationNote extends StatefulWidget {
   State<MeditationNote> createState() => _MeditationNoteState();
 }
 class _MeditationNoteState extends State<MeditationNote> {
+  TextEditingController noteController = TextEditingController();
+
+
   bool _global = false;
   @override
   Widget build(BuildContext context) {
+    var meditation = Provider.of<MeditationController>(context);
+
     var pro = Provider.of<AppLogin>(context);
-    TextEditingController noteController = TextEditingController();
     return Scaffold(
       backgroundColor: shadeOne,
       appBar: AppBar(
@@ -166,6 +172,10 @@ class _MeditationNoteState extends State<MeditationNote> {
               width: 304.w,
               child: ElevatedButton(
                 onPressed: () {
+                  DateTime now = DateTime.now();
+                  String formattedTime = DateFormat('h:mm a').format(now);
+                  String messageTDate = DateFormat('MMMM dd').format(DateTime.now());
+                  meditation.meditationNote( noteController.text, _global ? "global": "private", formattedTime,messageTDate);
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(

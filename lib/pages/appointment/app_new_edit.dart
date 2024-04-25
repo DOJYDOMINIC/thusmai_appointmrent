@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/pages/appointment/termsandconditions.dart';
 import '../../constant/constant.dart';
 import '../../controller/appointmentontroller.dart';
-import '../../controller/authentication.dart';
 import '../../models/appointment_model.dart';
 import '../../widgets/additionnalwidget.dart';
 
@@ -44,6 +42,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
     _reason = TextEditingController(text: widget.data.appointmentReason);
     _pickup = widget.data.pickup ?? false;
     _externalUser = widget.data.externalUser ?? false;
+
     selectedValue =widget.data.externalUser == true? "Yes" : "No";
     // _appointmentForOther = widget.data.externalUser;
 
@@ -91,6 +90,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
   // Define a list to store the expansion state of each item
 
   List<bool> itemExpandedList = [];
+
   late List<dynamic> updateMember;
 
   // List<GroupMember> dataList = [];
@@ -996,7 +996,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                 }
                               }
                               _submitForm(memberData);
-                              // pro.countOfPeople = 0;
+                              pro.countOfPeople = 0;
                             },
                       style: ElevatedButton.styleFrom(
                         shadowColor: Colors.black, backgroundColor: goldShade,

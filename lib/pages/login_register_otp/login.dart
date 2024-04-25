@@ -277,7 +277,8 @@ class _LoginState extends State<Login> {
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: (){_launchURL();}, child: Text(
+                                  onPressed: (){
+                                    launchURL(registerUrl);}, child: Text(
                                   "Register",
                                   style: TextStyle(
                                     fontSize: 12.sp,
@@ -305,12 +306,7 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-  _launchURL() async {
-    final Uri url = Uri.parse("https://thasmai.tstsvc.in");
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch url');
-    }
-  }
+
 }
 
 
