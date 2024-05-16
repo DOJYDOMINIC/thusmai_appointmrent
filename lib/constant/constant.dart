@@ -5,10 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 //Const Api link
 
 const baseUrl = "https://thasmai.tstsvc.in/api/v1/User";
-// const baseUrl = "http://192.168.1.92:5000/api/v1/User";
+// const baseUrl = "http://192.168.1.84:5000/api/v1/User";
 
 const  adminBaseUrl = "https://thasmai.tstsvc.in/api/v1/admin";
-// const  adminBaseUrl = "http://192.168.1.92:5000/api/v1/admin";
+const  paymentBaseUrl = "https://thasmai.tstsvc.in/api/v1/payment";
+
+// const  adminBaseUrl = "http://192.168.1.84:5000/api/v1/admin";
 
 
 // Url to Launch
@@ -77,6 +79,8 @@ Color red = Color.fromRGBO(186,26,26, 1);
 Color ringColor = Color.fromRGBO(156,143,128, 1);
 Color greenColor = Color.fromRGBO(183,206,162, 1);
 Color profileTextFieldDillColor = Color.fromRGBO(240,224,207, 1);
+Color meditationLogGreen = Color.fromRGBO(81,100,64, 1);
+Color meditationLogRed = Color.fromRGBO(186,26,26, 1);
 
 
 

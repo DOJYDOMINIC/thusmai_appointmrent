@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constant/constant.dart';
 import '../controller/appointmentontroller.dart';
-import '../pages/meditation/meditationpageview.dart';
+import '../pages/meditation/meditationlog.dart';
 import '../pages/meditation/meditationsetup.dart';
 
 
@@ -26,6 +26,7 @@ class _MeditationTabState extends State<MeditationTab> {
   Widget build(BuildContext context) {
     var pro = Provider.of<AppointmentController>(context);
     return Scaffold(
+      backgroundColor: shadeOne,
       body: SafeArea(
         child: Scaffold(
           body: ContainedTabBarView(
@@ -71,7 +72,8 @@ class _MeditationTabState extends State<MeditationTab> {
             ],
             views: [
               Meditationcycle(),
-              Container(),
+              MeditationLog(),
+              // SelectedDatesScreen()
             ],
             onChange: (index) {
               pro.selectedIndex = index;

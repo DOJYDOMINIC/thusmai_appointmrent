@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../constant/constant.dart';
 import '../../controller/login_register_otp_api.dart';
 
+
 class otpPage extends StatefulWidget {
   const otpPage({Key? key, this.data}) : super(key: key);
 

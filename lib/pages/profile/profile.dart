@@ -13,6 +13,8 @@ import '../../controller/login_register_otp_api.dart';
 import '../../controller/profileController.dart';
 import '../../widgets/additionnalwidget.dart';
 import 'app_feedback/app_feedback.dart';
+import 'edit/bank_info.dart';
+import 'edit/personalInfo.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -26,7 +28,6 @@ class _ProfileState extends State<Profile> {
     super.initState();
     Provider.of<ProfileController>(context,listen: false).getBankDetails();
   }
-
   @override
   Widget build(BuildContext context) {
     var pro = Provider.of<AppLogin>(context);
@@ -116,7 +117,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileDetailsEdit(),));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => PersonalInfo(),));
                               },
                               child: Container(
                                 height: 48.h,
@@ -145,7 +146,7 @@ class _ProfileState extends State<Profile> {
                             Divider(),
                             GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => BankDetailEdit(),));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => BankDetails(),));
 
                               },
                               child: Container(

@@ -1,7 +1,7 @@
-import 'dart:convert';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,11 +20,13 @@ import 'controller/videoplayer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+ await Firebase.initializeApp();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var cookies = prefs.getString("cookie") ?? "";
   var isAnswered = prefs.getString("isAnswered");
-  runApp(MyApp(cookies: cookies,isAnswered: isAnswered,));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
+    runApp(MyApp(cookies: cookies,isAnswered: isAnswered,));
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -49,6 +51,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AppointmentController(),),
@@ -61,7 +68,6 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => MessageController(),),
         ChangeNotifierProvider(create: (context) => OverViewController(),),
         ChangeNotifierProvider(create: (context) => ProfileController(),),
-
       ],
       child: ScreenUtilInit(
         designSize: const Size(400, 880),
@@ -72,10 +78,7 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
                 fontFamily: 'Roboto'),
-            home: widget.cookies == null || widget.cookies == ""
-                ? Login()
-                : CustomBottomNavBar(),
-            // home: MyHomePage(),
+            home:widget.cookies != "" ?  CustomBottomNavBar() : Login(),
           );
         },
       ),

@@ -16,6 +16,7 @@ class Overview extends StatefulWidget {
 }
 
 class _OverviewState extends State<Overview> {
+
   @override
   void initState() {
     super.initState();
@@ -269,15 +270,19 @@ class _OverviewState extends State<Overview> {
                                               mainAxisAlignment: MainAxisAlignment.start,
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  "${overView[itemIndex].eventName}",
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
+                                                Container(
+                                                  width: MediaQuery.of(context).size.width-150,
+                                                  child: Text(
+                                                    "${overView[itemIndex].eventName}",
+
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
                                                   ),
                                                 ),
                                                 Text(
-                                                  "${overView[itemIndex].date != null ? DateFormat('dd/MM/yyyy').format(overView[itemIndex].date!) : 'N/A'} (${overView[itemIndex].eventTime})",
+                                                  "${overView[itemIndex].date != null ?overView[itemIndex].date.toString() : 'N/A'} (${overView[itemIndex].eventTime})",
                                                   style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.bold,
@@ -345,19 +350,24 @@ class _OverviewState extends State<Overview> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Spacer(),
-                                    Text(
-                                      "${overView[itemIndex].eventName}",
-                                      style: TextStyle(
-                                          fontSize: 14.sp,
-                                          color: darkShade,
-                                          fontWeight: FontWeight.w500),
+                                    Container(
+                                      width: 200.w,
+                                      child: Text(
+                                        "${overView[itemIndex].eventName}",
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 14.sp,
+                                            color: darkShade,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                                     ),
                                     Spacer(),
                                     Row(
                                       children: [
                                         Icon(Icons.event_repeat_rounded),
                                         Text(
-                                          "${overView[itemIndex].date != null ? DateFormat('dd/MM/yyyy').format(overView[itemIndex].date!) : 'N/A'} (${overView[itemIndex].eventTime})",
+                                          // "${overView[itemIndex].date != null ? DateFormat('dd/MM/yyyy').format(overView[itemIndex].date!) : 'N/A'} (${overView[itemIndex].eventTime})",
+                                          "${overView[itemIndex].date != null ? overView[itemIndex].date.toString() : 'N/A'} (${overView[itemIndex].eventTime})",
                                           style: TextStyle(
                                               fontSize: 12.sp,
                                               color: darkShade),

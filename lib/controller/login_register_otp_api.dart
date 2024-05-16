@@ -91,6 +91,7 @@ class AppLogin extends ChangeNotifier {
     var decode = jsonDecode(response.body);
     try {
       if (response.statusCode == 200) {
+        prefs.setString("isAnswered", "true");
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -164,7 +165,7 @@ class AppLogin extends ChangeNotifier {
         SnackBar(
           backgroundColor: Colors.red,
           content: Text("Request timed out or other network error occurred."),
-          duration: Duration(seconds: 1),
+          duration: Duration(seconds: 3),
         ),
       );
     } catch (e) {
@@ -173,7 +174,7 @@ class AppLogin extends ChangeNotifier {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
-          content: Text("An error occurred: $e"),
+          content: Text("Something wentwrong"),
           duration: Duration(seconds: 1),
         ),
       );

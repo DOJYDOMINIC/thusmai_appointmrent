@@ -120,7 +120,7 @@ class _MeditationDataState extends State<MeditationData> {
                               Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "Refference : N/A",
+                                    "Reference : N/A",
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),

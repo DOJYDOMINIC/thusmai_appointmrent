@@ -172,11 +172,21 @@ class _MeditationNoteState extends State<MeditationNote> {
               width: 304.w,
               child: ElevatedButton(
                 onPressed: () {
-                  DateTime now = DateTime.now();
-                  String formattedTime = DateFormat('h:mm a').format(now);
-                  String messageTDate = DateFormat('MMMM dd').format(DateTime.now());
-                  meditation.meditationNote( noteController.text, _global ? "global": "private", formattedTime,messageTDate);
-                  Navigator.pop(context);
+                  if(noteController.text.isEmpty){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text("Please Fill Note"),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  }else{
+                    DateTime now = DateTime.now();
+                    String formattedTime = DateFormat('h:mm a').format(now);
+                    String messageTDate = DateFormat('MMMM dd, yyyy').format(DateTime.now());
+                    meditation.meditationNote( noteController.text, _global ? "global": "private", formattedTime,messageTDate);
+                    Navigator.pop(context);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   shadowColor: Colors.black, backgroundColor: goldShade,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
+import 'package:thusmai_appointmrent/pages/videos/videospage.dart';
 import 'package:thusmai_appointmrent/tabs/hometab.dart';
 import 'package:thusmai_appointmrent/tabs/messsagetab.dart';
 import 'package:thusmai_appointmrent/pages/profile/profile.dart';
@@ -10,7 +11,7 @@ import '../controller/login_register_otp_api.dart';
 import '../services/firebase_notification.dart';
 import '../tabs/meditationTab.dart';
 import '../tabs/paymentTab.dart';
-import 'notification/notification.dart';
+// import 'notification/notification.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({
@@ -35,15 +36,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   bool _paymentsEnabled = true;
 
   final List<Widget> _pages = [
-    Container(
-      color: shadeOne,
-      child: Center(
-          child: Text(
-        pageUnderWork,
-        style: TextStyle(
-            fontSize: 24.sp, color: const Color.fromRGBO(67, 44, 0, .3)),
-      )),
-    ),
+   VideosPage(),
     HomeTab(),
     MeditationTab(),
     PaymentTab(),
@@ -81,15 +74,15 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                 color: shadeSix,
               ),
             ),
-            IconButton(
-              onPressed: () {
-                slidePageRoute(context, NotificationPage());
-              },
-              icon: Icon(
-                Icons.circle_notifications_outlined,
-                color: shadeSix,
-              ),
-            ),
+            // IconButton(
+            //   onPressed: () {
+            //     slidePageRoute(context, NotificationPage());
+            //   },
+            //   icon: Icon(
+            //     Icons.circle_notifications_outlined,
+            //     color: shadeSix,
+            //   ),
+            // ),
             IconButton(
               onPressed: () {
                 Provider.of<AppLogin>(context, listen: false).getUserByID();

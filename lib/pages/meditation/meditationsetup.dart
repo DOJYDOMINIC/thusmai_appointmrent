@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../controller/login_register_otp_api.dart';
+import '../../controller/meditationController.dart';
 import '../../widgets/additionnalwidget.dart';
 import 'meditationtimer.dart';
 
@@ -36,10 +37,10 @@ class _MeditationcycleState extends State<Meditationcycle> {
     moon = Colors.grey;
 
     // Check if it's morning (6:00 AM to 9:00 AM)
-    if (now.hour >= 6 && now.hour < 12) {
+    if (now.hour >= 6 && now.hour < 10) {
       sun = ambercolor; // Replace with your morning border color
       videoId = 'aH96tw8fXfk'; // Replace with your morning video ID
-    } else if (now.hour >= 12 && now.hour < 22) {
+    } else if (now.hour >= 18 && now.hour < 22) {
       // Check if it's evening (6:30 PM to 10:00 PM)
       moon = ambercolor; // Replace with your afternoon border color
       videoId = 'kvRq5sJsuHY'; // Replace with your evening video ID
@@ -82,6 +83,7 @@ class _MeditationcycleState extends State<Meditationcycle> {
   var pro =  Provider.of<AppLogin>(context);
     // var height = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: shadeOne,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(right: 20, left: 20),
@@ -194,9 +196,11 @@ class _MeditationcycleState extends State<Meditationcycle> {
                     child: ElevatedButton(
                       onPressed: () {
                         DateTime now = DateTime.now();
+                        print(now.hour+now.minute);
+
                         // Check the time conditions to determine whether to navigate or not
-                        if ((now.hour >= 6 && now.hour < 12) ||
-                            (now.hour >= 12 && now.hour < 22)) {
+                        if ((now.hour+now.minute  >= 6 && now.hour < 18) ||
+                            (now.hour >= 18 && now.hour < 22)) {
                           _controller.pause();
                           slidePageRoute(context,TimerScreen());
                           // Navigator.push(context,MaterialPageRoute(builder: (context) => TimerScreen(),));

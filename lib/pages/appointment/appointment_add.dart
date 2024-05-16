@@ -1189,12 +1189,12 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                     children: [
                                       Padding(
                                         padding: EdgeInsets.only(
-                                            top: 23.sp, right: 10.sp),
+                                            top: 23, right: 10),
                                         child: Text("#${index + 1}"),
                                       ),
                                       Expanded(
                                         child: Container(
-                                          height: 260.h,
+                                          // height: 258.h,
                                           decoration: BoxDecoration(
                                             color: shadeTwo,
                                             borderRadius:
