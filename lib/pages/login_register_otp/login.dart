@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/reset_password.dart';
 import 'package:thusmai_appointmrent/widgets/additionnalwidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,6 +19,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<AppLogin>(context,listen: false).importantFlags();
+  }
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = true;
   late String _email;
@@ -222,12 +229,12 @@ class _LoginState extends State<Login> {
                                   // Here you can perform your login logic
                                   Map<String, dynamic> data = {"email": _email, "password": _password};
                                   Provider.of<AppLogin>(context, listen: false).loginApi(context,data);
+
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                shadowColor: Colors.black,
+                                shadowColor: Colors.black, backgroundColor: goldShade,
                                 elevation: 4,
-                                primary: goldShade,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100),
                                 ),

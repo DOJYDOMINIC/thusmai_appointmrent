@@ -61,7 +61,6 @@ class AppointmentController extends ChangeNotifier {
         },
       );
       if (response.statusCode == 200) {
-
         Map<String, dynamic> dataList = jsonDecode(response.body);
         var data = dataList["appointments"];
         if (data is List) {
@@ -167,12 +166,12 @@ class AppointmentController extends ChangeNotifier {
       if (response.statusCode == 200) {
         Provider.of<AppointmentController>(context, listen: false).fetchAppointments();
         countOfPeople = 0;
-        if(response.statusCode == 401){
-          prefs.clear();
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
-        }else{
+        // if(response.statusCode == 401){
+        //   prefs.clear();
+        //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
+        // }else{
           showPlatformDialog(context,alertCompleted,bookingCompleted,message["message"].toString(),"Continue",Color.fromRGBO(81, 100, 64, 1) );
-        }
+        // }
       }else {
         showPlatformDialog(context,alertDeleted,bookingFailed,message["error"].toString(),"cancel",Color.fromRGBO(186, 26, 26, 1));
         print('Failed to create appointment. Status code: ${response.statusCode}');
@@ -257,26 +256,34 @@ class AppointmentController extends ChangeNotifier {
         body: jsonEncode(data),
       );
 
-      // var message = jsonDecode(response.body);
       if (response.statusCode == 200) {
         Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(" Feedback Shared Successfully"),
+            backgroundColor: Colors.green,
+          ),
+        );
         if(response.statusCode == 401){
           prefs.clear();
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
         }
-        // else{
-        //   showPlatformDialog(context,alertCompleted,bookingCompleted,message["message"].toString(),"Continue",Color.fromRGBO(81, 100, 64, 1) );
-        // }
       }else {
-        // showPlatformDialog(context,alertDeleted,bookingFailed,message["error"].toString(),"cancel",Color.fromRGBO(186, 26, 26, 1));
-        // print('Failed to create appointment. Status code: ${response.statusCode}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed"),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     }on http.ClientException catch (_) {
-      // showPlatformDialog(context,alertDeleted,bookingFailed,"something went wrong","cancel",Color.fromRGBO(186, 26, 26, 1));
     }  catch (error) {
-      // showPlatformDialog(context,alertDeleted,bookingFailed,"something went wrong","cancel",Color.fromRGBO(186, 26, 26, 1));
-      print('Error creating appointment: $error');
-      throw Exception('Failed to create appointment');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed"),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 }

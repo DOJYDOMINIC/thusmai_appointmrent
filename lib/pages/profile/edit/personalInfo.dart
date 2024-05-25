@@ -58,8 +58,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
     await _picker.pickImage(source: ImageSource.gallery, imageQuality: 15);
     if (pickedFile != null) {
       _image = File(pickedFile.path);
-      print("dataPAth${_image!.path.toString()}");
       Provider.of<ProfileController>(context,listen: false).uploadData(_image, context);
+      setState(() {
+
+      });
     }
   }
 
@@ -68,8 +70,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
     await _picker.pickImage(source: ImageSource.camera, imageQuality: 15);
     if (pickedFile != null) {
       _image = File(pickedFile.path);
-      print("dataPAth${_image!.path.toString()}");
       Provider.of<ProfileController>(context,listen: false).uploadData(_image, context);
+      setState(() {
+
+      });
     }
   }
 
@@ -79,7 +83,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
   }
   @override
   Widget build(BuildContext context) {
-    var userdata = Provider.of<AppLogin>(context,listen: false).userData;
+    var userdata = Provider.of<AppLogin>(context).userData;
     var profile = Provider.of<ProfileController>(context,listen: false);
 
 
@@ -124,7 +128,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
                             children: [
                               CircleAvatar(
                                 radius: 70,
-                                backgroundImage: AssetImage(guruji),
+                                backgroundImage: _image?.path == null
+                                    ? userdata?.profilePicUrl != null
+                                    ? NetworkImage("${userdata?.profilePicUrl} ")
+                                    : NetworkImage(imgFromFirebase)
+                                    : Image.file(File(_image!.path)).image,
                               ),
                               Positioned(
                                 bottom: -8,

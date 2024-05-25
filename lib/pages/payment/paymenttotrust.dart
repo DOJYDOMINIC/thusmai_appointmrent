@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:http/http.dart' as http;
 import '../../constant/constant.dart';
+import '../../controller/login_register_otp_api.dart';
+import '../../controller/payment_controller.dart';
 
 class PaymentToTrust extends StatefulWidget {
   const PaymentToTrust({super.key});
@@ -34,6 +37,23 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    var payment = Provider.of<PaymentController>(context, listen: false);
+    var pro = Provider.of<AppLogin>(context,listen: false);
+    var amount = double.parse(donationController.text);
+    DateTime day = DateTime.now();
+
+    Map<String, dynamic> data = {
+      "razorpay_order_id": response.orderId,
+      "razorpay_payment_id": response.paymentId,
+      "razorpay_signature": response.signature,
+      "UId":pro.userData?.uId,
+      "amount": amount,
+      "payment_date": "${day.day}/${day.month}/${day.year}",
+      "payment_time": "${day.hour}:${day.minute}:${day.second}",
+    };
+
+    payment.paymentSuccess(context, "donation-paymentVerification", data);
+
     // Handle payment success
     print("Payment Successful: $response");
 
@@ -114,7 +134,6 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
           print('Error: $e');
         }
       } else {
-        print('Failed to create order');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red,
@@ -212,9 +231,8 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
                 child: ElevatedButton(
                   onPressed: _createOrderAndOpenCheckout,
                   style: ElevatedButton.styleFrom(
-                    shadowColor: Colors.black,
+                    shadowColor: Colors.black, backgroundColor: goldShade,
                     elevation: 4,
-                    primary: goldShade,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
                     ),

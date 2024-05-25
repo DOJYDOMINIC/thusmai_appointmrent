@@ -44,7 +44,6 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
   TextEditingController _district = TextEditingController();
   TextEditingController _address = TextEditingController();
   TextEditingController _country = TextEditingController();
-  String _userName = "";
 
   @override
   Widget build(BuildContext context) {

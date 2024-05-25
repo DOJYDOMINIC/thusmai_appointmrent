@@ -77,7 +77,6 @@ class _PaymentTabState extends State<PaymentTab> {
             ],
             onChange: (index) {
               pro.selectedIndex = index;
-              print(index);
             },
           ),
         ),

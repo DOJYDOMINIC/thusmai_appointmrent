@@ -184,7 +184,7 @@ class _MeditationNoteState extends State<MeditationNote> {
                     DateTime now = DateTime.now();
                     String formattedTime = DateFormat('h:mm a').format(now);
                     String messageTDate = DateFormat('MMMM dd, yyyy').format(DateTime.now());
-                    meditation.meditationNote( noteController.text, _global ? "global": "private", formattedTime,messageTDate);
+                    meditation.meditationNote(context, noteController.text, _global ? "global": "private", formattedTime,messageTDate);
                     Navigator.pop(context);
                   }
                 },

@@ -51,6 +51,11 @@ class _ResetPageTwoState extends State<ResetPageTwo> {
       enableResend = false;
     });
   }
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
 
   TextEditingController _email = TextEditingController();
 

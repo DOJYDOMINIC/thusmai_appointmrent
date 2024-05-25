@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:thusmai_appointmrent/pages/videos/videospage.dart';
+import 'package:thusmai_appointmrent/pages/videos/videospageone.dart';
 import 'package:thusmai_appointmrent/tabs/hometab.dart';
 import 'package:thusmai_appointmrent/tabs/messsagetab.dart';
 import 'package:thusmai_appointmrent/pages/profile/profile.dart';
@@ -11,7 +12,6 @@ import '../controller/login_register_otp_api.dart';
 import '../services/firebase_notification.dart';
 import '../tabs/meditationTab.dart';
 import '../tabs/paymentTab.dart';
-// import 'notification/notification.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({
@@ -32,11 +32,11 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   int _currentIndex = 1;
   bool _videoEnabled = true;
   bool _homeEnabled = true;
-  bool _meditationEnabled = true;
+  bool _meditationEnabled = false;
   bool _paymentsEnabled = true;
 
   final List<Widget> _pages = [
-   VideosPage(),
+    VideosPageOne(),
     HomeTab(),
     MeditationTab(),
     PaymentTab(),
@@ -44,16 +44,17 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    // var pro = Provider.of<AppointmentController>(context);
+    var flagModel = Provider.of<AppLogin>(context).flagModel;
+    _meditationEnabled = flagModel.meditationFeePaymentStatus??false;
     return WillPopScope(
-        onWillPop: () async {
-          if (_currentIndex != 1) {
-            setState(() {
-              _currentIndex = 1;
-            });
-            return false;
-          }
-          return true;
+      onWillPop: () async {
+        if (_currentIndex != 1) {
+          setState(() {
+            _currentIndex = 1;
+          });
+          return false;
+        }
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(

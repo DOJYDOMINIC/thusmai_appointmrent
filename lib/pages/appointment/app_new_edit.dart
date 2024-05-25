@@ -463,7 +463,6 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                               ),
                               Expanded(
                                 child: Container(
-                                  height: 260.h,
                                   decoration: BoxDecoration(
                                     color: shadeTwo,
                                     borderRadius: BorderRadius.circular(8),
@@ -628,9 +627,8 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                             children: [
                                               ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                  shadowColor: Colors.black,
+                                                  shadowColor: Colors.black, backgroundColor: darkShade,
                                                   elevation: 4,
-                                                  primary: darkShade,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
@@ -657,9 +655,8 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                               SizedBox(width: 16.w),
                                               ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                  shadowColor: Colors.black,
+                                                  shadowColor: Colors.black, backgroundColor: darkShade,
                                                   elevation: 4,
-                                                  primary: darkShade,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(

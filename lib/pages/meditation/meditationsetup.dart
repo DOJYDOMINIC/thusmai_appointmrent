@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
@@ -16,52 +17,71 @@ class Meditationcycle extends StatefulWidget {
 }
 
 class _MeditationcycleState extends State<Meditationcycle> {
+  // double _progress = 0.0;
+  // bool _isPlaying = false;
   bool isPressed = false;
   late Color sun; // Added this line
   late Color moon; // Added this line
- Color ambercolor = Colors.amber;
+  Color ambercolor = Colors.amber;
+
   @override
   void initState() {
     super.initState();
     _initializeVideoController();
     Provider.of<AppLogin>(context, listen: false).getUserByID();
+    Provider.of<MeditationController>(context, listen: false).meditationTimeDetails();
 
+    _controller.play();
   }
 
+  // String _printDuration(Duration duration) {
+  //   String twoDigits(int n) => n.toString().padLeft(2, "0");
+  //   String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+  //   String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+  //   return "${duration.inHours}:$twoDigitMinutes:$twoDigitSeconds";
+  // }
+
   late YoutubePlayerController _controller;
+
+  late PlayerState _playerState;
+
   void _initializeVideoController() {
     DateTime now = DateTime.now();
 
-    String videoId;
     sun = Colors.grey;
     moon = Colors.grey;
+
+    String youtubeUrl = 'https://www.youtube.com/watch?v=VNSxTanl3YU';
+    List<String> parts = youtubeUrl.split('=');
+    String videoId = parts[1];
 
     // Check if it's morning (6:00 AM to 9:00 AM)
     if (now.hour >= 6 && now.hour < 10) {
       sun = ambercolor; // Replace with your morning border color
-      videoId = 'aH96tw8fXfk'; // Replace with your morning video ID
-    } else if (now.hour >= 18 && now.hour < 22) {
+      videoId; // Replace with your morning video ID
+    } else if (now.hour >= 10 && now.hour < 12) {
       // Check if it's evening (6:30 PM to 10:00 PM)
-      moon = ambercolor; // Replace with your afternoon border color
-      videoId = 'kvRq5sJsuHY'; // Replace with your evening video ID
+      sun = ambercolor; // Replace with your afternoon border color
+      videoId; // Replace with your evening video ID
     } else {
       // Default video ID for other times
-      videoId = '60ItHLz5WEA'; // Replace with your default video ID
+      videoId; // Replace with your default video ID
     }
 
     _controller = YoutubePlayerController(
       initialVideoId: videoId,
       flags: YoutubePlayerFlags(
-        mute: false,
-        autoPlay: false,
-        disableDragSeek: false,
-        loop: false, // Don't set loop to true to handle replay manually
-        isLive: false,
-        forceHD: false,
-        enableCaption: false,
-
-      ),
+          mute: false,
+          autoPlay: false,
+          disableDragSeek: false,
+          loop: false,
+          // Don't set loop to true to handle replay manually
+          isLive: false,
+          forceHD: false,
+          enableCaption: false,
+          hideControls: true),
     );
+  }
 
   //   _controller.addListener(() {
   //     if (_controller.value.playerState == PlayerState.ended) {
@@ -70,7 +90,17 @@ class _MeditationcycleState extends State<Meditationcycle> {
   //       _controller.pause(); // Optionally, you can auto-play after seeking to the beginning
   //     }
   //   });
-  }
+
+  // void listener() {
+  //   if (_controller.value.playerState != _playerState) {
+  //     setState(() {
+  //       _playerState = _controller.value.playerState;
+  //     });
+  //   }
+  //   setState(() {
+  //   _progress = _controller.value.position.inSeconds.toDouble();
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -80,7 +110,7 @@ class _MeditationcycleState extends State<Meditationcycle> {
 
   @override
   Widget build(BuildContext context) {
-  var pro =  Provider.of<AppLogin>(context);
+    var pro = Provider.of<AppLogin>(context);
     // var height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: shadeOne,
@@ -89,7 +119,7 @@ class _MeditationcycleState extends State<Meditationcycle> {
           padding: const EdgeInsets.only(right: 20, left: 20),
           child: SingleChildScrollView(
             child: Container(
-              height: MediaQuery.of(context).size.height- 250.h,
+              height: MediaQuery.of(context).size.height - 250.h,
               child: Column(
                 children: [
                   spaceBetween,
@@ -97,7 +127,11 @@ class _MeditationcycleState extends State<Meditationcycle> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      meditationCycleWidget("Meditation Cycle","${pro.userData?.day??0}","${pro.userData?.cycle??0}","${pro.userData?.cycle??0}"),
+                      meditationCycleWidget(
+                          "Meditation Cycle",
+                          "${pro.userData?.day ?? 0}",
+                          "${pro.userData?.cycle ?? 0}",
+                          "${pro.userData?.cycle ?? 0}"),
                       Container(
                         width: 2,
                         height: 208,
@@ -116,31 +150,40 @@ class _MeditationcycleState extends State<Meditationcycle> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     gradient: LinearGradient(
-                                      colors: [Colors.grey.shade900, Colors.black],
+                                      colors: [
+                                        Colors.grey.shade900,
+                                        Colors.black
+                                      ],
                                       begin: Alignment.topCenter,
                                       end: Alignment.bottomCenter,
                                     ),
                                     color: Colors.black,
                                     border: Border.all(
-                                        width: 4.w, color: sun), // Updated this line
+                                        width: 4.w,
+                                        color: sun), // Updated this line
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(15),
                                     child: Image(
                                         fit: BoxFit.fill,
-                                        image: AssetImage("assets/images/sun.png")),
+                                        image: AssetImage(
+                                            "assets/images/sun.png")),
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 8,),
+                          SizedBox(
+                            height: 8,
+                          ),
                           Container(
                             width: 176.w,
                             height: 1.h,
                             color: shadeEight,
                           ),
-                          SizedBox(height: 8.h,),
+                          SizedBox(
+                            height: 8.h,
+                          ),
                           Row(
                             children: [
                               timeSetup("Evening", "09:30 PM", "10:30 PM"),
@@ -151,18 +194,23 @@ class _MeditationcycleState extends State<Meditationcycle> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     gradient: LinearGradient(
-                                      colors: [Colors.grey.shade900, Colors.black],
+                                      colors: [
+                                        Colors.grey.shade900,
+                                        Colors.black
+                                      ],
                                       begin: Alignment.topCenter,
                                       end: Alignment.bottomCenter,
                                     ),
                                     border: Border.all(
-                                        width: 4, color: moon), // Updated this line
+                                        width: 4,
+                                        color: moon), // Updated this line
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(15),
                                     child: Image(
                                         fit: BoxFit.fill,
-                                        image: AssetImage("assets/images/moon.png")),
+                                        image: AssetImage(
+                                            "assets/images/moon.png")),
                                   ),
                                 ),
                               ),
@@ -173,22 +221,78 @@ class _MeditationcycleState extends State<Meditationcycle> {
                     ],
                   ),
                   spaceBetween,
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0), // Adjust the radius as needed
-                    child: YoutubePlayer(
-                      controller: _controller,
-                      showVideoProgressIndicator: true,
-                      progressIndicatorColor: Colors.blueAccent,
-                      progressColors: ProgressBarColors(
-                        playedColor: Colors.amber,
-                        handleColor: Colors.amberAccent,
+                  GestureDetector(
+                    onTap: (){launchUrl(Uri.parse("https://www.youtube.com/watch?v=VNSxTanl3YU"));},
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          YoutubePlayer(
+                            controller: _controller,
+                            showVideoProgressIndicator: false,
+                            progressIndicatorColor: Colors.blueAccent,
+                            progressColors: ProgressBarColors(
+                              playedColor: Colors.amber,
+                              handleColor: Colors.amberAccent,
+                            ),
+                            onReady: () {
+                              print("Player is ready.");
+                            },
+                          ),
+                          Icon(
+                            Icons.play_arrow,
+                            size: 50.0,
+                            color: Colors.white,
+                          ),
+                        ],
                       ),
-                      onReady: () {
-                        // You can perform actions when the player is ready.
-                        print("ready");
-                      },
                     ),
                   ),
+                  // Row(
+                  //   children: [
+                  //     Text(
+                  //       "${_printDuration(Duration(seconds: _progress.toInt()))}",
+                  //     ),
+                  //     IconButton(
+                  //       onPressed: () {
+                  //         setState(() {
+                  //           if (!_isPlaying) {
+                  //             _controller.play();
+                  //           } else {
+                  //             _controller.pause();
+                  //           }
+                  //           _isPlaying =
+                  //           !_isPlaying; // Toggle the play/pause state
+                  //         });
+                  //       },
+                  //       icon: Icon(
+                  //         _isPlaying ? Icons.pause : Icons.play_arrow,
+                  //         // Change icon to pause if playing, otherwise play_arrow
+                  //       ),
+                  //     ),
+                  //     Expanded(
+                  //       child: Slider(
+                  //         activeColor: goldShade,
+                  //         value: _progress,
+                  //         min: 0.0,
+                  //         max: _controller.metadata.duration.inSeconds.toDouble(),
+                  //         onChanged: (value) {
+                  //           setState(() {
+                  //             _progress = value;
+                  //           });
+                  //         },
+                  //         onChangeEnd: (value) {
+                  //           _controller
+                  //               .seekTo(Duration(seconds: value.toInt()));
+                  //         },
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       "${_printDuration(_controller.metadata.duration)}",
+                  //     ),
+                  //   ],
+                  // ),
                   Spacer(),
                   SizedBox(
                     height: 56.h,
@@ -196,24 +300,24 @@ class _MeditationcycleState extends State<Meditationcycle> {
                     child: ElevatedButton(
                       onPressed: () {
                         DateTime now = DateTime.now();
-                        print(now.hour+now.minute);
-
                         // Check the time conditions to determine whether to navigate or not
-                        if ((now.hour+now.minute  >= 6 && now.hour < 18) ||
+                        if ((now.hour >= 6 && now.hour <= 9) ||
                             (now.hour >= 18 && now.hour < 22)) {
                           _controller.pause();
-                          slidePageRoute(context,TimerScreen());
+                          slidePageRoute(context, TimerScreen());
                           // Navigator.push(context,MaterialPageRoute(builder: (context) => TimerScreen(),));
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Button is disabled at this time.'),
+                              content: Text("Sorry,Your are not able to Meditate now"),
+                              backgroundColor: Colors.red,
                             ),
                           );
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        shadowColor: Colors.black, backgroundColor: goldShade,
+                        shadowColor: Colors.black,
+                        backgroundColor: goldShade,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(100),
                         ),
@@ -238,9 +342,9 @@ class _MeditationcycleState extends State<Meditationcycle> {
       ),
     );
   }
+  launchURL(Uri url) async {
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch url');
+    }
+  }
 }
-
-
-
-
-

@@ -21,6 +21,7 @@ class _OverviewState extends State<Overview> {
   void initState() {
     super.initState();
     Provider.of<AppLogin>(context, listen: false).getUserByID();
+    Provider.of<AppLogin>(context,listen: false).importantFlags();
     Provider.of<OverViewController>(context, listen: false).eventList();
   }
 
@@ -28,7 +29,6 @@ class _OverviewState extends State<Overview> {
   Widget build(BuildContext context) {
     var appLogin = Provider.of<AppLogin>(context);
    var overView = Provider.of<OverViewController>(context).eventLIst;
-
     String? firstName =
         appLogin.userData?.firstName; // Get the first name, if available
     String? lastName =
@@ -47,8 +47,7 @@ class _OverviewState extends State<Overview> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Provider.of<PaymentController>(context, listen: false)
-                      .paymentStatus(context, appLogin.userData?.uId);
+                  // Provider.of<PaymentController>(context, listen: false).processPayment(context, appLogin.userData?.uId);
                 },
                 child: Padding(
                   padding:

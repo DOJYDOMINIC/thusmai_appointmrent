@@ -283,9 +283,8 @@ class _otpPageState extends State<otpPage> {
                             Provider.of<AppLogin>(context, listen: false).otpVerification(context, data);
                           },
                           style: ElevatedButton.styleFrom(
-                            shadowColor: Colors.black,
+                            shadowColor: Colors.black, backgroundColor: 20 == 20 ? goldShade : Colors.grey,
                             elevation: 4,
-                            primary: 20 == 20 ? goldShade : Colors.grey,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(100),
                             ),

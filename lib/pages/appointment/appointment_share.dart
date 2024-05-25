@@ -168,8 +168,7 @@ final _screenShotController = ScreenshotController();
                 _takeScreenShort();
               },
               style: ElevatedButton.styleFrom(
-                shadowColor: Colors.black,
-                primary: goldShade,
+                shadowColor: Colors.black, backgroundColor: goldShade,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100),
                 ),

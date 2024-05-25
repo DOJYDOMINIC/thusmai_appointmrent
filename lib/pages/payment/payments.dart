@@ -1,14 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/pages/payment/paymenttotrust.dart';
 
 import '../../constant/constant.dart';
+import '../../controller/payment_controller.dart';
 import 'meditationpayment.dart';
 
-class PaymentPage extends StatelessWidget {
+class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
 
   @override
+  State<PaymentPage> createState() => _PaymentPageState();
+}
+
+class _PaymentPageState extends State<PaymentPage> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<PaymentController>(context,listen: false).transactionData();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var transactionSummary = Provider.of<PaymentController>(context).transactionSummary;
     return DefaultTabController(
       length: 2, // Number of tabs
       child: Scaffold(
@@ -55,15 +69,21 @@ class PaymentPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Text(": 5000"),
-                                Text(": 5000"),
-                                Text(": 10k"),
+                                Text(": ${transactionSummary.totalguru??0}"),
+                                Text(": ${transactionSummary.totaltrust??0}"),
+                                Text(
+                                  ": ${transactionSummary.total??0}",
+                                  style: TextStyle(
+                                    fontSize: 16.0, // adjust the font size as needed
+                                    fontWeight: FontWeight.bold, // adjust the font weight as needed
+                                  ),
+                                ),
                               ],
                             ),
                           ],
                         ),
                       ),
-          
+
                       Container(
                         height: 110,
                         width: 2,
@@ -75,7 +95,7 @@ class PaymentPage extends StatelessWidget {
                           Column(
                             children: [
                               Text("Transactions"),
-                              Text("3"),
+                              Text("${transactionSummary.totalTransactionCount??0}"),
                             ],
                           ),
                           Text(""),
@@ -112,7 +132,7 @@ class PaymentPage extends StatelessWidget {
                     ),
                   ),
                 ),
-          
+
                 // create widgets for each tab bar here
                 Expanded(
                   child: TabBarView(

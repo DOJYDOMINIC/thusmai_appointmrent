@@ -8,7 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../constant/constant.dart';
 import 'package:http/http.dart' as http;
 
+import '../../controller/login_register_otp_api.dart';
 import '../../controller/payment_controller.dart';
+
 class MeditationPayment extends StatefulWidget {
   const MeditationPayment({super.key});
 
@@ -21,10 +23,17 @@ class _MeditationPaymentState extends State<MeditationPayment> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -102,7 +111,8 @@ class MeditationPaymentWidget extends StatefulWidget {
   final void Function()? onPressed;
 
   @override
-  State<MeditationPaymentWidget> createState() => _MeditationPaymentWidgetState();
+  State<MeditationPaymentWidget> createState() =>
+      _MeditationPaymentWidgetState();
 }
 
 class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
@@ -124,12 +134,12 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
   }
 
 
-
-
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    var pro = Provider.of<AppLogin>(context,listen: false);
+
     // Handle payment success
     print("Payment Successful: ${response.signature.toString()}");
-  String  signatur = response.signature.toString();
+    String signatur = response.signature.toString();
 
     String url;
 
@@ -146,22 +156,23 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
       default:
         url = '';
     }
-var payment= Provider.of<PaymentController>(context,listen: false);
+    var payment = Provider.of<PaymentController>(context, listen: false);
     double amount = widget.amount.isEmpty && widget.controller != null
         ? double.parse(widget.controller!.text)
         : double.parse(widget.amount);
-print("lalal${response.signature.toString()}");
-  DateTime  day = DateTime.now();
-  Map<String,dynamic>  data = {
-      "razorpay_order_id" : response.orderId,
-      "razorpay_payment_id" : response.paymentId,
-      "razorpay_signature" : response.signature,
+    print("lalal${response.signature.toString()}");
+    DateTime day = DateTime.now();
+    Map<String, dynamic> data = {
+      "razorpay_order_id": response.orderId,
+      "razorpay_payment_id": response.paymentId,
+      "razorpay_signature": response.signature,
+      "UId":pro.userData?.uId,
       "amount": amount,
-      "payment_date" : "${day.day}/${day.month}/${day.year}",
-      "payment_time" : "${day.hour}:${day.minute}:${day.second}",
+      "payment_date": "${day.day}/${day.month}/${day.year}",
+      "payment_time": "${day.hour}:${day.minute}:${day.second}",
     };
 
-  print("data : ${data.toString()}");
+    print("data : ${data.toString()}");
     payment.paymentSuccess(context, url, data);
   }
 
@@ -174,7 +185,6 @@ print("lalal${response.signature.toString()}");
     // Handle external wallet
     print("External Wallet Selected: $response");
   }
-
 
 
   // void _openCheckout() {
@@ -229,7 +239,7 @@ print("lalal${response.signature.toString()}");
         final String orderId = orderData['order']["id"];
         var options = {
           'key': 'rzp_test_iupJrCXb3OkViV',
-          'amount':total, // Amount is in paise
+          'amount': total, // Amount is in paise
           'name': widget.paymentType,
           'order_id': orderId,
           'description': 'Payment for ${widget.paymentType}',
@@ -248,7 +258,6 @@ print("lalal${response.signature.toString()}");
           print('Error: $e');
         }
       } else {
-        print('Failed to create order');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red,
@@ -257,7 +266,7 @@ print("lalal${response.signature.toString()}");
           ),
         );
       }
-    }catch(e){
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
@@ -290,14 +299,16 @@ print("lalal${response.signature.toString()}");
                     if (widget.amount.isNotEmpty)
                       Row(
                         children: [
-                          SvgPicture.asset("assets/svgImage/currency_rupee.svg"),
+                          SvgPicture.asset(
+                              "assets/svgImage/currency_rupee.svg"),
                           Text(": ${widget.amount}"),
                         ],
                       ),
                     if (widget.amount.isEmpty)
                       Row(
                         children: [
-                          SvgPicture.asset("assets/svgImage/currency_rupee.svg"),
+                          SvgPicture.asset(
+                              "assets/svgImage/currency_rupee.svg"),
                           SizedBox(
                             height: 45,
                             width: 150,
@@ -311,11 +322,13 @@ print("lalal${response.signature.toString()}");
                                 hintText: "Donations",
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(16),
-                                  borderSide: BorderSide(color: Colors.grey.withOpacity(0.5)),
+                                  borderSide: BorderSide(
+                                      color: Colors.grey.withOpacity(0.5)),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(16),
-                                  borderSide: BorderSide(color: Colors.grey.withOpacity(0.5)),
+                                  borderSide: BorderSide(
+                                      color: Colors.grey.withOpacity(0.5)),
                                 ),
                               ),
                             ),
@@ -346,9 +359,8 @@ print("lalal${response.signature.toString()}");
                   child: ElevatedButton(
                     onPressed: _createOrderAndOpenCheckout,
                     style: ElevatedButton.styleFrom(
-                      shadowColor: Colors.black,
+                      shadowColor: Colors.black, backgroundColor: Colors.amber,
                       elevation: 4,
-                      primary: Colors.amber,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),

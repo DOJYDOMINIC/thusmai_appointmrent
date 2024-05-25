@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../constant/constant.dart';
@@ -41,6 +42,7 @@ class MeditationController extends ChangeNotifier {
     if (_meditatedDatesIndex <= totalPage) {
       _meditatedDatesIndex++;
       meditatedDates(_meditatedDatesIndex.toString());
+      _updateCounts();
       notifyListeners();
     }
   }
@@ -49,6 +51,7 @@ class MeditationController extends ChangeNotifier {
     if (_meditatedDatesIndex > 1) {
       _meditatedDatesIndex--;
       meditatedDates(_meditatedDatesIndex.toString());
+      _updateCounts();
       notifyListeners();
     }
   }
@@ -77,8 +80,8 @@ class MeditationController extends ChangeNotifier {
 
         // Store the parsed data into _medDates
         _medDates = meditationData.data ?? [];
+        _updateCounts();
 
-        print("New Data: ${_medDates.length.toString()}");
       } else {
         print('MeditationDates Error: ${response.reasonPhrase}');
       }
@@ -88,7 +91,7 @@ class MeditationController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> meditationNote( String note, String type, String messageTime,String? messageDate) async {
+  Future<void> meditationNote( BuildContext context,String note, String type, String messageTime,String? messageDate) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
 
@@ -108,9 +111,20 @@ class MeditationController extends ChangeNotifier {
         }),
       );
       if (response.statusCode == 200) {
-
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Success"),
+            backgroundColor: Colors.green,
+          ),
+        );
         print("sucess");
       } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed"),
+            backgroundColor: Colors.red,
+          ),
+        );
         print('Failed to send time: ${response.reasonPhrase}');
       }
     } catch (e) {
@@ -118,6 +132,85 @@ class MeditationController extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> meditationTimeDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+    print(cookies);
+    try {
+      var response = await http.get(
+        Uri.parse("$baseUrl/meditation-time"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+      if (response.statusCode == 200) {
+        final dataList = jsonDecode(response.body);
+
+      } else {
+        print('Failed to load appointments: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Error fetching appointments: $e');
+    }
+    notifyListeners();
+  }
+
+
+  int greenCount = 0;
+  int redCount = 0;
+
+
+
+  void _updateCounts() {
+    // Reset the counters
+    greenCount = 0;
+    redCount = 0;
+
+    if (medDates.isEmpty) return;
+
+    // Calculate the minimum date from the data
+    DateTime minDate = medDates.map((item) => DateTime.parse(item.medStarttime.toString())).reduce((value, element) => value.isBefore(element) ? value : element);
+
+    // Calculate the number of days to display in the calendar
+    DateTime startDate = minDate.subtract(Duration(days: 1));
+
+    // Update the counters based on the data
+    for (int index = 0; index < medDates.length; index++) {
+      DateTime currentDate = startDate.add(Duration(days: index));
+      bool isGreen = medDates.any((item) {
+        if (item.medStarttime != null) {
+          DateTime medDate = DateTime.parse(item.medStarttime.toString());
+          return medDate.day == currentDate.day && medDate.month == currentDate.month;
+        }
+        return false;
+      });
+
+      if (isGreen) {
+        greenCount++;
+      } else {
+        redCount++;
+      }
+    }
+  }
+
+  double _progress = 0.0;
+  double _maxDuration = 0.0;
+
+  double get progress => _progress;
+  double get maxDuration => _maxDuration;
+
+  void setProgress(double value) {
+    _progress = value;
+    notifyListeners();
+  }
+
+  void setMaxDuration(double value) {
+    _maxDuration = value;
+    notifyListeners();
+  }
 }
+
 
 

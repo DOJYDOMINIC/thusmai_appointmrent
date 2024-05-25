@@ -3,12 +3,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import '../constant/constant.dart';
 import '../models/bankdetails.dart';
 import '../models/update_user_details.dart';
+import 'login_register_otp_api.dart';
 class ProfileController extends ChangeNotifier{
 
 
@@ -80,6 +82,7 @@ class ProfileController extends ChangeNotifier{
         backgroundColor: Colors.red,
       );
   }
+    notifyListeners();
   }
 
   Future<void> appFeedback(BuildContext context,var data) async {
@@ -97,15 +100,20 @@ class ProfileController extends ChangeNotifier{
 
       // var message = jsonDecode(response.body);
       if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(" Feedback Shared Successfully"),
+            backgroundColor: Colors.green,
+          ),
+        );
         Navigator.pop(context);
-        // if(response.statusCode == 401){
-        //   prefs.clear();
-        //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
-        // }
-        // else{
-        //   showPlatformDialog(context,alertCompleted,bookingCompleted,message["message"].toString(),"Continue",Color.fromRGBO(81, 100, 64, 1) );
-        // }
       }else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Failed"),
+            backgroundColor: Colors.red,
+          ),
+        );
         // showPlatformDialog(context,alertDeleted,bookingFailed,message["error"].toString(),"cancel",Color.fromRGBO(186, 26, 26, 1));
         // print('Failed to create appointment. Status code: ${response.statusCode}');
       }
@@ -114,7 +122,12 @@ class ProfileController extends ChangeNotifier{
     }  catch (error) {
       // showPlatformDialog(context,alertDeleted,bookingFailed,"something went wrong","cancel",Color.fromRGBO(186, 26, 26, 1));
       print('Error creating appointment: $error');
-      throw Exception('Failed to create appointment');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed"),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -132,6 +145,7 @@ class ProfileController extends ChangeNotifier{
       );
 
       if (response.statusCode == 200) {
+        Provider.of<AppLogin>(context, listen: false).getUserByID();
 
         // Navigator.popUntil(context, (route) => route.isFirst);
         Navigator.pop(context);
@@ -160,7 +174,8 @@ class ProfileController extends ChangeNotifier{
       );
 
       if (response.statusCode == 200) {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        Provider.of<ProfileController>(context, listen: false).getBankDetails();
+        Navigator.pop(context);
         print("Sucess");
       } else {
         // Handle other status codes if needed
@@ -191,7 +206,6 @@ class ProfileController extends ChangeNotifier{
         var decode = jsonDecode(response.body);
         if (response.statusCode == 200) {
           _bankDataDetails = BankDetail.fromJson(decode);
-          print(decode.toString());
         } else {
           // Handle other status codes if needed
           print("Failed to load updateUserDetails : ${response.statusCode}");
@@ -201,5 +215,38 @@ class ProfileController extends ChangeNotifier{
       }
       notifyListeners();
     }
+
+
+
+  BankDetail? _rewardList;
+
+  BankDetail? get rewardListData => _rewardList;
+
+
+  Future<void> rewardList() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var cookies = prefs.getString("cookie");
+      final response = await http.get(
+        // Uri.parse("$baseUrl/rewardList"),
+        Uri.parse("https://thasmai.tstsvc.in/api/v1/User/rewardList"),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+      var decode = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        // _rewardlist = rewardList.fromJson(decode);
+        print(decode.toString());
+      } else {
+        // Handle other status codes if needed
+        print("Failed to load updateUserDetails : ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error updateUserDetails: $e");
+    }
+    notifyListeners();
+  }
 
 }

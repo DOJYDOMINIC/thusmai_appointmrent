@@ -3,9 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/login.dart';
-import 'package:thusmai_appointmrent/pages/profile/edit/bank_detail_edit.dart';
 import 'package:thusmai_appointmrent/pages/profile/password_reset/resetpage_one.dart';
-import 'package:thusmai_appointmrent/pages/profile/edit/profile_edit.dart';
 import 'package:thusmai_appointmrent/pages/profile/referpage.dart';
 import 'package:thusmai_appointmrent/pages/profile/rewardpage.dart';
 import '../../constant/constant.dart';
@@ -15,6 +13,7 @@ import '../../widgets/additionnalwidget.dart';
 import 'app_feedback/app_feedback.dart';
 import 'edit/bank_info.dart';
 import 'edit/personalInfo.dart';
+
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -26,7 +25,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   initState() {
     super.initState();
-    Provider.of<ProfileController>(context,listen: false).getBankDetails();
+    Provider.of<AppLogin>(context, listen: false).getUserByID();
   }
   @override
   Widget build(BuildContext context) {
@@ -240,16 +239,12 @@ class _ProfileState extends State<Profile> {
                         padding: EdgeInsets.fromLTRB(16.sp, 0.sp, 16.sp, 16.sp),
                         child: GestureDetector(
                           onTap: () async {
-                            // Clear SharedPreferences
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
+                            SharedPreferences prefs = await SharedPreferences.getInstance();
                             await prefs.clear();
-                            // Navigate to the login page and replace the current page
-                            Navigator.pushReplacement(
+                            Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => Login(),
-                              ),
+                              MaterialPageRoute(builder: (context) => Login()),
+                                  (Route<dynamic> route) => false,
                             );
                           },
                           child: Container(

@@ -113,7 +113,7 @@ class _PrivateMessageState extends State<PrivateMessage> {
                     String messageTDate = DateFormat('MMMM dd').format(DateTime.now());
                     String formattedTime = DateFormat('h:mm a').format(DateTime.now());
                     if(_userMessageController.text.isNotEmpty){
-                     await meditation.meditationNote( _userMessageController.text,"private", formattedTime,messageTDate);
+                     await meditation.meditationNote( context,_userMessageController.text,"private", formattedTime,messageTDate);
                     }
                     _userMessageController.clear();
                    await Provider.of<MessageController>(context, listen: false).privateMessage("1");

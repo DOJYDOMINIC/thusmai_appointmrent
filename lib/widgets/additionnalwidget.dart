@@ -84,6 +84,8 @@ Widget meditationCycleWidget(
 }
 
 Widget profileCard(BuildContext context) {
+  Provider.of<AppLogin>(context,listen: false).getUserByID();
+
   var pro = Provider.of<AppLogin>(context);
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,14 +120,20 @@ Widget profileCard(BuildContext context) {
             child: CircleAvatar(
               backgroundColor: Colors.white,
               radius: 45.sp,
-              backgroundImage: pro.userData?.profilePicUrl == null
-                  ? NetworkImage("${pro.userData?.profilePicUrl} ")
-                  : NetworkImage(imgFromFirebase),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: pro.userData?.profilePicUrl != null
+                        ? NetworkImage("${pro.userData?.profilePicUrl}")
+                        : NetworkImage(imgFromFirebase),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
-            // : Image.file(File(_image!.path)).image
-            // const AssetImage(
-            //             "assets/images/man.png") as ImageProvider<Object>?
           ),
+
           Text(
             // "Valid : ${pro.userData?.expiredDate.toString().split(" ").first ?? ""}",),
             "Valid : ${pro.userData?.expiredDate != null ? DateFormat('dd/MM/yyyy').format(pro.userData!.expiredDate!) : 'N/A'}",
@@ -425,7 +433,7 @@ launchURL(Uri url) async {
 
 // change asset image to network image on api call
 Widget transactionWidget(IconData icon, String date, String title,
-    String description, String amount, Uri url, void Function()? onPressed) {
+    String description, String amount, void Function()? onPressed) {
   return Column(
     children: [
       SizedBox(
@@ -456,16 +464,14 @@ Widget transactionWidget(IconData icon, String date, String title,
                   SizedBox(
                     width: 16.w,
                   ),
-                  Container(
-                    width: 200.w,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(title),
-                        Text(description),
-                      ],
-                    ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title,style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
+                      SizedBox(height: 10.h,),
+                      Text(description),
+                    ],
                   ),
                 ],
               ),

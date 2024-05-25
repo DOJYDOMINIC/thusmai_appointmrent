@@ -1,6 +1,11 @@
-import 'package:flutter/cupertino.dart';
-import 'package:video_player/video_player.dart';
+import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_player/video_player.dart';
+import 'package:http/http.dart' as http;
+
+import '../constant/constant.dart';
 class VideoPlayerState extends ChangeNotifier {
 
   bool _timeDelay = false;
@@ -18,8 +23,8 @@ class VideoPlayerState extends ChangeNotifier {
   double sliderValue = 0.0;
 
   VideoPlayerState() {
-    controller = VideoPlayerController.network(
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+    controller = VideoPlayerController.networkUrl(
+      Uri.parse('https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'),
     )..initialize().then((_) {
       controller.addListener(() {
         sliderValue = controller.value.position.inMilliseconds.toDouble();
@@ -53,4 +58,56 @@ class VideoPlayerState extends ChangeNotifier {
     controller.dispose();
     super.dispose();
   }
+
+  Future<void> videoPlaylist() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+    print(cookies);
+    try {
+      var response = await http.post(
+        Uri.parse("$baseUrl/videos-by-playlist"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+        body:  jsonEncode({"playList_heading":"yoga"})
+      );
+      if (response.statusCode == 200) {
+        final dataList = jsonDecode(response.body);
+
+      } else {
+        print('Failed to load appointments: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Error fetching appointments: $e');
+    }
+    notifyListeners();
+  }
+
+  Future<void> playlistDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+    print(cookies);
+    try {
+      var response = await http.get(
+        Uri.parse("$baseUrl/playlists"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+      if (response.statusCode == 200) {
+        final dataList = jsonDecode(response.body);
+
+      } else {
+        print('Failed to load appointments: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Error fetching appointments: $e');
+    }
+    notifyListeners();
+  }
+
+
+
 }

@@ -28,9 +28,7 @@ class _AppFeedBackState extends State<AppFeedBack> {
 
   @override
   Widget build(BuildContext context) {
-    var pro = Provider.of<ProfileController>(
-      context,
-    );
+    var pro = Provider.of<ProfileController>(context,);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -184,9 +182,7 @@ class _AppFeedBackState extends State<AppFeedBack> {
                     }
                         : null,
                     style: ElevatedButton.styleFrom(
-                      shadowColor: Colors.black,
-                      // elevation: 4,
-                      primary: goldShade,
+                      shadowColor: Colors.black, backgroundColor: goldShade,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),

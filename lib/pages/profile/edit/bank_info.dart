@@ -7,6 +7,7 @@ import '../../../../controller/profileController.dart';
 import '../../../../widgets/custombutton.dart';
 import '../../../../widgets/customtextfield.dart';
 import '../../../constant/constant.dart';
+import '../../../controller/login_register_otp_api.dart';
 import 'bank_detail_edit.dart';
 
 class BankDetails extends StatefulWidget {
@@ -21,10 +22,11 @@ class _BankDetailsState extends State<BankDetails> {
   @override
   void initState() {
     super.initState();
+
   }
   @override
   Widget build(BuildContext context) {
-    var bankDataDetails = Provider.of<ProfileController>(context,listen: false).bankDataDetails;
+    var bankDataDetails = Provider.of<ProfileController>(context).bankDataDetails;
 
    var sizeHeight = SizedBox(height: 24);
     return Scaffold(

@@ -221,9 +221,8 @@ class _MeditationDataState extends State<MeditationData> {
                                 ));
                           },
                           style: ElevatedButton.styleFrom(
-                            shadowColor: Colors.black,
+                            shadowColor: Colors.black, backgroundColor: goldShade,
                             elevation: 4,
-                            primary: goldShade,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(100),
                             ),

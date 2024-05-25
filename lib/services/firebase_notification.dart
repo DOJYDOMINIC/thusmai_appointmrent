@@ -2,7 +2,11 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thusmai_appointmrent/constant/constant.dart';
+import 'package:http/http.dart' as http;
+import '../controller/login_register_otp_api.dart';
 
 Future handleBackgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -125,7 +129,26 @@ class FirebaseApi {
     var token = prefs.getString("fCMToken");
     print('Token NOT: $token');
     // add token to database
+    tokenSave(token.toString());
     initPushNotifications();
     initNotification(_localNotifications);
+  }
+}
+Future<void> tokenSave(String notificationToken) async {
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var cookies = prefs.getString("cookie");
+  final response = await http.post(Uri.parse("$paymentBaseUrl/save-token"),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        if (cookies != null) 'Cookie': cookies,
+      },
+      body: jsonEncode({"token":notificationToken.toString()}));
+  try {
+    if (response.statusCode == 200) {
+    } else {
+    }
+  } catch (e) {
+    print("otpVerification : $e");
   }
 }

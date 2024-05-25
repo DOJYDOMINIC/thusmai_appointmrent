@@ -186,9 +186,7 @@ class _FeedBackState extends State<FeedBack> {
                           }
                         : null,
                     style: ElevatedButton.styleFrom(
-                      shadowColor: Colors.black,
-                      // elevation: 4,
-                      primary: goldShade,
+                      shadowColor: Colors.black, backgroundColor: goldShade,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
                       ),

@@ -77,7 +77,6 @@ class _MeditationTabState extends State<MeditationTab> {
             ],
             onChange: (index) {
               pro.selectedIndex = index;
-              print(index);
             },
           ),
         ),

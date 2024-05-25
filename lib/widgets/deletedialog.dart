@@ -128,7 +128,7 @@ class DeleteDialog extends StatelessWidget {
                           await Provider.of<AppointmentController>(context, listen: false).deleteAppointment(context,id);
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Color.fromRGBO(186, 26, 26, 1),
+                          backgroundColor: Color.fromRGBO(186, 26, 26, 1),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                           ),

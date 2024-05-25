@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thusmai_appointmrent/models/userdata.dart';
 import 'package:thusmai_appointmrent/models/userlogin.dart';
 import 'package:thusmai_appointmrent/pages/profile/profile.dart';
+import '../models/flagsmode.dart';
 import '../pages/bottom_navbar.dart';
 import '../constant/constant.dart';
 import '../pages/login_register_otp/changepassword.dart';
@@ -64,6 +65,8 @@ class AppLogin extends ChangeNotifier {
     );
 
       if (response.statusCode == 200) {
+
+
         var decode = jsonDecode(response.body);
         _userData = UserClass.fromJson(decode["user"]);
       } else if (response.statusCode == 404) {
@@ -107,6 +110,41 @@ class AppLogin extends ChangeNotifier {
   }
 
 
+  Message _flagModel = Message();
+  Message get flagModel => _flagModel;
+
+  Future<void> importantFlags() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+    final response = await http.get(Uri.parse("$baseUrl/flag"),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        if (cookies != null) 'Cookie': cookies,
+      },
+    );
+    var decode = jsonDecode(response.body);
+    try {
+      if (response.statusCode == 200) {
+        print(decode.toString());
+        _flagModel = Message.fromJson(decode["message"]);
+        prefs.setString("isAnswered", "true");
+        debugPrint(_flagModel.maintenancePaymentStatus.toString());
+      } else {
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     backgroundColor: Colors.red,
+        //     content: Text(decode["message"]),
+        //     duration: Duration(seconds: 1),
+        //   ),
+        // );
+      }
+    } catch (e) {
+      print("meditationData : $e");
+    }
+    notifyListeners();
+  }
+
+
 
   UserLoginData? _userLoginData;
 
@@ -133,9 +171,9 @@ class AppLogin extends ChangeNotifier {
         prefs.setString("cookie", sessionId!);
         prefs.setString("isAnswered", _userLoginData!.isans.toString());
         var isAnswered = prefs.getString("isAnswered");
-        var data = prefs.getString("id");
-        print(data);
-        print(sessionId);
+        var fCMToken = prefs.getString("fCMToken");
+        if (fCMToken != null) {
+        }
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -322,4 +360,7 @@ class AppLogin extends ChangeNotifier {
       print("resetPassword : $e");
     }
   }
+
+
+
 }
