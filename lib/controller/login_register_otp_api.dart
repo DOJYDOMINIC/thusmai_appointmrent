@@ -21,6 +21,7 @@ class AppLogin extends ChangeNotifier {
 // firstLogin check
 
   bool _firstLogin = true;
+
   bool get firstLogin => _firstLogin;
 
   set firstLogin(bool value) {
@@ -31,9 +32,8 @@ class AppLogin extends ChangeNotifier {
   // updated and manage moving tile
 
   List<String> _myTiles = ["Financial", "Health", "Mental", "Relationship"];
+
   List<String> get myTiles => _myTiles;
-
-
 
   void updateMyTile(int oldIndex, int newIndex) {
     // An adjustment is needed when moving the tile down
@@ -47,28 +47,26 @@ class AppLogin extends ChangeNotifier {
     notifyListeners(); // Notify listeners to rebuild widgets
   }
 
-
   UserClass? _userData;
-  UserClass? get userData => _userData;
 
+  UserClass? get userData => _userData;
 
   Future<void> getUserByID() async {
     try {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var cookies = prefs.getString("cookie");
-    final response = await http.get(
-      Uri.parse("$baseUrl/getUserById"),
-      headers: {
-        'Content-Type': 'application/json',
-        if (cookies != null) 'Cookie': cookies,
-      },
-    );
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var cookies = prefs.getString("cookie");
+      final response = await http.get(
+        Uri.parse("$baseUrl/getUserById"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
 
       if (response.statusCode == 200) {
-
-
         var decode = jsonDecode(response.body);
         _userData = UserClass.fromJson(decode["user"]);
+        tokenSave();
       } else if (response.statusCode == 404) {
         // Handle 404 Not Found error
         _userData = null;
@@ -81,8 +79,10 @@ class AppLogin extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  Future<void> meditationData(BuildContext context, List<String> data,) async {
+  Future<void> meditationData(
+    BuildContext context,
+    List<String> data,
+  ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     final response = await http.post(Uri.parse("$baseUrl/meditation-data"),
@@ -90,7 +90,7 @@ class AppLogin extends ChangeNotifier {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
         },
-        body: jsonEncode({"ans": data,"isans":true}));
+        body: jsonEncode({"ans": data, "isans": true}));
     var decode = jsonDecode(response.body);
     try {
       if (response.statusCode == 200) {
@@ -109,14 +109,15 @@ class AppLogin extends ChangeNotifier {
     }
   }
 
-
   Message _flagModel = Message();
+
   Message get flagModel => _flagModel;
 
   Future<void> importantFlags() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    final response = await http.get(Uri.parse("$baseUrl/flag"),
+    final response = await http.get(
+      Uri.parse("$baseUrl/flag"),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         if (cookies != null) 'Cookie': cookies,
@@ -144,21 +145,21 @@ class AppLogin extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   UserLoginData? _userLoginData;
 
   UserLoginData? get userLoginData => _userLoginData;
 
   Future<void> loginApi(BuildContext context, Map<String, dynamic> data) async {
     try {
-      final response = await http.post(
-        Uri.parse("$baseUrl/login"),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(data),
-      ).timeout(Duration(seconds: 3)); // Set timeout to 5 seconds
+      final response = await http
+          .post(
+            Uri.parse("$baseUrl/login"),
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(data),
+          )
+          .timeout(Duration(seconds: 3)); // Set timeout to 5 seconds
 
       var decode = jsonDecode(response.body);
       print(decode.toString());
@@ -173,11 +174,13 @@ class AppLogin extends ChangeNotifier {
         var isAnswered = prefs.getString("isAnswered");
         var fCMToken = prefs.getString("fCMToken");
         if (fCMToken != null) {
+          print(data);
         }
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => isAnswered != "true" ? MeditationData() : CustomBottomNavBar(),
+            builder: (context) =>
+                isAnswered != "true" ? MeditationData() : CustomBottomNavBar(),
           ),
         );
       } else if (response.statusCode == 404) {
@@ -220,7 +223,10 @@ class AppLogin extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> requestPasswordReset(BuildContext context, String data,) async {
+  Future<void> requestPasswordReset(
+    BuildContext context,
+    String data,
+  ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     final response = await http.post(Uri.parse("$baseUrl/requestPasswordReset"),
@@ -231,20 +237,19 @@ class AppLogin extends ChangeNotifier {
     var decode = jsonDecode(response.body);
     try {
       if (response.statusCode == 200) {
-        if(cookies == null|| cookies == "" || cookies.isEmpty){
+        if (cookies == null || cookies == "" || cookies.isEmpty) {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => otpPage(data: data),
               ));
-        }else{
+        } else {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => ResetPageTwo(data: data),
               ));
         }
-
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -268,9 +273,7 @@ class AppLogin extends ChangeNotifier {
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         },
-
         body: jsonEncode(data));
-
 
     var decode = jsonDecode(response.body);
     try {
@@ -282,13 +285,13 @@ class AppLogin extends ChangeNotifier {
         //     duration: Duration(seconds: 2),
         //   ),
         // );
-        if(cookies == null|| cookies == "" || cookies.isEmpty ){
+        if (cookies == null || cookies == "" || cookies.isEmpty) {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => ChangePassword(data: data),
               ));
-        }else{
+        } else {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -314,8 +317,8 @@ class AppLogin extends ChangeNotifier {
     }
   }
 
-
-  Future<void> resetPassword(BuildContext context, Map<String, dynamic> data) async {
+  Future<void> resetPassword(
+      BuildContext context, Map<String, dynamic> data) async {
     print(data.toString());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
@@ -335,17 +338,15 @@ class AppLogin extends ChangeNotifier {
         //     duration: Duration(seconds: 2),
         //   ),
         // );
-        if(cookies == null|| cookies == "" || cookies.isEmpty ){
+        if (cookies == null || cookies == "" || cookies.isEmpty) {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => Login(),
               ));
-        }else{
+        } else {
           Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-              builder: (context) => Profile()));
+              context, MaterialPageRoute(builder: (context) => Profile()));
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -361,6 +362,22 @@ class AppLogin extends ChangeNotifier {
     }
   }
 
-
-
+  Future<void> tokenSave() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+    var token = prefs.getString("fCMToken");
+    print(token);
+    final response = await http.post(Uri.parse("$paymentBaseUrl/save-token"),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          if (cookies != null) 'Cookie': cookies,
+        },
+        body: jsonEncode({"token": token, "UId": userData?.uId}));
+    try {
+      if (response.statusCode == 200) {
+      } else {}
+    } catch (e) {
+      print("otpVerification : $e");
+    }
+  }
 }

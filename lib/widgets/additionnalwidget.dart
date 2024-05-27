@@ -84,7 +84,6 @@ Widget meditationCycleWidget(
 }
 
 Widget profileCard(BuildContext context) {
-  Provider.of<AppLogin>(context,listen: false).getUserByID();
 
   var pro = Provider.of<AppLogin>(context);
   return Row(

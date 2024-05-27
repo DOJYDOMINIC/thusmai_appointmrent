@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
@@ -42,20 +43,53 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     PaymentTab(),
   ];
 
+  void onPopInvoked(bool didPop) {
+    if (didPop) {
+      return;
+    } else if (_currentIndex != 1) {
+      setState(() {
+        _currentIndex = 1;
+      });
+    } else if (_currentIndex == 1) {
+      showExitConfirmationDialog(context);
+    }
+  }
+
+  void showExitConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Exit App"),
+          content: Text("Are you sure you want to exit the app?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                SystemNavigator.pop(); // Exit the app
+              },
+              child: Text("Exit"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     var flagModel = Provider.of<AppLogin>(context).flagModel;
     _meditationEnabled = flagModel.meditationFeePaymentStatus??false;
-    return WillPopScope(
-      onWillPop: () async {
-        if (_currentIndex != 1) {
-          setState(() {
-            _currentIndex = 1;
-          });
-          return false;
-        }
-        return true;
-      },
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop)=>onPopInvoked(didPop),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: darkShade,
@@ -67,12 +101,15 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           ),
           actions: [
             IconButton(
-              onPressed: () {
-                slidePageRoute(context, MessageTab());
-              },
+              onPressed: ()=>flagModel.meditationFeePaymentStatus == true ? slidePageRoute(context, MessageTab()):  ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.red,
+                  content: Text(enableMessage),
+                  duration: Duration(seconds: 2),
+                ),),
               icon: Icon(
                 Icons.message_outlined,
-                color: shadeSix,
+                color: flagModel.meditationFeePaymentStatus == true ?shadeSix : Colors.grey,
               ),
             ),
             // IconButton(
@@ -143,8 +180,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               });
             }
           : () {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(enable)));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(enable),duration: Duration(seconds: 2),));
               if (isEnabled == false) {
                 _currentIndex =
                     3; // Navigate to index 0 when tapping on index 3

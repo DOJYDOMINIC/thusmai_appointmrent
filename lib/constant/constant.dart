@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -117,6 +117,7 @@ const String videos = "Videos";
 const String home = "Home";
 const String payment = "Payments";
 const String enable = "Please Do payment to enable Meditation";
+const String enableMessage = "Please Do payment to enable Messages";
 const String name = "Name";
 const String age = "Age";
 const String pickupValidation = 'Please enter a Valid Pickup Point';

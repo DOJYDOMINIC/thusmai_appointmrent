@@ -96,7 +96,7 @@
 // import 'package:thusmai_appointmrent/constant/constant.dart';
 // import 'package:video_player/video_player.dart';
 //
-// import '../controller/videoplayer.dart';
+// import '../controller/videoplayer_controller.dart';
 //
 // class VideoPlayerScreen extends StatelessWidget {
 //
@@ -486,76 +486,140 @@
 
 
 
+// import 'package:flutter/material.dart';
+//
+// class MyHomePage extends StatefulWidget {
+//   @override
+//   _MyHomePageState createState() => _MyHomePageState();
+// }
+//
+// class _MyHomePageState extends State<MyHomePage> {
+//   int _selectedIndex = 0;
+//
+//   void _onItemTapped(int index) {
+//     setState(() {
+//       _selectedIndex = index;
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return WillPopScope(
+//       onWillPop: () async {
+//         if (_selectedIndex != 0) {
+//           setState(() {
+//             _selectedIndex = 0;
+//           });
+//           return false;
+//         }
+//         return true;
+//       },
+//       child: Scaffold(
+//         appBar: AppBar(
+//           title: Text('BottomNavigationBar Sample'),
+//         ),
+//         body: Center(
+//           child: _widgetOptions.elementAt(_selectedIndex),
+//         ),
+//         bottomNavigationBar: BottomNavigationBar(
+//           items: const <BottomNavigationBarItem>[
+//             BottomNavigationBarItem(
+//               icon: Icon(Icons.home),
+//               label: 'Home',
+//             ),
+//             BottomNavigationBarItem(
+//               icon: Icon(Icons.business),
+//               label: 'Business',
+//             ),
+//             BottomNavigationBarItem(
+//               icon: Icon(Icons.school),
+//               label: 'School',
+//             ),
+//           ],
+//           currentIndex: _selectedIndex,
+//           selectedItemColor: Colors.amber[800],
+//           onTap: _onItemTapped,
+//         ),
+//       ),
+//     );
+//   }
+//
+//   static const List<Widget> _widgetOptions = <Widget>[
+//     Text(
+//       'Index 0: Home',
+//       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+//     ),
+//     Text(
+//       'Index 1: Business',
+//       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+//     ),
+//     Text(
+//       'Index 2: School',
+//       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+//     ),
+//   ];
+// }
+
+
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
+class TimeCheckWidget extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _TimeCheckWidgetState createState() => _TimeCheckWidgetState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+class _TimeCheckWidgetState extends State<TimeCheckWidget> {
+  String result = '';
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void checkTime() {
+    // Get the current time
+    DateTime now = DateTime.now();
+    TimeOfDay currentTime = TimeOfDay.fromDateTime(now);
+
+    // Define the start and end times
+    TimeOfDay startTime = TimeOfDay(hour: 14, minute: 0); // 14:00 (2:00 PM)
+    TimeOfDay endTime = TimeOfDay(hour: 18, minute: 0);   // 18:00 (6:00 PM)
+
+    // Check if the current time is between the start and end times
+    if (isTimeBetween(currentTime, startTime, endTime)) {
+      setState(() {
+        result = "The current time is between the given start and end times.";
+      });
+    } else {
+      setState(() {
+        result = "The current time is not between the given start and end times.";
+      });
+    }
+  }
+
+  bool isTimeBetween(TimeOfDay currentTime, TimeOfDay startTime, TimeOfDay endTime) {
+    final now = DateTime.now();
+    final currentDateTime = DateTime(now.year, now.month, now.day, currentTime.hour, currentTime.minute);
+    final startDateTime = DateTime(now.year, now.month, now.day, startTime.hour, startTime.minute);
+    final endDateTime = DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
+
+    return currentDateTime.isAfter(startDateTime) && currentDateTime.isBefore(endDateTime);
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (_selectedIndex != 0) {
-          setState(() {
-            _selectedIndex = 0;
-          });
-          return false;
-        }
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('BottomNavigationBar Sample'),
-        ),
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Time Check Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: checkTime,
+              child: Text('Check Time'),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'Business',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.school),
-              label: 'School',
-            ),
+            SizedBox(height: 20),
+            Text(result),
           ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
-          onTap: _onItemTapped,
         ),
       ),
     );
   }
-
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-    ),
-    Text(
-      'Index 1: Business',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-    ),
-    Text(
-      'Index 2: School',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-    ),
-  ];
 }

@@ -147,7 +147,6 @@ class MeditationController extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         final dataList = jsonDecode(response.body);
-
       } else {
         print('Failed to load appointments: ${response.reasonPhrase}');
       }

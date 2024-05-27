@@ -129,26 +129,8 @@ class FirebaseApi {
     var token = prefs.getString("fCMToken");
     print('Token NOT: $token');
     // add token to database
-    tokenSave(token.toString());
     initPushNotifications();
     initNotification(_localNotifications);
   }
-}
-Future<void> tokenSave(String notificationToken) async {
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var cookies = prefs.getString("cookie");
-  final response = await http.post(Uri.parse("$paymentBaseUrl/save-token"),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        if (cookies != null) 'Cookie': cookies,
-      },
-      body: jsonEncode({"token":notificationToken.toString()}));
-  try {
-    if (response.statusCode == 200) {
-    } else {
-    }
-  } catch (e) {
-    print("otpVerification : $e");
-  }
 }

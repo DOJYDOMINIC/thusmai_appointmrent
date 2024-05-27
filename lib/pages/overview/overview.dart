@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
-import 'package:thusmai_appointmrent/controller/payment_controller.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/overviewController.dart';
+
 
 class Overview extends StatefulWidget {
   const Overview({super.key});
@@ -16,19 +16,28 @@ class Overview extends StatefulWidget {
 }
 
 class _OverviewState extends State<Overview> {
-
   @override
   void initState() {
     super.initState();
     Provider.of<AppLogin>(context, listen: false).getUserByID();
-    Provider.of<AppLogin>(context,listen: false).importantFlags();
+    Provider.of<AppLogin>(context, listen: false).importantFlags();
     Provider.of<OverViewController>(context, listen: false).eventList();
+    // Provider.of<AppLogin>(context, listen: false).tokenSave();
+
+  }
+
+
+  @override
+  void dispose() {
+    // Clean up resources when the widget is removed from the widget tree
+    // Provider.of<AppLogin>(context, listen: false).dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var appLogin = Provider.of<AppLogin>(context);
-   var overView = Provider.of<OverViewController>(context).eventLIst;
+    var overView = Provider.of<OverViewController>(context).eventLIst;
     String? firstName =
         appLogin.userData?.firstName; // Get the first name, if available
     String? lastName =
@@ -213,205 +222,227 @@ class _OverviewState extends State<Overview> {
                 ),
               ),
               spaceBetween,
-              overView.isEmpty ? Padding(
-                padding: EdgeInsets.only(left: 16.sp, right: 16.sp),
-                child: Container(
-                  height: 176.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        Colors.amber.shade100, // Lighter color
-                        Colors.amber.shade50, // Lighter color
-                        Colors.amber.shade50, // Lighter color
-                      ],
-                    ),
-                    border: Border.fromBorderSide(BorderSide.none),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                child: Center(child: Text("No Events")),
-                ),
-              ) : CarouselSlider.builder(
-                  itemCount: overView.length,
-                  itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-                    return  SizedBox(
-                      child: GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet<void>(
-                            backgroundColor: shadeOne,
-                            context: context,
-                            builder: (BuildContext context) {
-                              return SizedBox(
-                                height: 400.h,
-                                width: MediaQuery.of(context).size.width,
-                                child: Container(
-                                  padding: EdgeInsets.all(16),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Row(
-                                        children: [
-                                          Container(
-                                            height: 150.h,
-                                            width: 100.w,
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(8),image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: NetworkImage("${overView[itemIndex].image}"))),
-                                          ),
-                                          SizedBox(height: 16.h),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  width: MediaQuery.of(context).size.width-150,
-                                                  child: Text(
-                                                    "${overView[itemIndex].eventName}",
-
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight: FontWeight.bold,
+              overView.isEmpty
+                  ? Padding(
+                      padding: EdgeInsets.only(left: 16.sp, right: 16.sp),
+                      child: Container(
+                        height: 176.h,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.amber.shade100, // Lighter color
+                              Colors.amber.shade50, // Lighter color
+                              Colors.amber.shade50, // Lighter color
+                            ],
+                          ),
+                          border: Border.fromBorderSide(BorderSide.none),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Center(child: Text("No Events")),
+                      ),
+                    )
+                  : CarouselSlider.builder(
+                      itemCount: overView.length,
+                      itemBuilder: (BuildContext context, int itemIndex,
+                          int pageViewIndex) {
+                        return SizedBox(
+                          child: GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet<void>(
+                                backgroundColor: shadeOne,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                    height: 400.h,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Container(
+                                      padding: EdgeInsets.all(16),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Row(
+                                            children: [
+                                              Container(
+                                                height: 150.h,
+                                                width: 100.w,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                    image: DecorationImage(
+                                                        fit: BoxFit.cover,
+                                                        image: NetworkImage(
+                                                            "${overView[itemIndex].image}"))),
+                                              ),
+                                              SizedBox(height: 16.h),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width -
+                                                              150,
+                                                      child: Text(
+                                                        "${overView[itemIndex].eventName}",
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
+                                                    Text(
+                                                      "${overView[itemIndex].date != null ? overView[itemIndex].date.toString() : 'N/A'} (${overView[itemIndex].eventTime})",
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                Text(
-                                                  "${overView[itemIndex].date != null ?overView[itemIndex].date.toString() : 'N/A'} (${overView[itemIndex].eventTime})",
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8.h),
+                                          Expanded(
+                                            child: Scrollbar(
+                                              thickness: 5,
+                                              radius: Radius.circular(2),
+                                              interactive: true,
+                                              thumbVisibility: true,
+                                              child: SingleChildScrollView(
+                                                  child: Text(
+                                                "${overView[itemIndex].eventDescription}",
+                                              )),
                                             ),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 8.h),
-                                      Expanded(
-                                        child: Scrollbar(
-                                          thickness: 5,
-                                          radius: Radius.circular(2),
-                                          interactive: true,
-                                          thumbVisibility: true,
-                                          child: SingleChildScrollView(
-                                              child: Text(
-                                            "${overView[itemIndex].eventDescription}",
-                                          )),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                    ),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 16.sp, right: 16.sp),
-                          child: Container(
-                            height: 176.h,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Colors.amber.shade100, // Lighter color
-                                  Colors.amber.shade50, // Lighter color
-                                  Colors.amber.shade50, // Lighter color
-                                ],
-                              ),
-                              border: Border.fromBorderSide(BorderSide.none),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(4.sp),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.sp),
-                                    child: Container(
-                                        width: 122.w,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(8),
-                                            image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: NetworkImage("${overView[itemIndex].image}")))),
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.only(left: 16.sp, right: 16.sp),
+                              child: Container(
+                                height: 176.h,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Colors.amber.shade100, // Lighter color
+                                      Colors.amber.shade50, // Lighter color
+                                      Colors.amber.shade50, // Lighter color
+                                    ],
                                   ),
+                                  border:
+                                      Border.fromBorderSide(BorderSide.none),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Row(
                                   children: [
-                                    Spacer(),
-                                    Container(
-                                      width: 200.w,
-                                      child: Text(
-                                        "${overView[itemIndex].eventName}",
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 14.sp,
-                                            color: darkShade,
-                                            fontWeight: FontWeight.w500),
+                                    Padding(
+                                      padding: EdgeInsets.all(4.sp),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(8.sp),
+                                        child: Container(
+                                            width: 122.w,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        "${overView[itemIndex].image}")))),
                                       ),
                                     ),
-                                    Spacer(),
-                                    Row(
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Icon(Icons.event_repeat_rounded),
-                                        Text(
-                                          // "${overView[itemIndex].date != null ? DateFormat('dd/MM/yyyy').format(overView[itemIndex].date!) : 'N/A'} (${overView[itemIndex].eventTime})",
-                                          "${overView[itemIndex].date != null ? overView[itemIndex].date.toString() : 'N/A'} (${overView[itemIndex].eventTime})",
-                                          style: TextStyle(
-                                              fontSize: 12.sp,
-                                              color: darkShade),
-                                        )
-                                      ],
-                                    ),
-                                    Spacer(),
-                                    Container(
-                                        width: 200.w,
-                                        child: Text(
-                                          "${overView[itemIndex].eventDescription}",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: eventSubText,
-                                            // Maximum number of lines
+                                        Spacer(),
+                                        Container(
+                                          width: 200.w,
+                                          child: Text(
+                                            "${overView[itemIndex].eventName}",
                                             overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                fontSize: 14.sp,
+                                                color: darkShade,
+                                                fontWeight: FontWeight.w500),
                                           ),
-                                          maxLines: 4,
-                                        )),
-                                    Spacer()
+                                        ),
+                                        Spacer(),
+                                        Row(
+                                          children: [
+                                            Icon(Icons.event_repeat_rounded),
+                                            Text(
+                                              // "${overView[itemIndex].date != null ? DateFormat('dd/MM/yyyy').format(overView[itemIndex].date!) : 'N/A'} (${overView[itemIndex].eventTime})",
+                                              "${overView[itemIndex].date != null ? overView[itemIndex].date.toString() : 'N/A'} (${overView[itemIndex].eventTime})",
+                                              style: TextStyle(
+                                                  fontSize: 12.sp,
+                                                  color: darkShade),
+                                            )
+                                          ],
+                                        ),
+                                        Spacer(),
+                                        Container(
+                                            width: 200.w,
+                                            child: Text(
+                                              "${overView[itemIndex].eventDescription}",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: eventSubText,
+                                                // Maximum number of lines
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              maxLines: 4,
+                                            )),
+                                        Spacer()
+                                      ],
+                                    )
                                   ],
-                                )
-                              ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    );
-                  },
-                  options: CarouselOptions(
-                    height: 170,
-                    aspectRatio: 16 / 9,
-                    viewportFraction: 1,
-                    initialPage: 0,
-                    enableInfiniteScroll: true,
-                    reverse: false,
-                    autoPlay:overView.length == 1?false: true,
-                    autoPlayInterval: Duration(seconds: 3),
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enlargeCenterPage: true,
-                    enlargeFactor: 0.1,
-                    // onPageChanged: callbackFunction,
-                    scrollDirection: Axis.horizontal,
-                  )),
+                        );
+                      },
+                      options: CarouselOptions(
+                        height: 170,
+                        aspectRatio: 16 / 9,
+                        viewportFraction: 1,
+                        initialPage: 0,
+                        enableInfiniteScroll: true,
+                        reverse: false,
+                        autoPlay: overView.length == 1 ? false : true,
+                        autoPlayInterval: Duration(seconds: 3),
+                        autoPlayAnimationDuration: Duration(milliseconds: 800),
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        enlargeCenterPage: true,
+                        enlargeFactor: 0.1,
+                        // onPageChanged: callbackFunction,
+                        scrollDirection: Axis.horizontal,
+                      )),
             ],
           ),
         ),

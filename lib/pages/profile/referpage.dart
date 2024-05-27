@@ -66,7 +66,7 @@ class _ReferPageState extends State<ReferPage> {
               height: 56.h,
               child: ElevatedButton(
                 onPressed: () async{
-                    Share.share('https://thasmai.tstsvc.in/${pro.userData?.uId}', subject:  'Thasmai');
+                    Share.share('https://thasmai.tstsvc.in/?id=${pro.userData?.uId}', subject:  'Thasmai');
                 },
                 style: ElevatedButton.styleFrom(
                   shadowColor: Colors.black, backgroundColor: goldShade,

@@ -23,17 +23,10 @@ class _MeditationPaymentState extends State<MeditationPayment> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Container(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height,
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -89,17 +82,16 @@ class _MeditationPaymentState extends State<MeditationPayment> {
 }
 
 class MeditationPaymentWidget extends StatefulWidget {
-  const MeditationPaymentWidget({
-    super.key,
-    required this.icon,
-    required this.amount,
-    required this.dueDate,
-    this.onPressed,
-    required this.paymentType,
-    required this.noteIcon,
-    this.controller,
-    required this.url
-  });
+  const MeditationPaymentWidget(
+      {super.key,
+      required this.icon,
+      required this.amount,
+      required this.dueDate,
+      this.onPressed,
+      required this.paymentType,
+      required this.noteIcon,
+      this.controller,
+      required this.url});
 
   final IconData icon;
   final String noteIcon;
@@ -133,9 +125,8 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
     _razorpay.clear();
   }
 
-
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    var pro = Provider.of<AppLogin>(context,listen: false);
+    var pro = Provider.of<AppLogin>(context, listen: false);
 
     // Handle payment success
     print("Payment Successful: ${response.signature.toString()}");
@@ -166,13 +157,12 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
       "razorpay_order_id": response.orderId,
       "razorpay_payment_id": response.paymentId,
       "razorpay_signature": response.signature,
-      "UId":pro.userData?.uId,
+      "UId": pro.userData?.uId,
       "amount": amount,
       "payment_date": "${day.day}/${day.month}/${day.year}",
       "payment_time": "${day.hour}:${day.minute}:${day.second}",
     };
 
-    print("data : ${data.toString()}");
     payment.paymentSuccess(context, url, data);
   }
 
@@ -185,33 +175,6 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
     // Handle external wallet
     print("External Wallet Selected: $response");
   }
-
-
-  // void _openCheckout() {
-  //   var amount = widget.amount.isEmpty && widget.controller != null
-  //       ? int.parse(widget.controller!.text)
-  //       : int.parse(widget.amount);
-  //
-  //   var options = {
-  //     'key': 'rzp_test_1DP5mmOlF5G5ag', // Replace with your Razorpay key
-  //     'amount': amount * 100, // Amount is in paise
-  //     'name': widget.paymentType,
-  //     'description': 'Payment for ${widget.paymentType}',
-  //     'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'},
-  //     'method': {
-  //       'upi': true,
-  //     },
-  //     'external': {
-  //       'wallets': ['paytm']
-  //     }
-  //   };
-  //
-  //   try {
-  //     _razorpay.open(options);
-  //   } catch (e) {
-  //     debugPrint('Error: $e');
-  //   }
-  // }
 
   Future<void> _createOrderAndOpenCheckout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -359,7 +322,8 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
                   child: ElevatedButton(
                     onPressed: _createOrderAndOpenCheckout,
                     style: ElevatedButton.styleFrom(
-                      shadowColor: Colors.black, backgroundColor: Colors.amber,
+                      shadowColor: Colors.black,
+                      backgroundColor: Colors.amber,
                       elevation: 4,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),

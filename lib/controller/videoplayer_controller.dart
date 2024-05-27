@@ -6,7 +6,9 @@ import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 
 import '../constant/constant.dart';
-class VideoPlayerState extends ChangeNotifier {
+import '../models/playlist.dart';
+import '../models/videoslist.dart';
+class VideoPlayerStateController extends ChangeNotifier {
 
   bool _timeDelay = false;
 
@@ -22,7 +24,7 @@ class VideoPlayerState extends ChangeNotifier {
   late VideoPlayerController controller;
   double sliderValue = 0.0;
 
-  VideoPlayerState() {
+  VideoPlayerStateController() {
     controller = VideoPlayerController.networkUrl(
       Uri.parse('https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'),
     )..initialize().then((_) {
@@ -84,6 +86,10 @@ class VideoPlayerState extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  PlayList _playList = PlayList();
+  PlayList get playList => _playList;
+
   Future<void> playlistDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
@@ -98,7 +104,35 @@ class VideoPlayerState extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         final dataList = jsonDecode(response.body);
+        _playList = PlayList.fromJson(dataList);
+      } else {
+        print('Failed to load appointments: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Error fetching appointments: $e');
+    }
+    notifyListeners();
+  }
 
+  VideoPlayList _videoPlayList = VideoPlayList();
+  VideoPlayList get videoPlayList => _videoPlayList;
+
+  Future<void> videoPlaylistDetails(String category ) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+    print(cookies);
+    try {
+      var response = await http.get(
+        Uri.parse("$baseUrl/videos-by-playlist?playList_heading=$category"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+      if (response.statusCode == 200) {
+        final dataList = jsonDecode(response.body);
+        _videoPlayList    = VideoPlayList.fromJson(dataList);
+        print(_videoPlayList.videos?[0].videoLink);
       } else {
         print('Failed to load appointments: ${response.reasonPhrase}');
       }

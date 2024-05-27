@@ -128,12 +128,12 @@ class AppointmentController extends ChangeNotifier {
       var message = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        if(response.statusCode == 401){
-          prefs.clear();
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
-        }else{
+
           showPlatformDialog(context,alertCompleted,bookingCompleted,message["message"].toString(),"Continue",Color.fromRGBO(81, 100, 64, 1) );
-        }
+
+      }else if(response.statusCode == 401){
+        prefs.clear();
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login(),));
       }else {
         showPlatformDialog(context,alertDeleted,bookingFailed,message["error"].toString(),"cancel",Color.fromRGBO(186, 26, 26, 1));
         print('Failed to create appointment. Status code: ${response.statusCode}');

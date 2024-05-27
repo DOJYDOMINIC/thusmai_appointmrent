@@ -29,10 +29,51 @@ class _MeditationcycleState extends State<Meditationcycle> {
     super.initState();
     _initializeVideoController();
     Provider.of<AppLogin>(context, listen: false).getUserByID();
-    Provider.of<MeditationController>(context, listen: false).meditationTimeDetails();
-
-    _controller.play();
+    Provider.of<MeditationController>(context, listen: false)
+        .meditationTimeDetails();
+    // _controller.play();
+    // checkTime();
   }
+
+  // bool buttonStatus = false;
+  //
+  // String result = '';
+  //
+  // void checkTime() {
+  //   // Get the current time
+  //   DateTime now = DateTime.now();
+  //   TimeOfDay currentTime = TimeOfDay.fromDateTime(now);
+  //   print(currentTime.toString());
+  //   // Define the start and end times
+  //   TimeOfDay startTime = TimeOfDay(hour: 13, minute: 0); // 14:00 (2:00 PM)
+  //   TimeOfDay endTime = TimeOfDay(hour: 18, minute: 0); // 18:00 (6:00 PM)
+  //
+  //   // Check if the current time is between the start and end times
+  //   if (isTimeBetween(currentTime, startTime, endTime)) {
+  //     setState(() {
+  //       buttonStatus = true;
+  //     });
+  //     // slidePageRoute(context, TimerScreen());
+  //   } else {
+  //     setState(() {
+  //       buttonStatus = false;
+  //     });
+  //   }
+  // }
+  //
+  // bool isTimeBetween(
+  //     TimeOfDay currentTime, TimeOfDay startTime, TimeOfDay endTime) {
+  //   final now = DateTime.now();
+  //   final currentDateTime = DateTime(
+  //       now.year, now.month, now.day, currentTime.hour, currentTime.minute);
+  //   final startDateTime = DateTime(
+  //       now.year, now.month, now.day, startTime.hour, startTime.minute);
+  //   final endDateTime =
+  //       DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
+  //
+  //   return currentDateTime.isAfter(startDateTime) &&
+  //       currentDateTime.isBefore(endDateTime);
+  // }
 
   // String _printDuration(Duration duration) {
   //   String twoDigits(int n) => n.toString().padLeft(2, "0");
@@ -41,7 +82,7 @@ class _MeditationcycleState extends State<Meditationcycle> {
   //   return "${duration.inHours}:$twoDigitMinutes:$twoDigitSeconds";
   // }
 
-  late YoutubePlayerController _controller;
+  // late YoutubePlayerController _controller;
 
   late PlayerState _playerState;
 
@@ -54,33 +95,36 @@ class _MeditationcycleState extends State<Meditationcycle> {
     String youtubeUrl = 'https://www.youtube.com/watch?v=VNSxTanl3YU';
     List<String> parts = youtubeUrl.split('=');
     String videoId = parts[1];
-
-    // Check if it's morning (6:00 AM to 9:00 AM)
+    (((now.hour >= 6 && now.minute >= 30) && (now.hour <= 10 && now.minute >= 30)) ||
+        ((now.hour >= 6 && now.minute >= 30) &&(now.hour <= 10 && now.minute >= 30)));
     if (now.hour >= 6 && now.hour < 10) {
-      sun = ambercolor; // Replace with your morning border color
-      videoId; // Replace with your morning video ID
-    } else if (now.hour >= 10 && now.hour < 12) {
-      // Check if it's evening (6:30 PM to 10:00 PM)
-      sun = ambercolor; // Replace with your afternoon border color
-      videoId; // Replace with your evening video ID
+      sun = ambercolor;
+      // Replace with your morning border color
+      videoId;
+      // Replace with your morning video ID
+    } else if (now.hour >= 18 && now.hour < 22) {
+      sun = ambercolor;
+      // Replace with your afternoon border color
+      videoId;
+      // Replace with your evening video ID
     } else {
       // Default video ID for other times
       videoId; // Replace with your default video ID
     }
 
-    _controller = YoutubePlayerController(
-      initialVideoId: videoId,
-      flags: YoutubePlayerFlags(
-          mute: false,
-          autoPlay: false,
-          disableDragSeek: false,
-          loop: false,
-          // Don't set loop to true to handle replay manually
-          isLive: false,
-          forceHD: false,
-          enableCaption: false,
-          hideControls: true),
-    );
+    // _controller = YoutubePlayerController(
+    //   initialVideoId: videoId,
+    //   flags: YoutubePlayerFlags(
+    //       mute: false,
+    //       autoPlay: false,
+    //       disableDragSeek: false,
+    //       loop: false,
+    //       // Don't set loop to true to handle replay manually
+    //       isLive: false,
+    //       forceHD: false,
+    //       enableCaption: false,
+    //       hideControls: true),
+    // );
   }
 
   //   _controller.addListener(() {
@@ -104,7 +148,7 @@ class _MeditationcycleState extends State<Meditationcycle> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 
@@ -222,24 +266,33 @@ class _MeditationcycleState extends State<Meditationcycle> {
                   ),
                   spaceBetween,
                   GestureDetector(
-                    onTap: (){launchUrl(Uri.parse("https://www.youtube.com/watch?v=VNSxTanl3YU"));},
+                    onTap: () {
+                      launchUrl(Uri.parse("https://www.youtube.com/watch?v=VNSxTanl3YU"));
+                    },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15.0),
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          YoutubePlayer(
-                            controller: _controller,
-                            showVideoProgressIndicator: false,
-                            progressIndicatorColor: Colors.blueAccent,
-                            progressColors: ProgressBarColors(
-                              playedColor: Colors.amber,
-                              handleColor: Colors.amberAccent,
-                            ),
-                            onReady: () {
-                              print("Player is ready.");
-                            },
+                          Container(
+                            height: 200.h,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(image:DecorationImage(
+                                fit: BoxFit.fill,
+                                image: AssetImage(guruji))),
                           ),
+                          // YoutubePlayer(
+                          //   controller: _controller,
+                          //   showVideoProgressIndicator: false,
+                          //   progressIndicatorColor: Colors.blueAccent,
+                          //   progressColors: ProgressBarColors(
+                          //     playedColor: Colors.amber,
+                          //     handleColor: Colors.amberAccent,
+                          //   ),
+                          //   onReady: () {
+                          //     print("Player is ready.");
+                          //   },
+                          // ),
                           Icon(
                             Icons.play_arrow,
                             size: 50.0,
@@ -300,16 +353,15 @@ class _MeditationcycleState extends State<Meditationcycle> {
                     child: ElevatedButton(
                       onPressed: () {
                         DateTime now = DateTime.now();
-                        // Check the time conditions to determine whether to navigate or not
-                        if ((now.hour >= 6 && now.hour <= 9) ||
-                            (now.hour >= 18 && now.hour < 22)) {
-                          _controller.pause();
+                        if (((now.hour >= 6 && now.minute >= 30) && (now.hour <= 10 && now.minute >= 30)) ||
+                            ((now.hour >= 6 && now.minute >= 30) &&(now.hour <= 10 && now.minute >= 30))) {
+                          // _controller.pause();
                           slidePageRoute(context, TimerScreen());
-                          // Navigator.push(context,MaterialPageRoute(builder: (context) => TimerScreen(),));
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text("Sorry,Your are not able to Meditate now"),
+                              content: Text(
+                                  "Sorry,Your are not able to Meditate now"),
                               backgroundColor: Colors.red,
                             ),
                           );
@@ -342,6 +394,7 @@ class _MeditationcycleState extends State<Meditationcycle> {
       ),
     );
   }
+
   launchURL(Uri url) async {
     if (!await launchUrl(url)) {
       throw Exception('Could not launch url');

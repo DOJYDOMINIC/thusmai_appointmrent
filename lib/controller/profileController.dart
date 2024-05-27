@@ -51,8 +51,8 @@ class ProfileController extends ChangeNotifier{
     // Send the request
     try {
       var response = await request.send();
-
       if (response.statusCode == 200) {
+        Provider.of<AppLogin>(context,listen: false).getUserByID();
         print('Request sent successfully');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

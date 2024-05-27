@@ -4,8 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:thusmai_appointmrent/services/firebase_notification.dart';
+import 'package:thusmai_appointmrent/test/anime.dart';
 import 'controller/login_register_otp_api.dart';
 import 'controller/socket_provider.dart';
+import 'controller/zoommeeting_controller.dart';
 import 'pages/bottom_navbar.dart';
 import 'pages/login_register_otp/login.dart';
 import 'controller/appointmentontroller.dart';
@@ -15,11 +18,12 @@ import 'controller/message_controller.dart';
 import 'controller/overviewController.dart';
 import 'controller/payment_controller.dart';
 import 'controller/profileController.dart';
-import 'controller/videoplayer.dart';
+import 'controller/videoplayer_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseApi().initNotifications();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var cookies = prefs.getString("cookie") ?? "";
   var isAnswered = prefs.getString("isAnswered");
@@ -48,10 +52,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
         ChangeNotifierProvider(create: (context) => PaymentController()),
         ChangeNotifierProvider(create: (context) => MeditationController()),
-        ChangeNotifierProvider(create: (context) => VideoPlayerState()),
+        ChangeNotifierProvider(create: (context) => VideoPlayerStateController()),
         ChangeNotifierProvider(create: (context) => MessageController()),
         ChangeNotifierProvider(create: (context) => OverViewController()),
         ChangeNotifierProvider(create: (context) => ProfileController()),
+        ChangeNotifierProvider(create: (context) => ZoomMeetingController()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(400, 880),
@@ -62,6 +67,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: ThemeData(fontFamily: 'Roboto'),
             home: cookies != "" ?  CustomBottomNavBar() : Login(),
+            // home: TimeCheckWidget(),
           );
         },
       ),

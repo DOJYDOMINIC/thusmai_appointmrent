@@ -1,6 +1,7 @@
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:thusmai_appointmrent/controller/login_register_otp_api.dart';
 import '../constant/constant.dart';
 import '../controller/appointmentontroller.dart';
 import '../pages/appointment/list_appointment.dart';
@@ -21,6 +22,7 @@ class _HomeTabState extends State<HomeTab> {
   @override
   void initState() {
     super.initState();
+    // Provider.of<AppLogin>(context,listen: false).tokenSave();
   }
 
   @override
