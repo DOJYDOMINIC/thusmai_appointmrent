@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:thusmai_appointmrent/controller/videoplayer_controller.dart';
 import 'package:thusmai_appointmrent/pages/videos/videolist.dart';
-import 'package:thusmai_appointmrent/pages/videos/videospage.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../controller/zoommeeting_controller.dart';
 import '../../widgets/additionnalwidget.dart';
 
@@ -24,7 +21,8 @@ class _VideosPageOneState extends State<VideosPageOne> {
   void initState() {
     super.initState();
     Provider.of<VideoPlayerStateController>(context, listen: false).playlistDetails();
-    Provider.of<VideoPlayerStateController>(context, listen: false).videoPlaylist();
+    Provider.of<ZoomMeetingController>(context,listen: false).zoomClass();
+
   }
 
   var meetingLink = "https://meet.google.com/ept-whtp-dgr";
@@ -32,7 +30,10 @@ class _VideosPageOneState extends State<VideosPageOne> {
   @override
   Widget build(BuildContext context) {
     var data = Provider.of<VideoPlayerStateController>(context).playList;
+   var zoomDetails =  Provider.of<ZoomMeetingController>(context,listen: false).ZoomClassModelData;
+    String formattedDate = DateFormat('dd/MM/yy').format(zoomDetails.zoomdate??DateTime.now());
 
+    // Example DateTime, you can use DateTime.now() for the current time
     return Scaffold(
       body: Column(
         children: [
@@ -55,7 +56,7 @@ class _VideosPageOneState extends State<VideosPageOne> {
                         height: 8,
                       ),
                       Text(
-                        "Ready to find your inner peace? Your meditation session is about to begin! Join our Zoom meeting now for a tranquil journey:",
+                        zoomVideoDescription,
                         style: TextStyle(fontSize: 14.sp),
                       ),
                       SizedBox(
@@ -65,7 +66,7 @@ class _VideosPageOneState extends State<VideosPageOne> {
                         children: [
                           Icon(Icons.calendar_month),
                           Text("Date :"),
-                          Text("02/05/2024")
+                          Text("${formattedDate}")
                         ],
                       ),
                       SizedBox(
@@ -75,14 +76,14 @@ class _VideosPageOneState extends State<VideosPageOne> {
                         children: [
                           Icon(Icons.alarm),
                           Text("Time :"),
-                          Text("7:30 PM")
+                          Text("${zoomDetails.zoomStartTime}")
                         ],
                       ),
                       SizedBox(
                         height: 8,
                       ),
                       Text(
-                        "Join in developing mindfulness.I'll see you there!",
+                        zoomVideoDescription2,
                         style: TextStyle(fontSize: 14.sp),
                       ),
                       SizedBox(
@@ -100,7 +101,7 @@ class _VideosPageOneState extends State<VideosPageOne> {
                              var formattedDate =  DateTime.now().toString();
                              String formattedTime = DateFormat('hh:mm a').format(DateTime.now()).toString(); // Format as AM/PM
                                 Provider.of<ZoomMeetingController>(context,listen: false).zoomPost(formattedDate, formattedTime);
-                                // launchUrl(Uri.parse(meetingLink));
+                                launchUrl(Uri.parse(zoomDetails.zoomLink??""));
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -180,7 +181,7 @@ class _VideosPageOneState extends State<VideosPageOne> {
                                 children: [
                                   Icon(Icons.videocam),
                                   Text(
-                                      "(${data.playlists?.length.toString()}) Videos"),
+                                      "(${data.playlists?[index].videoHeadingCount.toString()}) Videos"),
                                 ],
                               ),
                             ],
@@ -197,7 +198,6 @@ class _VideosPageOneState extends State<VideosPageOne> {
       ),
     );
   }
-
   launchURL(Uri url) async {
     if (!await launchUrl(url)) {
       throw Exception('Could not launch url');

@@ -40,6 +40,10 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
     var payment = Provider.of<PaymentController>(context, listen: false);
     var pro = Provider.of<AppLogin>(context,listen: false);
     var amount = double.parse(donationController.text);
+    donationController.clear();
+    setState(() {
+
+    });
     DateTime day = DateTime.now();
 
     Map<String, dynamic> data = {
@@ -111,6 +115,7 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
       );
 
       if (response.statusCode == 200) {
+
         final orderData = jsonDecode(response.body);
         final String orderId = orderData['order']["id"];
         var options = {
@@ -257,103 +262,3 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
   }
 }
 
-
-// import 'package:flutter/material.dart';
-// import 'package:razorpay_flutter/razorpay_flutter.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
-//
-// import 'package:thusmai_appointmrent/constant/constant.dart';
-//
-// class PaymentScreen extends StatefulWidget {
-//   @override
-//   _PaymentScreenState createState() => _PaymentScreenState();
-// }
-//
-// class _PaymentScreenState extends State<PaymentScreen> {
-//   late Razorpay _razorpay;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _razorpay = Razorpay();
-//     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-//     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-//     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-//   }
-//
-//   @override
-//   void dispose() {
-//     _razorpay.clear();
-//     super.dispose();
-//   }
-//
-//   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-//     print("Payment Successful: $response");
-//   }
-//
-//   void _handlePaymentError(PaymentFailureResponse response) {
-//     print("Payment Error: $response");
-//   }
-//
-//   void _handleExternalWallet(ExternalWalletResponse response) {
-//     print("External Wallet Selected: $response");
-//   }
-//
-//   Future<void> _createOrderAndOpenCheckout() async {
-//     final url = Uri.parse('$baseUrl/checkout');
-//     final response = await http.post(
-//       url,
-//       headers: <String, String>{
-//         'Content-Type': 'application/json; charset=UTF-8',
-//       },
-//       body: jsonEncode(<String, dynamic>{
-//         'amount': 2500,
-//         // 'currency': 'INR',
-//       }),
-//     );
-//
-//     if (response.statusCode == 200) {
-//       final orderData = jsonDecode(response.body);
-//       final String orderId = orderData['orderId'];
-//
-//       var options = {
-//         'key': 'rzp_test_1DP5mmOlF5G5ag',
-//         'amount': 2500 * 100,
-//         'name': 'Meditation Payment',
-//         'order_id': orderId,
-//         'description': 'Meditation second payment',
-//         'prefill': {
-//           'contact': '1234567890',
-//           'email': 'test@razorpay.com',
-//         },
-//         'external': {
-//           'wallets': ['paytm']
-//         }
-//       };
-//
-//       try {
-//         _razorpay.open(options);
-//       } catch (e) {
-//         print('Error: $e');
-//       }
-//     } else {
-//       print('Failed to create order');
-//     }
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Payment'),
-//       ),
-//       body: Center(
-//         child: ElevatedButton(
-//           onPressed: _createOrderAndOpenCheckout,
-//           child: Text('Pay 2500 INR'),
-//         ),
-//       ),
-//     );
-//   }
-// }

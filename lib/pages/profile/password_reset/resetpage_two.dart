@@ -31,6 +31,7 @@ class _ResetPageTwoState extends State<ResetPageTwo> {
   @override
   initState() {
     super.initState();
+    // Provider.of<AppLogin>(context, listen: false).getUserByID();
     timer = Timer.periodic(Duration(seconds: 1), (_) {
       if (secondsRemaining != 0) {
         setState(() {
@@ -42,6 +43,7 @@ class _ResetPageTwoState extends State<ResetPageTwo> {
         });
       }
     });
+    // Provider.of<AppLogin>(context, listen: false).requestPasswordReset();
   }
 
   void _resendCode() {
@@ -57,10 +59,12 @@ class _ResetPageTwoState extends State<ResetPageTwo> {
     super.dispose();
   }
 
-  TextEditingController _email = TextEditingController();
+  // TextEditingController _email = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    var pro = Provider.of<AppLogin>(context);
+
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
@@ -206,7 +210,7 @@ class _ResetPageTwoState extends State<ResetPageTwo> {
                             onPressed: () {
                               Map<String, dynamic> data = {
                                 "otp": otpNumber,
-                                "email": widget.data,
+                                "email":pro.userData?.email,
                               };
                               if (_formKey.currentState!.validate()) {
                                 Provider.of<AppLogin>(context, listen: false).otpVerification(context, data);

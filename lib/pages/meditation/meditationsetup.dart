@@ -155,6 +155,12 @@ class _MeditationcycleState extends State<Meditationcycle> {
   @override
   Widget build(BuildContext context) {
     var pro = Provider.of<AppLogin>(context);
+    String getYoutubeThumbnail(String videoLink) {
+      final uri = Uri.parse(videoLink);
+      final videoId = uri.queryParameters['v']?.trim() ??
+          uri.pathSegments.last.trim();
+      return 'https://img.youtube.com/vi/$videoId/0.jpg';
+    }
     // var height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: shadeOne,
@@ -275,24 +281,12 @@ class _MeditationcycleState extends State<Meditationcycle> {
                         alignment: Alignment.center,
                         children: [
                           Container(
-                            height: 200.h,
+                            height: 210.h,
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(image:DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage(guruji))),
+                                fit: BoxFit.cover,
+                                image: NetworkImage(getYoutubeThumbnail("https://www.youtube.com/watch?v=VNSxTanl3YU")))),
                           ),
-                          // YoutubePlayer(
-                          //   controller: _controller,
-                          //   showVideoProgressIndicator: false,
-                          //   progressIndicatorColor: Colors.blueAccent,
-                          //   progressColors: ProgressBarColors(
-                          //     playedColor: Colors.amber,
-                          //     handleColor: Colors.amberAccent,
-                          //   ),
-                          //   onReady: () {
-                          //     print("Player is ready.");
-                          //   },
-                          // ),
                           Icon(
                             Icons.play_arrow,
                             size: 50.0,

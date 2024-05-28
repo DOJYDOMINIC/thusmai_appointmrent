@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
+import 'package:thusmai_appointmrent/pages/refreshpage.dart';
 import 'package:thusmai_appointmrent/pages/videos/videospage.dart';
 import 'package:thusmai_appointmrent/pages/videos/videospageone.dart';
 import 'package:thusmai_appointmrent/tabs/hometab.dart';
 import 'package:thusmai_appointmrent/tabs/messsagetab.dart';
 import 'package:thusmai_appointmrent/pages/profile/profile.dart';
 import 'package:thusmai_appointmrent/widgets/additionnalwidget.dart';
+import '../controller/connectivitycontroller.dart';
 import '../controller/login_register_otp_api.dart';
 import '../services/firebase_notification.dart';
 import '../tabs/meditationTab.dart';
@@ -28,6 +30,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   void initState() {
     super.initState();
     FirebaseApi().initNotifications();
+    Provider.of<ConnectivityProvider>(context, listen: false);
+
   }
 
   int _currentIndex = 1;
@@ -86,11 +90,17 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   @override
   Widget build(BuildContext context) {
     var flagModel = Provider.of<AppLogin>(context).flagModel;
+    var connect = Provider.of<ConnectivityProvider>(context);
     _meditationEnabled = flagModel.meditationFeePaymentStatus??false;
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop)=>onPopInvoked(didPop),
-      child: Scaffold(
+      child:connect.status == ConnectivityStatus.Offline?Center(
+          child: RefreshPage(
+            onTap: () {
+
+            },
+          )): Scaffold(
         appBar: AppBar(
           backgroundColor: darkShade,
           leading: Padding(
@@ -112,15 +122,6 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                 color: flagModel.meditationFeePaymentStatus == true ?shadeSix : Colors.grey,
               ),
             ),
-            // IconButton(
-            //   onPressed: () {
-            //     slidePageRoute(context, NotificationPage());
-            //   },
-            //   icon: Icon(
-            //     Icons.circle_notifications_outlined,
-            //     color: shadeSix,
-            //   ),
-            // ),
             IconButton(
               onPressed: () {
                 Provider.of<AppLogin>(context, listen: false).getUserByID();

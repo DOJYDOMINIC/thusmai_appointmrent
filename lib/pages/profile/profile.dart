@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/login.dart';
 import 'package:thusmai_appointmrent/pages/profile/password_reset/resetpage_one.dart';
+import 'package:thusmai_appointmrent/pages/profile/password_reset/resetpage_two.dart';
 import 'package:thusmai_appointmrent/pages/profile/referpage.dart';
 import 'package:thusmai_appointmrent/pages/profile/rewardpage.dart';
 import '../../constant/constant.dart';
+import '../../controller/connectivitycontroller.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/profileController.dart';
 import '../../widgets/additionnalwidget.dart';
@@ -26,6 +28,8 @@ class _ProfileState extends State<Profile> {
   initState() {
     super.initState();
     Provider.of<AppLogin>(context, listen: false).getUserByID();
+    Provider.of<ConnectivityProvider>(context, listen: false).status;
+
   }
   @override
   Widget build(BuildContext context) {
@@ -175,7 +179,7 @@ class _ProfileState extends State<Profile> {
                             Divider(),
                             GestureDetector(
                               onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => ResetPageOne(),));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ResetPageTwo(),));
                               },
                               child: Container(
                                 height: 48.h,

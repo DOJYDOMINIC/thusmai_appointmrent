@@ -44,6 +44,8 @@ const String smileySad = "assets/svgImage/SmileySad.svg";
 // New
 Color shadeOne = Color.fromRGBO(255, 251, 255, 1);
 
+Color videoBox = Color.fromRGBO(255, 248, 244, 1);
+
 Color shadeTwo = Color.fromRGBO(234, 225, 217, 1);
 
 Color shadeThree = Color.fromRGBO(234,225,217, 1);
@@ -140,6 +142,12 @@ const String emergencyContact = "Emergency Contact";
 const String remark = "Remarks";
 const String confirmBooking = "Confirm Booking";
 const String appointmentForOther = "Who are you booking for ?";
+
+
+const String zoomVideoDescription = "Ready to find your inner peace? Your meditation session is about to begin! Join our Zoom meeting now for a tranquil journey:";
+const String zoomVideoDescription2 = "Join in developing mindfulness.I'll see you there!";
+
+
 
 
 

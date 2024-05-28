@@ -8,6 +8,7 @@ enum ConnectivityStatus {
 }
 
 class ConnectivityProvider extends ChangeNotifier {
+
   late Connectivity _connectivity;
   ConnectivityStatus _status = ConnectivityStatus.Offline;
 

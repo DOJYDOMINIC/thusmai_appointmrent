@@ -17,16 +17,14 @@ class PaymentController extends ChangeNotifier {
 
   Future<void> processPayment(BuildContext context) async {
     var pro = Provider.of<AppLogin>(context,listen: false);
-
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     final response = await http.post(Uri.parse("$adminBaseUrl/processPayment"),
         headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
+          'Content-Type': 'application/json;',
           if (cookies != null) 'Cookie': cookies,
         },
-        body: jsonEncode({"uid" : pro.userData?.uId}));
+        body: jsonEncode({"UId" : pro.userData?.uId}));
     try {
       if (response.statusCode == 200) {
       } else {
@@ -50,7 +48,6 @@ class PaymentController extends ChangeNotifier {
   Future<void> transactionData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-
     final response = await http.get(
       Uri.parse("$baseUrl/transaction_summary"),
       headers: {

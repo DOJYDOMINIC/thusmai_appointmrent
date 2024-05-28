@@ -61,30 +61,30 @@ class VideoPlayerStateController extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> videoPlaylist() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var cookies = prefs.getString("cookie");
-    print(cookies);
-    try {
-      var response = await http.post(
-        Uri.parse("$baseUrl/videos-by-playlist"),
-        headers: {
-          'Content-Type': 'application/json',
-          if (cookies != null) 'Cookie': cookies,
-        },
-        body:  jsonEncode({"playList_heading":"yoga"})
-      );
-      if (response.statusCode == 200) {
-        final dataList = jsonDecode(response.body);
-
-      } else {
-        print('Failed to load appointments: ${response.reasonPhrase}');
-      }
-    } catch (e) {
-      print('Error fetching appointments: $e');
-    }
-    notifyListeners();
-  }
+  // Future<void> videoPlaylist() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var cookies = prefs.getString("cookie");
+  //   print(cookies);
+  //   try {
+  //     var response = await http.post(
+  //       Uri.parse("$baseUrl/videos-by-playlist"),
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         if (cookies != null) 'Cookie': cookies,
+  //       },
+  //       body:  jsonEncode({"playList_heading":"yoga"})
+  //     );
+  //     if (response.statusCode == 200) {
+  //       final dataList = jsonDecode(response.body);
+  //
+  //     } else {
+  //       print('Failed to load appointments: ${response.reasonPhrase}');
+  //     }
+  //   } catch (e) {
+  //     print('Error fetching appointments: $e');
+  //   }
+  //   notifyListeners();
+  // }
 
 
   PlayList _playList = PlayList();
@@ -132,7 +132,6 @@ class VideoPlayerStateController extends ChangeNotifier {
       if (response.statusCode == 200) {
         final dataList = jsonDecode(response.body);
         _videoPlayList    = VideoPlayList.fromJson(dataList);
-        print(_videoPlayList.videos?[0].videoLink);
       } else {
         print('Failed to load appointments: ${response.reasonPhrase}');
       }

@@ -68,7 +68,7 @@ class _MeditationPaymentState extends State<MeditationPayment> {
                   url: "dekshina-checkout",
                   amount: "",
                   dueDate: "Sincerely appreciate your.",
-                  paymentType: 'Guru Dakshin',
+                  paymentType: 'Guru Dakshina',
                   noteIcon: "assets/svgImage/person_play.svg",
                   controller: dakshinaController,
                 ),
@@ -141,7 +141,7 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
       case 'Platform Maintenance':
         url = 'maintenance-paymentVerification';
         break;
-      case 'Guru Dakshin':
+      case 'Guru Dakshina':
         url = 'dekshina-paymentVerification';
         break;
       default:
@@ -151,6 +151,7 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
     double amount = widget.amount.isEmpty && widget.controller != null
         ? double.parse(widget.controller!.text)
         : double.parse(widget.amount);
+    widget.controller?.clear();
     print("lalal${response.signature.toString()}");
     DateTime day = DateTime.now();
     Map<String, dynamic> data = {
@@ -282,7 +283,7 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
                                 contentPadding: EdgeInsets.all(10),
                                 fillColor: Colors.white,
                                 filled: true,
-                                hintText: "Donations",
+                                hintText: "Dakshina",
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(16),
                                   borderSide: BorderSide(

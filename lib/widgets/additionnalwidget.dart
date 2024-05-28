@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constant/constant.dart';
+import '../controller/connectivitycontroller.dart';
 import '../controller/login_register_otp_api.dart';
 
 Widget timeSetup(String head, String startTime, String endTime) {
@@ -86,6 +87,8 @@ Widget meditationCycleWidget(
 Widget profileCard(BuildContext context) {
 
   var pro = Provider.of<AppLogin>(context);
+  var connect = Provider.of<ConnectivityProvider>(context);
+
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -119,7 +122,7 @@ Widget profileCard(BuildContext context) {
             child: CircleAvatar(
               backgroundColor: Colors.white,
               radius: 45.sp,
-              child: Container(
+              child:connect.status == ConnectivityStatus.Offline? Container(): Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(

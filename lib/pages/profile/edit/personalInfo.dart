@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/models/bankdetails.dart';
 import 'package:thusmai_appointmrent/pages/profile/edit/profile_edit.dart';
 import '../../../constant/constant.dart';
+import '../../../controller/connectivitycontroller.dart';
 import '../../../controller/login_register_otp_api.dart';
 import '../../../controller/profileController.dart';
 import '../../../widgets/custombutton.dart';
@@ -20,6 +21,8 @@ class PersonalInfo extends StatefulWidget {
 }
 
 class _PersonalInfoState extends State<PersonalInfo> {
+
+
 
   Future<void> _showImageSourceBottomSheet() async {
     await showModalBottomSheet(
@@ -80,11 +83,14 @@ class _PersonalInfoState extends State<PersonalInfo> {
   @override
   void initState() {
     super.initState();
+    Provider.of<ConnectivityProvider>(context, listen: false).status;
+
   }
   @override
   Widget build(BuildContext context) {
     var userdata = Provider.of<AppLogin>(context).userData;
     var profile = Provider.of<ProfileController>(context,listen: false);
+    var connect = Provider.of<ConnectivityProvider>(context);
 
 
     var sizeHeight = SizedBox(height: 24);
@@ -118,35 +124,49 @@ class _PersonalInfoState extends State<PersonalInfo> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Container(
-                          width: 110,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: goldShade, width: 5), // Set border properties here
-                          ),
-                          child: Stack(
-                            children: [
-                              CircleAvatar(
-                                radius: 70,
-                                backgroundImage: _image?.path == null
+                        Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 60.sp,
+                              backgroundColor: goldShade,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 57.sp,
+                                child:connect.status == ConnectivityStatus.Offline? Container():Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image:_image?.path == null
                                     ? userdata?.profilePicUrl != null
                                     ? NetworkImage("${userdata?.profilePicUrl} ")
-                                    : NetworkImage(imgFromFirebase)
-                                    : Image.file(File(_image!.path)).image,
-                              ),
-                              Positioned(
-                                bottom: -8,
-                                right: -12,
-                                child: IconButton(
-                                  onPressed: () {
-                                    _showImageSourceBottomSheet();
-                                    // profile.uploadData();
-                                  },
-                                  icon: Icon(Icons.camera_alt),
+                                          : NetworkImage(imgFromFirebase)
+                                        : Image.file(File(_image!.path)).image,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                            // CircleAvatar(
+                            //   radius: 70,
+                            //   backgroundImage: _image?.path == null
+                            //       ? userdata?.profilePicUrl != null
+                            //       ? NetworkImage("${userdata?.profilePicUrl} ")
+                            //       : NetworkImage(imgFromFirebase)
+                            //       : Image.file(File(_image!.path)).image,
+                            // ),
+                            Positioned(
+                              bottom: -8,
+                              right: -12,
+                              child: IconButton(
+                                onPressed: () {
+                                  _showImageSourceBottomSheet();
+                                  // profile.uploadData();
+                                },
+                                icon: Icon(Icons.camera_alt),
+                              ),
+                            ),
+                          ],
                         ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(16,0,0,16),
