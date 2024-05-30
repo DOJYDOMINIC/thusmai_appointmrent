@@ -29,12 +29,10 @@ class _ProfileState extends State<Profile> {
     super.initState();
     Provider.of<AppLogin>(context, listen: false).getUserByID();
     Provider.of<ConnectivityProvider>(context, listen: false).status;
-
   }
   @override
   Widget build(BuildContext context) {
     var pro = Provider.of<AppLogin>(context);
-
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: shadeThree,

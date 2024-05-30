@@ -16,30 +16,34 @@ class PaymentController extends ChangeNotifier {
 
 
   Future<void> processPayment(BuildContext context) async {
-    var pro = Provider.of<AppLogin>(context,listen: false);
     SharedPreferences prefs = await SharedPreferences.getInstance();
+ var data  = Provider.of<AppLogin>(context,listen: false).userData;
+
     var cookies = prefs.getString("cookie");
-    final response = await http.post(Uri.parse("$adminBaseUrl/processPayment"),
+
+    try {
+      final response = await http.put(
+        Uri.parse("$adminBaseUrl/processPayment"),
         headers: {
-          'Content-Type': 'application/json;',
+          'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
         },
-        body: jsonEncode({"UId" : pro.userData?.uId}));
-    try {
+        body: jsonEncode({"UId":data?.uId }),
+      );
+
       if (response.statusCode == 200) {
+        // Handle success
+        print("Payment processed successfully");
+        // You can show a success message if needed
       } else {
-        // ScaffoldMessenger.of(context).showSnackBar(
-          // SnackBar(
-          //   backgroundColor: Colors.red,
-          //   // content: Text(decode["message"]),
-          //   duration: Duration(seconds: 1),
-          // ),
-        // );
+        // Handle error
+        var decode = jsonDecode(response.body);
+
       }
     } catch (e) {
-      print("meditationData : $e");
+      // Handle exception
+      print("Error during payment processing: $e");
     }
-    notifyListeners();
   }
 
   TransactionSummary _transactionSummary = TransactionSummary();
@@ -60,7 +64,6 @@ class PaymentController extends ChangeNotifier {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         _transactionSummary = TransactionSummary.fromJson(data);
-        print(transactionSummary.totalguru.toString());
       } else {
         print("Failed to load data: ${response.statusCode}");
       }
@@ -118,9 +121,10 @@ class PaymentController extends ChangeNotifier {
         body: jsonEncode(paymentData),
       );
       if (response.statusCode == 200) {
-        if(url == "meditation-paymentVerification"  && paymentData["amount"] ==2500){
-          Provider.of<AppLogin>(context,listen: false).importantFlags();
+        Provider.of<PaymentController>(context,listen: false).transactionData();
+        if(url == "meditation-paymentVerification"){
           processPayment(context);
+          Provider.of<AppLogin>(context,listen: false).importantFlags();
         }
      ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

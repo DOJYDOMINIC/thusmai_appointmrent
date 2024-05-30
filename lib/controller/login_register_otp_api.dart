@@ -20,6 +20,17 @@ import '../pages/profile/password_reset/resetpasge_three.dart';
 class AppLogin extends ChangeNotifier {
 // firstLogin check
 
+  int _currentIndex = 1;
+
+  int get currentIndex => _currentIndex;
+
+  set currentIndex(int newIndex) {
+    if (_currentIndex != newIndex) {
+      _currentIndex = newIndex;
+      notifyListeners();
+    }
+  }
+
   bool _firstLogin = true;
 
   bool get firstLogin => _firstLogin;
@@ -126,10 +137,8 @@ class AppLogin extends ChangeNotifier {
     var decode = jsonDecode(response.body);
     try {
       if (response.statusCode == 200) {
-        print(decode.toString());
         _flagModel = Message.fromJson(decode["message"]);
         prefs.setString("isAnswered", "true");
-        debugPrint(_flagModel.maintenancePaymentStatus.toString());
       } else {
         // ScaffoldMessenger.of(context).showSnackBar(
         //   SnackBar(

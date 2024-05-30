@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import '../constant/constant.dart';
+
 SliderEvents sliderEventsFromJson(String str) => SliderEvents.fromJson(json.decode(str));
 
 String sliderEventsToJson(SliderEvents data) => json.encode(data.toJson());

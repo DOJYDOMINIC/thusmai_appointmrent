@@ -1,7 +1,9 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../../constant/constant.dart';
@@ -16,6 +18,8 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
+
+  PermissionStatus _exactAlarmPermissionStatus = PermissionStatus.granted;
   bool isTimerRunning = false;
   bool isPaused = false;
   bool isCompleted = false;
@@ -23,8 +27,7 @@ class _TimerScreenState extends State<TimerScreen> {
   late CountDownController _controller;
   late AudioPlayer _audioPlayer;
 
-  final String audioUrl =
-      "https://firebasestorage.googleapis.com/v0/b/thasmai-star-life.appspot.com/o/general_images%2FY2meta.app%20-%20Shivashtakam%20Thasmai%20Namah%20Paramakarana%20written%20by%20Aadi%20Shankaracharya%20(320%20kbps).mp3?alt=media&token=845e902d-dccf-46fb-9a97-1013a6987c04";
+  final String audioUrl = "https://firebasestorage.googleapis.com/v0/b/thasmai-star-life.appspot.com/o/general_images%2FY2meta.app%20-%20Shivashtakam%20Thasmai%20Namah%20Paramakarana%20written%20by%20Aadi%20Shankaracharya%20(320%20kbps).mp3?alt=media&token=845e902d-dccf-46fb-9a97-1013a6987c04";
 
   @override
   void initState() {
@@ -32,8 +35,16 @@ class _TimerScreenState extends State<TimerScreen> {
     _controller = CountDownController();
     _audioPlayer = AudioPlayer();
     Provider.of<AppLogin>(context, listen: false).getUserByID();
+    AndroidAlarmManager.initialize();
+    _checkExactAlarmPermission();
   }
 
+  void _checkExactAlarmPermission() async {
+    final currentStatus = await Permission.scheduleExactAlarm.status;
+    setState(() {
+      _exactAlarmPermissionStatus = currentStatus;
+    });
+  }
   @override
   void dispose() {
     _audioPlayer.dispose();
@@ -179,7 +190,7 @@ class _TimerScreenState extends State<TimerScreen> {
         print('Timer completed');
         isCompleted = true;
         isTimerRunning = false;
-        if (difference.inMinutes >= 45) {
+        if (difference.inSeconds >= 3) {
           _startAlarm();
         }
         setState(() {});
@@ -290,3 +301,4 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 }
+

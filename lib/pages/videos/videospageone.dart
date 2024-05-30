@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
@@ -101,7 +102,7 @@ class _VideosPageOneState extends State<VideosPageOne> {
                              var formattedDate =  DateTime.now().toString();
                              String formattedTime = DateFormat('hh:mm a').format(DateTime.now()).toString(); // Format as AM/PM
                                 Provider.of<ZoomMeetingController>(context,listen: false).zoomPost(formattedDate, formattedTime);
-                                launchUrl(Uri.parse(zoomDetails.zoomLink??""));
+                                // launchUrl(Uri.parse(zoomDetails.zoomLink??""));
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

@@ -132,21 +132,24 @@ class _PersonalInfoState extends State<PersonalInfo> {
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: 57.sp,
-                                child:connect.status == ConnectivityStatus.Offline? Container():Container(
+                                child: connect.status == ConnectivityStatus.Offline
+                                    ? Container()
+                                    : Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                      image:_image?.path == null
-                                    ? userdata?.profilePicUrl != null
-                                    ? NetworkImage("${userdata?.profilePicUrl} ")
-                                          : NetworkImage(imgFromFirebase)
-                                        : Image.file(File(_image!.path)).image,
+                                      image: _image?.path != null
+                                          ? FileImage(File(_image!.path))
+                                          : userdata?.profilePicUrl != null && userdata!.profilePicUrl!.isNotEmpty
+                                          ? NetworkImage(userdata.profilePicUrl!)
+                                          : NetworkImage(imgFromFirebase) as ImageProvider,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
+
                             // CircleAvatar(
                             //   radius: 70,
                             //   backgroundImage: _image?.path == null

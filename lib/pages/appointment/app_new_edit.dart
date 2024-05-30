@@ -273,44 +273,45 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                       return null;
                     },
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text("Are you attending ?")),
-                      Row(
-                        children: [
-                          Row(
-                            children: [
-                              Radio<String>(
-                                value: 'Yes',
-                                groupValue: selectedValue,
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedValue = value??"";
-                                    _externalUser = true;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          Text("Yes"),
-                          Radio<String>(
-                            value: 'No',
-                            groupValue: selectedValue,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedValue = value??"";
-                                _externalUser = false;
-                              });
-                            },
-                          ),
-                          Text("No")
-                        ],
-                      ),
-                    ],
-                  ),
+                  spaceBetween,
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children: [
+                  //     Align(
+                  //         alignment: Alignment.centerLeft,
+                  //         child: Text("Are you attending ?")),
+                  //     Row(
+                  //       children: [
+                  //         Row(
+                  //           children: [
+                  //             Radio<String>(
+                  //               value: 'Yes',
+                  //               groupValue: selectedValue,
+                  //               onChanged: (value) {
+                  //                 setState(() {
+                  //                   selectedValue = value??"";
+                  //                   _externalUser = true;
+                  //                 });
+                  //               },
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         Text("Yes"),
+                  //         Radio<String>(
+                  //           value: 'No',
+                  //           groupValue: selectedValue,
+                  //           onChanged: (value) {
+                  //             setState(() {
+                  //               selectedValue = value??"";
+                  //               _externalUser = false;
+                  //             });
+                  //           },
+                  //         ),
+                  //         Text("No")
+                  //       ],
+                  //     ),
+                  //   ],
+                  // ),
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.start,
                   //   children: [

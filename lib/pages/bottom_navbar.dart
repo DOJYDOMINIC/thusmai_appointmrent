@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:thusmai_appointmrent/pages/refreshpage.dart';
-import 'package:thusmai_appointmrent/pages/videos/videospage.dart';
 import 'package:thusmai_appointmrent/pages/videos/videospageone.dart';
 import 'package:thusmai_appointmrent/tabs/hometab.dart';
 import 'package:thusmai_appointmrent/tabs/messsagetab.dart';
@@ -15,6 +14,7 @@ import '../controller/login_register_otp_api.dart';
 import '../services/firebase_notification.dart';
 import '../tabs/meditationTab.dart';
 import '../tabs/paymentTab.dart';
+import '../test/anime.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({
@@ -29,15 +29,14 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   @override
   void initState() {
     super.initState();
+    // runTest();
     FirebaseApi().initNotifications();
-    Provider.of<ConnectivityProvider>(context, listen: false);
-
+    Provider.of<ConnectivityProvider>(context, listen: false).status;
   }
 
-  int _currentIndex = 1;
   bool _videoEnabled = true;
   bool _homeEnabled = true;
-  bool _meditationEnabled = false;
+  bool _meditationEnabled = true;
   bool _paymentsEnabled = true;
 
   final List<Widget> _pages = [
@@ -47,14 +46,14 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     PaymentTab(),
   ];
 
-  void onPopInvoked(bool didPop) {
+  void onPopInvoked(BuildContext context, bool didPop) {
+    final indexProvider = Provider.of<AppLogin>(context, listen: false);
+
     if (didPop) {
       return;
-    } else if (_currentIndex != 1) {
-      setState(() {
-        _currentIndex = 1;
-      });
-    } else if (_currentIndex == 1) {
+    } else if (indexProvider.currentIndex != 1) {
+      indexProvider.currentIndex = 1;
+    } else if (indexProvider.currentIndex == 1) {
       showExitConfirmationDialog(context);
     }
   }
@@ -86,21 +85,16 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     var flagModel = Provider.of<AppLogin>(context).flagModel;
     var connect = Provider.of<ConnectivityProvider>(context);
-    _meditationEnabled = flagModel.meditationFeePaymentStatus??false;
+    var indexProvider = Provider.of<AppLogin>(context);
+
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop)=>onPopInvoked(didPop),
-      child:connect.status == ConnectivityStatus.Offline?Center(
-          child: RefreshPage(
-            onTap: () {
-
-            },
-          )): Scaffold(
+      onPopInvoked: (didPop) => onPopInvoked(context, didPop),
+      child: Scaffold(
         appBar: AppBar(
           backgroundColor: darkShade,
           leading: Padding(
@@ -111,17 +105,26 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           ),
           actions: [
             IconButton(
-              onPressed: ()=>flagModel.meditationFeePaymentStatus == true ? slidePageRoute(context, MessageTab()):  ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.red,
-                  content: Text(enableMessage),
-                  duration: Duration(seconds: 2),
-                ),),
+              onPressed: () {
+                if (flagModel.maintenancePaymentStatus == true) {
+                  slidePageRoute(context, MessageTab());
+                } else {
+                  Provider.of<AppLogin>(context, listen: false).currentIndex = 3;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text(enableMessage),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
+              },
               icon: Icon(
                 Icons.message_outlined,
-                color: flagModel.meditationFeePaymentStatus == true ?shadeSix : Colors.grey,
+                color: flagModel.meditationFeePaymentStatus == true ? shadeSix : Colors.grey,
               ),
             ),
+
             IconButton(
               onPressed: () {
                 Provider.of<AppLogin>(context, listen: false).getUserByID();
@@ -134,7 +137,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             ),
           ],
         ),
-        body: _pages[_currentIndex],
+        body: _pages[indexProvider.currentIndex],
         bottomNavigationBar: Container(
           height: 80,
           color: darkShade, // Background color of the bottom navigation bar
@@ -142,24 +145,29 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               buildNavBarItem(
-                  _currentIndex != 0 ? Icons.videocam_outlined : Icons.videocam,
-                  videos,
-                  0,
-                  _videoEnabled),
+                  currentIndex: indexProvider.currentIndex,
+                  icon: indexProvider.currentIndex != 0 ? Icons.videocam_outlined : Icons.videocam,
+                  label: videos,
+                  index: 0,
+                  isEnabled: _videoEnabled),
               buildNavBarItem(
-                  _currentIndex != 1 ? Icons.home_outlined : Icons.home_rounded,
-                  home,
-                  1,
-                  _homeEnabled),
+                  currentIndex: indexProvider.currentIndex,
+                  icon: indexProvider.currentIndex != 1 ? Icons.home_outlined : Icons.home_rounded,
+                  label: home,
+                  index: 1,
+                  isEnabled: _homeEnabled),
               buildNavBarItem(
-                  Icons.self_improvement, meditation, 2, _meditationEnabled),
+                  currentIndex: indexProvider.currentIndex,
+                  icon: Icons.self_improvement,
+                  label: meditation,
+                  index: 2,
+                  isEnabled: _meditationEnabled),
               buildNavBarItem(
-                  _currentIndex != 3
-                      ? Icons.payments_outlined
-                      : Icons.payments_rounded,
-                  payment,
-                  3,
-                  _paymentsEnabled),
+                  currentIndex: indexProvider.currentIndex,
+                  icon: indexProvider.currentIndex != 3 ? Icons.payments_outlined : Icons.payments_rounded,
+                  label: payment,
+                  index: 3,
+                  isEnabled: _paymentsEnabled),
             ],
           ),
         ),
@@ -167,30 +175,28 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     );
   }
 
-  Widget buildNavBarItem(
-    IconData icon,
-    String label,
-    int index,
-    bool isEnabled,
-  ) {
+  Widget buildNavBarItem({
+    required int currentIndex,
+    required IconData icon,
+    required String label,
+    required int index,
+    required bool isEnabled,
+  }) {
     return GestureDetector(
       onTap: isEnabled
           ? () {
-              setState(() {
-                _currentIndex = index;
-              });
-            }
+        Provider.of<AppLogin>(context, listen: false).currentIndex = index;
+      }
           : () {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(enable),duration: Duration(seconds: 2),));
-              if (isEnabled == false) {
-                _currentIndex =
-                    3; // Navigate to index 0 when tapping on index 3
-                setState(() {});
-              }
-            },
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(enable),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      },
       child: Container(
-        width:
-            MediaQuery.of(context).size.width / 4, // Divide by number of items
+        width: MediaQuery.of(context).size.width / 4, // Divide by number of items
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -198,14 +204,15 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               width: 64.w,
               height: 32.h,
               decoration: BoxDecoration(
-                  color: _currentIndex == index ? shadeEleven : darkShade,
-                  borderRadius: BorderRadius.circular(20.sp)),
+                color: currentIndex == index ? shadeEleven : darkShade,
+                borderRadius: BorderRadius.circular(20.sp),
+              ),
               child: Icon(
                 icon,
                 color: isEnabled
-                    ? _currentIndex == index
-                        ? shadeSix
-                        : shadeFive
+                    ? currentIndex == index
+                    ? shadeSix
+                    : shadeFive
                     : Colors.grey, // Icon color
               ),
             ),
@@ -214,9 +221,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               style: TextStyle(
                 fontSize: 12.sp,
                 color: isEnabled
-                    ? _currentIndex == index
-                        ? shadeTwo
-                        : shadeFive
+                    ? currentIndex == index
+                    ? shadeTwo
+                    : shadeFive
                     : Colors.grey, // Text color
               ),
             ),

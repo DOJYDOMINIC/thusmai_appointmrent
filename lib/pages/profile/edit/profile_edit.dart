@@ -82,6 +82,7 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                   hintText: 'Phone no.',
                   controller: _phoneNo,
                   prefixIcon: Icons.phone,
+                  keyboardType: TextInputType.phone,
                 ),
                 CustomTextField(
                   hintText: 'Date of Birth',

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:video_player/video_player.dart';
+// import 'package:video_player/video_player.dart';
 import 'package:http/http.dart' as http;
 
 import '../constant/constant.dart';
@@ -21,45 +21,45 @@ class VideoPlayerStateController extends ChangeNotifier {
     });
   }
 
-  late VideoPlayerController controller;
-  double sliderValue = 0.0;
-
-  VideoPlayerStateController() {
-    controller = VideoPlayerController.networkUrl(
-      Uri.parse('https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'),
-    )..initialize().then((_) {
-      controller.addListener(() {
-        sliderValue = controller.value.position.inMilliseconds.toDouble();
-        notifyListeners();
-      });
-      notifyListeners();
-    });
-  }
-
-  void play() {
-    controller.play();
-  }
-
-  void pause() {
-    controller.pause();
-  }
-
-  void seekTo(double value) {
-    controller.seekTo(Duration(milliseconds: value.toInt()));
-  }
-
-  String formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return '$twoDigitMinutes:$twoDigitSeconds';
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  // late VideoPlayerController controller;
+  // double sliderValue = 0.0;
+  //
+  // VideoPlayerStateController() {
+  //   controller = VideoPlayerController.networkUrl(
+  //     Uri.parse('https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'),
+  //   )..initialize().then((_) {
+  //     controller.addListener(() {
+  //       sliderValue = controller.value.position.inMilliseconds.toDouble();
+  //       notifyListeners();
+  //     });
+  //     notifyListeners();
+  //   });
+  // }
+  //
+  // void play() {
+  //   controller.play();
+  // }
+  //
+  // void pause() {
+  //   controller.pause();
+  // }
+  //
+  // void seekTo(double value) {
+  //   controller.seekTo(Duration(milliseconds: value.toInt()));
+  // }
+  //
+  // String formatDuration(Duration duration) {
+  //   String twoDigits(int n) => n.toString().padLeft(2, '0');
+  //   String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+  //   String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+  //   return '$twoDigitMinutes:$twoDigitSeconds';
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   controller.dispose();
+  //   super.dispose();
+  // }
 
   // Future<void> videoPlaylist() async {
   //   SharedPreferences prefs = await SharedPreferences.getInstance();

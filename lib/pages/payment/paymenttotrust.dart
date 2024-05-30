@@ -52,7 +52,7 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
       "razorpay_signature": response.signature,
       "UId":pro.userData?.uId,
       "amount": amount,
-      "payment_date": "${day.day}/${day.month}/${day.year}",
+      "payment_date": "$day",
       "payment_time": "${day.hour}:${day.minute}:${day.second}",
     };
 

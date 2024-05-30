@@ -8,6 +8,7 @@ import 'package:thusmai_appointmrent/pages/appointment/termsandconditions.dart';
 import '../../constant/constant.dart'; // Assuming this file contains the 'appTheam' constant
 import 'package:flutter/material.dart';
 import '../../controller/appointmentontroller.dart';
+import '../../controller/login_register_otp_api.dart';
 import '../../models/appointment_add_model.dart';
 import '../../widgets/additionnalwidget.dart';
 
@@ -145,7 +146,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   // WidgetTree
   @override
   Widget build(BuildContext context) {
-    var pro = Provider.of<AppointmentController>(context);
+    var appointmentController = Provider.of<AppointmentController>(context);
     List<GroupMemberAdd> dataList = [];
 // Iterate through each index
     const int maxCharacters = 100; // Maximum characters allowed
@@ -160,7 +161,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
         appBar: AppBar(
           leading: IconButton(
               onPressed: () {
-                pro.countOfPeople = 0;
+                appointmentController.countOfPeople = 0;
                 Navigator.pop(context);
               },
               icon: Icon(
@@ -232,44 +233,44 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                       },
                     ),
                     spaceBetween,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("Are you attending ?")),
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Radio<String>(
-                                  value: 'Yes',
-                                  groupValue: selectedValue,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedValue = value;
-                                      _externalUser = true;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                            Text("Yes"),
-                            Radio<String>(
-                              value: 'No',
-                              groupValue: selectedValue,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedValue = value;
-                                  _externalUser = false;
-                                });
-                              },
-                            ),
-                            Text("No")
-                          ],
-                        ),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.start,
+                    //   children: [
+                    //     Align(
+                    //         alignment: Alignment.centerLeft,
+                    //         child: Text("Are you attending ?")),
+                    //     Row(
+                    //       children: [
+                    //         Row(
+                    //           children: [
+                    //             Radio<String>(
+                    //               value: 'Yes',
+                    //               groupValue: selectedValue,
+                    //               onChanged: (value) {
+                    //                 setState(() {
+                    //                   selectedValue = value;
+                    //                   _externalUser = true;
+                    //                 });
+                    //               },
+                    //             ),
+                    //           ],
+                    //         ),
+                    //         Text("Yes"),
+                    //         Radio<String>(
+                    //           value: 'No',
+                    //           groupValue: selectedValue,
+                    //           onChanged: (value) {
+                    //             setState(() {
+                    //               selectedValue = value;
+                    //               _externalUser = false;
+                    //             });
+                    //           },
+                    //         ),
+                    //         Text("No")
+                    //       ],
+                    //     ),
+                    //   ],
+                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -281,21 +282,21 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                   EdgeInsets.fromLTRB(8.sp, 0.sp, 8.sp, 0.sp),
                               child: GestureDetector(
                                 onTap: () {
-                                  pro.subtract();
+                                  appointmentController.subtract();
                                   // You also need to decrement the countOfPeople variable if needed
-                                  if (pro.countOfPeople < 0) {
-                                    pro.countOfPeople--;
-                                    pro.countOfPeople = 0;
+                                  if (appointmentController.countOfPeople < 0) {
+                                    appointmentController.countOfPeople--;
+                                    appointmentController.countOfPeople = 0;
                                   }
-                                  itemExpandedList.removeAt(pro.countOfPeople);
+                                  itemExpandedList.removeAt(appointmentController.countOfPeople);
                                   _noOfPeople.text =
-                                      pro.countOfPeople.toString();
+                                      appointmentController.countOfPeople.toString();
                                   _GroupMembersDataControllers.removeAt(
-                                      pro.countOfPeople);
+                                      appointmentController.countOfPeople);
                                   _GroupMembersDataAgeControllers.removeAt(
-                                      pro.countOfPeople);
+                                      appointmentController.countOfPeople);
                                   _GroupMembersDataRelationControllers.removeAt(
-                                      pro.countOfPeople);
+                                      appointmentController.countOfPeople);
                                 },
                                 child: Container(
                                     color: darkShade,
@@ -305,13 +306,13 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                     )),
                               ),
                             ),
-                            Text("${pro.countOfPeople}"),
+                            Text("${appointmentController.countOfPeople}"),
                             Padding(
                               padding:
                                   EdgeInsets.fromLTRB(8.sp, 0.sp, 8.sp, 0.sp),
                               child: GestureDetector(
                                 onTap: () {
-                                  pro.addCount();
+                                  appointmentController.addCount();
                                   // Set all existing items to true
                                   itemExpandedList.forEach((element) {
                                     element = true;
@@ -319,15 +320,15 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                   itemExpandedList.add(false);
                                   print(itemExpandedList.toString());
                                   _noOfPeople.text =
-                                      pro.countOfPeople.toString();
+                                      appointmentController.countOfPeople.toString();
                                 },
                                 child: Container(
-                                    color: pro.countOfPeople != 5
+                                    color: appointmentController.countOfPeople != 5
                                         ? darkShade
                                         : Colors.grey,
                                     child: Icon(
                                       Icons.add,
-                                      color: pro.countOfPeople != 5
+                                      color: appointmentController.countOfPeople != 5
                                           ? Colors.white
                                           : Colors.grey.shade700,
                                     )),
@@ -390,7 +391,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         ),
                       ],
                     ),
-                    if (pro.countOfPeople != 0)
+                    if (appointmentController.countOfPeople != 0)
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
                         child: Row(
@@ -758,7 +759,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                     SizedBox(
                       child: ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: pro.countOfPeople,
+                        itemCount: appointmentController.countOfPeople,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           _GroupMembersDataControllers.add(
@@ -1093,7 +1094,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                 _GroupMembersDataRelationControllers
                                                     .removeAt(index);
                                                 // // You also need to decrement the countOfPeople variable if needed
-                                                pro.countOfPeople -= 1;
+                                                appointmentController.countOfPeople -= 1;
                                                 itemExpandedList
                                                     .removeAt(index);
                                                 calculateTotalHeight(
@@ -1302,7 +1303,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                             ? null
                             : () async {
                                 if (_formKey.currentState!.validate()) {
-                                  for (int i = 0; i < pro.countOfPeople; i++) {
+                                  for (int i = 0; i < appointmentController.countOfPeople; i++) {
                                     // Create a map to store data for each index
                                     GroupMemberAdd dataMap = GroupMemberAdd(
                                       name:

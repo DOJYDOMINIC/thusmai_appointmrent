@@ -45,22 +45,22 @@ class _MeditationPaymentState extends State<MeditationPayment> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 MeditationPaymentWidget(
-                  icon: Icons.self_improvement,
-                  url: "meditation-checkout",
-                  amount: "2500",
-                  dueDate: "Due date on 08/05/2024",
-                  paymentType: 'Meditation payment',
-                  noteIcon: 'assets/svgImage/brightness_alert.svg',
+                  url: "maintenance-checkout",
+                  icon: Icons.videocam,
+                  amount: "500",
+                  dueDate: "Funds to maintain our services.",
+                  paymentType: 'Platform Maintenance',
+                  noteIcon: "assets/svgImage/brightness_alert.svg",
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                  padding: const EdgeInsets.fromLTRB(0,8,0,8),
                   child: MeditationPaymentWidget(
-                    url: "maintenance-checkout",
-                    icon: Icons.videocam,
-                    amount: "500",
-                    dueDate: "Funds to maintain our services.",
-                    paymentType: 'Platform Maintenance',
-                    noteIcon: "assets/svgImage/brightness_alert.svg",
+                    icon: Icons.self_improvement,
+                    url: "meditation-checkout",
+                    amount: "2500",
+                    dueDate: "Due date on 08/05/2024",
+                    paymentType: 'Meditation payment',
+                    noteIcon: 'assets/svgImage/brightness_alert.svg',
                   ),
                 ),
                 MeditationPaymentWidget(
@@ -84,14 +84,14 @@ class _MeditationPaymentState extends State<MeditationPayment> {
 class MeditationPaymentWidget extends StatefulWidget {
   const MeditationPaymentWidget(
       {super.key,
-      required this.icon,
-      required this.amount,
-      required this.dueDate,
-      this.onPressed,
-      required this.paymentType,
-      required this.noteIcon,
-      this.controller,
-      required this.url});
+        required this.icon,
+        required this.amount,
+        required this.dueDate,
+        this.onPressed,
+        required this.paymentType,
+        required this.noteIcon,
+        this.controller,
+        required this.url});
 
   final IconData icon;
   final String noteIcon;
@@ -160,11 +160,13 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
       "razorpay_signature": response.signature,
       "UId": pro.userData?.uId,
       "amount": amount,
-      "payment_date": "${day.day}/${day.month}/${day.year}",
+      "payment_date": "$day",
       "payment_time": "${day.hour}:${day.minute}:${day.second}",
     };
 
     payment.paymentSuccess(context, url, data);
+    print(url);
+
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {

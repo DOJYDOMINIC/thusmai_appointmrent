@@ -561,65 +561,86 @@
 // }
 
 
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
+//
+// class TimeCheckWidget extends StatefulWidget {
+//   @override
+//   _TimeCheckWidgetState createState() => _TimeCheckWidgetState();
+// }
+//
+// class _TimeCheckWidgetState extends State<TimeCheckWidget> {
+//   String result = '';
+//
+//   void checkTime() {
+//     // Get the current time
+//     DateTime now = DateTime.now();
+//     TimeOfDay currentTime = TimeOfDay.fromDateTime(now);
+//
+//     // Define the start and end times
+//     TimeOfDay startTime = TimeOfDay(hour: 14, minute: 0); // 14:00 (2:00 PM)
+//     TimeOfDay endTime = TimeOfDay(hour: 18, minute: 0);   // 18:00 (6:00 PM)
+//
+//     // Check if the current time is between the start and end times
+//     if (isTimeBetween(currentTime, startTime, endTime)) {
+//       setState(() {
+//         result = "The current time is between the given start and end times.";
+//       });
+//     } else {
+//       setState(() {
+//         result = "The current time is not between the given start and end times.";
+//       });
+//     }
+//   }
+//
+//   bool isTimeBetween(TimeOfDay currentTime, TimeOfDay startTime, TimeOfDay endTime) {
+//     final now = DateTime.now();
+//     final currentDateTime = DateTime(now.year, now.month, now.day, currentTime.hour, currentTime.minute);
+//     final startDateTime = DateTime(now.year, now.month, now.day, startTime.hour, startTime.minute);
+//     final endDateTime = DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
+//
+//     return currentDateTime.isAfter(startDateTime) && currentDateTime.isBefore(endDateTime);
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Time Check Example'),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             ElevatedButton(
+//               onPressed: checkTime,
+//               child: Text('Check Time'),
+//             ),
+//             SizedBox(height: 20),
+//             Text(result),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
-class TimeCheckWidget extends StatefulWidget {
-  @override
-  _TimeCheckWidgetState createState() => _TimeCheckWidgetState();
-}
-
-class _TimeCheckWidgetState extends State<TimeCheckWidget> {
-  String result = '';
-
-  void checkTime() {
-    // Get the current time
-    DateTime now = DateTime.now();
-    TimeOfDay currentTime = TimeOfDay.fromDateTime(now);
-
-    // Define the start and end times
-    TimeOfDay startTime = TimeOfDay(hour: 14, minute: 0); // 14:00 (2:00 PM)
-    TimeOfDay endTime = TimeOfDay(hour: 18, minute: 0);   // 18:00 (6:00 PM)
-
-    // Check if the current time is between the start and end times
-    if (isTimeBetween(currentTime, startTime, endTime)) {
-      setState(() {
-        result = "The current time is between the given start and end times.";
-      });
-    } else {
-      setState(() {
-        result = "The current time is not between the given start and end times.";
-      });
-    }
-  }
-
-  bool isTimeBetween(TimeOfDay currentTime, TimeOfDay startTime, TimeOfDay endTime) {
-    final now = DateTime.now();
-    final currentDateTime = DateTime(now.year, now.month, now.day, currentTime.hour, currentTime.minute);
-    final startDateTime = DateTime(now.year, now.month, now.day, startTime.hour, startTime.minute);
-    final endDateTime = DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
-
-    return currentDateTime.isAfter(startDateTime) && currentDateTime.isBefore(endDateTime);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Time Check Example'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: checkTime,
-              child: Text('Check Time'),
-            ),
-            SizedBox(height: 20),
-            Text(result),
-          ],
-        ),
-      ),
-    );
-  }
-}
+// Future<void> runTest()async {
+//   List<Map<String, String>> items = [
+//     {'name': 'Event 1', 'date': '2023-12-01 14:00:00'},
+//     {'name': 'Event 2', 'date': '2024-01-01 09:30:00'},
+//     {'name': 'Event 3', 'date': '2023-11-20 17:45:00'},
+//     {'name': 'Event 4', 'date': '2024-01-01 08:15:00'},
+//   ];
+//
+//   // Sorting the list based on date and time
+//   items.sort((a, b) {
+//     DateTime dateA = DateTime.parse(a['date']!);
+//     DateTime dateB = DateTime.parse(b['date']!);
+//     return dateA.compareTo(dateB);
+//   });
+//
+//   // Printing the sorted list
+//   for (var item in items) {
+//     print('${item['name']} - ${item['date']}');
+//   }
+// }

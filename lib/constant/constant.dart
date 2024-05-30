@@ -5,12 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 //Const Api link
 
 const baseUrl = "https://thasmai.tstsvc.in/api/v1/User";
-// const baseUrl = "http://192.168.1.84:5000/api/v1/User";
-
 const  adminBaseUrl = "https://thasmai.tstsvc.in/api/v1/admin";
 const  paymentBaseUrl = "https://thasmai.tstsvc.in/api/v1/payment";
 
-// const  adminBaseUrl = "http://192.168.1.84:5000/api/v1/admin";
+
+// const baseUrl = "http://192.168.1.84:3000/api/v1/User";
+// const  adminBaseUrl = "http://192.168.1.84:3000/api/v1/admin";
+// const  paymentBaseUrl = "http://192.168.1.84:3000/api/v1/payment";
 
 
 // Url to Launch
@@ -118,8 +119,9 @@ const String meditation = "Meditation";
 const String videos = "Videos";
 const String home = "Home";
 const String payment = "Payments";
-const String enable = "Please Do payment to enable Meditation";
-const String enableMessage = "Please Do payment to enable Messages";
+const String enable = "Please pay the Meditation Payment fee of ₹2500 to enable Meditation";
+// const String enable = "Please pay the Meditation Payment fee of ₹2500 to enable Meditation";
+const String enableMessage = "Please pay the platform maintenance fee of ₹500 to enable messaging.";
 const String name = "Name";
 const String age = "Age";
 const String pickupValidation = 'Please enter a Valid Pickup Point';

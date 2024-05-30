@@ -360,22 +360,28 @@ class _OverviewState extends State<Overview> {
                                 ),
                                 child: Row(
                                   children: [
-                                    Padding(
-                                      padding: EdgeInsets.all(4.sp),
-                                      child: Padding(
-                                        padding: EdgeInsets.all(8.sp),
-                                        child: Container(
-                                            width: 122.w,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                image: DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image: NetworkImage(
-                                                        "${overView[itemIndex].image}")))),
-                                      ),
+                                Padding(
+                                padding: EdgeInsets.all(4.sp),
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.sp),
+                                  child: Container(
+                                    width: 122.w,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      image: overView[itemIndex].image != null
+                                          ? DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage("${overView[itemIndex].image}"),
+                                      )
+                                          : null,
                                     ),
-                                    Column(
+                                    child: overView[itemIndex].image == null
+                                        ? Center(child: Text("No Image Available",textAlign: TextAlign.center,),)
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                              Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [

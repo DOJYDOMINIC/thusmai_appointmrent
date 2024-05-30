@@ -60,12 +60,12 @@ class _BankDetailEditState extends State<BankDetailEdit> {
             padding:  EdgeInsets.all(16),
             child: Column(
               children: [
-                CustomTextField(hintText: 'Aadhar number ',controller: _aadharNumber,),
+                CustomTextField(hintText: 'Aadhar number ',controller: _aadharNumber,keyboardType: TextInputType.number,),
                 CustomTextField(hintText: 'IFSE Code',controller: _ifscCode,),
                 CustomTextField(hintText: 'Branch Name',controller: _branchName,),
                 CustomTextField(hintText: 'Bank Name',controller: _bankName,),
                 CustomTextField(hintText: 'Account name',controller: _accountName,),
-                CustomTextField(hintText: 'Account Number',controller: _accountNumber,),
+                CustomTextField(hintText: 'Account Number',controller: _accountNumber,keyboardType: TextInputType.number,),
                 SizedBox(height: 24,),
                 CustomButton(onPressed: (){
                   BankDetail bankDetails = BankDetail(

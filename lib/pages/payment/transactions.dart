@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:thusmai_appointmrent/constant/constant.dart';
 import '../../controller/payment_controller.dart';
 import '../../widgets/additionnalwidget.dart';
 
@@ -20,7 +22,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer(Duration(seconds: 10), () {
+    _timer = Timer(const Duration(seconds: 5), () {
       setState(() {
         _isLoading = false;
       });
@@ -38,17 +40,22 @@ class _TransactionsPageState extends State<TransactionsPage> {
   Widget build(BuildContext context) {
     var data = Provider.of<PaymentController>(context).transactionLists;
     return Scaffold(
+      backgroundColor: shadeOne,
       body: data.transactions?.length != null
           ? ListView.builder(
               itemCount: data.transactions!.length,
               itemBuilder: (context, index) {
+                DateTime paymentDate = DateTime.parse(data.transactions![index].paymentDate.toString());
+
+// Format the DateTime object to "dd/MM/yyyy"
+                String formattedDate = DateFormat('dd/MM/yyyy').format(paymentDate);
                 String? capitalizedType = data.transactions?[index].type;
                 if(data.transactions?[index].type != null){
                   capitalizedType = (capitalizedType![0].toUpperCase() + capitalizedType.substring(1));
                 }
                 return transactionWidget(
                     getIconBasedOnString(data.transactions![index].type.toString()) as IconData,
-                    "${data.transactions![index].paymentDate}",
+                    "${formattedDate}",
                     "$capitalizedType",
                     "${data.transactions![index].razorpayOrderId}",
                     "${data.transactions![index].amount}",

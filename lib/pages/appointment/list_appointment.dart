@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:thusmai_appointmrent/controller/connectivitycontroller.dart';
 import 'package:thusmai_appointmrent/pages/appointment/termsandconditions.dart';
 import '../../constant/constant.dart';
 import '../../controller/appointmentontroller.dart';
+import '../../controller/login_register_otp_api.dart';
 import '../../controller/payment_controller.dart';
 import '../../widgets/additionnalwidget.dart';
 import '../../widgets/deletedialog.dart';
@@ -24,8 +26,6 @@ class AppointmentListPage extends StatefulWidget {
 }
 
 class _AppointmentListPageState extends State<AppointmentListPage> {
-  String _isPayed = "false";
-
   @override
   void initState() {
     super.initState();
@@ -35,8 +35,6 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
     Provider.of<AppointmentController>(context, listen: false)
         .termsAndCondition();
     Provider.of<ConnectivityProvider>(context, listen: false).status;
-
-    _isPayed = "false";
   }
 
   final LocalAuthentication auth = LocalAuthentication();
@@ -92,6 +90,9 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
   Widget build(BuildContext context) {
     var connect = Provider.of<ConnectivityProvider>(context);
     var pro = Provider.of<AppointmentController>(context);
+    var flagModel = Provider.of<AppLogin>(context).flagModel;
+    var appLogin = Provider.of<AppLogin>(context);
+    bool payment = flagModel.meditationFeePaymentStatus ?? false;
     return Scaffold(
       backgroundColor: shadeOne,
       body: connect.status == ConnectivityStatus.Offline
@@ -117,10 +118,11 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
                         GestureDetector(
                           onTap: () {
                             appointment.appointmentStatus == "Not Arrived"
-                                ?
-                            slidePageRoute(context,  AppointmentShare(
-                                appointment: appointment),
-                            ): null;
+                                ? slidePageRoute(
+                                    context,
+                                    AppointmentShare(appointment: appointment),
+                                  )
+                                : null;
                           },
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,33 +231,88 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            heroTag: 1,
-            backgroundColor: shadeEight,
-            onPressed: () {
-              slidePageRoute(context, TermsAndConditions());
-            },
-            child: Icon(
-              Icons.info_outline,
-              color: darkShade,
-            ),
-            mini: true, // Set mini to true to reduce the size
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              FloatingActionButton(
+                heroTag: 1,
+                backgroundColor: shadeEight,
+                onPressed: () {
+                  slidePageRoute(context, TermsAndConditions());
+                },
+                child: Icon(
+                  Icons.info_outline,
+                  size: 30,
+                  color: darkShade,
+                ),
+                mini: false,
+              ),
+              GestureDetector(
+                onTap: () {
+                  slidePageRoute(context, TermsAndConditions());
+                },
+                child: Shimmer.fromColors(
+                  baseColor: Colors.transparent,
+                  direction: ShimmerDirection.ltr,
+                  loop: 10,
+                  highlightColor: Colors.white.withOpacity(0.3),
+                  child: Container(
+                    width: 60.w, // default size of FloatingActionButton
+                    height: 60.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
+          // Shimmer.fromColors(
+          //   baseColor: Colors.grey,
+          //   highlightColor: Colors.white,
+          //   child: FloatingActionButton(
+          //     heroTag: 1,
+          //     backgroundColor: shadeEight,
+          //     onPressed: () {
+          //       slidePageRoute(context, TermsAndConditions());
+          //     },
+          //     child: Icon(
+          //       Icons.info_outline,
+          //       size: 30,
+          //       color:
+          //           darkShade, // This color will be overridden by the shimmer effect
+          //     ),
+          //     mini: false, // Set mini to true to reduce the size
+          //   ),
+          // ),
           SizedBox(
             height: 16.h,
           ),
-          FloatingActionButton(
-            heroTag: 2,
-            backgroundColor: _isPayed != "true" ? goldShade : Colors.grey,
-            onPressed: _isPayed == "true"
-                ? null
-                : () {
-                    slidePageRoute(context, AppointmentAddPage());
-                  },
-            child: Icon(
-              Icons.add,
-              color: _isPayed != "true" ? shadeTen : Colors.white,
-              size: 35.sp,
+          Tooltip(
+            message: payment == false ? 'Enable payments to proceed' : 'Add Appointment',
+            child:  FloatingActionButton(
+              heroTag: 2,
+              backgroundColor: payment == false ? Colors.grey : goldShade,
+              onPressed: payment == false
+                  ? () {
+                      appLogin.currentIndex = 3;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text(enable),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  : () {
+                      slidePageRoute(context, AppointmentAddPage());
+                    },
+              child: Icon(
+                Icons.add,
+                color: payment == false ? Colors.white : shadeTen,
+                size: 35.sp,
+              ),
             ),
           ),
         ],
