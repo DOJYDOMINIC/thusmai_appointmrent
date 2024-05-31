@@ -137,9 +137,10 @@ class MeditationController extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     print(cookies);
+    var time = DateTime.now();
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/meditation-time"),
+        Uri.parse("$baseUrl/meditation-time?UId=1&time=${time.hour}:${time.minute}:${time.minute}"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,

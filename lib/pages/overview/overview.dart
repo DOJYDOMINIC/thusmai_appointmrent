@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
+import '../../controller/connectivitycontroller.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/overviewController.dart';
+import '../refreshpage.dart';
 
 
 class Overview extends StatefulWidget {
@@ -22,6 +24,8 @@ class _OverviewState extends State<Overview> {
     Provider.of<AppLogin>(context, listen: false).getUserByID();
     Provider.of<AppLogin>(context, listen: false).importantFlags();
     Provider.of<OverViewController>(context, listen: false).eventList();
+    Provider.of<ConnectivityProvider>(context, listen: false).status;
+
     // Provider.of<AppLogin>(context, listen: false).tokenSave();
 
   }
@@ -36,6 +40,7 @@ class _OverviewState extends State<Overview> {
 
   @override
   Widget build(BuildContext context) {
+    var connect = Provider.of<ConnectivityProvider>(context);
     var appLogin = Provider.of<AppLogin>(context);
     var overView = Provider.of<OverViewController>(context).eventLIst;
     String? firstName =
@@ -51,7 +56,17 @@ class _OverviewState extends State<Overview> {
     return Scaffold(
       backgroundColor: shadeOne,
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: connect.status == ConnectivityStatus.Offline
+            ? Center(
+            child: RefreshPage(
+              onTap: () {
+                Provider.of<AppLogin>(context, listen: false).getUserByID();
+                Provider.of<AppLogin>(context, listen: false).importantFlags();
+                Provider.of<OverViewController>(context, listen: false).eventList();
+                Provider.of<ConnectivityProvider>(context, listen: false).status;
+              },
+            ))
+            :  SingleChildScrollView(
           child: Column(
             children: [
               GestureDetector(

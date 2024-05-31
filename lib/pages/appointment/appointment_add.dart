@@ -52,6 +52,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   @override
   void initState() {
     super.initState();
+    Provider.of<AppLogin>(context,listen: false).importantFlags();
   }
 
   // dispose controllers

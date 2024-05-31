@@ -98,7 +98,13 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
       body: connect.status == ConnectivityStatus.Offline
           ? Center(
               child: RefreshPage(
-              onTap: () {},
+              onTap: () {
+                Provider.of<AppointmentController>(context, listen: false)
+                    .fetchAppointments();
+                Provider.of<AppointmentController>(context, listen: false)
+                    .termsAndCondition();
+                Provider.of<ConnectivityProvider>(context, listen: false).status;
+              },
             ))
           : pro.appointments.isEmpty
               ? Center(

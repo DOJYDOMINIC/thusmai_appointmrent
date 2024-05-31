@@ -31,13 +31,11 @@ class _MeditationcycleState extends State<Meditationcycle> {
     _initializeVideoController();
     Provider.of<AppLogin>(context, listen: false).getUserByID();
     Provider.of<AppLogin>(context, listen: false).importantFlags();
-    Provider.of<MeditationController>(context, listen: false)
-        .meditationTimeDetails();
+    Provider.of<MeditationController>(context, listen: false).meditationTimeDetails();
     // _controller.play();
     // checkTime();
   }
 
-  // late PlayerState _playerState;
 
   void _initializeVideoController() {
 
@@ -45,9 +43,13 @@ class _MeditationcycleState extends State<Meditationcycle> {
     moon = Colors.grey;
 
     String youtubeUrl = 'https://www.youtube.com/watch?v=VNSxTanl3YU';
+
     List<String> parts = youtubeUrl.split('=');
+
     String videoId = parts[1];
+
     var time =  TimeOfDay.now();
+
     // (((time.hour >= 6 && time.minute >= 30) && (time.hour <= 10 && time.minute >= 30)) || ((time.hour >= 6 && time.minute >= 30) && (time.hour <= 10 && time.minute >= 30)));
     if (time.hour >= 6 && time.hour < 10) {
       sun = ambercolor;

@@ -1,13 +1,9 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:thusmai_appointmrent/pages/meditation/meditationtimer.dart';
 import 'package:thusmai_appointmrent/services/firebase_notification.dart';
 import 'controller/login_register_otp_api.dart';
 import 'controller/zoommeeting_controller.dart';
@@ -23,12 +19,13 @@ import 'controller/profileController.dart';
 import 'controller/videoplayer_controller.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
   FirebaseApi().initNotifications();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var cookies = prefs.getString("cookie")??"1";
   var isAnswered = prefs.getString("isAnswered");
-  await AndroidAlarmManager.initialize();
+  // await AndroidAlarmManager.initialize();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
     runApp(MyApp(cookies: cookies, isAnswered: isAnswered));
   });
@@ -67,13 +64,13 @@ class MyApp extends StatelessWidget {
         builder: (_, __) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(fontFamily: 'Roboto'),
-            home: cookies!.length > 4  ?  CustomBottomNavBar() : Login(),
-            // home:CustomBottomNavBar(),
-            // home: TimeCheckWidget(),
+            theme: ThemeData(fontFamily: 'Roboto'
+            ),
+            home: cookies!.length > 4 || cookies != "1" ?  CustomBottomNavBar() : Login(),
           );
         },
       ),
     );
   }
 }
+

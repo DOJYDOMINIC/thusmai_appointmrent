@@ -31,7 +31,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     super.initState();
     // runTest();
     FirebaseApi().initNotifications();
-    Provider.of<ConnectivityProvider>(context, listen: false).status;
+    // Provider.of<ConnectivityProvider>(context, listen: false).status;
   }
 
   bool _videoEnabled = true;

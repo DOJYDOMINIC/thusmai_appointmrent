@@ -161,100 +161,104 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.centerRight,
-            colors: [
-              goldShade.withOpacity(.2),
-              goldShade.withOpacity(.3),
-              goldShade.withOpacity(.5),
-            ],
+      body: SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        child: Container(
+          height: MediaQuery.of(context).size.height/2,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.centerRight,
+              colors: [
+                goldShade.withOpacity(.2),
+                goldShade.withOpacity(.3),
+                goldShade.withOpacity(.5),
+              ],
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text("Lorem ipsum dolor sit amet consectetur. Mauris condimentum vulputate rhoncus nisl iaculis aliquam."),
-              SizedBox(height: 20),
-              Column(
-                children: [
-                  SizedBox(
-                    height: 56,
-                    child: TextFormField(
-                      onChanged: (val){
-                        setState(() {
-                        });
-                      },
-                      controller: donationController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(16),
-                        fillColor: goldShade.withOpacity(.3),
-                        filled: true,
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.only(left: 20),
-                          child: SvgPicture.asset(
-                            "assets/svgImage/approval_delegation.svg",
-                            color: darkShade,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text("Lorem ipsum dolor sit amet consectetur. Mauris condimentum vulputate rhoncus nisl iaculis aliquam."),
+                SizedBox(height: 20),
+                Column(
+                  children: [
+                    SizedBox(
+                      height: 56,
+                      child: TextFormField(
+                        onChanged: (val){
+                          setState(() {
+                          });
+                        },
+                        controller: donationController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(16),
+                          fillColor: goldShade.withOpacity(.3),
+                          filled: true,
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: SvgPicture.asset(
+                              "assets/svgImage/approval_delegation.svg",
+                              color: darkShade,
+                            ),
+                          ),
+                          hintText: "Donations",
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(color: darkShade.withOpacity(.5)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(color: darkShade.withOpacity(.5)),
                           ),
                         ),
-                        hintText: "Donations",
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: darkShade.withOpacity(.5)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: darkShade.withOpacity(.5)),
-                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Total Amount    ",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                      Text(
-                        ": ${donationController.text}",
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 20,),
-              SizedBox(
-                height: 56.h,
-                child: ElevatedButton(
-                  onPressed: _createOrderAndOpenCheckout,
-                  style: ElevatedButton.styleFrom(
-                    shadowColor: Colors.black, backgroundColor: goldShade,
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Total Amount    ",
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        Text(
+                          ": ${donationController.text}",
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                      ],
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Pay ${donationController.text}",
-                        style: TextStyle(color: darkShade),
+                  ],
+                ),
+                SizedBox(height: 20,),
+                SizedBox(
+                  height: 56.h,
+                  child: ElevatedButton(
+                    onPressed: _createOrderAndOpenCheckout,
+                    style: ElevatedButton.styleFrom(
+                      shadowColor: Colors.black, backgroundColor: goldShade,
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
                       ),
-                    ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Pay ${donationController.text}",
+                          style: TextStyle(color: darkShade),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Spacer(),
-            ],
+                Spacer(),
+              ],
+            ),
           ),
         ),
       ),

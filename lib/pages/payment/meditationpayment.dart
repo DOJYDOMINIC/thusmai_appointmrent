@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,10 +21,18 @@ class MeditationPayment extends StatefulWidget {
 }
 
 class _MeditationPaymentState extends State<MeditationPayment> {
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<AppLogin>(context,listen: false).importantFlags();
+  }
+
   TextEditingController dakshinaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    var flagModel = Provider.of<AppLogin>(context).flagModel;
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -44,6 +54,7 @@ class _MeditationPaymentState extends State<MeditationPayment> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                if(flagModel.maintenancePaymentStatus == false)
                 MeditationPaymentWidget(
                   url: "maintenance-checkout",
                   icon: Icons.videocam,
@@ -52,6 +63,7 @@ class _MeditationPaymentState extends State<MeditationPayment> {
                   paymentType: 'Platform Maintenance',
                   noteIcon: "assets/svgImage/brightness_alert.svg",
                 ),
+                if(flagModel.meditationFeePaymentStatus == false)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0,8,0,8),
                   child: MeditationPaymentWidget(
@@ -63,6 +75,8 @@ class _MeditationPaymentState extends State<MeditationPayment> {
                     noteIcon: 'assets/svgImage/brightness_alert.svg',
                   ),
                 ),
+                if(flagModel.meditationFeePaymentStatus == true)
+                SizedBox(height: 20,),
                 MeditationPaymentWidget(
                   icon: Icons.volunteer_activism,
                   url: "dekshina-checkout",
