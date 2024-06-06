@@ -137,7 +137,7 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                         state: _state.text.toUpperCase(),
                         district: _district.text.toUpperCase(),
                         address: _address.text.toUpperCase(),
-                      // country: _country.text
+                      country: "India"
                     );
                     Provider.of<ProfileController>(context,listen: false).profileEdit(context,data);
                   },

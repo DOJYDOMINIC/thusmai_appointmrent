@@ -65,6 +65,10 @@ class PaymentController extends ChangeNotifier {
         final data = jsonDecode(response.body);
         _transactionSummary = TransactionSummary.fromJson(data);
       } else {
+        _transactionSummary.totaltrust = 0;
+        _transactionSummary.total = 0;
+        _transactionSummary.totalguru = 0;
+        _transactionSummary.totalTransactionCount = 0;
         print("Failed to load data: ${response.statusCode}");
       }
     } catch (e) {

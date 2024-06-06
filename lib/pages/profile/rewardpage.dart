@@ -40,7 +40,7 @@ class _RewardPageState extends State<RewardPage> {
         ),
       ),
       body: ListView.builder(
-        itemCount: 10,
+        itemCount: 0,
         itemBuilder: (context, index) {
           final Uri rewardUrl = Uri.parse("https://thasmai.tstsvc.in");
         return  rewardWidget(guruji,"Reward 01","Lorem ipsum dolor sit amet consectetur.","3 days",rewardUrl);

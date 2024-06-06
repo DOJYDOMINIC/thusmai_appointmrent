@@ -21,8 +21,8 @@ class MeditationTime {
 
   factory MeditationTime.fromJson(Map<String, dynamic> json) => MeditationTime(
     video: json["video"],
-    fromTime: json["fromTime"]??"10:00:00",
-    toTime: json["toTime"]??"10:00:10",
+    fromTime: json["fromTime"],
+    toTime: json["toTime"],
   );
 
   Map<String, dynamic> toJson() => {

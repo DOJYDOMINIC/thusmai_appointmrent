@@ -59,6 +59,43 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
     super.dispose();
   }
 
+  bool isBeforeStopTime(String? zoomStopTime) {
+    // Return false if the zoomStopTime is null
+    if (zoomStopTime == null) {
+      return false;
+    }
+
+    // Split the stop time string and extract the hour, minute, and period (AM/PM)
+    List<String> parts = zoomStopTime.split(" ");
+    String timePart = parts[0]; // "10:00"
+    String periodPart = parts[1]; // "PM"
+
+    List<String> timeComponents = timePart.split(":");
+    int stopHour = int.parse(timeComponents[0]);
+    int stopMinute = int.parse(timeComponents[1]);
+
+    // Adjust the stop hour based on the period (AM/PM)
+    if (periodPart == "PM" && stopHour != 12) {
+      stopHour += 12;
+    } else if (periodPart == "AM" && stopHour == 12) {
+      stopHour = 0; // Midnight case
+    }
+
+    // Get the current hour and minute in 24-hour format
+    DateTime now = DateTime.now();
+    int currentHour = now.hour;
+    int currentMinute = now.minute;
+
+    // Compare the current time with the stop time
+    if (currentHour < stopHour) {
+      return true;
+    } else if (currentHour == stopHour) {
+      return currentMinute <= stopMinute;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var id = Provider.of<AppLogin>(context, listen: false).userData?.uId ?? "";
@@ -69,7 +106,10 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
     var overView = Provider.of<OverViewController>(context).eventLIst;
     var flagModel = Provider.of<AppLogin>(context).flagModel;
     var zoomMeet =  Provider.of<ZoomMeetingController>(context).ZoomClassModelData;
+    print(
+        zoomMeet.zoomStopTime
 
+    );
 
 
     // String? firstName =
@@ -83,33 +123,7 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
     //     ? lastName[0].toUpperCase() + lastName.substring(1)
     //     : ""; // Capitalize the first letter of last name if not null
     return Scaffold(
-      floatingActionButton:zoomMeet.zoomLink == null? null:
-      // FloatingActionButton(
-      //   tooltip:
-      //   flagModel.maintenancePaymentStatus == false ? 'Enable payments to proceed' : 'Add Appointment',
-      //   heroTag: 2,
-      //   backgroundColor: flagModel.maintenancePaymentStatus == false ? Colors.grey : goldShade,
-      //   onPressed: flagModel.maintenancePaymentStatus == false
-      //       ? () {
-      //           appLogin.currentIndex = 3;
-      //           ScaffoldMessenger.of(context).showSnackBar(
-      //             SnackBar(
-      //               backgroundColor: Colors.red,
-      //               content: Text(enable),
-      //               duration: Duration(seconds: 2),
-      //             ),
-      //           );
-      //         }
-      //       : () {
-      //     launchUrl(Uri.parse(zoomMeet.zoomLink.toString()));
-      //     print("object");
-      //   },
-      //   child: Icon(
-      //     Icons.video_call,
-      //     color: flagModel.meditationFeePaymentStatus == false ? Colors.white : shadeTen,
-      //     size: 35.sp,
-      //   ),
-      // ),
+      floatingActionButton:flagModel.maintenancePaymentStatus == false? null:zoomMeet.zoomLink == null? null: isBeforeStopTime(zoomMeet.zoomStopTime.toString()) == false?null:
       Stack(
         alignment: Alignment.center,
         children: [
@@ -120,13 +134,13 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
               height: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                color: Colors.blue.withOpacity(0.5),
+                color:flagModel.maintenancePaymentStatus == false?Colors.grey: Colors.blue.withOpacity(0.5),
               ),
             ),
           ),
           FloatingActionButton(
             heroTag: 1,
-            backgroundColor: Colors.blue,
+            backgroundColor:flagModel.maintenancePaymentStatus == false?Colors.grey: Colors.blue,
             // replace shadeEight with your color
             onPressed:flagModel.maintenancePaymentStatus == false
                       ? () {
@@ -134,7 +148,7 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: Colors.red,
-                              content: Text(enable),
+                              content: Text(enableMessage),
                               duration: Duration(seconds: 2),
                             ),
                           );

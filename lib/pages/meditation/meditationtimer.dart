@@ -20,6 +20,7 @@ class TimerScreen extends StatefulWidget {
 class _TimerScreenState extends State<TimerScreen> {
 
   PermissionStatus _exactAlarmPermissionStatus = PermissionStatus.granted;
+
   bool isTimerRunning = false;
   bool isPaused = false;
   bool isCompleted = false;
@@ -150,12 +151,9 @@ class _TimerScreenState extends State<TimerScreen> {
       ],
     );
   }
-
   Widget _buildTimer() {
     return CircularCountDownTimer(
-      duration: 3,
-      // duration: 60*45,
-
+      duration: 45*60,
       initialDuration: 0,
       controller: _controller,
       width: 320.w,
@@ -233,7 +231,6 @@ class _TimerScreenState extends State<TimerScreen> {
     return GestureDetector(
       onTap: () {
         if (isCompleted) return;
-
         if (!isTimerRunning) {
           _controller.start();
           setState(() {

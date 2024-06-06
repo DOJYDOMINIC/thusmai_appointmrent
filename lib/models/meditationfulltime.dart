@@ -48,10 +48,10 @@ class MeditationTimeDetails {
   factory MeditationTimeDetails.fromJson(Map<String, dynamic> json) => MeditationTimeDetails(
     id: json["id"],
     country: json["country"],
-    morningTimeFrom: json["morning_time_from"]??"10:00:00",
-    morningTimeTo: json["morning_time_to"]??"10:00:00",
-    eveningTimeFrom: json["evening_time_from"]??"10:00:00",
-    eveningTimeTo: json["evening_time_to"]??"10:00:00",
+    morningTimeFrom: json["morning_time_from"],
+    morningTimeTo: json["morning_time_to"],
+    eveningTimeFrom: json["evening_time_from"],
+    eveningTimeTo: json["evening_time_to"],
   );
 
   Map<String, dynamic> toJson() => {

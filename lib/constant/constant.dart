@@ -43,47 +43,47 @@ const String smileySad = "assets/svgImage/SmileySad.svg";
 
 
 // New
-Color shadeOne = Color.fromRGBO(255, 251, 255, 1);
+Color shadeOne = const Color.fromRGBO(255, 251, 255, 1);
 
-Color videoBox = Color.fromRGBO(255, 248, 244, 1);
+Color videoBox = const Color.fromRGBO(255, 248, 244, 1);
 
-Color shadeTwo = Color.fromRGBO(234, 225, 217, 1);
+Color shadeTwo = const Color.fromRGBO(234, 225, 217, 1);
 
-Color shadeThree = Color.fromRGBO(234,225,217, 1);
+Color shadeThree = const Color.fromRGBO(234,225,217, 1);
 
-Color shadeFour = Color.fromRGBO(240, 224, 207, 1);
+Color shadeFour = const Color.fromRGBO(240, 224, 207, 1);
 
-Color shadeFive = Color.fromRGBO(211, 196, 180, 1);
+Color shadeFive = const Color.fromRGBO(211, 196, 180, 1);
 
-Color shadeSix = Color.fromRGBO(250,222,188, 1);
+Color shadeSix = const Color.fromRGBO(250,222,188, 1);
 
-Color shadeSeven = Color.fromRGBO(255,221,178, 1);
+Color shadeSeven = const Color.fromRGBO(255,221,178, 1);
 
-Color shadeEight = Color.fromRGBO(221,194,161, 1);
+Color shadeEight = const Color.fromRGBO(221,194,161, 1);
 
-Color shadeNine = Color.fromRGBO(129, 117, 103, 1);
+Color shadeNine = const Color.fromRGBO(129, 117, 103, 1);
 
-Color shadeTen = Color.fromRGBO(79, 69, 57, 1);
+Color shadeTen = const Color.fromRGBO(79, 69, 57, 1);
 
-Color eventSubText = Color.fromRGBO(79,69,57, 1);
+Color eventSubText = const Color.fromRGBO(79,69,57, 1);
 
-Color shadeEleven = Color.fromRGBO(86, 68, 42, 1);
+Color shadeEleven = const Color.fromRGBO(86, 68, 42, 1);
 
-Color brown = Color.fromRGBO(68, 43, 0, 1);
+Color brown = const Color.fromRGBO(68, 43, 0, 1);
 
-Color darkShade = Color.fromRGBO(31, 27, 22, 1);
+Color darkShade = const Color.fromRGBO(31, 27, 22, 1);
 
-Color goldShade = Color.fromRGBO(255, 185, 76, 1);
-Color lightRed = Color.fromRGBO(255,180,171, 1);
-Color midRed = Color.fromRGBO(105,0,5, 1);
+Color goldShade = const Color.fromRGBO(255, 185, 76, 1);
+Color lightRed = const Color.fromRGBO(255,180,171, 1);
+Color midRed = const Color.fromRGBO(105,0,5, 1);
 
-Color red = Color.fromRGBO(186,26,26, 1);
+Color red = const Color.fromRGBO(186,26,26, 1);
 
-Color ringColor = Color.fromRGBO(156,143,128, 1);
-Color greenColor = Color.fromRGBO(183,206,162, 1);
-Color profileTextFieldDillColor = Color.fromRGBO(240,224,207, 1);
-Color meditationLogGreen = Color.fromRGBO(81,100,64, 1);
-Color meditationLogRed = Color.fromRGBO(186,26,26, 1);
+Color ringColor = const Color.fromRGBO(156,143,128, 1);
+Color greenColor = const Color.fromRGBO(183,206,162, 1);
+Color profileTextFieldDillColor = const Color.fromRGBO(240,224,207, 1);
+Color meditationLogGreen = const Color.fromRGBO(81,100,64, 1);
+Color meditationLogRed = const Color.fromRGBO(186,26,26, 1);
 
 
 
