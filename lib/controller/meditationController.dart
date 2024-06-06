@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:thusmai_appointmrent/models/meditationtime_model.dart';
 import '../constant/constant.dart';
 import '../models/meditatiologmodel.dart';
+import '../models/meditationfulltime.dart';
+import 'login_register_otp_api.dart';
 
 
 class MeditationController extends ChangeNotifier {
@@ -23,6 +27,35 @@ class MeditationController extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         print("sucess");
+      } else {
+        print('Failed to send time: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Error to send time:: $e');
+    }
+    notifyListeners();
+  }
+
+  MeditationTimeDetails _meditationFullTime = MeditationTimeDetails() ;
+  MeditationTimeDetails get meditationFullTime => _meditationFullTime;
+
+  Future<void> meditationDetailsTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+    try {
+      var response = await http.get(
+        Uri.parse("$baseUrl/meditationTimeDetails"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body);
+
+
+        _meditationFullTime  = MeditationTimeDetails.fromJson(jsonData["meditationTimeDetails"]);
+        print(_meditationFullTime.country);
       } else {
         print('Failed to send time: ${response.reasonPhrase}');
       }
@@ -133,14 +166,19 @@ class MeditationController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> meditationTimeDetails() async {
+
+  MeditationTime _meditationTime = MeditationTime();
+  MeditationTime get meditationTimeData => _meditationTime;
+
+  Future<void> meditationTimeDetails(BuildContext context) async {
+    var id = Provider.of<AppLogin>(context, listen: false).userData?.uId ?? "";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     print(cookies);
     var time = DateTime.now();
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/meditation-time?UId=1&time=${time.hour}:${time.minute}:${time.minute}"),
+        Uri.parse("$baseUrl/meditation-time?UId=$id&time=${time.hour}:${time.minute}:${time.minute}"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -148,6 +186,8 @@ class MeditationController extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         final dataList = jsonDecode(response.body);
+        _meditationTime = MeditationTime.fromJson(dataList);
+
       } else {
         print('Failed to load appointments: ${response.reasonPhrase}');
       }

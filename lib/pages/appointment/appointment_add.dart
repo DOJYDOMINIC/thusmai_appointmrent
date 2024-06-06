@@ -25,7 +25,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   bool _pickup = false;
   bool _externalUser = false;
   bool _termsAndCondition = false;
-  bool _internalUser = false;
+  // bool _internalUser = false;
   String? selectedValue = "No";
 
   // bool PersonalDetailExpand = false;
@@ -44,7 +44,6 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   List<TextEditingController> _GroupMembersDataAgeControllers = [];
   List<TextEditingController> _GroupMembersDataRelationControllers = [];
   List<TextEditingController> _GroupMembersDataControllers = [];
-
   // Define a list to store the expansion state of each item
   List<bool> itemExpandedList = [];
 
@@ -53,6 +52,8 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   void initState() {
     super.initState();
     Provider.of<AppLogin>(context,listen: false).importantFlags();
+    Provider.of<AppointmentController>(context,listen: false).disableDates();
+
   }
 
   // dispose controllers
@@ -79,9 +80,9 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   // disabledDates from Operator
 
   final List<DateTime> _disabledDates = [
-    DateTime(2024, 3, 10),
-    DateTime(2024, 3, 15),
-    DateTime(2024, 3, 18),
+    DateTime(2024, 6, 4),
+    DateTime(2024, 6, 8),
+    DateTime(2024, 6, 19),
   ];
 
   Future<void> _selectDate(BuildContext context) async {
@@ -147,6 +148,8 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   // WidgetTree
   @override
   Widget build(BuildContext context) {
+    var data = Provider.of<AppointmentController>(context).disabledDate;
+
     var appointmentController = Provider.of<AppointmentController>(context);
     List<GroupMemberAdd> dataList = [];
 // Iterate through each index

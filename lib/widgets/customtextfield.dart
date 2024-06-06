@@ -16,42 +16,39 @@ final TextInputType? keyboardType;
   Widget build(BuildContext context) {
     return Padding(
       padding:  EdgeInsets.only(bottom: 16.sp),
-      child: SizedBox(
-        height: 56,
-        child: TextFormField(
-          controller: controller,
-          validator:validator,
-          onChanged: onChanged,
-          keyboardType: keyboardType,
-          style: TextStyle(
+      child: TextFormField(
+        controller: controller,
+        validator:validator,
+        onChanged: onChanged,
+        keyboardType: keyboardType,
+        style: TextStyle(
+          color: shadeTen,
+          fontSize: 16.sp,
+        ),
+        cursorColor: shadeTen,
+        decoration: InputDecoration(
+          labelText: hintText,
+          labelStyle: TextStyle(
             color: shadeTen,
-            fontSize: 16.sp,
+            fontWeight: FontWeight.normal,
           ),
-          cursorColor: shadeTen,
-          decoration: InputDecoration(
-            labelText: hintText,
-            labelStyle: TextStyle(
-              color: shadeTen,
-              fontWeight: FontWeight.normal,
-            ),
-            prefixIcon: Icon(
-             prefixIcon,
-              color: shadeTen,
-            ),
-            fillColor: profileTextFieldDillColor,
-            filled: true,
-            enabledBorder:OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide: BorderSide(color: shadeNine,width: 1),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide: BorderSide(color: shadeNine,width: 1),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.0),
-              borderSide: BorderSide(color: shadeNine,width: 1),
-            ),
+          prefixIcon: Icon(
+           prefixIcon,
+            color: shadeTen,
+          ),
+          fillColor: profileTextFieldDillColor,
+          filled: true,
+          enabledBorder:OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: BorderSide(color: shadeNine,width: 1),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: BorderSide(color: shadeNine,width: 1),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16.0),
+            borderSide: BorderSide(color: shadeNine,width: 1),
           ),
         ),
       ),

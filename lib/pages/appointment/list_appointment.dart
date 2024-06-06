@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:thusmai_appointmrent/controller/connectivitycontroller.dart';
 import 'package:thusmai_appointmrent/pages/appointment/termsandconditions.dart';
 import '../../constant/constant.dart';
@@ -17,6 +16,7 @@ import '../refreshpage.dart';
 import 'app_new_edit.dart';
 import 'appointment_add.dart';
 import 'appointment_share.dart';
+import 'dart:io';
 
 class AppointmentListPage extends StatefulWidget {
   const AppointmentListPage({Key? key}) : super(key: key);
@@ -25,16 +25,44 @@ class AppointmentListPage extends StatefulWidget {
   State<AppointmentListPage> createState() => _AppointmentListPageState();
 }
 
-class _AppointmentListPageState extends State<AppointmentListPage> {
+class _AppointmentListPageState extends State<AppointmentListPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+// Define GlobalKey objects for the showcases
+//   final GlobalKey _infoButtonKey = GlobalKey();
+//   final GlobalKey _addButtonKey = GlobalKey();
   @override
   void initState() {
     super.initState();
+    // Initialize the AnimationController
+    _controller = AnimationController(
+      vsync: this, // SingleTickerProviderStateMixin provides vsync
+      duration: Duration(milliseconds: 500), // Duration of one heartbeat cycle
+    )..repeat(
+        reverse:
+            true); // Repeat the animation in reverse to create a heartbeat effect
+
+    // Define the scaling animation
+    _animation = Tween<double>(begin: 1.0, end: 1.2).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
+    );
 
     Provider.of<AppointmentController>(context, listen: false)
         .fetchAppointments();
     Provider.of<AppointmentController>(context, listen: false)
         .termsAndCondition();
     Provider.of<ConnectivityProvider>(context, listen: false).status;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // Dispose the controller
+    super.dispose(); // Call the superclass's dispose method
   }
 
   final LocalAuthentication auth = LocalAuthentication();
@@ -92,18 +120,18 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
     var pro = Provider.of<AppointmentController>(context);
     var flagModel = Provider.of<AppLogin>(context).flagModel;
     var appLogin = Provider.of<AppLogin>(context);
-    bool payment = flagModel.meditationFeePaymentStatus ?? false;
+    bool dataPayment = flagModel.meditationFeePaymentStatus ?? false;
     return Scaffold(
       backgroundColor: shadeOne,
       body: connect.status == ConnectivityStatus.Offline
-          ? Center(
-              child: RefreshPage(
+          ? Center(child: RefreshPage(
               onTap: () {
                 Provider.of<AppointmentController>(context, listen: false)
                     .fetchAppointments();
                 Provider.of<AppointmentController>(context, listen: false)
                     .termsAndCondition();
-                Provider.of<ConnectivityProvider>(context, listen: false).status;
+                Provider.of<ConnectivityProvider>(context, listen: false)
+                    .status;
               },
             ))
           : pro.appointments.isEmpty
@@ -240,37 +268,35 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
           Stack(
             alignment: Alignment.center,
             children: [
+              GestureDetector(
+                onTap: () {
+                  slidePageRoute(context, TermsAndConditions());
+                },
+                child: ScaleTransition(
+                  scale: _animation, // Apply the scaling animation
+                  child: Container(
+                    width: 60, // default size of FloatingActionButton
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: goldShade.withOpacity(0.5),
+                    ),
+                  ),
+                ),
+              ),
               FloatingActionButton(
                 heroTag: 1,
-                backgroundColor: shadeEight,
+                backgroundColor: goldShade,
+                // replace shadeEight with your color
                 onPressed: () {
                   slidePageRoute(context, TermsAndConditions());
                 },
                 child: Icon(
                   Icons.info_outline,
                   size: 30,
-                  color: darkShade,
+                  color: shadeTen, // replace darkShade with your color
                 ),
                 mini: false,
-              ),
-              GestureDetector(
-                onTap: () {
-                  slidePageRoute(context, TermsAndConditions());
-                },
-                child: Shimmer.fromColors(
-                  baseColor: Colors.transparent,
-                  direction: ShimmerDirection.ltr,
-                  loop: 10,
-                  highlightColor: Colors.white.withOpacity(0.3),
-                  child: Container(
-                    width: 60.w, // default size of FloatingActionButton
-                    height: 60.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
               ),
             ],
           ),
@@ -295,30 +321,30 @@ class _AppointmentListPageState extends State<AppointmentListPage> {
           SizedBox(
             height: 16.h,
           ),
-          Tooltip(
-            message: payment == false ? 'Enable payments to proceed' : 'Add Appointment',
-            child:  FloatingActionButton(
-              heroTag: 2,
-              backgroundColor: payment == false ? Colors.grey : goldShade,
-              onPressed: payment == false
-                  ? () {
-                      appLogin.currentIndex = 3;
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text(enable),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    }
-                  : () {
-                      slidePageRoute(context, AppointmentAddPage());
-                    },
-              child: Icon(
-                Icons.add,
-                color: payment == false ? Colors.white : shadeTen,
-                size: 35.sp,
-              ),
+          FloatingActionButton(
+            tooltip: dataPayment == false
+                ? 'Enable payments to proceed'
+                : 'Add Appointment',
+            heroTag: 2,
+            backgroundColor: dataPayment == false ? Colors.grey : goldShade,
+            onPressed: dataPayment == false
+                ? () {
+                    appLogin.currentIndex = 3;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text(enable),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                : () {
+                    slidePageRoute(context, AppointmentAddPage());
+                  },
+            child: Icon(
+              Icons.add,
+              color: dataPayment == false ? Colors.white : shadeTen,
+              size: 35.sp,
             ),
           ),
         ],

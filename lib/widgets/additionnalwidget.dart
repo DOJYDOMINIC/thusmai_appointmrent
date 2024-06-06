@@ -85,7 +85,6 @@ Widget meditationCycleWidget(
 }
 
 Widget profileCard(BuildContext context) {
-
   var pro = Provider.of<AppLogin>(context);
   var connect = Provider.of<ConnectivityProvider>(context);
 
@@ -106,9 +105,7 @@ Widget profileCard(BuildContext context) {
                 overflow: TextOverflow.ellipsis),
             Text(pro.userData?.phone ?? "", overflow: TextOverflow.ellipsis),
             Text(pro.userData?.email ?? "", overflow: TextOverflow.ellipsis),
-            Text(
-              // "DOJ : ${pro.userData?.doj.toString().split(" ").first}",
-              "DOJ : ${pro.userData?.doj != null ? DateFormat('dd/MM/yyyy').format(pro.userData!.doj!) : 'N/A'}",
+            Text("DOJ : ${pro.userData?.doj != null ? DateFormat('dd/MM/yyyy').format(pro.userData!.doj!) : 'N/A'}",
             ),
           ],
         ),
@@ -122,20 +119,21 @@ Widget profileCard(BuildContext context) {
             child: CircleAvatar(
               backgroundColor: Colors.white,
               radius: 45.sp,
-              child:connect.status == ConnectivityStatus.Offline? Container(): Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: pro.userData?.profilePicUrl != null
-                        ? NetworkImage("${pro.userData?.profilePicUrl}")
-                        : NetworkImage(imgFromFirebase),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
+              child: connect.status == ConnectivityStatus.Offline
+                  ? Container()
+                  : Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          image: pro.userData?.profilePicUrl != null
+                              ? NetworkImage("${pro.userData?.profilePicUrl}")
+                              : NetworkImage(imgFromFirebase),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
             ),
           ),
-
           Text(
             // "Valid : ${pro.userData?.expiredDate.toString().split(" ").first ?? ""}",),
             "Valid : ${pro.userData?.expiredDate != null ? DateFormat('dd/MM/yyyy').format(pro.userData!.expiredDate!) : 'N/A'}",
@@ -470,8 +468,14 @@ Widget transactionWidget(IconData icon, String date, String title,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title,style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold),),
-                      SizedBox(height: 10.h,),
+                      Text(
+                        title,
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
                       Text(description),
                     ],
                   ),

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:thusmai_appointmrent/services/firebase_notification.dart';
 import 'controller/login_register_otp_api.dart';
+import 'controller/timerprovidedr.dart';
 import 'controller/zoommeeting_controller.dart';
 import 'pages/bottom_navbar.dart';
 import 'pages/login_register_otp/login.dart';
@@ -47,7 +48,6 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => AppointmentController()),
         ChangeNotifierProvider(create: (context) => AppLogin()),
-        // ChangeNotifierProvider(create: (context) => SocketProvider()),
         ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
         ChangeNotifierProvider(create: (context) => PaymentController()),
         ChangeNotifierProvider(create: (context) => MeditationController()),
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: ThemeData(fontFamily: 'Roboto'
             ),
-            home: cookies!.length > 4 || cookies != "1" ?  CustomBottomNavBar() : Login(),
+            home: cookies!.length > 4 && cookies != "1" ?  CustomBottomNavBar() : Login(),
           );
         },
       ),

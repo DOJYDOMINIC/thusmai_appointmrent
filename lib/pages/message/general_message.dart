@@ -40,7 +40,7 @@ class _GeneralMessageState extends State<GeneralMessage> {
                     if (messageController
                             .globalMessages[index].isAdminMessage ==
                         false)
-                      getSenderView(ChatBubbleClipper10(type: BubbleType.sendBubble), context, "${messageController.globalMessages[index].message}", "${messageController.globalMessages[index].userName}", "${messageController.globalMessages[index].messageDate}"),
+                      getSenderView(ChatBubbleClipper10(type: BubbleType.sendBubble), context, "${messageController.globalMessages[index].message}", "${messageController.globalMessages[index].messageTime}", "${messageController.globalMessages[index].userName}","${messageController.globalMessages[index].messageDate}"),
                     if (messageController.globalMessages[index].isAdminMessage)
                       getReceiverView(ChatBubbleClipper10(type: BubbleType.receiverBubble), context, "${messageController.globalMessages[index].message}","${messageController.globalMessages[index].userName}", "${messageController.globalMessages[index].messageDate}"),
                   ],
@@ -179,7 +179,7 @@ class _GeneralMessageState extends State<GeneralMessage> {
   }
 }
 
-getSenderView(CustomClipper clipper, BuildContext context, String note,
+getSenderView(CustomClipper clipper, BuildContext context, String note,String time,
     String messageName, String messageDate) =>
     ChatBubble(
       clipper: clipper,
@@ -200,14 +200,14 @@ getSenderView(CustomClipper clipper, BuildContext context, String note,
                   Text(
                     messageName,
                     style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize: 16.sp,
                         color: darkShade,
                         fontWeight: FontWeight.w500),
                   ),
                   Text(
                     messageDate,
                     style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: 13.sp,
                         color: darkShade,
                         fontWeight: FontWeight.w400),
                   )
@@ -232,6 +232,9 @@ getSenderView(CustomClipper clipper, BuildContext context, String note,
                 // humanize: false,
               ),
             ),
+            Align(
+                alignment: Alignment.bottomRight,
+                child: Text(time,style: TextStyle(fontSize: 10.sp),))
           ],
         ),
       ),

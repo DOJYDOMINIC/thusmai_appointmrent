@@ -131,7 +131,9 @@ class VideoPlayerStateController extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         final dataList = jsonDecode(response.body);
+        print(dataList);
         _videoPlayList    = VideoPlayList.fromJson(dataList);
+        // print(_videoPlayList.toJson());
       } else {
         print('Failed to load appointments: ${response.reasonPhrase}');
       }

@@ -45,10 +45,15 @@ class ZoomMeetingController extends ChangeNotifier {
       },
     );
     var decode = jsonDecode(response.body);
-    _ZoomClassModelData = ZoomClassModel.fromJson(decode[0]);
+
     try {
       if (response.statusCode == 200) {
-      } else {}
+        _ZoomClassModelData = ZoomClassModel.fromJson(decode[0]);
+        // print(_ZoomClassModelData.zoomLink);
+      } else {
+
+        print(decode);
+      }
     } catch (e) {
       print("requestPasswordReset : $e");
     }

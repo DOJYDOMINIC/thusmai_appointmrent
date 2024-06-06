@@ -17,11 +17,12 @@ class MeditationNote extends StatefulWidget {
   @override
   State<MeditationNote> createState() => _MeditationNoteState();
 }
+
 class _MeditationNoteState extends State<MeditationNote> {
   TextEditingController noteController = TextEditingController();
 
-
   bool _global = false;
+
   @override
   Widget build(BuildContext context) {
     var meditation = Provider.of<MeditationController>(context);
@@ -106,17 +107,22 @@ class _MeditationNoteState extends State<MeditationNote> {
               ),
             ),
             spaceBetween,
-            Text("Share your experience",style: TextStyle(fontSize: 24.sp),),
+            Text(
+              "Share your experience",
+              style: TextStyle(fontSize: 24.sp),
+            ),
             spaceBetween,
             Container(
                 width: 304,
-                child: Text("Remember that meditation is a skill that \ndevelops over time, so be patient with \nyourself and embrace the learning \nprocess",textAlign: TextAlign.center,)),
+                child: Text(
+                  "Remember that meditation is a skill that \ndevelops over time, so be patient with \nyourself and embrace the learning \nprocess",
+                  textAlign: TextAlign.center,
+                )),
             spaceBetween,
             Container(
               height: 168.h,
               width: 368.w,
-              decoration:
-              BoxDecoration(border: Border.all(color: goldShade)),
+              decoration: BoxDecoration(border: Border.all(color: goldShade)),
               child: Padding(
                 padding: EdgeInsets.only(left: 10.sp, right: 10.sp),
                 child: TextField(
@@ -129,10 +135,8 @@ class _MeditationNoteState extends State<MeditationNote> {
                     color: Colors.black,
                   ),
                   decoration: InputDecoration(
-                    hintText:
-                    "Note... ",
-                    hintStyle:
-                    TextStyle(color: shadeFive, fontSize: 16.sp),
+                    hintText: "Note... ",
+                    hintStyle: TextStyle(color: shadeFive, fontSize: 16.sp),
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
@@ -145,7 +149,10 @@ class _MeditationNoteState extends State<MeditationNote> {
                   onChanged: (val) {},
                 ),
               ),
-            ),SizedBox(height: 16,),
+            ),
+            SizedBox(
+              height: 16,
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 15),
               child: Row(
@@ -162,17 +169,18 @@ class _MeditationNoteState extends State<MeditationNote> {
                         });
                       }),
                   Text("Global"),
-        
                 ],
               ),
             ),
-            SizedBox(height: 50.h,),
+            SizedBox(
+              height: 50.h,
+            ),
             SizedBox(
               height: 56.h,
               width: 304.w,
               child: ElevatedButton(
                 onPressed: () {
-                  if(noteController.text.isEmpty){
+                  if (noteController.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: Colors.red,
@@ -180,16 +188,23 @@ class _MeditationNoteState extends State<MeditationNote> {
                         duration: Duration(seconds: 1),
                       ),
                     );
-                  }else{
+                  } else {
                     DateTime now = DateTime.now();
                     String formattedTime = DateFormat('h:mm a').format(now);
-                    String messageTDate = DateFormat('MMMM dd, yyyy').format(DateTime.now());
-                    meditation.meditationNote(context, noteController.text, _global ? "global": "private", formattedTime,messageTDate);
+                    String messageTDate =
+                        DateFormat('MMMM dd, yyyy').format(DateTime.now());
+                    meditation.meditationNote(
+                        context,
+                        "Meditation Note : ${noteController.text}",
+                        _global ? "global" : "private",
+                        formattedTime,
+                        messageTDate);
                     Navigator.pop(context);
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  shadowColor: Colors.black, backgroundColor: goldShade,
+                  shadowColor: Colors.black,
+                  backgroundColor: goldShade,
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100),
@@ -198,8 +213,13 @@ class _MeditationNoteState extends State<MeditationNote> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.send,color: darkShade,),
-                    SizedBox(width: 6,),
+                    Icon(
+                      Icons.send,
+                      color: darkShade,
+                    ),
+                    SizedBox(
+                      width: 6,
+                    ),
                     Text(
                       "Send",
                       style: TextStyle(color: darkShade),

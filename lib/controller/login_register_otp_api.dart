@@ -140,16 +140,8 @@ class AppLogin extends ChangeNotifier {
         _flagModel = Message.fromJson(decode["message"]);
         prefs.setString("isAnswered", "true");
       } else {
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(
-        //     backgroundColor: Colors.red,
-        //     content: Text(decode["message"]),
-        //     duration: Duration(seconds: 1),
-        //   ),
-        // );
       }
     } catch (e) {
-      print("meditationData : $e");
     }
     notifyListeners();
   }

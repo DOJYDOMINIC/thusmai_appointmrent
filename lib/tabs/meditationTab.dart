@@ -71,7 +71,7 @@ class _MeditationTabState extends State<MeditationTab> {
               ),
             ],
             views: [
-              Meditationcycle(),
+              MeditationCycle(),
               MeditationLog(),
               // SelectedDatesScreen()
             ],

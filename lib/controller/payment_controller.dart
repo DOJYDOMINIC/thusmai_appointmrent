@@ -122,6 +122,7 @@ class PaymentController extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         Provider.of<PaymentController>(context,listen: false).transactionData();
+        Provider.of<AppLogin>(context,listen: false).importantFlags();
         if(url == "meditation-paymentVerification"){
           processPayment(context);
           Provider.of<AppLogin>(context,listen: false).importantFlags();

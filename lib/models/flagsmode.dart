@@ -37,8 +37,8 @@ class Message {
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
     isans: json["isans"],
-    maintenancePaymentStatus: json["maintenance_payment_status"],
-    meditationFeePaymentStatus: json["meditation_fee_payment_status"],
+    maintenancePaymentStatus: json["maintenance_payment_status"]??false,
+    meditationFeePaymentStatus: json["meditation_fee_payment_status"]??false,
   );
 
   Map<String, dynamic> toJson() => {

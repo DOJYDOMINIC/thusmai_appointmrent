@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/controller/message_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../constant/constant.dart';
 
 class GuruMessage extends StatefulWidget {
   const GuruMessage({super.key});

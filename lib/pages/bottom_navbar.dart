@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
-import 'package:thusmai_appointmrent/pages/refreshpage.dart';
 import 'package:thusmai_appointmrent/pages/videos/videospageone.dart';
 import 'package:thusmai_appointmrent/tabs/hometab.dart';
 import 'package:thusmai_appointmrent/tabs/messsagetab.dart';
@@ -14,7 +13,6 @@ import '../controller/login_register_otp_api.dart';
 import '../services/firebase_notification.dart';
 import '../tabs/meditationTab.dart';
 import '../tabs/paymentTab.dart';
-import '../test/anime.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   const CustomBottomNavBar({
@@ -32,6 +30,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     // runTest();
     FirebaseApi().initNotifications();
     // Provider.of<ConnectivityProvider>(context, listen: false).status;
+    Provider.of<AppLogin>(context, listen: false).importantFlags();
   }
 
   bool _videoEnabled = true;
@@ -121,7 +120,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               },
               icon: Icon(
                 Icons.message_outlined,
-                color: flagModel.meditationFeePaymentStatus == true ? shadeSix : Colors.grey,
+                color: flagModel.maintenancePaymentStatus == true ? shadeSix : Colors.grey,
               ),
             ),
 

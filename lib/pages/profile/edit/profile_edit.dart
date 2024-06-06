@@ -23,7 +23,7 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
     _firstName = TextEditingController(text: userdata?.firstName);
     _lastName = TextEditingController(text: userdata?.lastName);
     _phoneNo = TextEditingController(text: userdata?.phone);
-    _dateofBirth = TextEditingController(text: userdata?.dob);
+    _dateofBirth = TextEditingController(text: userdata?.dob?.replaceAll('-', '/'));
     _email = TextEditingController(text: userdata?.email);
     _pinCode = TextEditingController(text: userdata?.pincode.toString());
     _state = TextEditingController(text: userdata?.state);
@@ -96,15 +96,15 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                 ),
                 // CustomTextField(hintText: 'Emergency contact',controller: _emergencyContact,),
                 CustomTextField(
+                  hintText: 'Address',
+                  controller: _address,
+                  prefixIcon: Icons.pin_drop_outlined,
+                ),
+                CustomTextField(
                   hintText: 'PIN Code',
                   controller: _pinCode,
                   keyboardType: TextInputType.number,
                   prefixIcon: Icons.location_on_outlined,
-                ),
-                CustomTextField(
-                  hintText: 'State',
-                  controller: _state,
-                  prefixIcon: Icons.location_city_rounded,
                 ),
                 CustomTextField(
                   hintText: 'District',
@@ -112,10 +112,15 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                   prefixIcon: Icons.location_city_rounded,
                 ),
                 CustomTextField(
-                  hintText: 'Address',
-                  controller: _address,
-                  prefixIcon: Icons.pin_drop_outlined,
+                  hintText: 'State',
+                  controller: _state,
+                  prefixIcon: Icons.location_city_rounded,
                 ),
+                // CustomTextField(
+                //   hintText: 'Country',
+                //   controller: _country,
+                //   prefixIcon: Icons.location_city_rounded,
+                // ),
                 // CustomTextField(hintText: 'Country',controller: _country,prefixIcon: Icons.,),
                 SizedBox(
                   height: 24,
@@ -123,15 +128,17 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                 CustomButton(
                   onPressed: () {
                     UpdateUserDetail data = UpdateUserDetail(
-                        firstName: _firstName.text,
-                        lastName: _lastName.text,
+                        firstName: _firstName.text.toUpperCase(),
+                        lastName: _lastName.text.toUpperCase(),
                         phone: _phoneNo.text,
                         dob: _dateofBirth.text,
                         email: _email.text,
                         pincode: int.parse(_pinCode.text),
-                        state: _state.text,
-                        district: _district.text,
-                        address: _address.text);
+                        state: _state.text.toUpperCase(),
+                        district: _district.text.toUpperCase(),
+                        address: _address.text.toUpperCase(),
+                      // country: _country.text
+                    );
                     Provider.of<ProfileController>(context,listen: false).profileEdit(context,data);
                   },
                   buttonColor: goldShade,

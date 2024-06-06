@@ -11,7 +11,7 @@ class _MyPageViewState extends State<MyPageView> {
   PageController _pageController = PageController(initialPage: 0);
 
   final pages = [
-    Meditationcycle(),
+    MeditationCycle(),
     TimerScreen(),
   ];
 

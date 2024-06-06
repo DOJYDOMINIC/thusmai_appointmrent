@@ -22,7 +22,7 @@ class _BankDetailsState extends State<BankDetails> {
   @override
   void initState() {
     super.initState();
-
+    Provider.of<ProfileController>(context,listen: false).getBankDetails();
   }
   @override
   Widget build(BuildContext context) {
