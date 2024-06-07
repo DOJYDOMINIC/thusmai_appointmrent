@@ -27,11 +27,11 @@ class _MeditationCycleState extends State<MeditationCycle> {
   @override
   void initState() {
     super.initState();
-    final appLoginProvider = Provider.of<AppLogin>(context, listen: false);
-    final meditationController = Provider.of<MeditationController>(context, listen: false);
     Provider.of<ConnectivityProvider>(context, listen: false).status;
+    final appLoginProvider = Provider.of<AppLogin>(context, listen: false);
     appLoginProvider.getUserByID();
     appLoginProvider.importantFlags();
+    final meditationController = Provider.of<MeditationController>(context, listen: false);
     meditationController.meditationTimeDetails(context);
     meditationController.meditationDetailsTime();
   }
@@ -94,6 +94,8 @@ class _MeditationCycleState extends State<MeditationCycle> {
     final meditationController = Provider.of<MeditationController>(context);
     final connectivityProvider = Provider.of<ConnectivityProvider>(context);
     final meditationTimeData = meditationController.meditationTimeData;
+    print(meditationTimeData.fromTime);
+    print(meditationTimeData.toTime);
     final meditationFullTime = meditationController.meditationFullTime;
     final flagModel = appLoginProvider.flagModel;
 

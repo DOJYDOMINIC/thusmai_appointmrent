@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../constant/constant.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
@@ -18,8 +19,6 @@ class TimerScreen extends StatefulWidget {
 }
 
 class _TimerScreenState extends State<TimerScreen> {
-
-  PermissionStatus _exactAlarmPermissionStatus = PermissionStatus.granted;
 
   bool isTimerRunning = false;
   bool isPaused = false;
@@ -37,17 +36,11 @@ class _TimerScreenState extends State<TimerScreen> {
     _audioPlayer = AudioPlayer();
     Provider.of<AppLogin>(context, listen: false).getUserByID();
     AndroidAlarmManager.initialize();
-    _checkExactAlarmPermission();
   }
 
-  void _checkExactAlarmPermission() async {
-    final currentStatus = await Permission.scheduleExactAlarm.status;
-    setState(() {
-      _exactAlarmPermissionStatus = currentStatus;
-    });
-  }
   @override
   void dispose() {
+    WakelockPlus.disable();
     _audioPlayer.dispose();
     super.dispose();
   }
@@ -151,6 +144,7 @@ class _TimerScreenState extends State<TimerScreen> {
       ],
     );
   }
+
   Widget _buildTimer() {
     return CircularCountDownTimer(
       duration: 45*60,
@@ -190,6 +184,7 @@ class _TimerScreenState extends State<TimerScreen> {
         isTimerRunning = false;
         if (difference.inSeconds >= 3) {
           _startAlarm();
+          WakelockPlus.disable();
         }
         setState(() {});
       },
@@ -233,6 +228,7 @@ class _TimerScreenState extends State<TimerScreen> {
         if (isCompleted) return;
         if (!isTimerRunning) {
           _controller.start();
+          WakelockPlus.enable();
           setState(() {
             isTimerRunning = true;
             isPaused = false;
@@ -298,4 +294,3 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 }
-

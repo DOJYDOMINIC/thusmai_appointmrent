@@ -46,8 +46,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
               itemCount: data.transactions!.length,
               itemBuilder: (context, index) {
                 DateTime paymentDate = DateTime.parse(data.transactions![index].paymentDate.toString());
-
-// Format the DateTime object to "dd/MM/yyyy"
                 String formattedDate = DateFormat('dd/MM/yyyy').format(paymentDate);
                 String? capitalizedType = data.transactions?[index].type;
                 if(data.transactions?[index].type != null){

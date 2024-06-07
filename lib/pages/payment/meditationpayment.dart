@@ -231,7 +231,6 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
             'wallets': ['paytm'],
           }
         };
-
         try {
           _razorpay.open(options);
         } catch (e) {
@@ -281,7 +280,7 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
                         children: [
                           SvgPicture.asset(
                               "assets/svgImage/currency_rupee.svg"),
-                          Text(": ${widget.amount}"),
+                          Text(" ${widget.amount}"),
                         ],
                       ),
                     if (widget.amount.isEmpty)

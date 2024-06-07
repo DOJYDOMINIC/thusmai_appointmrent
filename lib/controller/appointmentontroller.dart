@@ -66,8 +66,7 @@ class AppointmentController extends ChangeNotifier {
         Map<String, dynamic> dataList = jsonDecode(response.body);
         var data = dataList["appointments"];
         if (data is List) {
-          _appointments =
-              data.map((json) => ListElement.fromJson(json)).toList();
+          _appointments = data.map((json) => ListElement.fromJson(json)).toList();
         } else if (data is Map<String, dynamic>) {
           _appointments = [ListElement.fromJson(data)];
         } else {

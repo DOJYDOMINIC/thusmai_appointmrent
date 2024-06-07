@@ -19,7 +19,7 @@ class _VideoListState extends State<VideoList> {
     // Initialize ScreenUtil for responsive design
     // ScreenUtil.init(context);
 
-    var data = Provider.of<VideoPlayerStateController>(context).videoPlayList;
+    List data = Provider.of<VideoPlayerStateController>(context).videoPlayList;
 
     return Scaffold(
       backgroundColor: shadeTwo,
@@ -42,9 +42,12 @@ class _VideoListState extends State<VideoList> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView.builder(
-          itemCount: data.videos?.length ?? 0,
+          itemCount: data.length,
           itemBuilder: (BuildContext context, int index) {
             String getYoutubeThumbnail(String videoLink) {
+              if(videoLink.isEmpty){
+                return noImage;
+              }
               final uri = Uri.parse(videoLink);
               final videoId = uri.queryParameters['v']?.trim() ??
                   uri.pathSegments.last.trim();
@@ -53,7 +56,7 @@ class _VideoListState extends State<VideoList> {
 
             return GestureDetector(
               onTap: () {
-                launchURL(Uri.parse(data.videos?[index].videoLink ?? ''));
+                launchURL(Uri.parse(data[index].videoLink ?? ''));
               },
               child: Padding(
                 padding: const EdgeInsets.all(4),
@@ -75,10 +78,7 @@ class _VideoListState extends State<VideoList> {
                             borderRadius: BorderRadius.circular(8),
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: NetworkImage(getYoutubeThumbnail(data
-                                      .videos?[index].videoLink
-                                      .toString() ??
-                                  "https://www.youtube.com/shorts/tFWBj9XQP6A")),
+                              image: NetworkImage(getYoutubeThumbnail(data[index].videoLink.toString())),
                             ),
                           ),
                         ),
@@ -89,18 +89,13 @@ class _VideoListState extends State<VideoList> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                data.videos?[index].videoHeading ?? '',
+                                data[index].videoHeading ?? '',
                                 style: TextStyle(
                                     fontSize: 16.sp,
                                     fontWeight: FontWeight.w500),
                                 overflow: TextOverflow.ellipsis,
                               ),
                               SizedBox(height: 4.h),
-                              Text(
-                                "08 May 2018",
-                                style: TextStyle(fontSize: 8.sp),
-                                overflow: TextOverflow.ellipsis,
-                              ),
                             ],
                           ),
                         ),

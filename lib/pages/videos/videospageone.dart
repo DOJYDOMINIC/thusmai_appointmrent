@@ -127,12 +127,7 @@ class _VideosPageOneState extends State<VideosPageOne> {
                                     String formattedTime = DateFormat('h:mm a').format(now);
                                     String messageTDate =
                                     DateFormat('MMMM dd, yyyy').format(DateTime.now());
-                                    meditation.meditationNote(
-                                        context,
-                                        "Class Note : ${noteController.text}",
-                                        _global ? "global" : "private",
-                                        formattedTime,
-                                        messageTDate);
+                                    meditation.meditationNote(context, "Class Note : ${noteController.text}", _global ? "global" : "private", formattedTime, messageTDate);
                                     // Navigator.pop(context);
                                   }
                                 },
@@ -192,7 +187,7 @@ class _VideosPageOneState extends State<VideosPageOne> {
                                     decoration: BoxDecoration(
                                         image: DecorationImage(
                                             image: NetworkImage(
-                                                "${data.playlists![index].playListImage}"),
+                                                "${data.playlists![index].playListImage??noImage}"),
                                             fit: BoxFit.cover)),
                                   ),
                                 ),

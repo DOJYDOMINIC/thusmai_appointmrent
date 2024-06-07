@@ -10,6 +10,8 @@ import 'package:http/http.dart' as http;
 import '../models/zoom_class_model.dart';
 
 class ZoomMeetingController extends ChangeNotifier {
+
+
   Future<void> zoomPost(String date, String time) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");

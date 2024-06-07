@@ -114,8 +114,8 @@ class VideoPlayerStateController extends ChangeNotifier {
     notifyListeners();
   }
 
-  VideoPlayList _videoPlayList = VideoPlayList();
-  VideoPlayList get videoPlayList => _videoPlayList;
+  List<VideoPlayList> _videoPlayList = [];
+  List<VideoPlayList> get videoPlayList => _videoPlayList;
 
   Future<void> videoPlaylistDetails(String category ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -131,9 +131,7 @@ class VideoPlayerStateController extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         final dataList = jsonDecode(response.body);
-        print(dataList);
-        _videoPlayList    = VideoPlayList.fromJson(dataList);
-        // print(_videoPlayList.toJson());
+      _videoPlayList  =  List<VideoPlayList>.from(dataList.map((x) => VideoPlayList.fromJson(x)));
       } else {
         print('Failed to load appointments: ${response.reasonPhrase}');
       }

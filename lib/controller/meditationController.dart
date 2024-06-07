@@ -52,8 +52,6 @@ class MeditationController extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
-
-
         _meditationFullTime  = MeditationTimeDetails.fromJson(jsonData["meditationTimeDetails"]);
         print(_meditationFullTime.country);
       } else {
@@ -171,14 +169,13 @@ class MeditationController extends ChangeNotifier {
   MeditationTime get meditationTimeData => _meditationTime;
 
   Future<void> meditationTimeDetails(BuildContext context) async {
-    var id = Provider.of<AppLogin>(context, listen: false).userData?.uId ?? "";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     print(cookies);
     var time = DateTime.now();
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/meditation-time?UId=$id&time=${time.hour}:${time.minute}:${time.minute}"),
+        Uri.parse("$baseUrl/meditation-time?time=${time.hour}:${time.minute}:${time.minute}"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,

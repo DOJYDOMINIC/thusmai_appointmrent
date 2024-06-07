@@ -38,19 +38,17 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
     var payment = Provider.of<PaymentController>(context, listen: false);
-    var pro = Provider.of<AppLogin>(context,listen: false);
+    var pro = Provider.of<AppLogin>(context, listen: false);
     var amount = double.parse(donationController.text);
     donationController.clear();
-    setState(() {
-
-    });
+    setState(() {});
     DateTime day = DateTime.now();
 
     Map<String, dynamic> data = {
       "razorpay_order_id": response.orderId,
       "razorpay_payment_id": response.paymentId,
       "razorpay_signature": response.signature,
-      "UId":pro.userData?.uId,
+      "UId": pro.userData?.uId,
       "amount": amount,
       "payment_date": "$day",
       "payment_time": "${day.hour}:${day.minute}:${day.second}",
@@ -60,7 +58,6 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
 
     // Handle payment success
     print("Payment Successful: $response");
-
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -102,7 +99,7 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
   Future<void> _createOrderAndOpenCheckout() async {
     try {
       var amount = double.parse(donationController.text);
-   double  total = amount * 100;
+      double total = amount * 100;
       final url = Uri.parse('$paymentBaseUrl/donation-checkout');
       final response = await http.post(
         url,
@@ -115,7 +112,6 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
       );
 
       if (response.statusCode == 200) {
-
         final orderData = jsonDecode(response.body);
         final String orderId = orderData['order']["id"];
         var options = {
@@ -147,7 +143,7 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
           ),
         );
       }
-    }catch(e){
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
@@ -162,9 +158,9 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         child: Container(
-          height: MediaQuery.of(context).size.height/2,
+          height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -181,16 +177,16 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
             child: Column(
               // mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text("Lorem ipsum dolor sit amet consectetur. Mauris condimentum vulputate rhoncus nisl iaculis aliquam."),
+                Text(
+                    "Lorem ipsum dolor sit amet consectetur. Mauris condimentum vulputate rhoncus nisl iaculis aliquam."),
                 SizedBox(height: 20),
                 Column(
                   children: [
                     SizedBox(
                       height: 56,
                       child: TextFormField(
-                        onChanged: (val){
-                          setState(() {
-                          });
+                        onChanged: (val) {
+                          setState(() {});
                         },
                         controller: donationController,
                         keyboardType: TextInputType.number,
@@ -208,11 +204,13 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
                           hintText: "Donations",
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(color: darkShade.withOpacity(.5)),
+                            borderSide:
+                                BorderSide(color: darkShade.withOpacity(.5)),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(color: darkShade.withOpacity(.5)),
+                            borderSide:
+                                BorderSide(color: darkShade.withOpacity(.5)),
                           ),
                         ),
                       ),
@@ -223,23 +221,28 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
                       children: [
                         Text(
                           "Total Amount    ",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         Text(
                           ": ${donationController.text}",
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                       ],
                     ),
                   ],
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 SizedBox(
                   height: 56.h,
                   child: ElevatedButton(
                     onPressed: _createOrderAndOpenCheckout,
                     style: ElevatedButton.styleFrom(
-                      shadowColor: Colors.black, backgroundColor: goldShade,
+                      shadowColor: Colors.black,
+                      backgroundColor: goldShade,
                       elevation: 4,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),
@@ -265,4 +268,3 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
     );
   }
 }
-

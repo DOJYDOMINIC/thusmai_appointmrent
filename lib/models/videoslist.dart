@@ -4,36 +4,20 @@
 
 import 'dart:convert';
 
-VideoPlayList videoPlayListFromJson(String str) => VideoPlayList.fromJson(json.decode(str));
+List<VideoPlayList> videoPlayListFromJson(String str) => List<VideoPlayList>.from(json.decode(str).map((x) => VideoPlayList.fromJson(x)));
 
-String videoPlayListToJson(VideoPlayList data) => json.encode(data.toJson());
+String videoPlayListToJson(List<VideoPlayList> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class VideoPlayList {
-  List<Video>? videos;
-
-  VideoPlayList({
-    this.videos,
-  });
-
-  factory VideoPlayList.fromJson(Map<String, dynamic> json) => VideoPlayList(
-    videos: json["videos"] == null ? [] : List<Video>.from(json["videos"]!.map((x) => Video.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "videos": videos == null ? [] : List<dynamic>.from(videos!.map((x) => x.toJson())),
-  };
-}
-
-class Video {
   String? videoHeading;
   String? videoLink;
 
-  Video({
+  VideoPlayList({
     this.videoHeading,
     this.videoLink,
   });
 
-  factory Video.fromJson(Map<String, dynamic> json) => Video(
+  factory VideoPlayList.fromJson(Map<String, dynamic> json) => VideoPlayList(
     videoHeading: json["Video_heading"],
     videoLink: json["videoLink"],
   );

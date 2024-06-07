@@ -12,16 +12,18 @@ import '../../controller/overviewController.dart';
 import '../../controller/zoommeeting_controller.dart';
 import '../refreshpage.dart';
 
-class Overview extends StatefulWidget  {
+class Overview extends StatefulWidget {
   const Overview({super.key});
 
   @override
   State<Overview> createState() => _OverviewState();
 }
 
-class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin {
+class _OverviewState extends State<Overview>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
@@ -31,7 +33,7 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
       duration: Duration(milliseconds: 500), // Duration of one heartbeat cycle
     )..repeat(
         reverse:
-        true); // Repeat the animation in reverse to create a heartbeat effect
+            true); // Repeat the animation in reverse to create a heartbeat effect
 
     // Define the scaling animation
     _animation = Tween<double>(begin: 1.0, end: 1.2).animate(
@@ -45,8 +47,11 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
     Provider.of<OverViewController>(context, listen: false).eventList();
     Provider.of<ConnectivityProvider>(context, listen: false).status;
     var id = Provider.of<AppLogin>(context, listen: false).userData?.uId ?? "";
-    Provider.of<MeditationController>(context, listen: false).meditationTimeDetails(context);
-    Provider.of<ZoomMeetingController>(context,listen: false).zoomClass();
+    Provider.of<MeditationController>(context, listen: false)
+        .meditationTimeDetails(context);
+    Provider.of<ZoomMeetingController>(context, listen: false).zoomClass();
+    Provider.of<MeditationController>(context, listen: false)
+        .meditationDetailsTime();
 
     // Provider.of<AppLogin>(context, listen: false).tokenSave();
   }
@@ -99,18 +104,15 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     var id = Provider.of<AppLogin>(context, listen: false).userData?.uId ?? "";
-    Provider.of<MeditationController>(context, listen: false).meditationTimeDetails(context);
+    Provider.of<MeditationController>(context, listen: false)
+        .meditationTimeDetails(context);
     var connect = Provider.of<ConnectivityProvider>(context);
-    Provider.of<MeditationController>(context, listen: false).meditationDetailsTime();
     var appLogin = Provider.of<AppLogin>(context);
     var overView = Provider.of<OverViewController>(context).eventLIst;
     var flagModel = Provider.of<AppLogin>(context).flagModel;
-    var zoomMeet =  Provider.of<ZoomMeetingController>(context).ZoomClassModelData;
-    print(
-        zoomMeet.zoomStopTime
-
-    );
-
+    var zoomMeet =
+        Provider.of<ZoomMeetingController>(context).ZoomClassModelData;
+    print(zoomMeet.zoomStopTime);
 
     // String? firstName =
     //     appLogin.userData?.firstName; // Get the first name, if available
@@ -123,49 +125,61 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
     //     ? lastName[0].toUpperCase() + lastName.substring(1)
     //     : ""; // Capitalize the first letter of last name if not null
     return Scaffold(
-      floatingActionButton:flagModel.maintenancePaymentStatus == false? null:zoomMeet.zoomLink == null? null: isBeforeStopTime(zoomMeet.zoomStopTime.toString()) == false?null:
-      Stack(
-        alignment: Alignment.center,
-        children: [
-          ScaleTransition(
-            scale: _animation, // Apply the scaling animation
-            child: Container(
-              width: 60, // default size of FloatingActionButton
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color:flagModel.maintenancePaymentStatus == false?Colors.grey: Colors.blue.withOpacity(0.5),
-              ),
-            ),
-          ),
-          FloatingActionButton(
-            heroTag: 1,
-            backgroundColor:flagModel.maintenancePaymentStatus == false?Colors.grey: Colors.blue,
-            // replace shadeEight with your color
-            onPressed:flagModel.maintenancePaymentStatus == false
-                      ? () {
-                          appLogin.currentIndex = 3;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: Colors.red,
-                              content: Text(enableMessage),
-                              duration: Duration(seconds: 2),
+      floatingActionButton: flagModel.maintenancePaymentStatus == false
+          ? null
+          : zoomMeet.zoomLink == null
+              ? null
+              : isBeforeStopTime(zoomMeet.zoomStopTime.toString()) == false
+                  ? null
+                  : Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        ScaleTransition(
+                          scale: _animation, // Apply the scaling animation
+                          child: Container(
+                            width: 60, // default size of FloatingActionButton
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: flagModel.maintenancePaymentStatus == false
+                                  ? Colors.grey
+                                  : Colors.blue.withOpacity(0.5),
                             ),
-                          );
-                        }
-                      : () {
-                          launchUrl(Uri.parse(zoomMeet.zoomLink.toString()));
-                          print("object");
-                        },
-                  child: Icon(
-              Icons.video_call_outlined,
-              size: 30,
-              color: Colors.white, // replace darkShade with your color
-            ),
-            mini: false,
-          ),
-        ],
-      ),
+                          ),
+                        ),
+                        FloatingActionButton(
+                          heroTag: 1,
+                          backgroundColor:
+                              flagModel.maintenancePaymentStatus == false
+                                  ? Colors.grey
+                                  : Colors.blue,
+                          // replace shadeEight with your color
+                          onPressed: flagModel.maintenancePaymentStatus == false
+                              ? () {
+                                  appLogin.currentIndex = 3;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(enableMessage),
+                                      duration: Duration(seconds: 2),
+                                    ),
+                                  );
+                                }
+                              : () {
+                                  launchUrl(
+                                      Uri.parse(zoomMeet.zoomLink.toString()));
+                                  print("object");
+                                },
+                          child: Icon(
+                            Icons.video_call_outlined,
+                            size: 30,
+                            color: Colors
+                                .white, // replace darkShade with your color
+                          ),
+                          mini: false,
+                        ),
+                      ],
+                    ),
       backgroundColor: shadeOne,
       body: SafeArea(
         child: connect.status == ConnectivityStatus.Offline
@@ -410,13 +424,15 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
                                                       height: 150.h,
                                                       width: 100.w,
                                                       decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(8),
-                                                          image: DecorationImage(
-                                                              fit: BoxFit.cover,
-                                                              image: NetworkImage(
-                                                                  "${overView[itemIndex].image}"))),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        image: DecorationImage(
+                                                          fit: BoxFit.fill,
+                                                          image: NetworkImage(
+                                                              "${overView[itemIndex].image}"),
+                                                        ),
+                                                      ),
                                                     ),
                                                     SizedBox(height: 16.h),
                                                     Padding(
@@ -520,7 +536,7 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
                                                               .image !=
                                                           null
                                                       ? DecorationImage(
-                                                          fit: BoxFit.cover,
+                                                          fit: BoxFit.fill,
                                                           image: NetworkImage(
                                                               "${overView[itemIndex].image}"),
                                                         )
@@ -619,6 +635,7 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
       ),
     );
   }
+
   launchURL(Uri url) async {
     if (!await launchUrl(url)) {
       throw Exception('Could not launch url');
