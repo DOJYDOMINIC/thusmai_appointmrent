@@ -20,7 +20,8 @@ class AppointmentEditPage extends StatefulWidget {
 }
 
 class _AppointmentEditPageState extends State<AppointmentEditPage> {
-  String selectedValue ="";
+  String selectedValue = "";
+
   // init State
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
     _pickup = widget.data.pickup ?? false;
     _externalUser = widget.data.externalUser ?? false;
 
-    selectedValue =widget.data.externalUser == true? "Yes" : "No";
+    selectedValue = widget.data.externalUser == true ? "Yes" : "No";
     // _appointmentForOther = widget.data.externalUser;
 
     updateMember =
@@ -262,8 +263,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
-                            color: darkShade, width: 2),
+                        borderSide: BorderSide(color: darkShade, width: 2),
                       ),
                     ),
                     validator: (value) {
@@ -416,8 +416,8 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                  color: darkShade, width: 2),
+                              borderSide:
+                                  BorderSide(color: darkShade, width: 2),
                             ),
                           ),
                           validator: (value) {
@@ -447,7 +447,8 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                 itemBuilder: (BuildContext context, int index) {
                   _GroupMembersDataControllers.add(TextEditingController());
                   _GroupMembersDataAgeControllers.add(TextEditingController());
-                  _GroupMembersDataRelationControllers.add(TextEditingController());
+                  _GroupMembersDataRelationControllers.add(
+                      TextEditingController());
                   itemExpandedList.add(false);
                   return Column(
                     children: [
@@ -495,8 +496,8 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                             border: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5),
-                                              borderSide: BorderSide(
-                                                  color: shadeNine),
+                                              borderSide:
+                                                  BorderSide(color: shadeNine),
                                             ),
                                             focusedBorder: OutlineInputBorder(
                                               borderRadius:
@@ -548,8 +549,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                                         BorderRadius.circular(
                                                             5),
                                                     borderSide: BorderSide(
-                                                        color:
-                                                            shadeNine),
+                                                        color: shadeNine),
                                                   ),
                                                   focusedBorder:
                                                       OutlineInputBorder(
@@ -557,8 +557,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                                         BorderRadius.circular(
                                                             5),
                                                     borderSide: BorderSide(
-                                                      color:
-                                                          darkShade,
+                                                      color: darkShade,
                                                       width: 2,
                                                     ),
                                                   ),
@@ -597,8 +596,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                                         BorderRadius.circular(
                                                             5),
                                                     borderSide: BorderSide(
-                                                        color:
-                                                            shadeNine),
+                                                        color: shadeNine),
                                                   ),
                                                   focusedBorder:
                                                       OutlineInputBorder(
@@ -606,8 +604,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                                         BorderRadius.circular(
                                                             5),
                                                     borderSide: BorderSide(
-                                                      color:
-                                                          darkShade,
+                                                      color: darkShade,
                                                       width: 2,
                                                     ),
                                                   ),
@@ -628,7 +625,8 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                             children: [
                                               ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                  shadowColor: Colors.black, backgroundColor: darkShade,
+                                                  shadowColor: Colors.black,
+                                                  backgroundColor: darkShade,
                                                   elevation: 4,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
@@ -656,7 +654,8 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                               SizedBox(width: 16.w),
                                               ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                  shadowColor: Colors.black, backgroundColor: darkShade,
+                                                  shadowColor: Colors.black,
+                                                  backgroundColor: darkShade,
                                                   elevation: 4,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
@@ -737,10 +736,14 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                 ),
                                 IconButton(
                                   onPressed: () {
-                                    if(updateMember.length > index){
-                                      if (updateMember[index].containsKey("id") && updateMember[index]["id"] != null) {
-                                        print( updateMember[index]["id"].toString());
-                                        pro.deleteMember(context, updateMember[index]["id"]);
+                                    if (updateMember.length > index) {
+                                      if (updateMember[index]
+                                              .containsKey("id") &&
+                                          updateMember[index]["id"] != null) {
+                                        print(updateMember[index]["id"]
+                                            .toString());
+                                        pro.deleteMember(
+                                            context, updateMember[index]["id"]);
                                       }
                                     }
                                     _GroupMembersDataControllers.removeAt(
@@ -810,8 +813,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: BorderSide(
-                              color: darkShade, width: 2),
+                          borderSide: BorderSide(color: darkShade, width: 2),
                         ),
                       ),
                       validator: (value) {
@@ -849,13 +851,12 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
-                            color: darkShade, width: 2),
+                        borderSide: BorderSide(color: darkShade, width: 2),
                       ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return  phoneRequired;
+                        return phoneRequired;
                       }
                       // Define a regular expression for validating phone numbers
                       final RegExp phoneRegex = RegExp(r'^\+?[0-9]{7,13}$');
@@ -899,8 +900,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide(
-                            color: darkShade, width: 2),
+                        borderSide: BorderSide(color: darkShade, width: 2),
                       ),
                     ),
                   ),
@@ -920,8 +920,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text:
-                                declaration,
+                                text: declaration,
                                 style:
                                     TextStyle(fontSize: 14, color: darkShade),
                               ),
@@ -933,7 +932,8 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                                     fontWeight: FontWeight.bold),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    slidePageRoute(context,TermsAndConditions());
+                                    slidePageRoute(
+                                        context, TermsAndConditions());
                                     // Add your code here to handle tap
                                     // print("Terms and conditions tapped!");
                                   },
@@ -958,43 +958,50 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                       onPressed: _termsAndCondition != true
                           ? null
                           : () {
-                              // //  This is to add appoint with and without together in edit
-                              List<Map<String, dynamic>> memberData = [];
-                              if (pro.countOfPeople > 0) {
-                                for (int i = 0; i <= pro.countOfPeople; i++) {
-                                  Map<String, dynamic> member = {};
-                                  // Add data from widget.data.groupMembers if available
-                                  if (i < widget.data.groupMembers!.length) {
-                                    member["id"] =
-                                        widget.data.groupMembers![i].id;
-                                    member["appointmentId"] = widget
-                                        .data.groupMembers![i].appointmentId;
-                                  } else {
-                                    member["id"] = null;
-                                    member["appointmentId"] = null;
-                                  }
-                                  // Add data from _GroupMembersDataControllers, _GroupMembersDataAgeControllers, and _GroupMembersDataRelationControllers
-                                  String name =
-                                      _GroupMembersDataControllers[i].text;
-                                  String age =
-                                      _GroupMembersDataAgeControllers[i].text;
-                                  String relation =
-                                      _GroupMembersDataRelationControllers[i]
-                                          .text;
-
-                                  if (name.isNotEmpty &&
-                                      age.isNotEmpty &&
-                                      relation.isNotEmpty) {
-                                    member["name"] = name;
-                                    member["age"] = age;
-                                    member["relation"] = relation;
-                                    memberData.add(member);
-                                    print(memberData[i].toString());
+                              if (pro.countOfPeople != 0) {
+                                // //  This is to add appoint with and without together in edit
+                                List<Map<String, dynamic>> memberData = [];
+                                if (pro.countOfPeople > 0) {
+                                  for (int i = 0; i <= pro.countOfPeople; i++) {
+                                    Map<String, dynamic> member = {};
+                                    // Add data from widget.data.groupMembers if available
+                                    if (i < widget.data.groupMembers!.length) {
+                                      member["id"] =
+                                          widget.data.groupMembers![i].id;
+                                      member["appointmentId"] = widget
+                                          .data.groupMembers![i].appointmentId;
+                                    } else {
+                                      member["id"] = null;
+                                      member["appointmentId"] = null;
+                                    }
+                                    // Add data from _GroupMembersDataControllers, _GroupMembersDataAgeControllers, and _GroupMembersDataRelationControllers
+                                    String name =
+                                        _GroupMembersDataControllers[i].text;
+                                    String age =
+                                        _GroupMembersDataAgeControllers[i].text;
+                                    String relation =
+                                        _GroupMembersDataRelationControllers[i].text;
+                                    if (name.isNotEmpty &&
+                                        age.isNotEmpty &&
+                                        relation.isNotEmpty) {
+                                      member["name"] = name;
+                                      member["age"] = age;
+                                      member["relation"] = relation;
+                                      memberData.add(member);
+                                      print(memberData[i].toString());
+                                    }
                                   }
                                 }
+                                _submitForm(memberData);
+                                pro.countOfPeople = 0;
+                              }else{
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("The number of people cannot be zero."),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
                               }
-                              _submitForm(memberData);
-                              pro.countOfPeople = 0;
                             },
                       style: ElevatedButton.styleFrom(
                         shadowColor: Colors.black, backgroundColor: goldShade,

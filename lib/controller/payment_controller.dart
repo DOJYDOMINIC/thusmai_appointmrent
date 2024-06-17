@@ -1,14 +1,17 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/financial_data.dart';
 import '../models/transaction_list.dart';
 import '../models/transactionsummary.dart';
+import '../models/videoslist.dart';
 import 'login_register_otp_api.dart';
 
 
@@ -130,6 +133,7 @@ class PaymentController extends ChangeNotifier {
         if(url == "meditation-paymentVerification"){
           processPayment(context);
           Provider.of<AppLogin>(context,listen: false).importantFlags();
+
         }
      ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -145,4 +149,35 @@ class PaymentController extends ChangeNotifier {
       print('Error to send time:: $e');
     }
   }
+
+  List<Finconfig> _financialConfig =  [];
+  List<Finconfig> get financialConfig => _financialConfig;
+
+  Future<void> financialConfiguration() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var cookies = prefs.getString("cookie");
+      final response = await http.get(
+        Uri.parse("$superAdmin/superadmin/financialconfig"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+      var res = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        _financialConfig  =  List<Finconfig>.from(res["finconfig"].map((x) => Finconfig.fromJson(x)));
+        // print("new Data : ${financialConfig[2].value}");
+      }else {
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Finance Data : $e");
+      }
+    }
+  }
+
+
+
 }

@@ -1306,25 +1306,35 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         onPressed: _termsAndCondition != true
                             ? null
                             : () async {
-                                if (_formKey.currentState!.validate()) {
-                                  for (int i = 0; i < appointmentController.countOfPeople; i++) {
-                                    // Create a map to store data for each index
-                                    GroupMemberAdd dataMap = GroupMemberAdd(
-                                      name:
-                                          _GroupMembersDataControllers[i].text,
-                                      age: _GroupMembersDataAgeControllers[i]
-                                          .text,
-                                      relation:
-                                          _GroupMembersDataRelationControllers[
-                                                  i]
-                                              .text,
-                                    );
-                                    // Add the map to the list
-                                    dataList.add(dataMap);
-                                  }
-                                  await _submitForm(dataList);
-                                  itemExpandedList.clear();
-                                }
+                          if(appointmentController.countOfPeople != 0){
+                            if (_formKey.currentState!.validate()) {
+                              for (int i = 0; i < appointmentController.countOfPeople; i++) {
+                                // Create a map to store data for each index
+                                GroupMemberAdd dataMap = GroupMemberAdd(
+                                  name:
+                                  _GroupMembersDataControllers[i].text,
+                                  age: _GroupMembersDataAgeControllers[i]
+                                      .text,
+                                  relation:
+                                  _GroupMembersDataRelationControllers[
+                                  i]
+                                      .text,
+                                );
+                                // Add the map to the list
+                                dataList.add(dataMap);
+                              }
+                              await _submitForm(dataList);
+                              itemExpandedList.clear();
+                            }
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("The number of people cannot be zero."),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }
+
                               },
                         style: ElevatedButton.styleFrom(
                           shadowColor: Colors.black, backgroundColor: goldShade,

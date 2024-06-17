@@ -1,646 +1,408 @@
-// import 'package:flutter/material.dart';
-// import 'package:video_player/video_player.dart';
+// // import 'package:flutter_background_service/flutter_background_service.dart';
+// // import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+// //
+// // class BackgroundService {
+// //   static final FlutterBackgroundService service = FlutterBackgroundService();
+// //
+// //   static Future<void> initializeBackgroundService() async {
+// //     await service.configure(
+// //       androidConfiguration: AndroidConfiguration(
+// //         onStart: onStart,
+// //         autoStart: true,
+// //         isForegroundMode: true,
+// //       ),
+// //       iosConfiguration: IosConfiguration(
+// //         autoStart: true,
+// //         onForeground: onStart,
+// //         onBackground: onIosBackground,
+// //       ),
+// //     );
+// //     await service.startService();
+// //   }
+// //
+// //   static void onStart(Map<String, dynamic>? params) async{
+// //     print('Background service started');
+// //     // Schedule the alarm
+// //     await AndroidAlarmManager.oneShot(
+// //       Duration(minutes: 45), // Set the alarm for 45 minutes from now
+// //       12345, // Unique ID for the alarm
+// //       callbackFunction, // Callback function to execute when the alarm fires
+// //       wakeup: true, // Ensure the app wakes up to handle the alarm
+// //     );
+// //   }
+// //
+// //   static void callbackFunction() {
+// //     print('Alarm fired!');
+// //     // Play the alarm sound here
+// //   }
+// //
+// //   static void onIosBackground(Map<String, dynamic>? params) {
+// //     print('iOS background task started');
+// //     // Implement iOS background task logic here
+// //   }
+// // }
 //
-// class VideoPlayerScreen extends StatefulWidget {
+// import 'package:flutter/material.dart';
+// import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//
+//
+//
+// class StartAlm extends StatelessWidget {
 //   @override
-//   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         appBar: AppBar(title: Text('Timer and Alarm Example')),
+//         body: Center(child: Text('Press the button to start the timer')),
+//         floatingActionButton: FloatingActionButton(
+//           onPressed: () {
+//             print("pressed");
+//             startTimerAndScheduleAlarm();
+//           },
+//           child: Icon(Icons.timer),
+//         ),
+//       ),
+//     );
+//   }
+//
+//   void startTimerAndScheduleAlarm() async {
+//     // Schedule the alarm to fire after 45 minutes
+//     await AndroidAlarmManager.oneShot(
+//       Duration(minutes: 1),
+//       0, // Unique ID for the alarm
+//       callbackFunction, // Callback function to execute when the alarm fires
+//       wakeup: true, // Ensure the app wakes up to handle the alarm
+//     );
+//   }
+//
+//   void callbackFunction() {
+//     print('Alarm fired!');
+//     // Here, you can play a sound or show a notification
+//     showNotification();
+//   }
+//
+//   void showNotification() async {
+//     // Initialize the notification plugin
+//     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
+//
+//     // Initialize settings for Android
+//     var android = AndroidInitializationSettings('@drawable/ic_launcher');
+//     var initializationSettings = InitializationSettings(android: android);
+//
+//     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+//
+//     // Define the notification details
+//     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+//       'high_importance_channel',
+//       'High Importance Notifications',
+//       importance: Importance.high,
+//       priority: Priority.high,
+//       playSound: true,
+//       icon: '@drawable/ic_launcher', // Replace with your app's launcher icon
+//     );
+//
+//     var platformChannelSpecifics = NotificationDetails(
+//       android: androidPlatformChannelSpecifics,
+//     );
+//
+//     // Show the notification
+//     await flutterLocalNotificationsPlugin.show(
+//       0,
+//       'Reminder',
+//       'It\'s time for your task!',
+//       platformChannelSpecifics,
+//       payload: 'item x',
+//     );
+//   }
+// }
+
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+// import 'dart:developer' as developer;
+// import 'dart:isolate';
+// import 'dart:math';
+// import 'dart:ui';
+//
+// import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+// import 'package:permission_handler/permission_handler.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:flutter/material.dart';
+//
+// /// The [SharedPreferences] key to access the alarm fire count.
+// const String countKey = 'count';
+//
+// /// The name associated with the UI isolate's [SendPort].
+// const String isolateName = 'isolate';
+//
+// /// A port used to communicate from a background isolate to the UI isolate.
+// ReceivePort port = ReceivePort();
+//
+// /// Global [SharedPreferences] object.
+// SharedPreferences? prefs;
+//
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//
+// // Register the UI isolate's SendPort to allow for communication from the
+// // background isolate.
+//   IsolateNameServer.registerPortWithName(
+//     port.sendPort,
+//     isolateName,
+//   );
+//   prefs = await SharedPreferences.getInstance();
+//   if (!prefs!.containsKey(countKey)) {
+//     await prefs!.setInt(countKey, 0);
+//   }
+//
+//   runApp(const AlarmManagerExampleApp());
 // }
 //
-// class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-//   late VideoPlayerController _controller;
-//   late VoidCallback _listener;
-//   double _sliderValue = 0.0;
+// /// Example app for Espresso plugin.
+// class AlarmManagerExampleApp extends StatelessWidget {
+//   const AlarmManagerExampleApp({super.key});
+//
+// // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Demo',
+//       theme: ThemeData(
+//         useMaterial3: true,
+//         colorSchemeSeed: const Color(0x9f4376f8),
+//       ),
+//       home: const _AlarmHomePage(),
+//     );
+//   }
+// }
+//
+// class _AlarmHomePage extends StatefulWidget {
+//   const _AlarmHomePage();
+//
+//   @override
+//   _AlarmHomePageState createState() => _AlarmHomePageState();
+// }
+//
+// class _AlarmHomePageState extends State<_AlarmHomePage> {
+//   int _counter = 0;
+//   PermissionStatus _exactAlarmPermissionStatus = PermissionStatus.granted;
 //
 //   @override
 //   void initState() {
 //     super.initState();
-//     _controller = VideoPlayerController.network(
-//       'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
-//     )..initialize().then((_) {
-//       setState(() {});
+//     AndroidAlarmManager.initialize();
+//     _checkExactAlarmPermission();
+//
+// // Register for events from the background isolate. These messages will
+// // always coincide with an alarm firing.
+//     port.listen((_) async => await _incrementCounter());
+//   }
+//
+//   void _checkExactAlarmPermission() async {
+//     final currentStatus = await Permission.scheduleExactAlarm.status;
+//     setState(() {
+//       _exactAlarmPermissionStatus = currentStatus;
 //     });
+//   }
 //
-//     _listener = () {
-//       setState(() {
-//         _sliderValue = _controller.value.position.inMilliseconds.toDouble();
-//       });
-//     };
-//     _controller.addListener(_listener);
+//   Future<void> _incrementCounter() async {
+//     developer.log('Increment counter!');
+// // Ensure we've loaded the updated count from the background isolate.
+//     await prefs?.reload();
+//
+//     setState(() {
+//       _counter++;
+//     });
+//   }
+//
+// // The background
+//   static SendPort? uiSendPort;
+//
+// // The callback for our alarm
+//   @pragma('vm:entry-point')
+//   static Future<void> callback() async {
+//     developer.log('Alarm fired!');
+// // Get the previous cached count and increment it.
+//     final prefs = await SharedPreferences.getInstance();
+//     final currentCount = prefs.getInt(countKey) ?? 0;
+//     await prefs.setInt(countKey, currentCount + 1);
+//
+// // This will be null if we're running in the background.
+//     uiSendPort ??= IsolateNameServer.lookupPortByName(isolateName);
+//     uiSendPort?.send(null);
 //   }
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: SafeArea(
-//         child: Column(
-//           children: [
-//             IconButton(
-//               onPressed: () {
-//                 _controller.play();
-//               },
-//               icon: Icon(Icons.play_arrow),
-//             ),
-//             IconButton(
-//               onPressed: () {
-//                 _controller.pause();
-//               },
-//               icon: Icon(Icons.pause),
-//             ),
-//             Container(
-//               width: 300, // Adjust as needed
-//               height: 200, // Adjust as needed
-//               child: Stack(
-//                 children: [
-//                   _controller.value.isInitialized
-//                       ? AspectRatio(
-//                     aspectRatio: _controller.value.aspectRatio,
-//                     child: VideoPlayer(_controller),
-//                   )
-//                       : CircularProgressIndicator(),
-//                   Positioned.fill(
-//                     child: Align(
-//                       alignment: Alignment.bottomCenter,
-//                       child: Slider(
-//                         value: _sliderValue,
-//                         min: 0.0,
-//                         max: _controller.value.duration.inMilliseconds.toDouble(),
-//                         onChanged: (value) {
-//                           setState(() {
-//                             _sliderValue = value;
-//                           });
-//                           _controller.seekTo(Duration(milliseconds: value.toInt()));
-//                         },
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-//
-//   @override
-//   void dispose() {
-//     _controller.removeListener(_listener);
-//     _controller.dispose();
-//     super.dispose();
-//   }
-// }
-
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:thusmai_appointmrent/constant/constant.dart';
-// import 'package:video_player/video_player.dart';
-//
-// import '../controller/videoplayer_controller.dart';
-//
-// class VideoPlayerScreen extends StatelessWidget {
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     var state = Provider.of<VideoPlayerState>(context);
-//     return Scaffold(
-//       body: SafeArea(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             GestureDetector(
-//               onTap: (){
-//                 state.controller.value.isPlaying ? state.pause(): state.pause();
-//               },
-//               child: Center(
-//                 child: GestureDetector(
-//                   onTap: (){
-//                     state.changeValueAfterDelay();
-//                   },
-//                   child: Container(
-//                     width: 300, // Adjust as needed
-//                     height: 170, // Adjust as needed
-//                     child: Stack(
-//                       children: [
-//                         state.controller.value.isInitialized
-//                             ? AspectRatio(
-//                                 aspectRatio: state.controller.value.aspectRatio,
-//                                 child: VideoPlayer(state.controller),
-//                               )
-//                             : CircularProgressIndicator(),
-//                         Positioned.fill(
-//                           child: Container(
-//                             color: state.controller.value.isPlaying ? null:Colors.black.withOpacity(.3),
-//                             child: Align(
-//                               alignment: Alignment.bottomCenter,
-//                               child: Column(
-//                                 mainAxisSize: MainAxisSize.min,
-//                                 children: [
-//                               AnimatedOpacity(
-//                               opacity: state.controller.value.isPlaying ? 0.0 : 1.0,
-//                                 duration: Duration(seconds: 3), // Adjust the duration as needed
-//                                 child: Column(
-//                                   children: [
-//                                     CircleAvatar(
-//                                       backgroundColor: Colors.black.withOpacity(.3),
-//                                       radius: 28,
-//                                       child: IconButton(
-//                                         enableFeedback: false,
-//                                         onPressed: () {
-//                                           state.controller.value.isPlaying ? state.pause() : state.play();},
-//                                         icon: Icon(
-//                                           state.controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-//                                           size: 30,
-//                                           color: Colors.white,
-//                                         ),
-//                                       ),
-//                                     ),
-//                                     Slider(
-//                                       activeColor: goldShade,
-//                                       value: state.sliderValue,
-//                                       min: 0.0,
-//                                       max: state.controller.value.duration.inMilliseconds.toDouble(),
-//                                       onChanged: (value) {
-//                                         state.seekTo(value);
-//                                       },
-//                                     ),
-//                                   ],
-//                                 ),
-//                               ),
-//                                 Container(
-//                                     color: Colors.black.withOpacity(.3),
-//                                     child: Padding(
-//                                       padding: const EdgeInsets.only(left: 5,right: 5,bottom: 5),
-//                                       child: Row(
-//                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                                         children: [
-//                                           Text(state.formatDuration(
-//                                               state.controller.value.position),style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 12),),
-//                                           Text(state.formatDuration(
-//                                               state.controller.value.duration),style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 12)),
-//                                         ],
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// import 'package:flutter/material.dart';
-//
-// class profilePage extends StatefulWidget {
-//   @override
-//   profilePageState createState() => profilePageState();
-// }
-//
-// class profilePageState extends State<profilePage> {
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return DefaultTabController(
-//       length: 2,
-//       child: Scaffold(
-//         appBar: AppBar(
-//           title: Text(
-//             'My Profile',
-//           ),
-//           centerTitle: true,
-//           backgroundColor: Colors.grey[700]?.withOpacity(0.4),
-//           elevation: 0,
-//           // give the app bar rounded corners
-//           shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.only(
-//               bottomLeft: Radius.circular(20.0),
-//               bottomRight: Radius.circular(20.0),
-//             ),
-//           ),
-//           leading: Icon(
-//             Icons.menu,
-//           ),
-//         ),
-//         body: Column(
-//           children: <Widget>[
-//             // construct the profile details widget here
-//             SizedBox(
-//               height: 180,
-//               child: Center(
-//                 child: Text(
-//                   'Profile Details Goes here',
-//                 ),
-//               ),
-//             ),
-//
-//             // the tab bar with two items
-//             SizedBox(
-//               height: 50,
-//               child: AppBar(
-//                 bottom: TabBar(
-//                   tabs: [
-//                     Tab(
-//                       icon: Icon(Icons.directions_bike),
-//                     ),
-//                     Tab(
-//                       icon: Icon(
-//                         Icons.directions_car,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//
-//             // create widgets for each tab bar here
-//             Expanded(
-//               child: TabBarView(
-//                 children: [
-//                   // first tab bar view widget
-//                   Container(
-//                     color: Colors.red,
-//                     child: Center(
-//                       child: Text(
-//                         'Bike',
-//                       ),
-//                     ),
-//                   ),
-//
-//                   // second tab bar viiew widget
-//                   Container(
-//                     color: Colors.pink,
-//                     child: Center(
-//                       child: Text(
-//                         'Car',
-//                       ),
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// import 'package:flutter/material.dart';
-// class MyHomePage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
+//     final textStyle = Theme.of(context).textTheme.headlineMedium;
 //     return Scaffold(
 //       appBar: AppBar(
-//         title: Text('Flutter Demo'),
+//         title: const Text('Android alarm manager plus example'),
+//         elevation: 4,
 //       ),
 //       body: Center(
-//         child: Container(
-//           width: 500,
-//           height: 500,
-//           child: Row(
-//             children: [
-//               Container(
-//                 width: 100,
-//                 height: 100,
-//                 child: Image.asset('path/to/image.jpg'),
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             const Spacer(),
+//             Text(
+//               'Alarms fired during this run of the app: $_counter',
+//               style: textStyle,
+//               textAlign: TextAlign.center,
+//             ),
+//             const SizedBox(height: 16),
+//             Text(
+//               'Total alarms fired since app installation: ${prefs?.getInt(countKey).toString() ?? ''}',
+//               style: textStyle,
+//               textAlign: TextAlign.center,
+//             ),
+//             const Spacer(),
+//             if (_exactAlarmPermissionStatus.isDenied)
+//               Text(
+//                 'SCHEDULE_EXACT_ALARM is denied\n\nAlarms scheduling is not available',
+//                 textAlign: TextAlign.center,
+//                 style: Theme.of(context).textTheme.titleMedium,
+//               )
+//             else
+//               Text(
+//                 'SCHEDULE_EXACT_ALARM is granted\n\nAlarms scheduling is available',
+//                 textAlign: TextAlign.center,
+//                 style: Theme.of(context).textTheme.titleMedium,
 //               ),
-//               Expanded(
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text(
-//                       'Title',
-//                       style: TextStyle(
-//                         fontSize: 24,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                     ),
-//                     SizedBox(height: 16),
-//                     Text(
-//                       'Description',
-//                       style: TextStyle(
-//                         fontSize: 16,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// import 'package:flutter/material.dart';
-// import 'package:flutter_chat_bubble/chat_bubble.dart';
-//
-//
-// class MainScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Padding(
-//         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
-//         child: ListView(
-//           children: <Widget>[
-//             getTitleText("Example 1"),
-//             getSenderView(
-//                 ChatBubbleClipper1(type: BubbleType.sendBubble), context),
-//             getReceiverView(
-//                 ChatBubbleClipper1(type: BubbleType.receiverBubble), context),
-//             SizedBox(
-//               height: 30,
+//             const SizedBox(height: 32),
+//             ElevatedButton(
+//               onPressed: _exactAlarmPermissionStatus.isDenied
+//                   ? () async {
+//                       await Permission.scheduleExactAlarm
+//                           .onGrantedCallback(() => setState(() {
+//                                 _exactAlarmPermissionStatus =
+//                                     PermissionStatus.granted;
+//                               }))
+//                           .request();
+//                     }
+//                   : null,
+//               child: const Text('Request exact alarm permission'),
 //             ),
-//             getTitleText("Example 2"),
-//             getSenderView(
-//                 ChatBubbleClipper2(type: BubbleType.sendBubble), context),
-//             getReceiverView(
-//                 ChatBubbleClipper2(type: BubbleType.receiverBubble), context),
-//             SizedBox(
-//               height: 30,
+//             const SizedBox(height: 32),
+//             ElevatedButton(
+//               onPressed: _exactAlarmPermissionStatus.isGranted
+//                   ? () async {
+//                       await AndroidAlarmManager.oneShot(
+//                         const Duration(seconds: 15),
+// // Ensure we have a unique alarm ID.
+//                         Random().nextInt(pow(2, 31) as int),
+//                         callback,
+//                         exact: true,
+//                         wakeup: true,
+//                       );
+//                     }
+//                   : null,
+//               child: const Text('Schedule OneShot Alarm'),
 //             ),
-//             getTitleText("Example 3"),
-//             getSenderView(
-//                 ChatBubbleClipper3(type: BubbleType.sendBubble), context),
-//             getReceiverView(
-//                 ChatBubbleClipper3(type: BubbleType.receiverBubble), context),
-//             SizedBox(
-//               height: 30,
-//             ),
-//             getTitleText("Example 4"),
-//             getSenderView(
-//                 ChatBubbleClipper4(type: BubbleType.sendBubble), context),
-//             getReceiverView(
-//                 ChatBubbleClipper4(type: BubbleType.receiverBubble), context),
-//             SizedBox(
-//               height: 30,
-//             ),
-//             getTitleText("Example 5"),
-//             getSenderView(
-//                 ChatBubbleClipper5(type: BubbleType.sendBubble), context),
-//             getReceiverView(
-//                 ChatBubbleClipper5(type: BubbleType.receiverBubble), context),
-//             SizedBox(
-//               height: 30,
-//             ),
-//             getTitleText("Example 6"),
-//             getSenderView(
-//                 ChatBubbleClipper6(type: BubbleType.sendBubble), context),
-//             getReceiverView(
-//                 ChatBubbleClipper6(type: BubbleType.receiverBubble), context),
-//             SizedBox(
-//               height: 30,
-//             ),
-//             getTitleText("Example 7"),
-//             getSenderView(
-//                 ChatBubbleClipper7(type: BubbleType.sendBubble), context),
-//             getReceiverView(
-//                 ChatBubbleClipper7(type: BubbleType.receiverBubble), context),
-//             SizedBox(
-//               height: 30,
-//             ),
-//             getTitleText("Example 8"),
-//             getSenderView(
-//                 ChatBubbleClipper8(type: BubbleType.sendBubble), context),
-//             getReceiverView(
-//                 ChatBubbleClipper8(type: BubbleType.receiverBubble), context),
-//             SizedBox(
-//               height: 30,
-//             ),
-//             getTitleText("Example 9"),
-//             getSenderView(
-//                 ChatBubbleClipper9(type: BubbleType.sendBubble), context),
-//             getReceiverView(
-//                 ChatBubbleClipper9(type: BubbleType.receiverBubble), context),
-//             SizedBox(
-//               height: 30,
-//             ),
-//             getTitleText("Example 10"),
-//             getSenderView(
-//                 ChatBubbleClipper10(type: BubbleType.sendBubble), context),
-//             Padding(
-//               padding: EdgeInsets.only(bottom: 10),
-//               child: getReceiverView(
-//                   ChatBubbleClipper10(type: BubbleType.receiverBubble), context),
-//             )
+//             const Spacer(),
 //           ],
 //         ),
 //       ),
 //     );
 //   }
-//
-//   getTitleText(String title) => Text(
-//     title,
-//     style: TextStyle(
-//       color: Colors.black,
-//       fontSize: 20,
-//     ),
-//   );
-//
-//   getSenderView(CustomClipper clipper, BuildContext context) => ChatBubble(
-//     clipper: clipper,
-//     alignment: Alignment.topRight,
-//     margin: EdgeInsets.only(top: 20),
-//     backGroundColor: Colors.blue,
-//     child: Container(
-//       constraints: BoxConstraints(
-//         maxWidth: MediaQuery.of(context).size.width * 0.7,
-//       ),
-//       child: Text(
-//         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-//         style: TextStyle(color: Colors.white),
-//       ),
-//     ),
-//   );
-//
-//   getReceiverView(CustomClipper clipper, BuildContext context) => ChatBubble(
-//     clipper: clipper,
-//     backGroundColor: Color(0xffE7E7ED),
-//     margin: EdgeInsets.only(top: 20),
-//     child: Container(
-//       constraints: BoxConstraints(
-//         maxWidth: MediaQuery.of(context).size.width * 0.7,
-//       ),
-//       child: Text(
-//         "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-//         style: TextStyle(color: Colors.black),
-//       ),
-//     ),
-//   );
 // }
 
-
-
+// import 'dart:async';
 // import 'package:flutter/material.dart';
+// import 'package:intl/intl.dart';
 //
-// class MyHomePage extends StatefulWidget {
+// class TimeProgressWidget extends StatefulWidget {
+//   final String startTime;
+//   final String endTime;
+//
+//   TimeProgressWidget({Key? key, required this.startTime, required this.endTime})
+//       : super(key: key);
+//
 //   @override
-//   _MyHomePageState createState() => _MyHomePageState();
+//   _TimeProgressWidgetState createState() => _TimeProgressWidgetState();
 // }
 //
-// class _MyHomePageState extends State<MyHomePage> {
-//   int _selectedIndex = 0;
+// class _TimeProgressWidgetState extends State<TimeProgressWidget> {
+//   late DateTime startDateTime;
+//   late DateTime endDateTime;
+//   double progress = 0.0;
 //
-//   void _onItemTapped(int index) {
-//     setState(() {
-//       _selectedIndex = index;
-//     });
+//   @override
+//   void initState() {
+//     super.initState();
+//     startDateTime = DateFormat('h:mm a').parse(widget.startTime);
+//     endDateTime = DateFormat('h:mm a').parse(widget.endTime);
+//
+//     // Calculate initial progress
+//     updateProgress();
+//
+//     // Update progress every second
+//     Timer.periodic(const Duration(seconds: 1), (Timer t) => updateProgress());
 //   }
 //
-//   @override
-//   Widget build(BuildContext context) {
-//     return WillPopScope(
-//       onWillPop: () async {
-//         if (_selectedIndex != 0) {
-//           setState(() {
-//             _selectedIndex = 0;
-//           });
-//           return false;
-//         }
-//         return true;
-//       },
-//       child: Scaffold(
-//         appBar: AppBar(
-//           title: Text('BottomNavigationBar Sample'),
-//         ),
-//         body: Center(
-//           child: _widgetOptions.elementAt(_selectedIndex),
-//         ),
-//         bottomNavigationBar: BottomNavigationBar(
-//           items: const <BottomNavigationBarItem>[
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.home),
-//               label: 'Home',
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.business),
-//               label: 'Business',
-//             ),
-//             BottomNavigationBarItem(
-//               icon: Icon(Icons.school),
-//               label: 'School',
-//             ),
-//           ],
-//           currentIndex: _selectedIndex,
-//           selectedItemColor: Colors.amber[800],
-//           onTap: _onItemTapped,
-//         ),
-//       ),
-//     );
-//   }
-//
-//   static const List<Widget> _widgetOptions = <Widget>[
-//     Text(
-//       'Index 0: Home',
-//       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-//     ),
-//     Text(
-//       'Index 1: Business',
-//       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-//     ),
-//     Text(
-//       'Index 2: School',
-//       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-//     ),
-//   ];
-// }
-
-
-// import 'package:flutter/material.dart';
-//
-// class TimeCheckWidget extends StatefulWidget {
-//   @override
-//   _TimeCheckWidgetState createState() => _TimeCheckWidgetState();
-// }
-//
-// class _TimeCheckWidgetState extends State<TimeCheckWidget> {
-//   String result = '';
-//
-//   void checkTime() {
-//     // Get the current time
+//   void updateProgress() {
 //     DateTime now = DateTime.now();
-//     TimeOfDay currentTime = TimeOfDay.fromDateTime(now);
+//     if (now.isAfter(startDateTime) && now.isBefore(endDateTime)) {
+//       // Calculate total duration in seconds
+//       double totalDurationSeconds =
+//       endDateTime.difference(startDateTime).inSeconds.toDouble();
 //
-//     // Define the start and end times
-//     TimeOfDay startTime = TimeOfDay(hour: 14, minute: 0); // 14:00 (2:00 PM)
-//     TimeOfDay endTime = TimeOfDay(hour: 18, minute: 0);   // 18:00 (6:00 PM)
+//       // Calculate elapsed duration in seconds
+//       double elapsedDurationSeconds =
+//       now.difference(startDateTime).inSeconds.toDouble();
 //
-//     // Check if the current time is between the start and end times
-//     if (isTimeBetween(currentTime, startTime, endTime)) {
+//       // Calculate progress
 //       setState(() {
-//         result = "The current time is between the given start and end times.";
+//         progress = elapsedDurationSeconds / totalDurationSeconds;
 //       });
-//     } else {
+//     } else if (now.isAfter(endDateTime)) {
+//       // If current time is after end time, progress is complete (1.0)
 //       setState(() {
-//         result = "The current time is not between the given start and end times.";
+//         progress = 1.0;
+//       });
+//     } else if (now.isBefore(startDateTime)) {
+//       // If current time is before start time, progress is 0.0
+//       setState(() {
+//         progress = 0.0;
+//       });
+//     }
+//
+//     // Limit progress to 0.5 if current time is halfway between start and end
+//     if (now.isAfter(startDateTime) &&
+//         now.isBefore(endDateTime) &&
+//         progress > 0.5) {
+//       setState(() {
+//         progress = 0.5;
 //       });
 //     }
 //   }
 //
-//   bool isTimeBetween(TimeOfDay currentTime, TimeOfDay startTime, TimeOfDay endTime) {
-//     final now = DateTime.now();
-//     final currentDateTime = DateTime(now.year, now.month, now.day, currentTime.hour, currentTime.minute);
-//     final startDateTime = DateTime(now.year, now.month, now.day, startTime.hour, startTime.minute);
-//     final endDateTime = DateTime(now.year, now.month, now.day, endTime.hour, endTime.minute);
-//
-//     return currentDateTime.isAfter(startDateTime) && currentDateTime.isBefore(endDateTime);
-//   }
-//
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Time Check Example'),
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             ElevatedButton(
-//               onPressed: checkTime,
-//               child: Text('Check Time'),
-//             ),
-//             SizedBox(height: 20),
-//             Text(result),
-//           ],
-//         ),
+//       body: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           LinearProgressIndicator(
+//             value: progress,
+//             backgroundColor: Colors.grey,
+//             valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+//           ),
+//           SizedBox(height: 10.0),
+//           Text(
+//             'Progress: ${progress.toStringAsFixed(1)}',
+//             style: TextStyle(fontSize: 20.0),
+//           ),
+//         ],
 //       ),
 //     );
 //   }
 // }
-
-// Future<void> runTest()async {
-//   List<Map<String, String>> items = [
-//     {'name': 'Event 1', 'date': '2023-12-01 14:00:00'},
-//     {'name': 'Event 2', 'date': '2024-01-01 09:30:00'},
-//     {'name': 'Event 3', 'date': '2023-11-20 17:45:00'},
-//     {'name': 'Event 4', 'date': '2024-01-01 08:15:00'},
-//   ];
 //
-//   // Sorting the list based on date and time
-//   items.sort((a, b) {
-//     DateTime dateA = DateTime.parse(a['date']!);
-//     DateTime dateB = DateTime.parse(b['date']!);
-//     return dateA.compareTo(dateB);
-//   });
 //
-//   // Printing the sorted list
-//   for (var item in items) {
-//     print('${item['name']} - ${item['date']}');
-//   }
-// }
+//
+//
+//
+//

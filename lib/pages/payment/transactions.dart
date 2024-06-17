@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
+import '../../controller/login_register_otp_api.dart';
 import '../../controller/payment_controller.dart';
 import '../../widgets/additionnalwidget.dart';
 
@@ -22,6 +23,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   @override
   void initState() {
     super.initState();
+    Provider.of<AppLogin>(context, listen: false).validateSession(context);
     _timer = Timer(const Duration(seconds: 5), () {
       setState(() {
         _isLoading = false;

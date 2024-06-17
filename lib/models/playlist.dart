@@ -27,23 +27,23 @@ class PlayList {
 class Playlist {
   String? playListHeading;
   String? playListImage;
-  int? videoHeadingCount;
+  int? videoLinkCount;
 
   Playlist({
     this.playListHeading,
     this.playListImage,
-    this.videoHeadingCount,
+    this.videoLinkCount,
   });
 
   factory Playlist.fromJson(Map<String, dynamic> json) => Playlist(
     playListHeading: json["playList_heading"],
     playListImage: json["playList_image"],
-    videoHeadingCount: json["videoHeadingCount"],
+    videoLinkCount: json["videoLinkCount"],
   );
 
   Map<String, dynamic> toJson() => {
     "playList_heading": playListHeading,
     "playList_image": playListImage,
-    "videoHeadingCount": videoHeadingCount,
+    "videoLinkCount": videoLinkCount,
   };
 }

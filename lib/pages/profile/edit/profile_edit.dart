@@ -29,7 +29,7 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
     _state = TextEditingController(text: userdata?.state);
     _district = TextEditingController(text: userdata?.district);
     _address = TextEditingController(text: userdata?.address);
-    // _country = TextEditingController(text: userdata?.country);
+    _country = TextEditingController(text: userdata?.country);
   }
 
   TextEditingController _firstName = TextEditingController();
@@ -116,11 +116,11 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                   controller: _state,
                   prefixIcon: Icons.location_city_rounded,
                 ),
-                // CustomTextField(
-                //   hintText: 'Country',
-                //   controller: _country,
-                //   prefixIcon: Icons.location_city_rounded,
-                // ),
+                CustomTextField(
+                  hintText: 'Country',
+                  controller: _country,
+                  prefixIcon: Icons.location_city_rounded,
+                ),
                 // CustomTextField(hintText: 'Country',controller: _country,prefixIcon: Icons.,),
                 SizedBox(
                   height: 24,

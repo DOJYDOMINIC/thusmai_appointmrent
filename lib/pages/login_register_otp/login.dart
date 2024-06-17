@@ -23,7 +23,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    // Provider.of<AppLogin>(context,listen: false).importantFlags();
+    Provider.of<AppLogin>(context,listen: false).listQuestions();
   }
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = true;

@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import '../constant/constant.dart';
 import '../models/bankdetails.dart';
+import '../models/reward_list.dart';
 import '../models/update_user_details.dart';
 import 'login_register_otp_api.dart';
 class ProfileController extends ChangeNotifier{
@@ -218,9 +219,9 @@ class ProfileController extends ChangeNotifier{
 
 
 
-  BankDetail? _rewardList;
+  List<RewardList>? _rewardList;
 
-  BankDetail? get rewardListData => _rewardList;
+  List<RewardList>? get rewardListData => _rewardList;
 
 
   Future<void> rewardList() async {
@@ -228,8 +229,7 @@ class ProfileController extends ChangeNotifier{
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.get(
-        // Uri.parse("$baseUrl/rewardList"),
-        Uri.parse("https://thasmai.tstsvc.in/api/v1/User/rewardList"),
+        Uri.parse("$baseUrl/rewardList"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -237,8 +237,7 @@ class ProfileController extends ChangeNotifier{
       );
       var decode = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        // _rewardlist = rewardList.fromJson(decode);
-        print(decode.toString());
+        _rewardList  =  List<RewardList>.from(decode.map((x) => RewardList.fromJson(x)));
       } else {
         // Handle other status codes if needed
         print("Failed to load updateUserDetails : ${response.statusCode}");

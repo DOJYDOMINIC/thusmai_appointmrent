@@ -120,9 +120,9 @@ class _ResetPageTwoState extends State<ResetPageTwo> {
                           child: Pinput(
                             controller: pinController,
                             focusNode: focusNode,
-                            androidSmsAutofillMethod:
-                            AndroidSmsAutofillMethod.smsUserConsentApi,
-                            listenForMultipleSmsOnAndroid: true,
+                            // androidSmsAutofillMethod:
+                            // AndroidSmsAutofillMethod.smsUserConsentApi,
+                            // listenForMultipleSmsOnAndroid: true,
                             defaultPinTheme: defaultPinTheme,
                             separatorBuilder: (index) => const SizedBox(width: 8),
                             disabledPinTheme: defaultPinTheme.copyWith(

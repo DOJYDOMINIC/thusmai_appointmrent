@@ -20,7 +20,7 @@ class _MeditationDataState extends State<MeditationData> {
   void initState() {
     super.initState();
     FirebaseApi().initNotifications();
-
+    Provider.of<AppLogin>(context,listen: false).listQuestions();
   }
 
   @override
@@ -142,7 +142,7 @@ class _MeditationDataState extends State<MeditationData> {
                             child: Column(
                               children: [
                                 Text(
-                                  "Which aspect of your life needs most improvement ?",
+                                  "${pro.listQuestion.question??"N/A"}",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 SizedBox(

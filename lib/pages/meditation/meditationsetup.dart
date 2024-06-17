@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:thusmai_appointmrent/widgets/shimmerwidget.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../controller/connectivitycontroller.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
@@ -27,6 +25,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
   @override
   void initState() {
     super.initState();
+    Provider.of<AppLogin>(context, listen: false).validateSession(context);
     Provider.of<ConnectivityProvider>(context, listen: false).status;
     final appLoginProvider = Provider.of<AppLogin>(context, listen: false);
     appLoginProvider.getUserByID();
@@ -54,33 +53,6 @@ class _MeditationCycleState extends State<MeditationCycle> {
     return 'https://img.youtube.com/vi/$videoId/0.jpg';
   }
 
-  bool isCurrentTimeBetween(String fromTime, String toTime) {
-    if (fromTime == "" || toTime == "") {
-      return false;
-    }
-    TimeOfDay from = TimeOfDay(
-      hour: int.parse(fromTime.split(":")[0]),
-      minute: int.parse(fromTime.split(":")[1]),
-    );
-    TimeOfDay to = TimeOfDay(
-      hour: int.parse(toTime.split(":")[0]),
-      minute: int.parse(toTime.split(":")[1]),
-    );
-    TimeOfDay now = TimeOfDay.now();
-
-    if (from.hour < to.hour ||
-        (from.hour == to.hour && from.minute <= to.minute)) {
-      return (now.hour > from.hour ||
-              (now.hour == from.hour && now.minute >= from.minute)) &&
-          (now.hour < to.hour ||
-              (now.hour == to.hour && now.minute <= to.minute));
-    } else {
-      return (now.hour > from.hour ||
-              (now.hour == from.hour && now.minute >= from.minute)) ||
-          (now.hour < to.hour ||
-              (now.hour == to.hour && now.minute <= to.minute));
-    }
-  }
 
   Future<void> launchURL(Uri url) async {
     if (!await launchUrl(url)) {
@@ -94,11 +66,9 @@ class _MeditationCycleState extends State<MeditationCycle> {
     final meditationController = Provider.of<MeditationController>(context);
     final connectivityProvider = Provider.of<ConnectivityProvider>(context);
     final meditationTimeData = meditationController.meditationTimeData;
-    print(meditationTimeData.fromTime);
-    print(meditationTimeData.toTime);
     final meditationFullTime = meditationController.meditationFullTime;
     final flagModel = appLoginProvider.flagModel;
-
+    print(flagModel.meditationFeePaymentStatus.toString());
     return Scaffold(
       backgroundColor: shadeOne,
       body: SafeArea(
@@ -291,6 +261,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
                           width: 304.w,
                           child: ElevatedButton(
                             onPressed: () {
+                              // slidePageRoute(context, TimerScreen());
                               if (flagModel.meditationFeePaymentStatus == true) {
                                 if (isCurrentTimeBetween(meditationTimeData.fromTime ?? "", meditationTimeData.toTime ?? "")) {
                                   slidePageRoute(context, TimerScreen());

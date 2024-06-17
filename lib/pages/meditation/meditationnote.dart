@@ -7,9 +7,8 @@ import 'package:provider/provider.dart';
 import '../../constant/constant.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
-import '../../tabs/messsagetab.dart';
-import '../../widgets/additionnalwidget.dart';
-import '../profile/profile.dart';
+import '../../controller/timer_controller.dart';
+import 'meditationtimer.dart';
 
 class MeditationNote extends StatefulWidget {
   const MeditationNote({super.key});
@@ -22,7 +21,10 @@ class _MeditationNoteState extends State<MeditationNote> {
   TextEditingController noteController = TextEditingController();
 
   bool _global = false;
-
+@override
+  void initState() {
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var meditation = Provider.of<MeditationController>(context);
@@ -191,14 +193,8 @@ class _MeditationNoteState extends State<MeditationNote> {
                   } else {
                     DateTime now = DateTime.now();
                     String formattedTime = DateFormat('h:mm a').format(now);
-                    String messageTDate =
-                        DateFormat('MMMM dd, yyyy').format(DateTime.now());
-                    meditation.meditationNote(
-                        context,
-                        "Meditation Note : ${noteController.text}",
-                        _global ? "global" : "private",
-                        formattedTime,
-                        messageTDate);
+                    String messageTDate = DateFormat('MMMM dd, yyyy').format(DateTime.now());
+                    meditation.meditationNote(context, "Meditation Note : ${noteController.text}", _global ? "global" : "private", formattedTime, messageTDate);
                     Navigator.pop(context);
                   }
                 },

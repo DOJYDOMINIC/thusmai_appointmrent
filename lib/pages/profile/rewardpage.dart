@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/pages/profile/profile.dart';
 import '../../constant/constant.dart';
@@ -23,6 +24,9 @@ class _RewardPageState extends State<RewardPage> {
   }
   @override
   Widget build(BuildContext context) {
+
+ var  rewardListData = Provider.of<ProfileController>(context).rewardListData;
+ // print(rewardListData![0].distributionTime.toString());
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -40,10 +44,13 @@ class _RewardPageState extends State<RewardPage> {
         ),
       ),
       body: ListView.builder(
-        itemCount: 0,
+        itemCount: rewardListData?.length,
         itemBuilder: (context, index) {
-          final Uri rewardUrl = Uri.parse("https://thasmai.tstsvc.in");
-        return  rewardWidget(guruji,"Reward 01","Lorem ipsum dolor sit amet consectetur.","3 days",rewardUrl);
+          DateTime dateTime = DateTime.parse(rewardListData?[index].distributionTime.toString()??"");
+          // Format date and time separately
+          String formattedDate = DateFormat('yyyy/MM/dd').format(dateTime);
+          String formattedTime = DateFormat('hh:mm:ss a').format(dateTime);
+        return  rewardWidget(formattedTime, "Rs : ${rewardListData?[index].reward.toString()}",formattedDate);
       },),
     );
   }

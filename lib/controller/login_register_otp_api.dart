@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,6 +8,8 @@ import 'package:thusmai_appointmrent/models/userdata.dart';
 import 'package:thusmai_appointmrent/models/userlogin.dart';
 import 'package:thusmai_appointmrent/pages/profile/profile.dart';
 import '../models/flagsmode.dart';
+import '../models/listQuestions.dart';
+import '../pages/appointment/termsandconditions.dart';
 import '../pages/bottom_navbar.dart';
 import '../constant/constant.dart';
 import '../pages/login_register_otp/changepassword.dart';
@@ -16,6 +19,7 @@ import '../pages/login_register_otp/otpPage.dart';
 import '../pages/login_register_otp/reset_password.dart';
 import '../pages/profile/password_reset/resetpage_two.dart';
 import '../pages/profile/password_reset/resetpasge_three.dart';
+import '../widgets/additionnalwidget.dart';
 
 class AppLogin extends ChangeNotifier {
 // firstLogin check
@@ -42,7 +46,7 @@ class AppLogin extends ChangeNotifier {
 
   // updated and manage moving tile
 
-  List<String> _myTiles = ["Financial", "Health", "Mental", "Relationship"];
+  late List<String> _myTiles = ["Financial", "Health", "Mental", "Relationship"];
 
   List<String> get myTiles => _myTiles;
 
@@ -88,6 +92,90 @@ class AppLogin extends ChangeNotifier {
       print("getUserByID : $e");
     }
     notifyListeners();
+  }
+ ListQuestions _listQuestions = ListQuestions();
+  ListQuestions get listQuestion => _listQuestions;
+
+  Future<void> listQuestions() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var cookies = prefs.getString("cookie");
+      final response = await http.get(
+        Uri.parse("$baseUrl/list-questions"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+      var decode = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        _listQuestions =  ListQuestions.fromJson(decode[0]);
+
+        _myTiles = [_listQuestions.ans1??"N/A",_listQuestions.ans2??"N/A",_listQuestions.ans3??"N/A",_listQuestions.ans4??"N/A",_listQuestions.ans5??"N/A",];
+      } else {
+
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("getUserByID : $e");
+      }
+    }
+    notifyListeners();
+  }
+
+  Future<void> validateSession(BuildContext context) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var cookies = prefs.getString("cookie");
+      final response = await http.get(
+        Uri.parse("$baseUrl/validate-session"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print("valid user");
+      } else if (response.statusCode == 401) {
+        print("Not valid user");
+        prefs.clear();
+        // slidePageRoute(context, Login());
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Login()),
+              (Route<dynamic> route) => false,
+        );
+      } else {
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("getUserByID : $e");
+      }
+    }
+  }
+
+  Future<void> backendSessionClear() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var cookies = prefs.getString("cookie");
+      final response = await http.get(
+        Uri.parse("$baseUrl/logout"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+
+      if (response.statusCode == 200) {
+      } else if (response.statusCode == 401) {
+      } else {
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("getUserByID : $e");
+      }
+    }
   }
 
   Future<void> meditationData(
@@ -137,6 +225,7 @@ class AppLogin extends ChangeNotifier {
     var decode = jsonDecode(response.body);
     try {
       if (response.statusCode == 200) {
+        print(decode.toString());
         _flagModel = Message.fromJson(decode["message"]);
         prefs.setString("isAnswered", "true");
       } else {
@@ -174,6 +263,8 @@ class AppLogin extends ChangeNotifier {
         prefs.setString("isAnswered", _userLoginData!.isans.toString());
         var isAnswered = prefs.getString("isAnswered");
         var fCMToken = prefs.getString("fCMToken");
+        print("data : $data");
+
         if (fCMToken != null) {
           print(data);
         }
@@ -185,10 +276,11 @@ class AppLogin extends ChangeNotifier {
           ),
         );
       } else if (response.statusCode == 404) {
+        requestPasswordReset(context,data["email"]);
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Register(),
+            builder: (context) => otpPage(),
           ),
         );
       } else {

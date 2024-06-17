@@ -7,11 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 const baseUrl = "https://thasmai.tstsvc.in/api/v1/User";
 const  adminBaseUrl = "https://thasmai.tstsvc.in/api/v1/admin";
 const  paymentBaseUrl = "https://thasmai.tstsvc.in/api/v1/payment";
+const  superAdmin = "https://thasmai.tstsvc.in/api/v1";
 
-
-// const baseUrl = "http://192.168.1.84:3000/api/v1/User";
-// const  adminBaseUrl = "http://192.168.1.84:3000/api/v1/admin";
-// const  paymentBaseUrl = "http://192.168.1.84:3000/api/v1/payment";
 
 
 // Url to Launch

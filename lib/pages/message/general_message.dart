@@ -7,6 +7,7 @@ import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:thusmai_appointmrent/controller/message_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../controller/login_register_otp_api.dart';
 import '../../models/general_message_model.dart';
 
 class GeneralMessage extends StatefulWidget {
@@ -20,6 +21,7 @@ class _GeneralMessageState extends State<GeneralMessage> {
   @override
   void initState() {
     super.initState();
+    Provider.of<AppLogin>(context, listen: false).validateSession(context);
     Provider.of<MessageController>(context, listen: false).generalMessage("1");
   }
 

@@ -12,15 +12,19 @@ import '../models/zoom_class_model.dart';
 class ZoomMeetingController extends ChangeNotifier {
 
 
-  Future<void> zoomPost(String date, String time) async {
+  Future<void> zoomPost() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
+    var now = DateTime.now();
+    String formattedTime = "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}";
+    String formattedDate = "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
     final response = await http.post(Uri.parse("$baseUrl/zoom_Records"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
         },
-        body: jsonEncode({"zoom_date": date, "zoom_time": time}));
+
+        body: jsonEncode({"zoom_date": formattedDate, "zoom_time": formattedTime}));
     // var decode = jsonDecode(response.body);
     // print(decode.toString());
     try {
@@ -51,9 +55,13 @@ class ZoomMeetingController extends ChangeNotifier {
     try {
       if (response.statusCode == 200) {
         _ZoomClassModelData = ZoomClassModel.fromJson(decode[0]);
-        // print(_ZoomClassModelData.zoomLink);
+        print(response.body.toString());
+        print("zoom link 200: ${_ZoomClassModelData.zoomLink.toString()}");
       } else {
+        _ZoomClassModelData.zoomLink = "";
+        print("zoom link else: ${_ZoomClassModelData.zoomLink.toString()}");
 
+_ZoomClassModelData.zoomLink == null;
         print(decode);
       }
     } catch (e) {

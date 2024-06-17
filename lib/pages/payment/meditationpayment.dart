@@ -1,15 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../constant/constant.dart';
 import 'package:http/http.dart' as http;
-
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/payment_controller.dart';
 
@@ -25,6 +21,7 @@ class _MeditationPaymentState extends State<MeditationPayment> {
   @override
   void initState() {
     super.initState();
+    Provider.of<PaymentController>(context, listen: false).financialConfiguration();
     Provider.of<AppLogin>(context,listen: false).importantFlags();
   }
 
@@ -33,6 +30,8 @@ class _MeditationPaymentState extends State<MeditationPayment> {
   @override
   Widget build(BuildContext context) {
     var flagModel = Provider.of<AppLogin>(context).flagModel;
+  var   finData = Provider.of<PaymentController>(context).financialConfig;
+
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -54,12 +53,14 @@ class _MeditationPaymentState extends State<MeditationPayment> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+
+                SizedBox(height: 8,),
                 if(flagModel.maintenancePaymentStatus == false)
                 MeditationPaymentWidget(
                   url: "maintenance-checkout",
                   icon: Icons.videocam,
-                  amount: "500",
-                  dueDate: "Funds to maintain our services.",
+                  amount: "${finData[3].value.toString()}",
+                  dueDate: "Funds to enable Messages \nand Classes",
                   paymentType: 'Platform Maintenance',
                   noteIcon: "assets/svgImage/brightness_alert.svg",
                 ),
@@ -69,23 +70,24 @@ class _MeditationPaymentState extends State<MeditationPayment> {
                   child: MeditationPaymentWidget(
                     icon: Icons.self_improvement,
                     url: "meditation-checkout",
-                    amount: "2500",
-                    dueDate: "Due date on 08/05/2024",
+                    amount: "${finData[2].value.toString()}",
+                    dueDate: "Fund to enable Meditation",
                     paymentType: 'Meditation payment',
                     noteIcon: 'assets/svgImage/brightness_alert.svg',
                   ),
                 ),
-                if(flagModel.meditationFeePaymentStatus == true)
+                // if(flagModel.meditationFeePaymentStatus == false)
+                  MeditationPaymentWidget(
+                    icon: Icons.volunteer_activism,
+                    url: "dekshina-checkout",
+                    amount: "",
+                    dueDate: "Sincerely appreciate your \nkindness.",
+                    paymentType: 'Guru Dakshina',
+                    noteIcon: "assets/svgImage/person_play.svg",
+                    controller: dakshinaController,
+                  ),
                 SizedBox(height: 20,),
-                MeditationPaymentWidget(
-                  icon: Icons.volunteer_activism,
-                  url: "dekshina-checkout",
-                  amount: "",
-                  dueDate: "Sincerely appreciate your.",
-                  paymentType: 'Guru Dakshina',
-                  noteIcon: "assets/svgImage/person_play.svg",
-                  controller: dakshinaController,
-                ),
+
               ],
             ),
           ),

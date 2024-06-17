@@ -22,35 +22,7 @@ class RefreshPage extends StatelessWidget {
               style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w500),
             ),
           ),
-          SizedBox(
-            width: 118.w,
-            child: GestureDetector(
-              onTap: onTap,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(16.sp, 8.sp, 16.sp, 8.sp),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.autorenew,
-                      size: 18.sp,
-                    ),
-                    SizedBox(width: 4.w),
-                    Text(
-                      "Refresh",
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          OutlinedButton(onPressed: onTap, child: Text("Refresh",style: TextStyle(color: Colors.black),))
         ],
       ),
     );

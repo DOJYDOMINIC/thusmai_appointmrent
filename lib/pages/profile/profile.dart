@@ -243,9 +243,8 @@ class _ProfileState extends State<Profile> {
                           onTap: () async {
                             SharedPreferences prefs = await SharedPreferences.getInstance();
                             await prefs.clear();
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(builder: (context) => Login()),
+                            Provider.of<AppLogin>(context, listen: false).backendSessionClear();
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login()),
                                   (Route<dynamic> route) => false,
                             );
                           },

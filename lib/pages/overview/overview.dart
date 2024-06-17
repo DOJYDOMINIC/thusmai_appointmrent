@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
+import 'package:thusmai_appointmrent/controller/payment_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../controller/connectivitycontroller.dart';
 import '../../controller/login_register_otp_api.dart';
@@ -23,10 +27,18 @@ class _OverviewState extends State<Overview>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  late Timer _timer;
+  int _currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    Provider.of<AppLogin>(context, listen: false).validateSession(context);
+    Provider.of<ZoomMeetingController>(context, listen: false).zoomClass();
+    Provider.of<PaymentController>(context, listen: false).financialConfiguration();
+    _timer = Timer.periodic(Duration(minutes: 15), (timer) {
+      Provider.of<ZoomMeetingController>(context, listen: false).zoomClass();
+    });
     // Initialize the AnimationController
     _controller = AnimationController(
       vsync: this, // SingleTickerProviderStateMixin provides vsync
@@ -49,7 +61,6 @@ class _OverviewState extends State<Overview>
     var id = Provider.of<AppLogin>(context, listen: false).userData?.uId ?? "";
     Provider.of<MeditationController>(context, listen: false)
         .meditationTimeDetails(context);
-    Provider.of<ZoomMeetingController>(context, listen: false).zoomClass();
     Provider.of<MeditationController>(context, listen: false)
         .meditationDetailsTime();
 
@@ -60,6 +71,7 @@ class _OverviewState extends State<Overview>
   void dispose() {
     // Clean up resources when the widget is removed from the widget tree
     // Provider.of<AppLogin>(context, listen: false).dispose();
+    _timer.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -127,59 +139,69 @@ class _OverviewState extends State<Overview>
     return Scaffold(
       floatingActionButton: flagModel.maintenancePaymentStatus == false
           ? null
-          : zoomMeet.zoomLink == null
+          : zoomMeet.zoomLink == ""
               ? null
-              : isBeforeStopTime(zoomMeet.zoomStopTime.toString()) == false
-                  ? null
-                  : Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        ScaleTransition(
-                          scale: _animation, // Apply the scaling animation
-                          child: Container(
-                            width: 60, // default size of FloatingActionButton
-                            height: 60,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              color: flagModel.maintenancePaymentStatus == false
-                                  ? Colors.grey
-                                  : Colors.blue.withOpacity(0.5),
+              : zoomMeet.zoomLink == null
+                  ? const Center(child: CircularProgressIndicator())
+                  : isBeforeStopTime(zoomMeet.zoomStopTime.toString()) == false
+                      ? null
+                      : Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            ScaleTransition(
+                              scale: _animation, // Apply the scaling animation
+                              child: Container(
+                                width:
+                                    60, // default size of FloatingActionButton
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  color: flagModel.maintenancePaymentStatus ==
+                                          false
+                                      ? Colors.grey
+                                      : Colors.blue.withOpacity(0.5),
+                                ),
+                              ),
                             ),
-                          ),
+                            FloatingActionButton(
+                              heroTag: 1,
+                              backgroundColor:
+                                  flagModel.maintenancePaymentStatus == false
+                                      ? Colors.grey
+                                      : Colors.blue,
+                              // replace shadeEight with your color
+                              onPressed:
+                                  flagModel.maintenancePaymentStatus == false
+                                      ? () {
+                                          appLogin.currentIndex = 3;
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              backgroundColor: Colors.red,
+                                              content: Text(enableMessage),
+                                              duration: Duration(seconds: 2),
+                                            ),
+                                          );
+                                        }
+                                      : () {
+                                          Provider.of<ZoomMeetingController>(
+                                                  context,
+                                                  listen: false)
+                                              .zoomPost();
+                                          launchUrl(Uri.parse(
+                                              zoomMeet.zoomLink.toString()));
+                                          print("object");
+                                        },
+                              child: Icon(
+                                Icons.video_call_outlined,
+                                size: 30,
+                                color: Colors
+                                    .white, // replace darkShade with your color
+                              ),
+                              mini: false,
+                            ),
+                          ],
                         ),
-                        FloatingActionButton(
-                          heroTag: 1,
-                          backgroundColor:
-                              flagModel.maintenancePaymentStatus == false
-                                  ? Colors.grey
-                                  : Colors.blue,
-                          // replace shadeEight with your color
-                          onPressed: flagModel.maintenancePaymentStatus == false
-                              ? () {
-                                  appLogin.currentIndex = 3;
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      backgroundColor: Colors.red,
-                                      content: Text(enableMessage),
-                                      duration: Duration(seconds: 2),
-                                    ),
-                                  );
-                                }
-                              : () {
-                                  launchUrl(
-                                      Uri.parse(zoomMeet.zoomLink.toString()));
-                                  print("object");
-                                },
-                          child: Icon(
-                            Icons.video_call_outlined,
-                            size: 30,
-                            color: Colors
-                                .white, // replace darkShade with your color
-                          ),
-                          mini: false,
-                        ),
-                      ],
-                    ),
       backgroundColor: shadeOne,
       body: SafeArea(
         child: connect.status == ConnectivityStatus.Offline
@@ -192,6 +214,8 @@ class _OverviewState extends State<Overview>
                       .eventList();
                   Provider.of<ConnectivityProvider>(context, listen: false)
                       .status;
+                  Provider.of<ZoomMeetingController>(context, listen: false)
+                      .zoomClass();
                 },
               ))
             : SingleChildScrollView(
@@ -372,7 +396,22 @@ class _OverviewState extends State<Overview>
                         ),
                       ),
                     ),
-                    spaceBetween,
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Events",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
                     overView.isEmpty
                         ? Padding(
                             padding: EdgeInsets.only(left: 16.sp, right: 16.sp),
@@ -629,6 +668,65 @@ class _OverviewState extends State<Overview>
                               // onPageChanged: callbackFunction,
                               scrollDirection: Axis.horizontal,
                             )),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Blogs",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    CarouselSlider.builder(
+                      itemCount: 5,
+                      itemBuilder: (BuildContext context, int itemIndex,
+                          int pageViewIndex) {
+                        return EventCard(
+                          image: imgFromFirebase,
+                          title: "data",
+                          description:
+                              "E/flutter (23073): #0      StandardMethodCodec.decodeEnvelope (package:flutter/src/services/message_codecs.dart:648:E/flutter (23073): #1      MethodChannel._invokeMethod (package:flutter/src/services/platform_channel.dart:334:18)E/flutter (23073): <asynchronous suspension>",
+                          date: "data",
+                          time: "data",
+                          backgroundColor: Colors.white,
+                          textColor: Colors.black,
+                        );
+                      },
+                      options: CarouselOptions(
+                        height: 170,
+                        aspectRatio: 16 / 9,
+                        viewportFraction: 1,
+                        initialPage: 0,
+                        enableInfiniteScroll: true,
+                        reverse: false,
+                        autoPlay: 0 == 1 ? false : true,
+                        autoPlayInterval: Duration(seconds: 3),
+                        autoPlayAnimationDuration: Duration(milliseconds: 800),
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        enlargeCenterPage: true,
+                        enlargeFactor: 0.1,
+                        scrollDirection: Axis.horizontal,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                        },
+                      ),
+                    ),
+                    // DotsIndicator(
+                    //   dotsCount: 5,
+                    //   position: _currentIndex,
+                    // ),
+                    SizedBox(
+                      height: 16,
+                    ),
                   ],
                 ),
               ),
@@ -640,5 +738,213 @@ class _OverviewState extends State<Overview>
     if (!await launchUrl(url)) {
       throw Exception('Could not launch url');
     }
+  }
+}
+
+class EventCard extends StatelessWidget {
+  final String? image;
+  final String title;
+  final String description;
+  final String? date;
+  final String time;
+  final Color backgroundColor;
+  final Color textColor;
+
+  const EventCard({
+    Key? key,
+    required this.image,
+    required this.title,
+    required this.description,
+    required this.date,
+    required this.time,
+    this.backgroundColor = Colors.white,
+    this.textColor = Colors.black,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet<void>(
+          backgroundColor: Colors.grey[900],
+          context: context,
+          builder: (BuildContext context) {
+            return SizedBox(
+              height: 400,
+              width: MediaQuery.of(context).size.width,
+              child: Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Container(
+                          height: 150,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            image: image != null
+                                ? DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: NetworkImage(image!),
+                                  )
+                                : null,
+                          ),
+                          child: image == null
+                              ? Center(
+                                  child: Text(
+                                    "No Image Available",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: textColor),
+                                  ),
+                                )
+                              : null,
+                        ),
+                        SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width - 150,
+                                child: Text(
+                                  title,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: textColor,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "${date != null ? date.toString() : 'N/A'} ($time)",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: textColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    Expanded(
+                      child: Scrollbar(
+                        thickness: 5,
+                        radius: Radius.circular(2),
+                        interactive: true,
+                        thumbVisibility: true,
+                        child: SingleChildScrollView(
+                          child: Text(
+                            description,
+                            style: TextStyle(color: textColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+      child: Padding(
+        padding: EdgeInsets.only(left: 16, right: 16),
+        child: Container(
+          height: 176,
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.amber.shade100,
+                Colors.amber.shade50,
+                Colors.amber.shade50,
+              ],
+            ),
+            border: Border.fromBorderSide(BorderSide.none),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(4),
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Container(
+                    width: 120.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: image != null
+                          ? DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(image!),
+                            )
+                          : null,
+                    ),
+                    child: image == null
+                        ? Center(
+                            child: Text(
+                              "No Image Available",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: textColor),
+                            ),
+                          )
+                        : null,
+                  ),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Spacer(),
+                  Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Spacer(),
+                  Row(
+                    children: [
+                      Icon(Icons.event_repeat_rounded),
+                      Text(
+                        "${date != null ? date.toString() : 'N/A'} ($time)",
+                        style: TextStyle(fontSize: 12, color: Colors.black),
+                      )
+                    ],
+                  ),
+                  Spacer(),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width - 200,
+                    child: Text(
+                      description,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black54,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      maxLines: 4,
+                    ),
+                  ),
+                  Spacer()
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

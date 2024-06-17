@@ -36,7 +36,7 @@ class UserClass {
   int? pincode;
   String? state;
   String? district;
-  // String? country;
+  String? country;
   String? phone;
   String? reference;
   String? languages;
@@ -61,7 +61,7 @@ class UserClass {
     this.pincode,
     this.state,
     this.district,
-    // this.country,
+    this.country,
     this.phone,
     this.reference,
     this.languages,
@@ -87,7 +87,7 @@ class UserClass {
     pincode: json["pincode"],
     state: json["state"],
     district: json["district"],
-    // country: json["country"],
+    country: json["country"],
     phone: json["phone"],
     reference: json["reference"],
     languages: json["languages"],
@@ -113,7 +113,7 @@ class UserClass {
     "pincode": pincode,
     "state": state,
     "district": district,
-    // "country": country,
+    "country": country,
     "phone": phone,
     "reference": reference,
     "languages": languages,

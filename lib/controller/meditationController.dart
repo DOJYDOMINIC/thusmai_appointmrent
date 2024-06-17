@@ -1,19 +1,17 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:thusmai_appointmrent/models/meditationtime_model.dart';
 import '../constant/constant.dart';
 import '../models/meditatiologmodel.dart';
 import '../models/meditationfulltime.dart';
-import 'login_register_otp_api.dart';
 
 
 class MeditationController extends ChangeNotifier {
 
-  Future<void> meditationTime(String start, String end) async {
+  Future<void> meditationTime(String start, String end,) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     try {
@@ -23,7 +21,9 @@ class MeditationController extends ChangeNotifier {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
         },
-        body: jsonEncode({"startdatetime": start, "stopdatetime": end}),
+        body: jsonEncode({"startdatetime": start, "stopdatetime": end,
+          // "morning_meditation": morning, "evening_meditation": evening
+        }),
       );
       if (response.statusCode == 200) {
         print("sucess");
@@ -122,6 +122,9 @@ class MeditationController extends ChangeNotifier {
     notifyListeners();
   }
 
+   bool? _clearNote ;
+  bool? get clearNote => _clearNote;
+
   Future<void> meditationNote( BuildContext context,String note, String type, String messageTime,String? messageDate) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
@@ -142,26 +145,28 @@ class MeditationController extends ChangeNotifier {
         }),
       );
       if (response.statusCode == 200) {
+        _clearNote = true;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Success"),
             backgroundColor: Colors.green,
           ),
         );
-        print("sucess");
       } else {
+        _clearNote = false;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Failed"),
             backgroundColor: Colors.red,
           ),
         );
-        print('Failed to send time: ${response.reasonPhrase}');
+        // print('Failed to send time: ${response.reasonPhrase}');
       }
+      notifyListeners();
     } catch (e) {
-      print('Error to send time:: $e');
+      _clearNote = false;
+      // print('Error to send time:: $e');
     }
-    notifyListeners();
   }
 
 
@@ -173,9 +178,11 @@ class MeditationController extends ChangeNotifier {
     var cookies = prefs.getString("cookie");
     print(cookies);
     var time = DateTime.now();
+    String formattedTime = "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
+
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/meditation-time?time=${time.hour}:${time.minute}:${time.minute}"),
+        Uri.parse("$baseUrl/meditation-time?time=$formattedTime"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -184,7 +191,6 @@ class MeditationController extends ChangeNotifier {
       if (response.statusCode == 200) {
         final dataList = jsonDecode(response.body);
         _meditationTime = MeditationTime.fromJson(dataList);
-
       } else {
         print('Failed to load appointments: ${response.reasonPhrase}');
       }

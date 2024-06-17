@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../constant/constant.dart';
+import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
 import '../../controller/message_controller.dart';
 
@@ -23,6 +24,8 @@ class _PrivateMessageState extends State<PrivateMessage> {
   void initState() {
     super.initState();
     Provider.of<MessageController>(context, listen: false).privateMessage("1");
+    Provider.of<AppLogin>(context, listen: false).validateSession(context);
+
   }
   @override
   Widget build(BuildContext context) {
@@ -91,7 +94,7 @@ class _PrivateMessageState extends State<PrivateMessage> {
                         cursorColor: Colors.black,
                         controller: _userMessageController,
                         decoration: InputDecoration(
-                          hintText: 'Type your message...',
+                          hintText: 'Type your Note...',
                           border: InputBorder.none,
                         ),
                         // onChanged: (val) {},

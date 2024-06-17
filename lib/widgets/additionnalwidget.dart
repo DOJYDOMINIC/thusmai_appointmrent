@@ -105,7 +105,8 @@ Widget profileCard(BuildContext context) {
                 overflow: TextOverflow.ellipsis),
             Text(pro.userData?.phone ?? "", overflow: TextOverflow.ellipsis),
             Text(pro.userData?.email ?? "", overflow: TextOverflow.ellipsis),
-            Text("DOJ : ${pro.userData?.doj != null ? DateFormat('dd/MM/yyyy').format(pro.userData!.doj!) : 'N/A'}",
+            Text(
+              "DOJ : ${pro.userData?.doj != null ? DateFormat('dd/MM/yyyy').format(pro.userData!.doj!) : 'N/A'}",
             ),
           ],
         ),
@@ -354,8 +355,7 @@ Future slidePageRoute(
 }
 
 // change asset image to network image on api call
-Widget rewardWidget(
-    String imgLink, String title, String description, days, Uri url) {
+Widget rewardWidget(String title, String description, days) {
   return Column(
     children: [
       SizedBox(
@@ -366,14 +366,15 @@ Widget rewardWidget(
             children: [
               Row(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.all(8.sp),
-                    child: Image(
-                        width: 56.w,
-                        height: 56.h,
-                        fit: BoxFit.cover,
-                        image: AssetImage(imgLink)),
-                  ),
+                  // Text(title),
+                  // Padding(
+                  //   padding: EdgeInsets.all(8.sp),
+                  //   child: Image(
+                  //       width: 56.w,
+                  //       height: 56.h,
+                  //       fit: BoxFit.cover,
+                  //       image: AssetImage(imgLink)),
+                  // ),
                   SizedBox(
                     width: 16.w,
                   ),
@@ -401,17 +402,17 @@ Widget rewardWidget(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp),
                   ),
-                  ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(goldShade)),
-                      onPressed: () {
-                        launchURL(url);
-                      },
-                      child: Text(
-                        "share",
-                        style: TextStyle(
-                            color: darkShade, fontWeight: FontWeight.w400),
-                      ))
+                  // ElevatedButton(
+                  //     style: ButtonStyle(
+                  //         backgroundColor: MaterialStatePropertyAll(goldShade)),
+                  //     onPressed: () {
+                  //       launchURL(url);
+                  //     },
+                  //     child: Text(
+                  //       "share",
+                  //       style: TextStyle(
+                  //           color: darkShade, fontWeight: FontWeight.w400),
+                  //     ))
                 ],
               )
             ],
@@ -492,13 +493,14 @@ Widget transactionWidget(IconData icon, String date, String title,
                         fontSize: 14.sp),
                   ),
                   IconButton(
-                      onPressed: onPressed,
-                      icon: Icon(
-                        Icons.copy,
-                        size: 16,
-                      )),
+                    onPressed: onPressed,
+                    icon: Icon(
+                      Icons.copy,
+                      size: 16,
+                    ),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -508,4 +510,35 @@ Widget transactionWidget(IconData icon, String date, String title,
       )
     ],
   );
+}
+
+bool isCurrentTimeBetween(String fromTime, String toTime) {
+  if (fromTime == "" || toTime == "") {
+    return false;
+  }
+
+  TimeOfDay from = TimeOfDay(
+    hour: int.parse(fromTime.split(":")[0]),
+    minute: int.parse(fromTime.split(":")[1]),
+  );
+
+  TimeOfDay to = TimeOfDay(
+    hour: int.parse(toTime.split(":")[0]),
+    minute: int.parse(toTime.split(":")[1]),
+  );
+
+  TimeOfDay now = TimeOfDay.now();
+
+  if (from.hour < to.hour ||
+      (from.hour == to.hour && from.minute <= to.minute)) {
+    return (now.hour > from.hour ||
+            (now.hour == from.hour && now.minute >= from.minute)) &&
+        (now.hour < to.hour ||
+            (now.hour == to.hour && now.minute <= to.minute));
+  } else {
+    return (now.hour > from.hour ||
+            (now.hour == from.hour && now.minute >= from.minute)) ||
+        (now.hour < to.hour ||
+            (now.hour == to.hour && now.minute <= to.minute));
+  }
 }
