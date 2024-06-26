@@ -97,6 +97,7 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
   // }
 
   Future<void> _createOrderAndOpenCheckout() async {
+    Provider.of<AppLogin>(context,listen: false).disableButton();
     try {
       var amount = double.parse(donationController.text);
       double total = amount * 100;
@@ -239,10 +240,10 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
                 SizedBox(
                   height: 56.h,
                   child: ElevatedButton(
-                    onPressed: _createOrderAndOpenCheckout,
+                    onPressed:Provider.of<AppLogin>(context).isButtonDisabled ? null :  _createOrderAndOpenCheckout,
                     style: ElevatedButton.styleFrom(
                       shadowColor: Colors.black,
-                      backgroundColor: goldShade,
+                      backgroundColor:Provider.of<AppLogin>(context).isButtonDisabled ? null : goldShade,
                       elevation: 4,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),

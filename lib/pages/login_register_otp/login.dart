@@ -142,6 +142,9 @@ class _LoginState extends State<Login> {
                                 color: goldShade,
                               ),
                               fillColor: darkShade,
+                              disabledBorder: InputBorder.none,
+                              focusedErrorBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
                               filled: true,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
@@ -155,6 +158,7 @@ class _LoginState extends State<Login> {
                                 borderRadius: BorderRadius.circular(16.0),
                                 borderSide: BorderSide(color: goldShade, width: 1),
                               ),
+
                             ),
                           ),
                           SizedBox(
@@ -168,7 +172,7 @@ class _LoginState extends State<Login> {
                               return null;
                             },
                             onChanged: (value) {
-                              _password = value;
+                              _password = value.trim();
                             },
                             style: TextStyle(
                               color: Colors.white,

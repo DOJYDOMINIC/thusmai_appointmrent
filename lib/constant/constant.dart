@@ -11,9 +11,17 @@ const  superAdmin = "https://thasmai.tstsvc.in/api/v1";
 
 
 
+// const baseUrl = "http://192.168.1.53:5000/api/v1/User";
+// const  adminBaseUrl = "http://192.168.1.53:5000/api/v1/admin";
+// const  paymentBaseUrl = "http://192.168.1.53:5000/api/v1/payment";
+// const  superAdmin = "http://192.168.1.53:5000/api/v1";
+
+
 // Url to Launch
 final Uri registerUrl = Uri.parse("https://thasmai.tstsvc.in");
 
+final String audioUrl = "https://firebasestorage.googleapis.com/v0/b/thasmai-star-life.appspot.com/o/general_images%2FY2meta.app%20-%20Shivashtakam%20Thasmai%20Namah%20Paramakarana%20written%20by%20Aadi%20Shankaracharya%20(320%20kbps).mp3?alt=media&token=845e902d-dccf-46fb-9a97-1013a6987c04";
+// final String audioUrl = "assets/audio/thasmainamah.mp3";
 
 
 

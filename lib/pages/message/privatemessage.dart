@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../constant/constant.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
@@ -52,8 +54,7 @@ class _PrivateMessageState extends State<PrivateMessage> {
             reverse: true,
             itemCount: messageController.privateMessages.length,
             itemBuilder: (context, index) {
-              return  getSenderView(
-                  ChatBubbleClipper10(type: BubbleType.sendBubble), context,"${messageController.privateMessages[index].message}");
+              return  getSenderView(ChatBubbleClipper10(type: BubbleType.sendBubble), context,"${messageController.privateMessages[index].message}","${messageController.privateMessages[index].messageTime}","","${messageController.privateMessages[index].messageDate}");
             },
           ),
         ),
@@ -131,33 +132,99 @@ class _PrivateMessageState extends State<PrivateMessage> {
   }
 }
 
-getSenderView(CustomClipper clipper, BuildContext context,String note) => ChatBubble(
-  clipper: clipper,
-  alignment: Alignment.topRight,
-  margin: EdgeInsets.only(top: 20),
-  backGroundColor: Colors.grey.shade300,
-  child: Container(
-    constraints: BoxConstraints(
-      maxWidth: MediaQuery.of(context).size.width * 0.7,
-    ),
-    child: Text(
-      note,
-      style: TextStyle(color: Colors.black),
-    ),
-  ),
-);
+// getSenderView(CustomClipper clipper, BuildContext context,String note) => ChatBubble(
+//   clipper: clipper,
+//   alignment: Alignment.topRight,
+//   margin: EdgeInsets.only(top: 20),
+//   backGroundColor: Colors.grey.shade300,
+//   child: Container(
+//     constraints: BoxConstraints(
+//       maxWidth: MediaQuery.of(context).size.width * 0.7,
+//     ),
+//     child: Text(
+//       note,
+//       style: TextStyle(color: Colors.black),
+//     ),
+//   ),
+// );
 
-getReceiverView(CustomClipper clipper, BuildContext context) => ChatBubble(
-  clipper: clipper,
-  backGroundColor: Color(0xffE7E7ED),
-  margin: EdgeInsets.only(top: 20),
-  child: Container(
-    constraints: BoxConstraints(
-      maxWidth: MediaQuery.of(context).size.width * 0.7,
-    ),
-    child: Text(
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
-      style: TextStyle(color: Colors.black),
-    ),
-  ),
-);
+// getReceiverView(CustomClipper clipper, BuildContext context) => ChatBubble(
+//   clipper: clipper,
+//   backGroundColor: Color(0xffE7E7ED),
+//   margin: EdgeInsets.only(top: 20),
+//   child: Container(
+//     constraints: BoxConstraints(
+//       maxWidth: MediaQuery.of(context).size.width * 0.7,
+//     ),
+//     child: Text(
+//       "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+//       style: TextStyle(color: Colors.black),
+//     ),
+//   ),
+// );
+
+
+getSenderView(CustomClipper clipper, BuildContext context, String note,String time,
+    String messageName, String messageDate) =>
+    ChatBubble(
+      clipper: clipper,
+      alignment: Alignment.topRight,
+      margin: EdgeInsets.only(top: 20),
+      backGroundColor: Colors.grey.shade300,
+      child: Container(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width * 0.7,
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // SizedBox(
+                  //   width:150.w,
+                  //   child: Text(
+                  //     messageName,
+                  //     style: TextStyle(
+                  //         fontSize: 16.sp,
+                  //         color: darkShade,
+                  //         fontWeight: FontWeight.w500),
+                  //   ),
+                  // ),
+
+                  Text(
+                    messageDate,
+                    style: TextStyle(
+                        fontSize: 12.sp,
+                        color: darkShade,
+                        fontWeight: FontWeight.w400),
+                  )
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Linkify(
+                onOpen: (link) async {
+                  // This function will be called when a link is clicked
+                  if (await canLaunchUrl(Uri.parse(link.url))) {
+                    await launchUrl(Uri.parse(link.url));
+                  } else {
+                    throw 'Could not launch $link';
+                  }
+                },
+                text: note,
+                style: TextStyle(color: Colors.black,fontSize: 16.sp),
+                linkStyle: TextStyle(color: Colors.blue),
+                // Optional, set to false to disable @mentions
+                // humanize: false,
+              ),
+            ),
+            Align(
+                alignment: Alignment.bottomRight,
+                child: Text(time,style: TextStyle(fontSize: 10.sp),))
+          ],
+        ),
+      ),
+    );

@@ -49,7 +49,7 @@ class _MeditationLogState extends State<MeditationLog> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 8.sp),
-                  child: Text("Days attended"),
+                  child: Text("Days Meditated"),
                 ),
                 Text("   : ${meditation.greenCount}"),
               ],
@@ -63,7 +63,7 @@ class _MeditationLogState extends State<MeditationLog> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 8.sp),
-                  child: Text("Days neglected"),
+                  child: Text("Days Missed"),
                 ),
                 Text(" : ${meditation.redCount}")
               ],

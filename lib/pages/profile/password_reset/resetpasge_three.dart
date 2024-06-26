@@ -9,13 +9,12 @@ class ResetPageThree extends StatefulWidget {
   const ResetPageThree({super.key, this.data});
 
   final data;
+
   @override
   State<ResetPageThree> createState() => _ResetPageThreeState();
 }
 
 class _ResetPageThreeState extends State<ResetPageThree> {
-
-
   TextEditingController _newPassword = TextEditingController();
 
   @override
@@ -42,15 +41,20 @@ class _ResetPageThreeState extends State<ResetPageThree> {
           child: Align(
             alignment: Alignment.center,
             child: Container(
-              height: MediaQuery.of(context).size.height-100,
+              height: MediaQuery.of(context).size.height - 100,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(height: 44,),
+                  SizedBox(
+                    height: 44,
+                  ),
                   SvgPicture.asset(
                     "assets/svgImage/Reset password.svg",
                   ),
-                  Text("For a verification code to be sent to the \nregistered mobile number, please provide your \nemail address.",textAlign: TextAlign.center,),
+                  Text(
+                    "For a verification code to be sent to the \nregistered mobile number, please provide your \nemail address.",
+                    textAlign: TextAlign.center,
+                  ),
                   Column(
                     children: [
                       TextFormField(
@@ -82,17 +86,17 @@ class _ResetPageThreeState extends State<ResetPageThree> {
                           ),
                           fillColor: shadeFour,
                           filled: true,
-                          enabledBorder:OutlineInputBorder(
+                          enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16.0),
-                            borderSide: BorderSide(color: shadeTen,width: 1),
+                            borderSide: BorderSide(color: shadeTen, width: 1),
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16.0),
-                            borderSide: BorderSide(color: shadeTen,width: 1),
+                            borderSide: BorderSide(color: shadeTen, width: 1),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16.0),
-                            borderSide: BorderSide(color: shadeTen,width: 1),
+                            borderSide: BorderSide(color: shadeTen, width: 1),
                           ),
                         ),
                       ),
@@ -102,14 +106,17 @@ class _ResetPageThreeState extends State<ResetPageThree> {
                         child: ElevatedButton(
                           onPressed: () {
                             var data = {
-                              "email":  widget.data["email"].toString(),
+                              "email": widget.data["email"].toString(),
                               "new_password": _newPassword.text,
                             };
 
-                            Provider.of<AppLogin>(context, listen: false).resetPassword(context, data);
+                            Provider.of<AppLogin>(context, listen: false)
+                                .resetPassword(context, data);
                           },
                           style: ElevatedButton.styleFrom(
-                            shadowColor: Colors.black, backgroundColor: goldShade, // Use primary instead of backgroundColor
+                            shadowColor: Colors.black,
+                            backgroundColor: goldShade,
+                            // Use primary instead of backgroundColor
                             elevation: 4,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -128,7 +135,9 @@ class _ResetPageThreeState extends State<ResetPageThree> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16,)
+                  SizedBox(
+                    height: 16,
+                  )
                 ],
               ),
             ),
@@ -138,4 +147,3 @@ class _ResetPageThreeState extends State<ResetPageThree> {
     );
   }
 }
-

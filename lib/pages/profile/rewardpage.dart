@@ -28,6 +28,7 @@ class _RewardPageState extends State<RewardPage> {
  var  rewardListData = Provider.of<ProfileController>(context).rewardListData;
  // print(rewardListData![0].distributionTime.toString());
     return Scaffold(
+      backgroundColor: shadeOne,
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
@@ -43,15 +44,14 @@ class _RewardPageState extends State<RewardPage> {
           style: TextStyle(color: shadeOne),
         ),
       ),
-      body: ListView.builder(
+      body:rewardListData?.length != null? ListView.builder(
         itemCount: rewardListData?.length,
         itemBuilder: (context, index) {
           DateTime dateTime = DateTime.parse(rewardListData?[index].distributionTime.toString()??"");
-          // Format date and time separately
           String formattedDate = DateFormat('yyyy/MM/dd').format(dateTime);
           String formattedTime = DateFormat('hh:mm:ss a').format(dateTime);
         return  rewardWidget(formattedTime, "Rs : ${rewardListData?[index].reward.toString()}",formattedDate);
-      },),
+      },): CircularProgressIndicator(),
     );
   }
 }

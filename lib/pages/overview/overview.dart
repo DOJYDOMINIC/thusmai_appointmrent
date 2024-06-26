@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +12,8 @@ import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
 import '../../controller/overviewController.dart';
 import '../../controller/zoommeeting_controller.dart';
+import '../../widgets/additionnalwidget.dart';
+import '../profile/profile.dart';
 import '../refreshpage.dart';
 
 class Overview extends StatefulWidget {
@@ -28,7 +28,6 @@ class _OverviewState extends State<Overview>
   late AnimationController _controller;
   late Animation<double> _animation;
   late Timer _timer;
-  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -57,7 +56,8 @@ class _OverviewState extends State<Overview>
     Provider.of<AppLogin>(context, listen: false).getUserByID();
     Provider.of<AppLogin>(context, listen: false).importantFlags();
     Provider.of<OverViewController>(context, listen: false).eventList();
-    Provider.of<ConnectivityProvider>(context, listen: false).status;
+    Provider.of<OverViewController>(context, listen: false).blogs();
+    Provider.of<ConnectivityProvider>(context, listen: false).initConnectivity();
     var id = Provider.of<AppLogin>(context, listen: false).userData?.uId ?? "";
     Provider.of<MeditationController>(context, listen: false)
         .meditationTimeDetails(context);
@@ -104,6 +104,7 @@ class _OverviewState extends State<Overview>
     int currentMinute = now.minute;
 
     // Compare the current time with the stop time
+
     if (currentHour < stopHour) {
       return true;
     } else if (currentHour == stopHour) {
@@ -115,16 +116,16 @@ class _OverviewState extends State<Overview>
 
   @override
   Widget build(BuildContext context) {
+    var indexProvider = Provider.of<AppLogin>(context);
     var id = Provider.of<AppLogin>(context, listen: false).userData?.uId ?? "";
     Provider.of<MeditationController>(context, listen: false)
         .meditationTimeDetails(context);
     var connect = Provider.of<ConnectivityProvider>(context);
     var appLogin = Provider.of<AppLogin>(context);
     var overView = Provider.of<OverViewController>(context).eventLIst;
+    var blogsLIst = Provider.of<OverViewController>(context).blogsLIst;
     var flagModel = Provider.of<AppLogin>(context).flagModel;
-    var zoomMeet =
-        Provider.of<ZoomMeetingController>(context).ZoomClassModelData;
-    print(zoomMeet.zoomStopTime);
+    var zoomMeet = Provider.of<ZoomMeetingController>(context).ZoomClassModelData;
 
     // String? firstName =
     //     appLogin.userData?.firstName; // Get the first name, if available
@@ -190,7 +191,6 @@ class _OverviewState extends State<Overview>
                                               .zoomPost();
                                           launchUrl(Uri.parse(
                                               zoomMeet.zoomLink.toString()));
-                                          print("object");
                                         },
                               child: Icon(
                                 Icons.video_call_outlined,
@@ -223,7 +223,8 @@ class _OverviewState extends State<Overview>
                   children: [
                     GestureDetector(
                       onTap: () {
-                        // Provider.of<PaymentController>(context, listen: false).processPayment(context, appLogin.userData?.uId);
+                        slidePageRoute(context, Profile());
+                        // Navigator.push(context,MaterialPageRoute(builder: (context) => Profile(),));
                       },
                       child: Padding(
                         padding: EdgeInsets.only(
@@ -290,7 +291,7 @@ class _OverviewState extends State<Overview>
                                       Column(
                                         children: [
                                           Text(
-                                            "Card No : ${appLogin.userData?.uId}",
+                                            "Card No : TSL${appLogin.userData?.uId}",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 12.sp),
@@ -328,70 +329,75 @@ class _OverviewState extends State<Overview>
                       ),
                     ),
                     spaceBetween,
-                    Padding(
-                      padding: EdgeInsets.only(left: 16.sp, right: 16.sp),
-                      child: Container(
-                        height: 176.h,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Colors.amber.shade100, // Lighter color
-                              Colors.amber.shade50, // Lighter color
-                              Colors.amber.shade50, // Lighter color
-                            ],
-                            // stops: [0.0, 1.0],
+                    InkWell(
+                      onTap: (){
+                        indexProvider.currentIndex = 2;
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 16.sp, right: 16.sp),
+                        child: Container(
+                          height: 176.h,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Colors.amber.shade100, // Lighter color
+                                Colors.amber.shade50, // Lighter color
+                                Colors.amber.shade50, // Lighter color
+                              ],
+                              // stops: [0.0, 1.0],
+                            ),
+                            border: Border.fromBorderSide(BorderSide.none),
+                            borderRadius: BorderRadius.circular(12.sp),
                           ),
-                          border: Border.fromBorderSide(BorderSide.none),
-                          borderRadius: BorderRadius.circular(12.sp),
-                        ),
-                        child: Padding(
-                          padding:
-                              EdgeInsets.fromLTRB(16.sp, 8.sp, 16.sp, 8.sp),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Meditation Cycle"),
-                              spaceBetween,
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Icon(
-                                    Icons.self_improvement,
-                                    size: 80.sp,
-                                  ),
-                                  Container(
-                                    height: 100.h,
-                                    width: 1.w,
-                                    color: brown,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Completed Cycle"),
-                                      spaceBetween,
-                                      Text("Current Cycle"),
-                                      spaceBetween,
-                                      Text("Days Completed"),
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text("${appLogin.userData?.cycle ?? 0}"),
-                                      spaceBetween,
-                                      Text("${appLogin.userData?.cycle ?? 0}"),
-                                      spaceBetween,
-                                      Text("${appLogin.userData?.day ?? 0}"),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ],
+                          child: Padding(
+                            padding:
+                                EdgeInsets.fromLTRB(16.sp, 8.sp, 16.sp, 8.sp),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Meditation Cycle"),
+                                spaceBetween,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Icon(
+                                      Icons.self_improvement,
+                                      size: 80.sp,
+                                    ),
+                                    Container(
+                                      height: 100.h,
+                                      width: 1.w,
+                                      color: brown,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Completed Cycle"),
+                                        spaceBetween,
+                                        Text("Current Cycle"),
+                                        spaceBetween,
+                                        Text("Days Completed"),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text("${appLogin.userData?.cycle ?? 0}"),
+                                        spaceBetween,
+                                        Text("${appLogin.userData?.cycle ?? 0}"),
+                                        spaceBetween,
+                                        Text("${appLogin.userData?.day ?? 0}"),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -684,42 +690,262 @@ class _OverviewState extends State<Overview>
                     SizedBox(
                       height: 8,
                     ),
-                    CarouselSlider.builder(
-                      itemCount: 5,
-                      itemBuilder: (BuildContext context, int itemIndex,
-                          int pageViewIndex) {
-                        return EventCard(
-                          image: imgFromFirebase,
-                          title: "data",
-                          description:
-                              "E/flutter (23073): #0      StandardMethodCodec.decodeEnvelope (package:flutter/src/services/message_codecs.dart:648:E/flutter (23073): #1      MethodChannel._invokeMethod (package:flutter/src/services/platform_channel.dart:334:18)E/flutter (23073): <asynchronous suspension>",
-                          date: "data",
-                          time: "data",
-                          backgroundColor: Colors.white,
-                          textColor: Colors.black,
-                        );
-                      },
-                      options: CarouselOptions(
-                        height: 170,
-                        aspectRatio: 16 / 9,
-                        viewportFraction: 1,
-                        initialPage: 0,
-                        enableInfiniteScroll: true,
-                        reverse: false,
-                        autoPlay: 0 == 1 ? false : true,
-                        autoPlayInterval: Duration(seconds: 3),
-                        autoPlayAnimationDuration: Duration(milliseconds: 800),
-                        autoPlayCurve: Curves.fastOutSlowIn,
-                        enlargeCenterPage: true,
-                        enlargeFactor: 0.1,
-                        scrollDirection: Axis.horizontal,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                        },
-                      ),
-                    ),
+                    blogsLIst.isEmpty
+                        ? Padding(
+                            padding: EdgeInsets.only(left: 16.sp, right: 16.sp),
+                            child: Container(
+                              height: 176.h,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Colors.amber.shade100, // Lighter color
+                                    Colors.amber.shade50, // Lighter color
+                                    Colors.amber.shade50, // Lighter color
+                                  ],
+                                ),
+                                border: Border.fromBorderSide(BorderSide.none),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Center(child: Text("No Blogs")),
+                            ),
+                          )
+                        : CarouselSlider.builder(
+                            itemCount: blogsLIst.length,
+                            itemBuilder: (BuildContext context, int itemIndex,
+                                int pageViewIndex) {
+                              return SizedBox(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    showModalBottomSheet<void>(
+                                      backgroundColor: shadeOne,
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return SizedBox(
+                                          height: 400.h,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: Container(
+                                            padding: EdgeInsets.all(16),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Row(
+                                                  children: [
+                                                    Container(
+                                                      height: 150.h,
+                                                      width: 100.w,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        image: DecorationImage(
+                                                          fit: BoxFit.fill,
+                                                          image: NetworkImage(
+                                                              "${blogsLIst[itemIndex].image}"),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(height: 16.h),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Container(
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width -
+                                                                150,
+                                                            child: Text(
+                                                              "${blogsLIst[itemIndex].blogName}",
+                                                              style: TextStyle(
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "${blogsLIst[itemIndex].date != null ? blogsLIst[itemIndex].date.toString() : 'N/A'}",
+                                                            style: TextStyle(
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 8.h),
+                                                Expanded(
+                                                  child: Scrollbar(
+                                                    thickness: 5,
+                                                    radius: Radius.circular(2),
+                                                    interactive: true,
+                                                    thumbVisibility: true,
+                                                    child:
+                                                        SingleChildScrollView(
+                                                            child: Text(
+                                                      "${blogsLIst[itemIndex].blogDescription}",
+                                                    )),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 16.sp, right: 16.sp),
+                                    child: Container(
+                                      height: 176.h,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Colors.amber
+                                                .shade100, // Lighter color
+                                            Colors
+                                                .amber.shade50, // Lighter color
+                                            Colors
+                                                .amber.shade50, // Lighter color
+                                          ],
+                                        ),
+                                        border: Border.fromBorderSide(
+                                            BorderSide.none),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.all(4.sp),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.sp),
+                                              child: Container(
+                                                width: 122.w,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                  image: blogsLIst[itemIndex]
+                                                              .image !=
+                                                          null
+                                                      ? DecorationImage(
+                                                          fit: BoxFit.fill,
+                                                          image: NetworkImage(
+                                                              "${blogsLIst[itemIndex].image}"),
+                                                        )
+                                                      : null,
+                                                ),
+                                                child: blogsLIst[itemIndex]
+                                                            .image ==
+                                                        null
+                                                    ? Center(
+                                                        child: Text(
+                                                          "No Image Available",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                      )
+                                                    : null,
+                                              ),
+                                            ),
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 200.w,
+                                                child: Text(
+                                                  "${blogsLIst[itemIndex].blogName}",
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontSize: 14.sp,
+                                                      color: darkShade,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Row(
+                                                children: [
+                                                  Icon(Icons
+                                                      .event_repeat_rounded),
+                                                  Text(
+                                                    // "${overView[itemIndex].date != null ? DateFormat('dd/MM/yyyy').format(overView[itemIndex].date!) : 'N/A'} (${overView[itemIndex].eventTime})",
+                                                    "${blogsLIst[itemIndex].date != null ? blogsLIst[itemIndex].date.toString() : 'N/A'} ",
+                                                    style: TextStyle(
+                                                        fontSize: 12.sp,
+                                                        color: darkShade),
+                                                  )
+                                                ],
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                  width: 200.w,
+                                                  child: Text(
+                                                    "${blogsLIst[itemIndex].blogDescription}",
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: eventSubText,
+                                                      // Maximum number of lines
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                    maxLines: 4,
+                                                  )),
+                                              Spacer()
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            options: CarouselOptions(
+                              height: 170,
+                              aspectRatio: 16 / 9,
+                              viewportFraction: 1,
+                              initialPage: 0,
+                              enableInfiniteScroll: true,
+                              reverse: false,
+                              autoPlay: blogsLIst.length == 1 ? false : true,
+                              autoPlayInterval: Duration(seconds: 3),
+                              autoPlayAnimationDuration:
+                                  Duration(milliseconds: 800),
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              enlargeCenterPage: true,
+                              enlargeFactor: 0.1,
+                              // onPageChanged: callbackFunction,
+                              scrollDirection: Axis.horizontal,
+                            )),
                     // DotsIndicator(
                     //   dotsCount: 5,
                     //   position: _currentIndex,
@@ -766,7 +992,7 @@ class EventCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         showModalBottomSheet<void>(
-          backgroundColor: Colors.grey[900],
+          backgroundColor: Colors.white,
           context: context,
           builder: (BuildContext context) {
             return SizedBox(
@@ -781,8 +1007,8 @@ class EventCard extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          height: 150,
-                          width: 100,
+                          height: 150.h,
+                          width: 100.w,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             image: image != null
@@ -821,7 +1047,7 @@ class EventCard extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                "${date != null ? date.toString() : 'N/A'} ($time)",
+                                "${date != null ? date.toString() : 'N/A'} $time",
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -920,7 +1146,7 @@ class EventCard extends StatelessWidget {
                     children: [
                       Icon(Icons.event_repeat_rounded),
                       Text(
-                        "${date != null ? date.toString() : 'N/A'} ($time)",
+                        "${date != null ? date.toString() : 'N/A'} $time",
                         style: TextStyle(fontSize: 12, color: Colors.black),
                       )
                     ],

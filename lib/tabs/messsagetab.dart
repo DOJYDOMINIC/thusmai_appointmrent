@@ -20,11 +20,11 @@ class _MessageTabState extends State<MessageTab> {
 
 
 
-  @override
-  void initState() {
-    super.initState();
-
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  // }
   @override
   Widget build(BuildContext context) {
     var pro = Provider.of<AppointmentController>(context);
@@ -66,7 +66,7 @@ class _MessageTabState extends State<MessageTab> {
         ),
         Tab(
           child: Text(
-            "General",
+            "Global",
           ),
         ),
         ],),

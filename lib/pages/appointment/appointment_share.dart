@@ -69,8 +69,8 @@ final _screenShotController = ScreenshotController();
                                 SizedBox(height: 20,),
                                 Column(
                                   children: [
-                                    Text("${widget.appointment.userName??"N/A"}"),
-                                    Text("${widget.appointment.uId??"N/A"}"),
+                                    Text("${widget.appointment.userName??"N/A"}",style: TextStyle(fontWeight: FontWeight.bold),),
+                                    Text("${widget.appointment.uId??"N/A"}",style: TextStyle(fontWeight: FontWeight.bold)),
                                   ],
                                 ),
                                 Row(

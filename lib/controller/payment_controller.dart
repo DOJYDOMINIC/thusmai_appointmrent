@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -11,16 +10,12 @@ import 'package:http/http.dart' as http;
 import '../models/financial_data.dart';
 import '../models/transaction_list.dart';
 import '../models/transactionsummary.dart';
-import '../models/videoslist.dart';
 import 'login_register_otp_api.dart';
 
-
 class PaymentController extends ChangeNotifier {
-
-
   Future<void> processPayment(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
- var data  = Provider.of<AppLogin>(context,listen: false).userData;
+    var data = Provider.of<AppLogin>(context, listen: false).userData;
 
     var cookies = prefs.getString("cookie");
 
@@ -31,7 +26,7 @@ class PaymentController extends ChangeNotifier {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
         },
-        body: jsonEncode({"UId":data?.uId }),
+        body: jsonEncode({"UId": data?.uId}),
       );
 
       if (response.statusCode == 200) {
@@ -41,7 +36,6 @@ class PaymentController extends ChangeNotifier {
       } else {
         // Handle error
         var decode = jsonDecode(response.body);
-
       }
     } catch (e) {
       // Handle exception
@@ -50,6 +44,7 @@ class PaymentController extends ChangeNotifier {
   }
 
   TransactionSummary _transactionSummary = TransactionSummary();
+
   TransactionSummary get transactionSummary => _transactionSummary;
 
   Future<void> transactionData() async {
@@ -81,6 +76,7 @@ class PaymentController extends ChangeNotifier {
   }
 
   TransactionList _transactionList = TransactionList();
+
   TransactionList get transactionLists => _transactionList;
 
   Future<void> transactionList() async {
@@ -109,12 +105,11 @@ class PaymentController extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
-
-
-
-  Future<void> paymentSuccess( BuildContext context,String url, Map<String,dynamic> paymentData,) async {
+  Future<void> paymentSuccess(
+    BuildContext context,
+    String url,
+    Map<String, dynamic> paymentData,
+  ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
 
@@ -128,20 +123,20 @@ class PaymentController extends ChangeNotifier {
         body: jsonEncode(paymentData),
       );
       if (response.statusCode == 200) {
-        Provider.of<PaymentController>(context,listen: false).transactionData();
-        Provider.of<AppLogin>(context,listen: false).importantFlags();
-        if(url == "meditation-paymentVerification"){
+        Provider.of<PaymentController>(context, listen: false)
+            .transactionData();
+        Provider.of<AppLogin>(context, listen: false).importantFlags();
+        if (url == "meditation-paymentVerification") {
           processPayment(context);
-          Provider.of<AppLogin>(context,listen: false).importantFlags();
-
+          Provider.of<AppLogin>(context, listen: false).importantFlags();
         }
-     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-      backgroundColor: Colors.green,
-      content: Text("Payment Completed"),
-      duration: Duration(seconds: 1),
-    ),
-    );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text("Payment Completed"),
+            duration: Duration(seconds: 1),
+          ),
+        );
       } else {
         print('Failed to send time: ${response.reasonPhrase}');
       }
@@ -150,7 +145,8 @@ class PaymentController extends ChangeNotifier {
     }
   }
 
-  List<Finconfig> _financialConfig =  [];
+  List<Finconfig> _financialConfig = [];
+
   List<Finconfig> get financialConfig => _financialConfig;
 
   Future<void> financialConfiguration() async {
@@ -167,17 +163,13 @@ class PaymentController extends ChangeNotifier {
       var res = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        _financialConfig  =  List<Finconfig>.from(res["finconfig"].map((x) => Finconfig.fromJson(x)));
-        // print("new Data : ${financialConfig[2].value}");
-      }else {
-      }
+        _financialConfig = List<Finconfig>.from(
+            res["finconfig"].map((x) => Finconfig.fromJson(x)));
+      } else {}
     } catch (e) {
       if (kDebugMode) {
         print("Finance Data : $e");
       }
     }
   }
-
-
-
 }

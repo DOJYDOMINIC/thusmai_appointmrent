@@ -111,11 +111,11 @@ class _ResetPageTwoState extends State<ResetPageTwo> {
                     SvgPicture.asset(
                       "assets/svgImage/Frame 2608318.svg",
                     ),
-                    Text("Enter the four digit code we sent to +91******5798",textAlign: TextAlign.center,),
+                    // Text("Enter the four digit code we sent to +91******5798",textAlign: TextAlign.center,),
+                    Text("",style: TextStyle(fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
                     Column(
                       children: [
                         Directionality(
-                          // Specify direction if desired
                           textDirection: TextDirection.ltr,
                           child: Pinput(
                             controller: pinController,
@@ -186,23 +186,23 @@ class _ResetPageTwoState extends State<ResetPageTwo> {
                         ),
 
                         SizedBox(height: 44.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              enableResend
-                                  ? 'Resend OTP in '
-                                  : 'Resend OTP in ',
-                              style: TextStyle(color:darkShade, fontSize: 16.sp),
-                            ),
-                            Text(
-                              enableResend
-                                  ? '00:30'
-                                  : '00:$secondsRemaining',
-                              style: TextStyle(color: goldShade, fontSize: 16.sp),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     Text(
+                        //       enableResend
+                        //           ? 'Resend OTP in '
+                        //           : 'Resend OTP in ',
+                        //       style: TextStyle(color:darkShade, fontSize: 16.sp),
+                        //     ),
+                        //     Text(
+                        //       enableResend
+                        //           ? '00:30'
+                        //           : '00:$secondsRemaining',
+                        //       style: TextStyle(color: goldShade, fontSize: 16.sp),
+                        //     ),
+                        //   ],
+                        // ),
                         SizedBox(height: 44.h),
                         SizedBox(
                           height: 56.h,
@@ -227,7 +227,7 @@ class _ResetPageTwoState extends State<ResetPageTwo> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "send",
+                                  "Send",
                                   style: TextStyle(color: darkShade),
                                 ),
                               ],
@@ -235,28 +235,28 @@ class _ResetPageTwoState extends State<ResetPageTwo> {
                           ),
                         ),
                         SizedBox(height: 44.h),
-                        TextButton(
-                          onPressed: () {
-                            if (enableResend == true) {
-                              Provider.of<AppLogin>(context, listen: false).requestPasswordReset(context,widget.data.toString(),);
-                              _resendCode();
-                            }else{
-                              null;
-                            }
-                          },
-                          child: Text(
-                            "Resend OTP",
-                            style: TextStyle(
-                              color: enableResend ? goldShade : Colors.grey,
-                              fontWeight: FontWeight.w500,
-                              // Make text bold
-                              decoration: TextDecoration.underline,
-                              // Add underline decoration
-                              decorationColor:
-                              goldShade, // Set underline color to red
-                            ),
-                          ),
-                        )
+                        // TextButton(
+                        //   onPressed: () {
+                        //     if (enableResend == true) {
+                        //       Provider.of<AppLogin>(context, listen: false).requestPasswordReset(context,widget.data.toString(),);
+                        //       _resendCode();
+                        //     }else{
+                        //       null;
+                        //     }
+                        //   },
+                        //   child: Text(
+                        //     "Resend OTP",
+                        //     style: TextStyle(
+                        //       color: enableResend ? goldShade : Colors.grey,
+                        //       fontWeight: FontWeight.w500,
+                        //       // Make text bold
+                        //       decoration: TextDecoration.underline,
+                        //       // Add underline decoration
+                        //       decorationColor:
+                        //       goldShade, // Set underline color to red
+                        //     ),
+                        //   ),
+                        // )
                       ],
                     ),
                     SizedBox(height: 100,)

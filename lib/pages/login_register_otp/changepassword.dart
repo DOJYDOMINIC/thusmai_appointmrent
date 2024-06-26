@@ -256,7 +256,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   print(widget.data.toString());
                                   var data = {
                                     "email":  widget.data["email"].toString(),
-                                    "new_password": _newPassword,
+                                    "new_password": _newPassword.trim(),
                                   };
                                   Provider.of<AppLogin>(context, listen: false).resetPassword(context,data);
                                 }

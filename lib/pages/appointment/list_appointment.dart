@@ -37,6 +37,7 @@ class _AppointmentListPageState extends State<AppointmentListPage>
   void initState() {
     super.initState();
     Provider.of<AppLogin>(context, listen: false).validateSession(context);
+    Provider.of<ConnectivityProvider>(context, listen: false).initConnectivity();
     // Initialize the AnimationController
     _controller = AnimationController(
       vsync: this, // SingleTickerProviderStateMixin provides vsync

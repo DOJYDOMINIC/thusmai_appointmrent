@@ -4,43 +4,72 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:audioplayers/audioplayers.dart';
 import '../../constant/constant.dart';
+import '../../controller/connectivitycontroller.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
 import '../../controller/timer_controller.dart';
 import '../../widgets/additionnalwidget.dart';
 import 'meditationnote.dart';
 
-AudioPlayer _audioPlayer = AudioPlayer();
-const int alarmId = 0;
-
-@pragma('vm:entry-point')
-void startAlarmCallback() async {
-  final String audioUrl = "https://firebasestorage.googleapis.com/v0/b/thasmai-star-life.appspot.com/o/general_images%2FY2meta.app%20-%20Shivashtakam%20Thasmai%20Namah%20Paramakarana%20written%20by%20Aadi%20Shankaracharya%20(320%20kbps).mp3?alt=media&token=845e902d-dccf-46fb-9a97-1013a6987c04";
-  await _audioPlayer.setSourceUrl(audioUrl);
-  await _audioPlayer.setReleaseMode(ReleaseMode.loop);
-  await _audioPlayer.resume();
+class TimerScreen extends StatefulWidget {
+  @override
+  State<TimerScreen> createState() => _TimerScreenState();
 }
 
-@pragma('vm:entry-point')
-void stopAlarmCallback() async {
-  await AndroidAlarmManager.cancel(alarmId);
-  await _audioPlayer.stop();
-}
+class _TimerScreenState extends State<TimerScreen> {
+  late TimerProvider timerProvider;
+  late AppLogin appLogin;
+  late MeditationController meditation;
 
-class TimerScreen extends StatelessWidget {
+  @override
+  void dispose() {
+    AndroidAlarmManager.cancel(alarmId);
+    super.dispose();
+  }
+
+  Future<bool> _showCancelDialog(BuildContext context) async {
+    return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Cancel Timer"),
+              content: Text("Are you sure you want to cancel?"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false); // Close the dialog
+                  },
+                  child: Text("No"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    timerProvider.resetTimer();
+                    Navigator.of(context).pop(true); // Close the dialog
+                  },
+                  child: Text("Yes"),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    var timerProvider = Provider.of<TimerProvider>(context);
-    var appLogin = Provider.of<AppLogin>(context);
-    var meditation = Provider.of<MeditationController>(context);
+    timerProvider = Provider.of<TimerProvider>(context);
+    appLogin = Provider.of<AppLogin>(context);
+    meditation = Provider.of<MeditationController>(context);
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
+          onPressed: () async {
+            bool shouldLeave = await _showCancelDialog(context);
+            if (shouldLeave) {
+              Navigator.of(context).pop(true); // Close the dialog
+            }
           },
           icon: Icon(
             Icons.arrow_back,
@@ -53,112 +82,129 @@ class TimerScreen extends StatelessWidget {
           style: TextStyle(color: shadeOne),
         ),
       ),
-      body: SafeArea(
-        child: Center(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: [
-                _buildHeader(appLogin, context),
-                Spacer(),
-                Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [
-                            Colors.grey.shade800,
-                            Colors.black,
-                          ],
-                        ),
-                      ),
-                      child: CircleAvatar(
-                        radius: 130,
-                        backgroundColor: Colors.transparent,
-                      ),
-                    ),
-                    CircularPercentIndicator(
-                      backgroundColor: Colors.grey,
-                      radius: 130.0,
-                      lineWidth: 15.0,
-                      percent: (timerProvider.initialSeconds - timerProvider.currentSeconds) / timerProvider.initialSeconds,
-                      center: Text(
-                        timerProvider.timerText,
-                        style: TextStyle(fontSize: 40.0, color: Colors.white),
-                      ),
-                      progressColor: Colors.amber,
-                    ),
-                  ],
-                ),
-                Spacer(),
-                if (timerProvider.currentSeconds > 0)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) async {
+          if (didPop) {
+            return;
+          }
+          final navigator = Navigator.of(context);
+          bool value = await _showCancelDialog(context);
+          if (value) {
+            navigator.pop();
+          }
+        },
+        child: SafeArea(
+          child: Center(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
+                  _buildHeader(appLogin, context),
+                  Spacer(),
+                  Stack(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          timerProvider.resetTimer();
-                        },
-                        child: QuarterCircleContainer(
-                          size: 170,
-                          color: lightRed,
-                          status: false,
-                          child: buttonData("Cancel", Icons.backspace),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          timerProvider.isRunning ? timerProvider.pauseTimer() : timerProvider.resumeTimer();
-                        },
-                        child: QuarterCircleContainer(
-                          size: 170,
-                          color: goldShade,
-                          status: true,
-                          child: Center(
-                            child: timerProvider.isRunning
-                                ? buttonData("Pause", Icons.pause)
-                                : buttonData("Start", Icons.smart_display),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Colors.grey.shade800,
+                              Colors.black,
+                            ],
                           ),
                         ),
+                        child: CircleAvatar(
+                          radius: 130,
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                      CircularPercentIndicator(
+                        backgroundColor: Colors.grey,
+                        radius: 130.0,
+                        lineWidth: 15.0,
+                        percent: (timerProvider.initialSeconds -
+                                    timerProvider.currentSeconds)
+                                .clamp(0, timerProvider.initialSeconds) /
+                            timerProvider.initialSeconds,
+                        center: Text(
+                          timerProvider.timerText,
+                          style: TextStyle(fontSize: 40.0, color: Colors.white),
+                        ),
+                        progressColor: Colors.amber,
                       ),
                     ],
                   ),
-                if (timerProvider.currentSeconds == 0)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: ClipPath(
-                      clipper: HalfCircleClipper(),
-                      child: GestureDetector(
-                        onTap: () {
-                          String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(timerProvider.startDateTime!);
-                          String endTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
-                          meditation.meditationTime(startTime, endTime);
-                          timerProvider.resetTimer();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => MeditationNote()),
-                          );
-                        },
-                        child: Container(
-                          color: greenColor,
-                          width: MediaQuery.of(context).size.width,
-                          height: 130,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Meditation \nCompleted",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white, fontSize: 24),
+                  Spacer(),
+                  if (timerProvider.currentSeconds > 0)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showCancelDialog(context);
+                          },
+                          child: QuarterCircleContainer(
+                            size: 170,
+                            color: lightRed,
+                            status: false,
+                            child: buttonData("Cancel", Icons.backspace),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            timerProvider.isRunning
+                                ? timerProvider.pauseTimer()
+                                : timerProvider.resumeTimer();
+                          },
+                          child: QuarterCircleContainer(
+                            size: 170,
+                            color: goldShade,
+                            status: true,
+                            child: Center(
+                              child: timerProvider.isRunning
+                                  ? buttonData("Pause", Icons.pause)
+                                  : buttonData("Start", Icons.smart_display),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  if (timerProvider.currentSeconds == 0)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ClipPath(
+                        clipper: HalfCircleClipper(),
+                        child: GestureDetector(
+                          onTap: () {
+                            // var connect = Provider.of<ConnectivityProvider>(context);
+                            timerProvider.resetTimer();
+                            String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now().subtract(Duration(minutes: 46)));
+                            String endTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+                            meditation.meditationTime(startTime.toString(), endTime);
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeditationNote()),);
+                          },
+                          child: Container(
+                            color: greenColor,
+                            width: MediaQuery.of(context).size.width,
+                            height: 130,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Meditation \nCompleted",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 24),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

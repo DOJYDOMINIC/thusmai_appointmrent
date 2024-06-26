@@ -19,10 +19,11 @@ class ConnectivityProvider extends ChangeNotifier {
     _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
       _updateStatus(result);
     });
-    _initConnectivity();
+    initConnectivity();
+    notifyListeners();
   }
 
-  Future<void> _initConnectivity() async {
+  Future<void> initConnectivity() async {
     ConnectivityResult result = await _connectivity.checkConnectivity();
     _updateStatus(result);
   }

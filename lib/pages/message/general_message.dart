@@ -44,99 +44,11 @@ class _GeneralMessageState extends State<GeneralMessage> {
                         false)
                       getSenderView(ChatBubbleClipper10(type: BubbleType.sendBubble), context, "${messageController.globalMessages[index].message}", "${messageController.globalMessages[index].messageTime}", "${messageController.globalMessages[index].userName}","${messageController.globalMessages[index].messageDate}"),
                     if (messageController.globalMessages[index].isAdminMessage)
-                      getReceiverView(ChatBubbleClipper10(type: BubbleType.receiverBubble), context, "${messageController.globalMessages[index].message}","${messageController.globalMessages[index].userName}", "${messageController.globalMessages[index].messageDate}"),
+                      getReceiverView(ChatBubbleClipper10(type: BubbleType.receiverBubble), context, messageController.globalMessages[index].message.toString(),messageController.globalMessages[index].userName.toString(), messageController.globalMessages[index].messageDate.toString()),
                   ],
                 );
-
-                //   Column(children: [
-                //   Padding(
-                //     padding: const EdgeInsets.fromLTRB(16, 5, 16, 0),
-                //     child: Column(
-                //       children: [
-                //         Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: [
-                //             Text(
-                //               "${messageController.globalMessages[index].userName}",
-                //               style:
-                //                   TextStyle(fontSize: 14, color:messageController.globalMessages[index].isAdminMessage?Colors.red : darkShade,fontWeight: FontWeight.w500),
-                //             ),
-                //             Text(
-                //                 "${messageController.globalMessages[index].messageDate}",
-                //             style:
-                //             TextStyle(fontSize: 12, color: darkShade,fontWeight: FontWeight.w400),)
-                //           ],
-                //         ),
-                //         SizedBox(
-                //           height: 8.h,
-                //         ),
-                //         Align(
-                //             alignment: Alignment.centerLeft,
-                //             child: Text(
-                //               "${messageController.globalMessages[index].message}",
-                //               style:
-                //                   TextStyle(fontSize: 12, color: darkShade),
-                //             )),
-                //       ],
-                //     ),
-                //   ),
-                //   Divider(),
-                // ]);
               },
             ),
-            // FutureBuilder(
-            //   future: messageController.generalMessage(),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.connectionState == ConnectionState.waiting) {
-            //       return Center(
-            //         child: CircularProgressIndicator(), // Loading indicator
-            //       );
-            //     } else if (snapshot.hasError) {
-            //       return Center(
-            //         child: Text('Error: ${snapshot.error}'), // Error message
-            //       );
-            //     } else {
-            //       return ListView.builder(
-            //         itemCount: messageController.globalMessages.length,
-            //         itemBuilder: (context, index) {
-            //         var data =  messageController.globalMessages[index];
-            //           return Column(
-            //             children: [
-            //               Padding(
-            //                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-            //                 child: Column(
-            //                   children: [
-            //                     Row(
-            //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //                       children: [
-            //                         Text(
-            //                           "${data.message}",
-            //                           style: TextStyle(fontSize: 14, color: darkShade,fontWeight: FontWeight.w400,height: 1.6),
-            //                         ),
-            //                         Text("${data.messageTime}",style: TextStyle(fontSize: 12, color: darkShade),)
-            //                       ],
-            //                     ),
-            //                     SizedBox(
-            //                       height: 4.h,
-            //                     ),
-            //                     Align(
-            //                       alignment: Alignment.centerLeft,
-            //                       child: Text(
-            //                         "${data.message}",
-            //                         style: TextStyle(fontSize: 12, color: darkShade),
-            //                       ),
-            //                     ),
-            //                   ],
-            //                 ),
-            //               ),
-            //               Divider(),
-            //             ],
-            //           );
-            //         },
-            //       );
-            //     }
-            //   },
-            // )
           ),
           Container(
             color: Colors.white,
@@ -199,12 +111,15 @@ getSenderView(CustomClipper clipper, BuildContext context, String note,String ti
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    messageName,
-                    style: TextStyle(
-                        fontSize: 16.sp,
-                        color: darkShade,
-                        fontWeight: FontWeight.w500),
+                  SizedBox(
+                    width:150.w,
+                    child: Text(
+                      messageName,
+                      style: TextStyle(
+                          fontSize: 16.sp,
+                          color: darkShade,
+                          fontWeight: FontWeight.w500),
+                    ),
                   ),
                   Text(
                     messageDate,

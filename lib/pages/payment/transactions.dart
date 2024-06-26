@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
@@ -59,7 +60,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
                     "$capitalizedType",
                     "${data.transactions![index].razorpayOrderId}",
                     "${data.transactions![index].amount}",
-                    () {});
+                    () {
+                      Clipboard.setData(ClipboardData(text:"${data.transactions![index].razorpayOrderId}"));
+                    });
               },
             )
           : _isLoading

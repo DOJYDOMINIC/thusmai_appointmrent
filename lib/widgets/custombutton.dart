@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../constant/constant.dart';
-
 class CustomButton extends StatelessWidget {
   const CustomButton({super.key, this.onPressed, required this.buttonColor, required this.buttonText});
 

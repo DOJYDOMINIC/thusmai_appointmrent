@@ -25,6 +25,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
   @override
   void initState() {
     super.initState();
+    Provider.of<ConnectivityProvider>(context, listen: false).initConnectivity();
     Provider.of<AppLogin>(context, listen: false).validateSession(context);
     Provider.of<ConnectivityProvider>(context, listen: false).status;
     final appLoginProvider = Provider.of<AppLogin>(context, listen: false);
@@ -33,6 +34,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
     final meditationController = Provider.of<MeditationController>(context, listen: false);
     meditationController.meditationTimeDetails(context);
     meditationController.meditationDetailsTime();
+    meditationController.buttonBlock();
   }
 
   String convertToAmPm(String time) {
@@ -261,19 +263,22 @@ class _MeditationCycleState extends State<MeditationCycle> {
                           width: 304.w,
                           child: ElevatedButton(
                             onPressed: () {
-                              // slidePageRoute(context, TimerScreen());
                               if (flagModel.meditationFeePaymentStatus == true) {
-                                if (isCurrentTimeBetween(meditationTimeData.fromTime ?? "", meditationTimeData.toTime ?? "")) {
-                                  slidePageRoute(context, TimerScreen());
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          "Sorry, you are not able to meditate now"),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                }
+                                // if(meditationController.buttonBloc == true){
+                                  if (isCurrentTimeBetween(meditationTimeData.fromTime ?? "", meditationTimeData.toTime ?? "")) {
+                                    slidePageRoute(context, TimerScreen());
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            "Sorry, you are not able to meditate now"),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                // }else{
+                                //  return null;
+                                // }
                               } else {
                                 appLoginProvider.currentIndex = 3;
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -289,6 +294,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
                               shadowColor: Colors.black,
                               backgroundColor:
                                   flagModel.meditationFeePaymentStatus == true
+                                      // && meditationController.buttonBloc == true
                                       ? goldShade
                                       : Colors.grey,
                               shape: RoundedRectangleBorder(

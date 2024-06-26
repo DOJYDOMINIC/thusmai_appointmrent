@@ -101,7 +101,7 @@ Widget profileCard(BuildContext context) {
               style: TextStyle(fontSize: 22.sp),
               overflow: TextOverflow.ellipsis,
             ),
-            Text("Card no : ${pro.userData?.uId ?? ""}",
+            Text("Card no : TSL${pro.userData?.uId ?? ""}",
                 overflow: TextOverflow.ellipsis),
             Text(pro.userData?.phone ?? "", overflow: TextOverflow.ellipsis),
             Text(pro.userData?.email ?? "", overflow: TextOverflow.ellipsis),
@@ -358,69 +358,67 @@ Future slidePageRoute(
 Widget rewardWidget(String title, String description, days) {
   return Column(
     children: [
-      SizedBox(
-        child: Padding(
-          padding: EdgeInsets.only(left: 8.sp, right: 8.sp),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  // Text(title),
-                  // Padding(
-                  //   padding: EdgeInsets.all(8.sp),
-                  //   child: Image(
-                  //       width: 56.w,
-                  //       height: 56.h,
-                  //       fit: BoxFit.cover,
-                  //       image: AssetImage(imgLink)),
-                  // ),
-                  SizedBox(
-                    width: 16.w,
+      Padding(
+        padding: EdgeInsets.only(left: 8.sp, right: 8.sp),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                // Text(title),
+                // Padding(
+                //   padding: EdgeInsets.all(8.sp),
+                //   child: Image(
+                //       width: 56.w,
+                //       height: 56.h,
+                //       fit: BoxFit.cover,
+                //       image: AssetImage(imgLink)),
+                // ),
+                SizedBox(
+                  width: 16.w,
+                ),
+                Container(
+                  width: 200.w,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title),
+                      Text(description),
+                    ],
                   ),
-                  Container(
-                    width: 200.w,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(title),
-                        Text(description),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    days,
-                    style: TextStyle(
-                        color: darkShade,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10.sp),
-                  ),
-                  // ElevatedButton(
-                  //     style: ButtonStyle(
-                  //         backgroundColor: MaterialStatePropertyAll(goldShade)),
-                  //     onPressed: () {
-                  //       launchURL(url);
-                  //     },
-                  //     child: Text(
-                  //       "share",
-                  //       style: TextStyle(
-                  //           color: darkShade, fontWeight: FontWeight.w400),
-                  //     ))
-                ],
-              )
-            ],
-          ),
+                ),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  days,
+                  style: TextStyle(
+                      color: darkShade,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 10.sp),
+                ),
+                // ElevatedButton(
+                //     style: ButtonStyle(
+                //         backgroundColor: MaterialStatePropertyAll(goldShade)),
+                //     onPressed: () {
+                //       launchURL(url);
+                //     },
+                //     child: Text(
+                //       "share",
+                //       style: TextStyle(
+                //           color: darkShade, fontWeight: FontWeight.w400),
+                //     ))
+              ],
+            )
+          ],
         ),
       ),
       Divider(
-        color: shadeThree,
+        color: darkShade,
       )
     ],
   );

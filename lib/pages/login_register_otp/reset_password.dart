@@ -170,7 +170,7 @@ class _RegisterState extends State<Register> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  Provider.of<AppLogin>(context, listen: false).requestPasswordReset(context,_email.toString(),);
+                                  Provider.of<AppLogin>(context, listen: false).requestPasswordReset(context,_email.trim().toString(),);
                                 }
                               },
                               style: ElevatedButton.styleFrom(

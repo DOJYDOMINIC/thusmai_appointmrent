@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:thusmai_appointmrent/models/meditationtime_model.dart';
+import 'package:thusmai_appointmrent/widgets/additionnalwidget.dart';
 import '../constant/constant.dart';
 import '../models/meditatiologmodel.dart';
 import '../models/meditationfulltime.dart';
+import '../tabs/messsagetab.dart';
 
 
 class MeditationController extends ChangeNotifier {
@@ -34,6 +37,34 @@ class MeditationController extends ChangeNotifier {
       print('Error to send time:: $e');
     }
     notifyListeners();
+  }
+
+
+  bool _buttonBlock = false;
+  bool  get buttonBloc => _buttonBlock;
+
+
+  Future<void> buttonBlock() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+    String dateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+    final response = await http.post(
+      Uri.parse("$baseUrl/button-block"),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        if (cookies != null) 'Cookie': cookies,
+      },
+      body: jsonEncode({"date": dateTime}),
+    );
+    var decode = jsonDecode(response.body);
+    try {
+      if (response.statusCode == 200) {
+         _buttonBlock = decode["key"];
+      } else {
+      }
+    } catch (e) {
+      print("requestPasswordReset : $e");
+    }
   }
 
   MeditationTimeDetails _meditationFullTime = MeditationTimeDetails() ;
@@ -152,6 +183,7 @@ class MeditationController extends ChangeNotifier {
             backgroundColor: Colors.green,
           ),
         );
+        slidePageRoute(context, MessageTab());
       } else {
         _clearNote = false;
         ScaffoldMessenger.of(context).showSnackBar(

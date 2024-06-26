@@ -200,14 +200,14 @@ class _AppFeedBackState extends State<AppFeedBack> {
                 SizedBox(
                   height: 24.h,
                 ),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      "cancel",
-                      style: TextStyle(color: Colors.black),
-                    ))
+                // TextButton(
+                //     onPressed: () {
+                //       Navigator.pop(context);
+                //     },
+                //     child: Text(
+                //       "Cancel",
+                //       style: TextStyle(color: Colors.black),
+                //     ))
               ],
             ),
           ),

@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/controller/message_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../constant/constant.dart';
+
 
 class GuruMessage extends StatefulWidget {
   const GuruMessage({super.key});
@@ -25,6 +27,7 @@ class _GuruMessageState extends State<GuruMessage> {
   Widget build(BuildContext context) {
     var messageController = Provider.of<MessageController>(context);
 
+
     return Scaffold(
       body: Column(
         children: [
@@ -33,13 +36,12 @@ class _GuruMessageState extends State<GuruMessage> {
               reverse: true,
               itemCount: messageController.guruMessages.length,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.all(8),
-                  child: getSenderView(
-                      ChatBubbleClipper10(type: BubbleType.sendBubble),
-                      context,
-                      "${messageController.guruMessages[index].message}"),
-                );
+                List<String>? splitDatetime = messageController.guruMessages[index].messageTime?.split(" at ");
+
+                // Extract date and time components
+                String? datePart = splitDatetime?[0]??"";
+                String? timePart = splitDatetime?[1]??"";
+                return  getSenderView(ChatBubbleClipper10(type: BubbleType.sendBubble), context,"${messageController.guruMessages[index].message}",timePart,"",datePart);
               },
             ),
           ),
@@ -97,7 +99,8 @@ class _GuruMessageState extends State<GuruMessage> {
 //         ),
 //       ),
 //     );
-getSenderView(CustomClipper clipper, BuildContext context, String note) =>
+getSenderView(CustomClipper clipper, BuildContext context, String note,String time,
+    String messageName, String messageDate) =>
     ChatBubble(
       clipper: clipper,
       alignment: Alignment.topRight,
@@ -107,23 +110,56 @@ getSenderView(CustomClipper clipper, BuildContext context, String note) =>
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width * 0.7,
         ),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Linkify(
-            onOpen: (link) async {
-              // This function will be called when a link is clicked
-              if (await canLaunchUrl(Uri.parse(link.url))) {
-                await launchUrl(Uri.parse(link.url));
-              } else {
-                throw 'Could not launch $link';
-              }
-            },
-            text: note,
-            style: TextStyle(color: Colors.black,fontSize: 16.sp),
-            linkStyle: TextStyle(color: Colors.blue),
-            // Optional, set to false to disable @mentions
-            // humanize: false,
-          ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // SizedBox(
+                  //   width:150.w,
+                  //   child: Text(
+                  //     messageName,
+                  //     style: TextStyle(
+                  //         fontSize: 16.sp,
+                  //         color: darkShade,
+                  //         fontWeight: FontWeight.w500),
+                  //   ),
+                  // ),
+
+                  Text(
+                    messageDate,
+                    style: TextStyle(
+                        fontSize: 12.sp,
+                        color: darkShade,
+                        fontWeight: FontWeight.w400),
+                  )
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Linkify(
+                onOpen: (link) async {
+                  // This function will be called when a link is clicked
+                  if (await canLaunchUrl(Uri.parse(link.url))) {
+                    await launchUrl(Uri.parse(link.url));
+                  } else {
+                    throw 'Could not launch $link';
+                  }
+                },
+                text: note,
+                style: TextStyle(color: Colors.black,fontSize: 16.sp),
+                linkStyle: TextStyle(color: Colors.blue),
+                // Optional, set to false to disable @mentions
+                // humanize: false,
+              ),
+            ),
+            Align(
+                alignment: Alignment.bottomRight,
+                child: Text(time,style: TextStyle(fontSize: 10.sp),))
+          ],
         ),
       ),
     );

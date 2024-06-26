@@ -91,6 +91,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       canPop: false,
       onPopInvoked: (didPop) => onPopInvoked(context, didPop),
       child: Scaffold(
+        backgroundColor: darkShade,
         appBar: AppBar(
           backgroundColor: darkShade,
           leading: Padding(

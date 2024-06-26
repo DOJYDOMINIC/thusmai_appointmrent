@@ -1,16 +1,18 @@
 import 'dart:async';
-import 'dart:isolate';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:thusmai_appointmrent/services/firebase_notification.dart';
+import 'package:workmanager/workmanager.dart';
 import 'constant/constant.dart';
 import 'controller/login_register_otp_api.dart';
 import 'controller/timer_controller.dart';
+import 'controller/timerprovidedr.dart';
 import 'controller/zoommeeting_controller.dart';
 import 'pages/bottom_navbar.dart';
 import 'pages/login_register_otp/login.dart';
@@ -25,29 +27,34 @@ import 'controller/videoplayer_controller.dart';
 
 
 @pragma('vm:entry-point')
-void printHello() {
-  final DateTime now = DateTime.now();
-  final int isolateId = Isolate.current.hashCode;
-  print("[$now] Hello, world! isolate=${isolateId} function='$printHello'");
-}
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentSeconds = prefs.getInt('currentSeconds') ?? 0;
 
+    if (currentSeconds > 0) {
+      currentSeconds--;
+      prefs.setInt('currentSeconds', currentSeconds);
+    }
+
+    return Future.value(true);
+  });
+}
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AndroidAlarmManager.initialize();
   await Firebase.initializeApp();
   FirebaseApi().initNotifications();
+  await Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var cookies = prefs.getString("cookie") ?? "1";
   var isAnswered = prefs.getString("isAnswered");
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
+    Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
     runApp(MyApp(cookies: cookies, isAnswered: isAnswered));
-
   });
-  final int helloAlarmID = 0;
-  await AndroidAlarmManager.periodic(const Duration(minutes: 1), helloAlarmID, printHello);
 }
-
 
 class MyApp extends StatelessWidget {
   final String? cookies;

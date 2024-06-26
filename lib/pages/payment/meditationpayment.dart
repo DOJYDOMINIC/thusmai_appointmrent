@@ -53,7 +53,6 @@ class _MeditationPaymentState extends State<MeditationPayment> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-
                 SizedBox(height: 8,),
                 if(flagModel.maintenancePaymentStatus == false)
                 MeditationPaymentWidget(
@@ -196,6 +195,7 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
   }
 
   Future<void> _createOrderAndOpenCheckout() async {
+    Provider.of<AppLogin>(context,listen: false).disableButton();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     try {
@@ -338,10 +338,10 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
                   height: 40.0,
                   width: 91.0,
                   child: ElevatedButton(
-                    onPressed: _createOrderAndOpenCheckout,
+                    onPressed: Provider.of<AppLogin>(context).isButtonDisabled ? null : _createOrderAndOpenCheckout,
                     style: ElevatedButton.styleFrom(
                       shadowColor: Colors.black,
-                      backgroundColor: Colors.amber,
+                      backgroundColor:Provider.of<AppLogin>(context).isButtonDisabled ? null :  goldShade,
                       elevation: 4,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),

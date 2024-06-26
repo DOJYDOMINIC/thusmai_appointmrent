@@ -80,9 +80,9 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   // disabledDates from Operator
 
   final List<DateTime> _disabledDates = [
-    DateTime(2024, 6, 4),
-    DateTime(2024, 6, 8),
-    DateTime(2024, 6, 19),
+    // DateTime(2024, 6, 4),
+    // DateTime(2024, 6, 8),
+    // DateTime(2024, 6, 19),
   ];
 
   Future<void> _selectDate(BuildContext context) async {

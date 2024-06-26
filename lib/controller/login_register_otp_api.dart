@@ -9,19 +9,34 @@ import 'package:thusmai_appointmrent/models/userlogin.dart';
 import 'package:thusmai_appointmrent/pages/profile/profile.dart';
 import '../models/flagsmode.dart';
 import '../models/listQuestions.dart';
-import '../pages/appointment/termsandconditions.dart';
 import '../pages/bottom_navbar.dart';
 import '../constant/constant.dart';
 import '../pages/login_register_otp/changepassword.dart';
 import '../pages/login_register_otp/login.dart';
 import '../pages/login_register_otp/meditationdata.dart';
 import '../pages/login_register_otp/otpPage.dart';
-import '../pages/login_register_otp/reset_password.dart';
 import '../pages/profile/password_reset/resetpage_two.dart';
 import '../pages/profile/password_reset/resetpasge_three.dart';
 import '../widgets/additionnalwidget.dart';
 
 class AppLogin extends ChangeNotifier {
+
+
+  bool _isButtonDisabled = false;
+
+  bool get isButtonDisabled => _isButtonDisabled;
+
+  void disableButton() {
+    _isButtonDisabled = true;
+    notifyListeners();
+
+    Timer(Duration(seconds: 2), () {
+      _isButtonDisabled = false;
+      notifyListeners();
+    });
+  }
+
+
 // firstLogin check
 
   int _currentIndex = 1;
@@ -225,7 +240,6 @@ class AppLogin extends ChangeNotifier {
     var decode = jsonDecode(response.body);
     try {
       if (response.statusCode == 200) {
-        print(decode.toString());
         _flagModel = Message.fromJson(decode["message"]);
         prefs.setString("isAnswered", "true");
       } else {
