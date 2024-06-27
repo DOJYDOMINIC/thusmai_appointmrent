@@ -44,7 +44,7 @@ class _GeneralMessageState extends State<GeneralMessage> {
                         false)
                       getSenderView(ChatBubbleClipper10(type: BubbleType.sendBubble), context, "${messageController.globalMessages[index].message}", "${messageController.globalMessages[index].messageTime}", "${messageController.globalMessages[index].userName}","${messageController.globalMessages[index].messageDate}"),
                     if (messageController.globalMessages[index].isAdminMessage)
-                      getReceiverView(ChatBubbleClipper10(type: BubbleType.receiverBubble), context, messageController.globalMessages[index].message.toString(),messageController.globalMessages[index].userName.toString(), messageController.globalMessages[index].messageDate.toString()),
+                      getReceiverView(ChatBubbleClipper10(type: BubbleType.receiverBubble), context, messageController.globalMessages[index].message.toString(),messageController.globalMessages[index].userName.toString(), messageController.globalMessages[index].messageTime.toString()),
                   ],
                 );
               },
@@ -181,13 +181,6 @@ getReceiverView(CustomClipper clipper, BuildContext context, String text,
                         color: darkShade,
                         fontWeight: FontWeight.w500),
                   ),
-                  Text(
-                    messageDate,
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: darkShade,
-                        fontWeight: FontWeight.w400),
-                  )
                 ],
               ),
             ),
@@ -208,6 +201,16 @@ getReceiverView(CustomClipper clipper, BuildContext context, String text,
                 // Optional, set to false to disable @mentions
               ),
             ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text(
+                messageDate,
+                style: TextStyle(
+                    fontSize: 12,
+                    color: darkShade,
+                    fontWeight: FontWeight.w400),
+              ),
+            )
           ],
         ),
       ),

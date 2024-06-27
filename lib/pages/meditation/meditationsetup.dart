@@ -34,7 +34,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
     final meditationController = Provider.of<MeditationController>(context, listen: false);
     meditationController.meditationTimeDetails(context);
     meditationController.meditationDetailsTime();
-    meditationController.buttonBlock();
+    meditationController.buttonBlockRequest();
   }
 
   String convertToAmPm(String time) {
@@ -264,7 +264,8 @@ class _MeditationCycleState extends State<MeditationCycle> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (flagModel.meditationFeePaymentStatus == true) {
-                                // if(meditationController.buttonBloc == true){
+                                print(meditationController.buttonBlock.toString());
+                                if(meditationController.buttonBlock == true){
                                   if (isCurrentTimeBetween(meditationTimeData.fromTime ?? "", meditationTimeData.toTime ?? "")) {
                                     slidePageRoute(context, TimerScreen());
                                   } else {
@@ -276,9 +277,9 @@ class _MeditationCycleState extends State<MeditationCycle> {
                                       ),
                                     );
                                   }
-                                // }else{
-                                //  return null;
-                                // }
+                                }else{
+                                 return null;
+                                }
                               } else {
                                 appLoginProvider.currentIndex = 3;
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -294,7 +295,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
                               shadowColor: Colors.black,
                               backgroundColor:
                                   flagModel.meditationFeePaymentStatus == true
-                                      // && meditationController.buttonBloc == true
+                                      && meditationController.buttonBlock == true
                                       ? goldShade
                                       : Colors.grey,
                               shape: RoundedRectangleBorder(

@@ -41,7 +41,7 @@ class _AppointmentListPageState extends State<AppointmentListPage>
     // Initialize the AnimationController
     _controller = AnimationController(
       vsync: this, // SingleTickerProviderStateMixin provides vsync
-      duration: Duration(milliseconds: 500), // Duration of one heartbeat cycle
+      duration: const Duration(milliseconds: 500), // Duration of one heartbeat cycle
     )..repeat(
         reverse:
             true); // Repeat the animation in reverse to create a heartbeat effect

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +16,7 @@ import 'controller/login_register_otp_api.dart';
 import 'controller/timer_controller.dart';
 import 'controller/timerprovidedr.dart';
 import 'controller/zoommeeting_controller.dart';
+import 'models/hive/meditationdata.dart';
 import 'pages/bottom_navbar.dart';
 import 'pages/login_register_otp/login.dart';
 import 'controller/appointmentontroller.dart';
@@ -42,6 +45,9 @@ void callbackDispatcher() {
 }
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(MeditationDataAdapter());
+  await Hive.openBox<MeditationData>('MeditationDataBox');
   await AndroidAlarmManager.initialize();
   await Firebase.initializeApp();
   FirebaseApi().initNotifications();

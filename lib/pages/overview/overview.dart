@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
@@ -12,6 +13,7 @@ import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
 import '../../controller/overviewController.dart';
 import '../../controller/zoommeeting_controller.dart';
+import '../../models/hive/meditationdata.dart';
 import '../../widgets/additionnalwidget.dart';
 import '../profile/profile.dart';
 import '../refreshpage.dart';
@@ -63,8 +65,22 @@ class _OverviewState extends State<Overview>
         .meditationTimeDetails(context);
     Provider.of<MeditationController>(context, listen: false)
         .meditationDetailsTime();
+    uploadMeditationTimes();
+  }
 
-    // Provider.of<AppLogin>(context, listen: false).tokenSave();
+  void uploadMeditationTimes() async {
+    if(Provider.of<ConnectivityProvider>(context, listen: false).status != ConnectivityStatus.Offline){
+      var box = await Hive.openBox<MeditationData>('MeditationDataBox');
+      print("entered");
+      for (int index = 0; index < box.length; index++) {
+        MeditationData? db = box.getAt(index);
+        if (db != null) {
+          print("check data : ${db.startTime}, ${db.endTime}");
+          Provider.of<MeditationController>(context, listen: false).meditationTime(db.startTime, db.endTime).then((_) {box.deleteAt(index);
+          });
+        }
+      }
+    }
   }
 
   @override

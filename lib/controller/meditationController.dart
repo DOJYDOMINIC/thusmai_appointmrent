@@ -41,29 +41,35 @@ class MeditationController extends ChangeNotifier {
 
 
   bool _buttonBlock = false;
-  bool  get buttonBloc => _buttonBlock;
 
+  bool get buttonBlock => _buttonBlock;
 
-  Future<void> buttonBlock() async {
+  Future<void> buttonBlockRequest() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     String dateTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
-    final response = await http.post(
-      Uri.parse("$baseUrl/button-block"),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        if (cookies != null) 'Cookie': cookies,
-      },
-      body: jsonEncode({"date": dateTime}),
-    );
-    var decode = jsonDecode(response.body);
+
     try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/button-block"),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          if (cookies != null) 'Cookie': cookies,
+        },
+        body: jsonEncode({"date": dateTime}),
+      );
+
       if (response.statusCode == 200) {
-         _buttonBlock = decode["key"];
+        var decode = jsonDecode(response.body);
+        print(decode.toString());
+        _buttonBlock = decode['key'];
+        print(_buttonBlock.toString());
+        notifyListeners();
       } else {
+        print('Failed to block button: ${response.statusCode}');
       }
     } catch (e) {
-      print("requestPasswordReset : $e");
+      print("buttonBlockRequest: $e");
     }
   }
 

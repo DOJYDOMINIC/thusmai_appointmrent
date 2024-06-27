@@ -39,9 +39,9 @@ class ConnectivityProvider extends ChangeNotifier {
       case ConnectivityResult.none:
         _status = ConnectivityStatus.Offline;
         break;
-      default:
-        _status = ConnectivityStatus.Offline;
-        break;
+      // default:
+      //   _status = ConnectivityStatus.Offline;
+      //   break;
     }
     notifyListeners();
   }

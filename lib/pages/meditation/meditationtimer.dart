@@ -1,6 +1,7 @@
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import '../../controller/connectivitycontroller.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
 import '../../controller/timer_controller.dart';
+import '../../models/hive/meditationdata.dart';
 import '../../widgets/additionnalwidget.dart';
 import 'meditationnote.dart';
 
@@ -61,7 +63,8 @@ class _TimerScreenState extends State<TimerScreen> {
     timerProvider = Provider.of<TimerProvider>(context);
     appLogin = Provider.of<AppLogin>(context);
     meditation = Provider.of<MeditationController>(context);
-
+    var connect = Provider.of<ConnectivityProvider>(context);
+    var box = Hive.box<MeditationData>('MeditationDataBox');
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -179,12 +182,20 @@ class _TimerScreenState extends State<TimerScreen> {
                         clipper: HalfCircleClipper(),
                         child: GestureDetector(
                           onTap: () {
-                            // var connect = Provider.of<ConnectivityProvider>(context);
                             timerProvider.resetTimer();
                             String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now().subtract(Duration(minutes: 46)));
                             String endTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
-                            meditation.meditationTime(startTime.toString(), endTime);
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeditationNote()),);
+                            if(connect.status == ConnectivityStatus.Offline){
+                              print("object : Offline");
+                              var meditationData = MeditationData(startTime: startTime, endTime: endTime);
+                              box.add(meditationData);
+;                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeditationNote()),);
+                            }else{
+                              print("object : else");
+                              meditation.meditationTime(startTime.toString(), endTime);
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeditationNote()),);
+                            }
+
                           },
                           child: Container(
                             color: greenColor,
