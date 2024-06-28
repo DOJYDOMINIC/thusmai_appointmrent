@@ -153,6 +153,7 @@ class AppLogin extends ChangeNotifier {
       if (response.statusCode == 200) {
         print("valid user");
       } else if (response.statusCode == 401) {
+        _currentIndex = 1;
         print("Not valid user");
         prefs.clear();
         // slidePageRoute(context, Login());
@@ -266,7 +267,6 @@ class AppLogin extends ChangeNotifier {
           .timeout(Duration(seconds: 3)); // Set timeout to 5 seconds
 
       var decode = jsonDecode(response.body);
-      print(decode.toString());
 
       if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -277,8 +277,6 @@ class AppLogin extends ChangeNotifier {
         prefs.setString("isAnswered", _userLoginData!.isans.toString());
         var isAnswered = prefs.getString("isAnswered");
         var fCMToken = prefs.getString("fCMToken");
-        print("data : $data");
-
         if (fCMToken != null) {
           print(data);
         }
@@ -373,7 +371,6 @@ class AppLogin extends ChangeNotifier {
 
   Future<void> otpVerification(
       BuildContext context, Map<String, dynamic> data) async {
-    print(data.toString());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     final response = await http.post(Uri.parse("$baseUrl/verify-userotp"),
@@ -426,7 +423,6 @@ class AppLogin extends ChangeNotifier {
 
   Future<void> resetPassword(
       BuildContext context, Map<String, dynamic> data) async {
-    print(data.toString());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
 

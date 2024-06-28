@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -12,9 +11,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:thusmai_appointmrent/services/firebase_notification.dart';
 import 'package:workmanager/workmanager.dart';
 import 'constant/constant.dart';
+import 'controller/disable_meditation.dart';
 import 'controller/login_register_otp_api.dart';
 import 'controller/timer_controller.dart';
-import 'controller/timerprovidedr.dart';
 import 'controller/zoommeeting_controller.dart';
 import 'models/hive/meditationdata.dart';
 import 'pages/bottom_navbar.dart';
@@ -43,6 +42,7 @@ void callbackDispatcher() {
     return Future.value(true);
   });
 }
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -86,6 +86,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => OverViewController()),
         ChangeNotifierProvider(create: (context) => ProfileController()),
         ChangeNotifierProvider(create: (context) => ZoomMeetingController()),
+        ChangeNotifierProvider(create: (context) => ButtonStateNotifier()),
         ChangeNotifierProvider(create: (_) => TimerProvider()),
       ],
       child: ScreenUtilInit(

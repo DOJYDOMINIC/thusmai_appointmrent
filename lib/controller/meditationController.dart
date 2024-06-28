@@ -61,11 +61,18 @@ class MeditationController extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         var decode = jsonDecode(response.body);
-        print(decode.toString());
         _buttonBlock = decode['key'];
-        print(_buttonBlock.toString());
+        print("200 : ${decode.toString()}");
+        print("200 : ${_buttonBlock.toString()}");
         notifyListeners();
-      } else {
+      }else if(response.statusCode == 404){
+        var decode = jsonDecode(response.body);
+        _buttonBlock = decode['key'];
+        print("404 : ${decode.toString()}");
+        print("404 : ${_buttonBlock.toString()}");
+        notifyListeners();
+      }
+      else {
         print('Failed to block button: ${response.statusCode}');
       }
     } catch (e) {
@@ -90,7 +97,6 @@ class MeditationController extends ChangeNotifier {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(response.body);
         _meditationFullTime  = MeditationTimeDetails.fromJson(jsonData["meditationTimeDetails"]);
-        print(_meditationFullTime.country);
       } else {
         print('Failed to send time: ${response.reasonPhrase}');
       }

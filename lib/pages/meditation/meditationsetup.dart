@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/widgets/shimmerwidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../controller/connectivitycontroller.dart';
+import '../../controller/disable_meditation.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
 import '../../widgets/additionnalwidget.dart';
@@ -25,13 +26,14 @@ class _MeditationCycleState extends State<MeditationCycle> {
   @override
   void initState() {
     super.initState();
+    final meditationController = Provider.of<MeditationController>(context, listen: false);
+    final appLoginProvider = Provider.of<AppLogin>(context, listen: false);
     Provider.of<ConnectivityProvider>(context, listen: false).initConnectivity();
     Provider.of<AppLogin>(context, listen: false).validateSession(context);
     Provider.of<ConnectivityProvider>(context, listen: false).status;
-    final appLoginProvider = Provider.of<AppLogin>(context, listen: false);
+    Provider.of<ButtonStateNotifier>(context,listen: false).loadButtonState();
     appLoginProvider.getUserByID();
     appLoginProvider.importantFlags();
-    final meditationController = Provider.of<MeditationController>(context, listen: false);
     meditationController.meditationTimeDetails(context);
     meditationController.meditationDetailsTime();
     meditationController.buttonBlockRequest();
@@ -50,8 +52,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
 
   String getYoutubeThumbnail(String url) {
     final uri = Uri.parse(url);
-    final videoId =
-        uri.queryParameters['v']?.trim() ?? uri.pathSegments.last.trim();
+    final videoId = uri.queryParameters['v']?.trim() ?? uri.pathSegments.last.trim();
     return 'https://img.youtube.com/vi/$videoId/0.jpg';
   }
 
@@ -64,11 +65,12 @@ class _MeditationCycleState extends State<MeditationCycle> {
 
   @override
   Widget build(BuildContext context) {
+    final buttonStateNotifier = Provider.of<ButtonStateNotifier>(context);
     final appLoginProvider = Provider.of<AppLogin>(context);
-    final meditationController = Provider.of<MeditationController>(context);
     final connectivityProvider = Provider.of<ConnectivityProvider>(context);
-    final meditationTimeData = meditationController.meditationTimeData;
+    final meditationController = Provider.of<MeditationController>(context);
     final meditationFullTime = meditationController.meditationFullTime;
+    final meditationTimeData = meditationController.meditationTimeData;
     final flagModel = appLoginProvider.flagModel;
     print(flagModel.meditationFeePaymentStatus.toString());
     return Scaffold(
@@ -264,21 +266,24 @@ class _MeditationCycleState extends State<MeditationCycle> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (flagModel.meditationFeePaymentStatus == true) {
-                                print(meditationController.buttonBlock.toString());
-                                if(meditationController.buttonBlock == true){
+                                if (buttonStateNotifier.meditationDisable == false) {
                                   if (isCurrentTimeBetween(meditationTimeData.fromTime ?? "", meditationTimeData.toTime ?? "")) {
                                     slidePageRoute(context, TimerScreen());
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text(
-                                            "Sorry, you are not able to meditate now"),
+                                        content: Text("Sorry, you are not able to meditate now"),
                                         backgroundColor: Colors.red,
                                       ),
                                     );
                                   }
-                                }else{
-                                 return null;
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("Sorry, your meditation is already completed."),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
                                 }
                               } else {
                                 appLoginProvider.currentIndex = 3;
@@ -295,7 +300,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
                               shadowColor: Colors.black,
                               backgroundColor:
                                   flagModel.meditationFeePaymentStatus == true
-                                      && meditationController.buttonBlock == true
+                                      && buttonStateNotifier.meditationDisable != true
                                       ? goldShade
                                       : Colors.grey,
                               shape: RoundedRectangleBorder(

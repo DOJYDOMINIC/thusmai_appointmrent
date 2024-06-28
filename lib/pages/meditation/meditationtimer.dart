@@ -7,6 +7,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import '../../constant/constant.dart';
 import '../../controller/connectivitycontroller.dart';
+import '../../controller/disable_meditation.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
 import '../../controller/timer_controller.dart';
@@ -60,6 +61,8 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final buttonStateNotifier = Provider.of<ButtonStateNotifier>(context);
+    // final meditationFullTime = meditationController.meditationFullTime;
     timerProvider = Provider.of<TimerProvider>(context);
     appLogin = Provider.of<AppLogin>(context);
     meditation = Provider.of<MeditationController>(context);
@@ -183,19 +186,32 @@ class _TimerScreenState extends State<TimerScreen> {
                         child: GestureDetector(
                           onTap: () {
                             timerProvider.resetTimer();
-                            String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now().subtract(Duration(minutes: 46)));
-                            String endTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
-                            if(connect.status == ConnectivityStatus.Offline){
+                            String startTime = DateFormat('yyyy-MM-dd HH:mm:ss')
+                                .format(DateTime.now()
+                                    .subtract(Duration(minutes: 46)));
+                            String endTime = DateFormat('yyyy-MM-dd HH:mm:ss')
+                                .format(DateTime.now());
+                            if (connect.status == ConnectivityStatus.Offline) {
                               print("object : Offline");
-                              var meditationData = MeditationData(startTime: startTime, endTime: endTime);
+                              var meditationData = MeditationData(
+                                  startTime: startTime, endTime: endTime);
                               box.add(meditationData);
-;                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeditationNote()),);
-                            }else{
+                              buttonStateNotifier.disableButton();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MeditationNote()),
+                              );
+                            } else {
                               print("object : else");
                               meditation.meditationTime(startTime.toString(), endTime);
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeditationNote()),);
+                              buttonStateNotifier.disableButton();
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MeditationNote()),
+                              );
                             }
-
                           },
                           child: Container(
                             color: greenColor,
