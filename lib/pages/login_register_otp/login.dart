@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -115,10 +116,7 @@ class _LoginState extends State<Login> {
                               if (value == null || value.trim().isEmpty) {
                                 return 'Please enter your email';
                               }
-                              // Email validation regular expression
-                              bool isValidEmail =
-                              RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value.trim());
-                              if (!isValidEmail) {
+                              if (!EmailValidator.validate(value.trim())) {
                                 return 'Please enter a valid email';
                               }
                               return null;
@@ -143,8 +141,14 @@ class _LoginState extends State<Login> {
                               ),
                               fillColor: darkShade,
                               disabledBorder: InputBorder.none,
-                              focusedErrorBorder: InputBorder.none,
-                              errorBorder: InputBorder.none,
+                              focusedErrorBorder:OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                                borderSide: BorderSide(color: goldShade, width: 1),
+                              ),
+                              errorBorder:OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                                borderSide: BorderSide(color: goldShade, width: 1),
+                              ),
                               filled: true,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),

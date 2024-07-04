@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,7 +47,7 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(MeditationDataAdapter());
   await Hive.openBox<MeditationData>('MeditationDataBox');
-  await AndroidAlarmManager.initialize();
+  // await AndroidAlarmManager.initialize();
   await Firebase.initializeApp();
   FirebaseApi().initNotifications();
   await Workmanager().initialize(callbackDispatcher, isInDebugMode: true);

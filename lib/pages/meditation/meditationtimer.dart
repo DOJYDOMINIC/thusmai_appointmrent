@@ -1,4 +1,3 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
@@ -27,7 +26,6 @@ class _TimerScreenState extends State<TimerScreen> {
 
   @override
   void dispose() {
-    AndroidAlarmManager.cancel(alarmId);
     super.dispose();
   }
 
@@ -186,15 +184,11 @@ class _TimerScreenState extends State<TimerScreen> {
                         child: GestureDetector(
                           onTap: () {
                             timerProvider.resetTimer();
-                            String startTime = DateFormat('yyyy-MM-dd HH:mm:ss')
-                                .format(DateTime.now()
-                                    .subtract(Duration(minutes: 46)));
-                            String endTime = DateFormat('yyyy-MM-dd HH:mm:ss')
-                                .format(DateTime.now());
+                            String startTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now().subtract(Duration(minutes: 46)));
+                            String endTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
                             if (connect.status == ConnectivityStatus.Offline) {
                               print("object : Offline");
-                              var meditationData = MeditationData(
-                                  startTime: startTime, endTime: endTime);
+                              var meditationData = MeditationData(startTime: startTime, endTime: endTime);
                               box.add(meditationData);
                               buttonStateNotifier.disableButton();
                               Navigator.pushReplacement(

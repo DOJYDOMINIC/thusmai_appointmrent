@@ -9,6 +9,7 @@ import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:thusmai_appointmrent/controller/payment_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../controller/connectivitycontroller.dart';
+import '../../controller/disable_meditation.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
 import '../../controller/overviewController.dart';
@@ -34,6 +35,7 @@ class _OverviewState extends State<Overview>
   @override
   void initState() {
     super.initState();
+    Provider.of<ButtonStateNotifier>(context,listen: false).loadButtonState();
     Provider.of<AppLogin>(context, listen: false).validateSession(context);
     Provider.of<ZoomMeetingController>(context, listen: false).zoomClass();
     Provider.of<PaymentController>(context, listen: false).financialConfiguration();
@@ -183,12 +185,12 @@ class _OverviewState extends State<Overview>
                             FloatingActionButton(
                               heroTag: 1,
                               backgroundColor:
-                                  flagModel.maintenancePaymentStatus == false
+                                  flagModel.meditationFeePaymentStatus == false
                                       ? Colors.grey
                                       : Colors.blue,
                               // replace shadeEight with your color
                               onPressed:
-                                  flagModel.maintenancePaymentStatus == false
+                                  flagModel.meditationFeePaymentStatus == false
                                       ? () {
                                           appLogin.currentIndex = 3;
                                           ScaffoldMessenger.of(context)
@@ -468,9 +470,7 @@ class _OverviewState extends State<Overview>
                                       context: context,
                                       builder: (BuildContext context) {
                                         return SizedBox(
-                                          height: 400.h,
-                                          width:
-                                              MediaQuery.of(context).size.width,
+                                           width: MediaQuery.of(context).size.width,
                                           child: Container(
                                             padding: EdgeInsets.all(16),
                                             child: Column(
@@ -482,18 +482,32 @@ class _OverviewState extends State<Overview>
                                                 Row(
                                                   children: [
                                                     Container(
-                                                      height: 150.h,
                                                       width: 100.w,
+                                                      height: 120.h,
                                                       decoration: BoxDecoration(
                                                         borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                        image: DecorationImage(
+                                                        BorderRadius.circular(8),
+                                                        image: overView[itemIndex]
+                                                            .image !=
+                                                            null
+                                                            ? DecorationImage(
                                                           fit: BoxFit.fill,
                                                           image: NetworkImage(
                                                               "${overView[itemIndex].image}"),
-                                                        ),
+                                                        )
+                                                            : null,
                                                       ),
+                                                      child: overView[itemIndex]
+                                                          .image ==
+                                                          null
+                                                          ? Center(
+                                                        child: Text(
+                                                          "No Image Available",
+                                                          textAlign:
+                                                          TextAlign.center,
+                                                        ),
+                                                      )
+                                                          : null,
                                                     ),
                                                     SizedBox(height: 16.h),
                                                     Padding(
@@ -508,12 +522,8 @@ class _OverviewState extends State<Overview>
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
-                                                          Container(
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width -
-                                                                150,
+                                                          SizedBox(
+                                                            width: MediaQuery.of(context).size.width - 150,
                                                             child: Text(
                                                               "${overView[itemIndex].eventName}",
                                                               style: TextStyle(
@@ -740,7 +750,7 @@ class _OverviewState extends State<Overview>
                                       context: context,
                                       builder: (BuildContext context) {
                                         return SizedBox(
-                                          height: 400.h,
+                                          // height: 500.h,
                                           width:
                                               MediaQuery.of(context).size.width,
                                           child: Container(
@@ -754,7 +764,7 @@ class _OverviewState extends State<Overview>
                                                 Row(
                                                   children: [
                                                     Container(
-                                                      height: 150.h,
+                                                      height: 120.h,
                                                       width: 100.w,
                                                       decoration: BoxDecoration(
                                                         borderRadius:
@@ -1012,7 +1022,7 @@ class EventCard extends StatelessWidget {
           context: context,
           builder: (BuildContext context) {
             return SizedBox(
-              height: 400,
+              height: 500,
               width: MediaQuery.of(context).size.width,
               child: Container(
                 padding: EdgeInsets.all(16),

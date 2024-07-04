@@ -193,9 +193,9 @@ class MeditationController extends ChangeNotifier {
           SnackBar(
             content: Text("Success"),
             backgroundColor: Colors.green,
+            duration: Duration(milliseconds: 500),
           ),
         );
-        slidePageRoute(context, MessageTab());
       } else {
         _clearNote = false;
         ScaffoldMessenger.of(context).showSnackBar(

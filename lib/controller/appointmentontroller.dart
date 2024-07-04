@@ -340,9 +340,10 @@ class AppointmentController extends ChangeNotifier {
     }
   }
 
-  DisableDates _disableDate = DisableDates();
+  final List<DateTime> _disabledDates = [];
 
-  DisableDates get disabledDate => _disableDate;
+  List<DateTime> get disabledDates => _disabledDates;
+
 
   Future<void> disableDates() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -358,8 +359,15 @@ class AppointmentController extends ChangeNotifier {
       );
       if (response.statusCode == 200) {
         var disableDates = jsonDecode(response.body);
-        _disableDate = DisableDates.fromJson(disableDates);
-        print(_disableDate.disabledDates);
+        for (String dateString in disableDates['values']) {
+          List<String> parts = dateString.split(',');
+          int year = int.parse(parts[0]);
+          int month = int.parse(parts[1]);
+          int day = int.parse(parts[2]);
+
+          // Add the DateTime object to the list
+          _disabledDates.add(DateTime(year, month, day));
+        }
 
       } else {
         print('Failed to load appointments: ${response.reasonPhrase}');

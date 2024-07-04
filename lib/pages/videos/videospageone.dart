@@ -11,6 +11,8 @@ import '../../controller/connectivitycontroller.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../controller/meditationController.dart';
 import '../../controller/zoommeeting_controller.dart';
+import '../../tabs/messsagetab.dart';
+import '../../widgets/additionnalwidget.dart';
 import '../refreshpage.dart';
 
 class VideosPageOne extends StatefulWidget {
@@ -150,16 +152,11 @@ class _VideosPageOneState extends State<VideosPageOne> {
                                     String messageTDate =
                                     DateFormat('MMMM dd, yyyy')
                                         .format(DateTime.now());
-                                    meditation.meditationNote(
-                                      context,
-                                      "Class Note : ${noteController.text}",
-                                      _global ? "global" : "private",
-                                      formattedTime,
-                                      messageTDate,
-                                    ).then((result) {
+                                    meditation.meditationNote(context, "Class Note : ${noteController.text}", _global ? "global" : "private", formattedTime, messageTDate,).then((result) {
                                       if (meditation.clearNote == true) {
                                         _global = false;
                                         noteController.clear();
+                                        slidePageRoute(context, MessageTab());
                                       }
                                     });
                                   }

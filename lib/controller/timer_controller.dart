@@ -8,7 +8,7 @@ import 'package:audioplayers/audioplayers.dart';
 const int alarmId = 0;
 
 class TimerProvider extends ChangeNotifier {
-  static const int _initialSeconds = 1 * 60;
+  static const int _initialSeconds = 45 * 60;
   int _currentSeconds = _initialSeconds;
   Timer? _timer;
   bool _isRunning = false;

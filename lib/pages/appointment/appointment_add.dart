@@ -46,13 +46,15 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   List<TextEditingController> _GroupMembersDataControllers = [];
   // Define a list to store the expansion state of each item
   List<bool> itemExpandedList = [];
+  List<DateTime> disabledDates = [];
 
   // init State
   @override
   void initState() {
     super.initState();
     Provider.of<AppLogin>(context,listen: false).importantFlags();
-    Provider.of<AppointmentController>(context,listen: false).disableDates();
+    // Provider.of<AppointmentController>(context,listen: false).disableDates();
+     disabledDates = Provider.of<AppointmentController>(context,listen: false).disabledDates;
 
   }
 
@@ -78,21 +80,21 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   }
 
   // disabledDates from Operator
-
-  final List<DateTime> _disabledDates = [
-    // DateTime(2024, 6, 4),
-    // DateTime(2024, 6, 8),
-    // DateTime(2024, 6, 19),
-  ];
+  //
+  // final List<DateTime> _disabledDates = [
+  //   // DateTime(2024, 6, 4),
+  //   // DateTime(2024, 6, 8),
+  //   // DateTime(2024, 6, 19),
+  // ];
 
   Future<void> _selectDate(BuildContext context) async {
     DateTime selectedDate = DateTime.now();
 
     // Check if the selected date is disabled
-    if (_disabledDates.contains(selectedDate)) {
+    if (disabledDates.contains(selectedDate)) {
       // If selected date is disabled, find the next available date
       selectedDate = selectedDate.add(const Duration(days: 1));
-      while (_disabledDates.contains(selectedDate)) {
+      while (disabledDates.contains(selectedDate)) {
         selectedDate = selectedDate.add(const Duration(days: 1));
       }
     }
@@ -115,7 +117,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
 // Define the selectableDayPredicate outside _selectDate
   bool selectableDayPredicate(DateTime date) {
     // Disable dates from the _disabledDates list
-    return !_disabledDates.contains(date);
+    return !disabledDates.contains(date);
   }
 
   // Submit data For Appointment
@@ -148,7 +150,6 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   // WidgetTree
   @override
   Widget build(BuildContext context) {
-    var data = Provider.of<AppointmentController>(context).disabledDate;
 
     var appointmentController = Provider.of<AppointmentController>(context);
     List<GroupMemberAdd> dataList = [];

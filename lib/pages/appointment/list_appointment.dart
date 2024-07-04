@@ -59,6 +59,7 @@ class _AppointmentListPageState extends State<AppointmentListPage>
     Provider.of<AppointmentController>(context, listen: false)
         .termsAndCondition();
     Provider.of<ConnectivityProvider>(context, listen: false).status;
+    Provider.of<AppointmentController>(context,listen: false).disableDates();
   }
 
   @override

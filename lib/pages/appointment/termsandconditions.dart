@@ -46,7 +46,7 @@ class _TermsAndConditionsState extends State<TermsAndConditions> {
           child: Column(
             children: [
               SizedBox(height: 20.sp,),
-              pro.tAndC.isNotEmpty ?  Text("${pro.tAndC}"):Center(child: CircularProgressIndicator()),
+              pro.tAndC.isNotEmpty ?  Text(pro.tAndC,textAlign: TextAlign.justify,style: TextStyle(fontWeight: FontWeight.w400,fontSize: 14.sp)):Center(child: CircularProgressIndicator()),
               SizedBox(height: 20.sp,),
             ],
           ),
