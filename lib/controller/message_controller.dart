@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -172,6 +173,30 @@ class MessageController extends ChangeNotifier {
       print("Error fetching guruMessage: $e");
     }
     notifyListeners();
+  }
+
+
+  Future<void>deleteGlobalMessage(String id)async {
+    try{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var cookies = prefs.getString("cookie");
+      final response = await http.delete(
+        Uri.parse("$baseUrl/deleteMsg/$id"),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+      var res = jsonDecode(response.body);
+      if(response.statusCode == 200){
+        print(red.toString());
+      }
+
+    }catch(e){
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
 }
