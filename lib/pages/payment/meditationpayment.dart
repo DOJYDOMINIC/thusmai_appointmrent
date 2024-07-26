@@ -63,6 +63,8 @@ class _MeditationPaymentState extends State<MeditationPayment> {
                   paymentType: 'Platform Maintenance',
                   noteIcon: "assets/svgImage/brightness_alert.svg",
                 ),
+                if(flagModel.meditationFeePaymentStatus != false)
+                SizedBox(height: 8,),
                 if(flagModel.meditationFeePaymentStatus == false)
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0,8,0,8),
@@ -242,7 +244,7 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red,
-            content: Text('Failed to create order'),
+            content: Text(failedCreateOrder),
             duration: Duration(seconds: 1),
           ),
         );
@@ -251,7 +253,7 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
-          content: Text('Failed to create order'),
+          content: Text(failedCreateOrder),
           duration: Duration(seconds: 1),
         ),
       );
@@ -280,16 +282,16 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
                     if (widget.amount.isNotEmpty)
                       Row(
                         children: [
-                          SvgPicture.asset(
-                              "assets/svgImage/currency_rupee.svg"),
+                          // SvgPicture.asset(
+                          //     currencyRupee),
                           Text(" ${widget.amount}"),
                         ],
                       ),
                     if (widget.amount.isEmpty)
                       Row(
                         children: [
-                          SvgPicture.asset(
-                              "assets/svgImage/currency_rupee.svg"),
+                          // SvgPicture.asset(
+                          //     currencyRupee),
                           SizedBox(
                             height: 45,
                             width: 150,
@@ -300,7 +302,7 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
                                 contentPadding: EdgeInsets.all(10),
                                 fillColor: Colors.white,
                                 filled: true,
-                                hintText: "Dakshina",
+                                hintText: dakshina,
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(16),
                                   borderSide: BorderSide(
@@ -334,6 +336,7 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
                     ],
                   ),
                 ),
+
                 SizedBox(
                   height: 40.0,
                   width: 91.0,
@@ -347,7 +350,7 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    child: Text("Pay", style: TextStyle(color: Colors.black)),
+                    child: Text(pay, style: TextStyle(color: Colors.black)),
                   ),
                 ),
               ],

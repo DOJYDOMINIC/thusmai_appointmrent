@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
+// import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -56,7 +56,7 @@ class TimerProvider extends ChangeNotifier {
   
   
   void resumeTimer() async {
-    WakelockPlus.enable();
+    // WakelockPlus.enable();
     _isRunning = true;
     _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
       if (_currentSeconds > 0) {
@@ -86,7 +86,7 @@ class TimerProvider extends ChangeNotifier {
     _cancelBackgroundTask();
     // _saveCurrentSeconds();
     prefs.remove("currentSeconds");
-    WakelockPlus.disable();
+    // WakelockPlus.disable();
     notifyListeners();
   }
 

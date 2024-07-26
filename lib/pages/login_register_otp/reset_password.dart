@@ -19,8 +19,6 @@ class _RegisterState extends State<Register> {
 
   late String _email;
 
-
-
   @override
   Widget build(BuildContext context) {
     // Get the height of the status bar
@@ -118,9 +116,7 @@ class _RegisterState extends State<Register> {
                                 return 'Please enter your email';
                               }
                               // Email validation regular expression
-                              bool isValidEmail =
-                                  RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                                      .hasMatch(value);
+                              bool isValidEmail = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
                               if (!isValidEmail) {
                                 return 'Please enter a valid email';
                               }

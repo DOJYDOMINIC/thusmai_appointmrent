@@ -21,11 +21,13 @@ class AppointmentEditPage extends StatefulWidget {
 
 class _AppointmentEditPageState extends State<AppointmentEditPage> {
   String selectedValue = "";
+  List<DateTime> disabledDates = [];
 
   // init State
   @override
   void initState() {
     super.initState();
+    disabledDates = Provider.of<AppointmentController>(context,listen: false).disabledDates;
 
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
@@ -96,27 +98,27 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
 
   // List<GroupMember> dataList = [];
 
-  final List<DateTime> _disabledDates = [
-    DateTime(2024, 3, 10),
-    DateTime(2024, 3, 15),
-    DateTime(2024, 3, 18),
-  ];
+  // final List<DateTime> _disabledDates = [
+  //   DateTime(2024, 3, 10),
+  //   DateTime(2024, 3, 15),
+  //   DateTime(2024, 3, 18),
+  // ];
 
   Future<void> _selectDate(BuildContext context) async {
     DateTime selectedDate = DateTime.now();
 
     // Check if the selected date is disabled
-    if (_disabledDates.contains(selectedDate)) {
+    if (disabledDates.contains(selectedDate)) {
       // If selected date is disabled, find the next available date
       selectedDate = selectedDate.add(const Duration(days: 1));
-      while (_disabledDates.contains(selectedDate)) {
+      while (disabledDates.contains(selectedDate)) {
         selectedDate = selectedDate.add(const Duration(days: 1));
       }
     }
 
     final DateTime? datePicked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      // initialDate: selectedDate,
       firstDate: DateTime.now(),
       lastDate: DateTime(DateTime.now().year + 1, 12, 31),
       // Add one more year
@@ -132,7 +134,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
 // Define the selectableDayPredicate outside _selectDate
   bool selectableDayPredicate(DateTime date) {
     // Disable dates from the _disabledDates list
-    return !_disabledDates.contains(date);
+    return !disabledDates.contains(date);
   }
 
   Future<void> _submitForm(List<dynamic> dataList) async {
@@ -334,7 +336,7 @@ class _AppointmentEditPageState extends State<AppointmentEditPage> {
                     children: [
                       Row(
                         children: [
-                          Text(noOfPeople),
+                           Text(noOfPeople),
                           Padding(
                             padding:
                                 EdgeInsets.fromLTRB(8.sp, 0.sp, 8.sp, 0.sp),

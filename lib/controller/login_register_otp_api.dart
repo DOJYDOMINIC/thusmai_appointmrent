@@ -20,8 +20,6 @@ import '../pages/profile/password_reset/resetpasge_three.dart';
 import '../widgets/additionnalwidget.dart';
 
 class AppLogin extends ChangeNotifier {
-
-
   bool _isButtonDisabled = false;
 
   bool get isButtonDisabled => _isButtonDisabled;
@@ -35,7 +33,6 @@ class AppLogin extends ChangeNotifier {
       notifyListeners();
     });
   }
-
 
 // firstLogin check
 
@@ -61,7 +58,12 @@ class AppLogin extends ChangeNotifier {
 
   // updated and manage moving tile
 
-  late List<String> _myTiles = ["Financial", "Health", "Mental", "Relationship"];
+  late List<String> _myTiles = [
+    "Financial",
+    "Health",
+    "Mental",
+    "Relationship"
+  ];
 
   List<String> get myTiles => _myTiles;
 
@@ -108,7 +110,9 @@ class AppLogin extends ChangeNotifier {
     }
     notifyListeners();
   }
- ListQuestions _listQuestions = ListQuestions();
+
+  ListQuestions _listQuestions = ListQuestions();
+
   ListQuestions get listQuestion => _listQuestions;
 
   Future<void> listQuestions() async {
@@ -124,18 +128,57 @@ class AppLogin extends ChangeNotifier {
       );
       var decode = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        _listQuestions =  ListQuestions.fromJson(decode[0]);
+        _listQuestions = ListQuestions.fromJson(decode[0]);
 
-        _myTiles = [_listQuestions.ans1??"N/A",_listQuestions.ans2??"N/A",_listQuestions.ans3??"N/A",_listQuestions.ans4??"N/A",_listQuestions.ans5??"N/A",];
-      } else {
-
-      }
+        _myTiles = [
+          _listQuestions.ans1 ?? "N/A",
+          _listQuestions.ans2 ?? "N/A",
+          _listQuestions.ans3 ?? "N/A",
+          _listQuestions.ans4 ?? "N/A",
+          _listQuestions.ans5 ?? "N/A",
+        ];
+      } else {}
     } catch (e) {
       if (kDebugMode) {
         print("getUserByID : $e");
       }
     }
     notifyListeners();
+  }
+
+  Future<void> deleteUser(BuildContext context) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var cookies = prefs.getString("cookie");
+      final response = await http.delete(
+        Uri.parse("$baseUrl/delete-user"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+      var res = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        prefs.clear();
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Login()),
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(res["message"]),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("getUserByID : $e");
+      }
+    }
   }
 
   Future<void> validateSession(BuildContext context) async {
@@ -160,10 +203,9 @@ class AppLogin extends ChangeNotifier {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => Login()),
-              (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
         );
-      } else {
-      }
+      } else {}
     } catch (e) {
       if (kDebugMode) {
         print("getUserByID : $e");
@@ -185,8 +227,7 @@ class AppLogin extends ChangeNotifier {
 
       if (response.statusCode == 200) {
       } else if (response.statusCode == 401) {
-      } else {
-      }
+      } else {}
     } catch (e) {
       if (kDebugMode) {
         print("getUserByID : $e");
@@ -243,10 +284,8 @@ class AppLogin extends ChangeNotifier {
       if (response.statusCode == 200) {
         _flagModel = Message.fromJson(decode["message"]);
         prefs.setString("isAnswered", "true");
-      } else {
-      }
-    } catch (e) {
-    }
+      } else {}
+    } catch (e) {}
     notifyListeners();
   }
 
@@ -288,7 +327,7 @@ class AppLogin extends ChangeNotifier {
           ),
         );
       } else if (response.statusCode == 404) {
-        requestPasswordReset(context,data["email"]);
+        requestPasswordReset(context, data["email"]);
         Navigator.push(
           context,
           MaterialPageRoute(

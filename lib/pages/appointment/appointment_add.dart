@@ -101,7 +101,7 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
 
     final DateTime? datePicked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      // initialDate: selectedDate,
       firstDate: DateTime.now(),
       lastDate: DateTime(DateTime.now().year + 1, 12, 31),
       // Add one more year

@@ -45,6 +45,7 @@ class _GuruMessageState extends State<GuruMessage> {
               },
             ),
           ),
+          SizedBox(height: 8.sp,),
           Container(
             color: Colors.white,
             height: 96.h,

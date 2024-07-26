@@ -116,11 +116,11 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                   controller: _state,
                   prefixIcon: Icons.location_city_rounded,
                 ),
-                CustomTextField(
-                  hintText: 'Country',
-                  controller: _country,
-                  prefixIcon: Icons.location_city_rounded,
-                ),
+                // CustomTextField(
+                //   hintText: 'Country',
+                //   controller: _country,
+                //   prefixIcon: Icons.location_city_rounded,
+                // ),
                 // CustomTextField(hintText: 'Country',controller: _country,prefixIcon: Icons.,),
                 SizedBox(
                   height: 24,
@@ -137,7 +137,7 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                         state: _state.text.toUpperCase(),
                         district: _district.text.toUpperCase(),
                         address: _address.text.toUpperCase(),
-                      country: "India"
+                      country: _country.text
                     );
                     Provider.of<ProfileController>(context,listen: false).profileEdit(context,data);
                   },

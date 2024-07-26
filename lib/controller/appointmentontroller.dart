@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:thusmai_appointmrent/models/disabledates.dart';
 import '../constant/constant.dart';
 import '../models/appointment_add_model.dart';
 import '../models/appointment_model.dart';
@@ -55,8 +54,7 @@ class AppointmentController extends ChangeNotifier {
     var cookies = prefs.getString("cookie");
     print(cookies);
     try {
-      var response = await http.get(
-        Uri.parse("$baseUrl/list-appointment"),
+      var response = await http.get(Uri.parse("$baseUrl/list-appointment"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -344,7 +342,6 @@ class AppointmentController extends ChangeNotifier {
 
   List<DateTime> get disabledDates => _disabledDates;
 
-
   Future<void> disableDates() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
@@ -368,7 +365,6 @@ class AppointmentController extends ChangeNotifier {
           // Add the DateTime object to the list
           _disabledDates.add(DateTime(year, month, day));
         }
-
       } else {
         print('Failed to load appointments: ${response.reasonPhrase}');
       }

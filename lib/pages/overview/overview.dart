@@ -16,6 +16,7 @@ import '../../controller/overviewController.dart';
 import '../../controller/zoommeeting_controller.dart';
 import '../../models/hive/meditationdata.dart';
 import '../../widgets/additionnalwidget.dart';
+import '../../widgets/popup_widget.dart';
 import '../profile/profile.dart';
 import '../refreshpage.dart';
 

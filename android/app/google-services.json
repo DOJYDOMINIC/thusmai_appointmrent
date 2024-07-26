@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "203849519222",
-    "project_id": "thasmai-star-life",
-    "storage_bucket": "thasmai-star-life.appspot.com"
+    "project_number": "877574184561",
+    "project_id": "thasmai-meditation-1fcff",
+    "storage_bucket": "thasmai-meditation-1fcff.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:203849519222:android:2ff1effdc8aeeace3e4f57",
+        "mobilesdk_app_id": "1:877574184561:android:15d89c751407fd7e4a05d0",
         "android_client_info": {
-          "package_name": "com.vconsol.thasmai"
+          "package_name": "com.tsl.thasmai"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAPpsiT8utxKgdqsi8k7EH_0NVwj1qGtno"
+          "current_key": "AIzaSyAJURhYIr_jt9IvHdsZ31TTFbGZzLmumzA"
         }
       ],
       "services": {

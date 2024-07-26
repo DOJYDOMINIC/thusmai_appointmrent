@@ -26,18 +26,15 @@ import 'controller/payment_controller.dart';
 import 'controller/profileController.dart';
 import 'controller/videoplayer_controller.dart';
 
-
 @pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentSeconds = prefs.getInt('currentSeconds') ?? 0;
-
     if (currentSeconds > 0) {
       currentSeconds--;
       prefs.setInt('currentSeconds', currentSeconds);
     }
-
     return Future.value(true);
   });
 }
@@ -47,7 +44,6 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(MeditationDataAdapter());
   await Hive.openBox<MeditationData>('MeditationDataBox');
-  // await AndroidAlarmManager.initialize();
   await Firebase.initializeApp();
   FirebaseApi().initNotifications();
   await Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
@@ -55,7 +51,8 @@ Future<void> main() async {
   var cookies = prefs.getString("cookie") ?? "1";
   var isAnswered = prefs.getString("isAnswered");
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
     Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
     runApp(MyApp(cookies: cookies, isAnswered: isAnswered));
   });
@@ -65,11 +62,7 @@ class MyApp extends StatelessWidget {
   final String? cookies;
   final String? isAnswered;
 
-  const MyApp({
-    Key? key,
-    this.cookies,
-    this.isAnswered,
-  }) : super(key: key);
+  const MyApp({Key? key, this.cookies, this.isAnswered,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,8 +91,11 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(fontFamily: 'Roboto'),
             initialRoute: '/', // Set initial route to '/'
             routes: {
-              '/': (context) => SplashScreen(), // Define '/' route to SplashScreen
-              '/home': (context) => cookies!.length > 4 && cookies != "1" ? CustomBottomNavBar() : Login(),
+              '/': (context) => SplashScreen(),
+              // Define '/' route to SplashScreen
+              '/home': (context) => cookies!.length > 4 && cookies != "1"
+                  ? CustomBottomNavBar()
+                  : Login(),
             },
           );
         },
@@ -123,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<AppLogin>(context,listen: false).listQuestions();
+    Provider.of<AppLogin>(context, listen: false).listQuestions();
     // Navigate after 2 seconds
     _navigationTimer = Timer(Duration(seconds: 2), () {
       Navigator.pushReplacementNamed(context, '/home');
@@ -154,11 +150,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: Center(
         child: TweenAnimationBuilder(
           tween: Tween<double>(begin: 2.0, end: 0.5), // Define the scale range
-          duration: Duration(seconds: 1), // Duration for the animation
+          duration: const Duration(seconds: 1), // Duration for the animation
           builder: (BuildContext context, double value, Widget? child) {
             if (value == 0.5) {
               // When zoomed out, push the first logo to the left
@@ -174,8 +170,9 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                   Transform.translate(
                     offset: Offset(-0, 0),
-                    child:  Image.asset(
-                      "assets/images/stars-80vector.png", // Replace with the path to the second logo
+                    child: Image.asset(
+                      "assets/images/stars-80vector.png",
+                      // Replace with the path to the second logo
                       height: 52.h,
                     ),
                   ),
@@ -192,7 +189,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                   if (_showBothLogos)
                     Image.asset(
-                      "assets/images/stars-80vector.png", // Replace with the path to the second logo
+                      "assets/images/stars-80vector.png",
+                      // Replace with the path to the second logo
                       height: 52.h,
                     ),
                 ],

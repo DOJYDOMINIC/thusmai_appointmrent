@@ -14,9 +14,11 @@ class MeditationLog extends StatefulWidget {
 }
 
 class _MeditationLogState extends State<MeditationLog> {
+
   @override
   void initState() {
     super.initState();
+    final DateTime now = DateTime.now();
     // WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<MeditationController>(context, listen: false).meditatedDates("1");
     // });
@@ -71,10 +73,10 @@ class _MeditationLogState extends State<MeditationLog> {
             SizedBox(height: 50),
             Expanded(
               child: GridView.count(
-                physics: NeverScrollableScrollPhysics(),
+                // physics: NeverScrollableScrollPhysics(),
                 crossAxisCount: 5,
                 children: List.generate(
-                  data.length,
+                  data.length+meditation.redCount,
                       (index) {
                     DateTime currentDate = startDate.add(Duration(days: index));
                     bool isGreen = data.any((item) {

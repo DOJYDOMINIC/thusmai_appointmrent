@@ -48,8 +48,14 @@ class _TransactionsPageState extends State<TransactionsPage> {
           ? ListView.builder(
               itemCount: data.transactions!.length,
               itemBuilder: (context, index) {
-                DateTime paymentDate = DateTime.parse(data.transactions![index].paymentDate.toString());
-                String formattedDate = DateFormat('dd/MM/yyyy').format(paymentDate);
+                DateTime? paymentDate = data.transactions?[index].paymentDate != null
+                    ? DateTime.parse(data.transactions![index].paymentDate!)
+                    : null;
+
+                String formattedDate = paymentDate != null
+                    ? DateFormat('dd/MM/yyyy').format(paymentDate)
+                    : '';
+
                 String? capitalizedType = data.transactions?[index].type;
                 if(data.transactions?[index].type != null){
                   capitalizedType = (capitalizedType![0].toUpperCase() + capitalizedType.substring(1));
@@ -57,9 +63,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 return transactionWidget(
                     getIconBasedOnString(data.transactions![index].type.toString()) as IconData,
                     "${formattedDate}",
-                    "$capitalizedType",
-                    "${data.transactions![index].razorpayOrderId}",
-                    "${data.transactions![index].amount}",
+                    "${capitalizedType?.toUpperCase()??""}",
+                    "${data.transactions![index].razorpayOrderId??""}",
+                    "${data.transactions![index].amount??""}",
                     () {
                       Clipboard.setData(ClipboardData(text:"${data.transactions![index].razorpayOrderId}"));
                     });

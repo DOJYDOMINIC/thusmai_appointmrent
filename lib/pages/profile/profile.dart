@@ -11,9 +11,9 @@ import '../../controller/connectivitycontroller.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../../widgets/additionnalwidget.dart';
 import 'app_feedback/app_feedback.dart';
+import 'delete_account.dart';
 import 'edit/bank_info.dart';
 import 'edit/personalInfo.dart';
-
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -28,6 +28,7 @@ class _ProfileState extends State<Profile> {
     Provider.of<AppLogin>(context, listen: false).getUserByID();
     Provider.of<ConnectivityProvider>(context, listen: false).status;
   }
+
   @override
   Widget build(BuildContext context) {
     var pro = Provider.of<AppLogin>(context);
@@ -58,15 +59,15 @@ class _ProfileState extends State<Profile> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 child: Container(
-                  height: 192.h,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: shadeOne, borderRadius: BorderRadius.circular(16.sp)),
+                      color: shadeOne,
+                      borderRadius: BorderRadius.circular(16.sp)),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: pro.userData == null
                         ? Center(child: CircularProgressIndicator())
-                        :profileCard(context),
+                        : profileCard(context),
                   ),
                 ),
               ),
@@ -75,15 +76,22 @@ class _ProfileState extends State<Profile> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                      referReward(gift,"Reward",(){
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RewardPage(),));
-                      }),
+                    referReward(gift, "Reward", () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RewardPage(),
+                          ));
+                    }),
                     SizedBox(
                       width: 16.w,
                     ),
-                    referReward(megaphone,"Refer",(){
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ReferPage(),));
-        
+                    referReward(megaphone, "Refer", () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReferPage(),
+                          ));
                     }),
                   ],
                 ),
@@ -115,14 +123,19 @@ class _ProfileState extends State<Profile> {
                               color: darkShade,
                             ),
                             GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => PersonalInfo(),));
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PersonalInfo(),
+                                    ));
                               },
                               child: Container(
                                 height: 48.h,
-                                color: Colors.white,
+                                color: shadeOne,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -130,7 +143,7 @@ class _ProfileState extends State<Profile> {
                                         SizedBox(
                                           width: 16.sp,
                                         ),
-                                        Text("Personal info",
+                                        Text(personalInfo,
                                             style: TextStyle(fontSize: 16.sp)),
                                       ],
                                     ),
@@ -144,15 +157,19 @@ class _ProfileState extends State<Profile> {
                             ),
                             Divider(),
                             GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => BankDetails(),));
-
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BankDetails(),
+                                    ));
                               },
                               child: Container(
                                 height: 48.h,
-                                color: Colors.white,
+                                color: shadeOne,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -160,7 +177,7 @@ class _ProfileState extends State<Profile> {
                                         SizedBox(
                                           width: 16.sp,
                                         ),
-                                        Text("Bank info",
+                                        Text(bankInfo,
                                             style: TextStyle(fontSize: 16.sp)),
                                       ],
                                     ),
@@ -174,14 +191,19 @@ class _ProfileState extends State<Profile> {
                             ),
                             Divider(),
                             GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => ResetPageTwo(),));
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ResetPageTwo(),
+                                    ));
                               },
                               child: Container(
                                 height: 48.h,
-                                color: Colors.white,
+                                color: shadeOne,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -189,7 +211,7 @@ class _ProfileState extends State<Profile> {
                                         SizedBox(
                                           width: 16.sp,
                                         ),
-                                        Text("Reset password",
+                                        Text(resetPassword,
                                             style: TextStyle(fontSize: 16.sp)),
                                       ],
                                     ),
@@ -203,15 +225,19 @@ class _ProfileState extends State<Profile> {
                             ),
                             Divider(),
                             GestureDetector(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => AppFeedBack(),));
-        
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AppFeedBack(),
+                                    ));
                               },
                               child: Container(
                                 height: 48.h,
-                                color: Colors.white,
+                                color: shadeOne,
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -219,7 +245,73 @@ class _ProfileState extends State<Profile> {
                                         SizedBox(
                                           width: 16.sp,
                                         ),
-                                        Text("Feedback",
+                                        Text(feedback,
+                                            style: TextStyle(fontSize: 16.sp)),
+                                      ],
+                                    ),
+                                    Icon(
+                                      Icons.chevron_right,
+                                      size: 22.sp,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Divider(),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DeleteAccount(),
+                                    ));
+                              },
+                              child: Container(
+                                height: 48.h,
+                                color: shadeOne,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.delete_outline_outlined,
+                                        ),
+                                        SizedBox(
+                                          width: 16.sp,
+                                        ),
+                                        Text(deleteAccount,
+                                            style: TextStyle(fontSize: 16.sp)),
+                                      ],
+                                    ),
+                                    Icon(
+                                      Icons.chevron_right,
+                                      size: 22.sp,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Divider(),
+                            GestureDetector(
+                              onTap: () {
+                                launchURL(privacyPolicy);
+                              },
+                              child: Container(
+                                height: 48.h,
+                                color: shadeOne,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.privacy_tip_outlined),
+                                        SizedBox(
+                                          width: 16.sp,
+                                        ),
+                                        Text(privacyPolicyTxt,
                                             style: TextStyle(fontSize: 16.sp)),
                                       ],
                                     ),
@@ -236,14 +328,18 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(16.sp, 0.sp, 16.sp, 16.sp),
+                        padding: EdgeInsets.fromLTRB(16.sp, 0.sp, 16.sp, 8.sp),
                         child: GestureDetector(
                           onTap: () async {
-                            SharedPreferences prefs = await SharedPreferences.getInstance();
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
                             await prefs.clear();
-                            Provider.of<AppLogin>(context, listen: false).backendSessionClear();
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Login()),
-                                  (Route<dynamic> route) => false,
+                            Provider.of<AppLogin>(context, listen: false)
+                                .backendSessionClear();
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(builder: (context) => Login()),
+                              (Route<dynamic> route) => false,
                             );
                           },
                           child: Container(
@@ -255,7 +351,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             child: Center(
                               child: Text(
-                                "Logout",
+                                logout,
                                 style: TextStyle(color: goldShade),
                               ),
                             ),

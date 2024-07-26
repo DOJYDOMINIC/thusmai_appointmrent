@@ -170,8 +170,8 @@ Widget referReward(String img, String text, void Function()? onTap) {
             SvgPicture.asset(
               img,
               color: darkShade,
-              width: 40.w,
-              height: 40.h,
+              width: 35.w,
+              height: 35.h,
             ),
             Text(
               text,
@@ -425,6 +425,8 @@ Widget rewardWidget(String title, String description, days) {
 }
 
 launchURL(Uri url) async {
+
+
   if (!await launchUrl(url)) {
     throw Exception('Could not launch url');
   }

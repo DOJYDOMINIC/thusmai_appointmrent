@@ -39,51 +39,79 @@ class _GeneralMessageState extends State<GeneralMessage> {
                 return Column(
                   children: [
                     if (messageController
-                        .globalMessages[index].isAdminMessage ==
+                            .globalMessages[index].isAdminMessage ==
                         false)
-                      getSenderView(ChatBubbleClipper10(type: BubbleType.sendBubble), context, "${messageController.globalMessages[index].message}", "${messageController.globalMessages[index].messageTime}", "${messageController.globalMessages[index].userName}","${messageController.globalMessages[index].messageDate}"),
+                      getSenderView(
+                          ChatBubbleClipper10(type: BubbleType.sendBubble),
+                          context,
+                          "${messageController.globalMessages[index].message}",
+                          "${messageController.globalMessages[index].messageTime}",
+                          "${messageController.globalMessages[index].userName}",
+                          "${messageController.globalMessages[index].messageDate}"),
                     if (messageController.globalMessages[index].isAdminMessage)
-                      getReceiverView(ChatBubbleClipper10(type: BubbleType.receiverBubble), context, messageController.globalMessages[index].message.toString(),messageController.globalMessages[index].userName.toString(), messageController.globalMessages[index].messageTime.toString()),
+                      getReceiverView(
+                          ChatBubbleClipper10(type: BubbleType.receiverBubble),
+                          context,
+                          messageController.globalMessages[index].message
+                              .toString(),
+                          messageController.globalMessages[index].userName
+                              .toString(),
+                          messageController.globalMessages[index].messageTime
+                              .toString()),
                   ],
                 );
               },
             ),
           ),
-          Container(
-            color: Colors.white,
-            height: 96.h,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Spacer(
-                  flex: 4,
-                ),
-                Text(
-                    "${messageController.pageIndex.toString()} of ${messageController.totalPage.toString()}"),
-                Spacer(
-                  flex: 1,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            messageController.subtract();
-                          },
-                          icon: Icon(Icons.chevron_left)),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            messageController.addCount(messageController.totalPage - 1);
-                          },
-                          icon: Icon(Icons.chevron_right)),
-                    ],
+          SizedBox(
+            height: 8.sp,
+          ),
+          GestureDetector(
+            onTap: () => showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: PopupMenuExample(),
+                  );
+                }),
+            // PopupMenuExample(),
+            child: Container(
+              color: Colors.white,
+              height: 96.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Spacer(
+                    flex: 4,
                   ),
-                )
-              ],
+                  Text(
+                      "${messageController.pageIndex.toString()} of ${messageController.totalPage.toString()}"),
+                  Spacer(
+                    flex: 1,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Row(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              messageController.subtract();
+                            },
+                            icon: Icon(Icons.chevron_left)),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              messageController
+                                  .addCount(messageController.totalPage - 1);
+                            },
+                            icon: Icon(Icons.chevron_right)),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ],
@@ -92,8 +120,8 @@ class _GeneralMessageState extends State<GeneralMessage> {
   }
 }
 
-getSenderView(CustomClipper clipper, BuildContext context, String note,String time,
-    String messageName, String messageDate) =>
+getSenderView(CustomClipper clipper, BuildContext context, String note,
+        String time, String messageName, String messageDate) =>
     ChatBubble(
       clipper: clipper,
       alignment: Alignment.topRight,
@@ -111,7 +139,7 @@ getSenderView(CustomClipper clipper, BuildContext context, String note,String ti
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width:150.w,
+                    width: 150.w,
                     child: Text(
                       messageName,
                       style: TextStyle(
@@ -142,7 +170,7 @@ getSenderView(CustomClipper clipper, BuildContext context, String note,String ti
                   }
                 },
                 text: note,
-                style: TextStyle(color: Colors.black,fontSize: 16.sp),
+                style: TextStyle(color: Colors.black, fontSize: 16.sp),
                 linkStyle: TextStyle(color: Colors.blue),
                 // Optional, set to false to disable @mentions
                 // humanize: false,
@@ -150,14 +178,17 @@ getSenderView(CustomClipper clipper, BuildContext context, String note,String ti
             ),
             Align(
                 alignment: Alignment.bottomRight,
-                child: Text(time,style: TextStyle(fontSize: 10.sp),))
+                child: Text(
+                  time,
+                  style: TextStyle(fontSize: 10.sp),
+                ))
           ],
         ),
       ),
     );
 
 getReceiverView(CustomClipper clipper, BuildContext context, String text,
-    String messageName, String messageDate) =>
+        String messageName, String messageDate) =>
     ChatBubble(
       clipper: clipper,
       backGroundColor: Color(0xffE7E7ED),
@@ -195,7 +226,7 @@ getReceiverView(CustomClipper clipper, BuildContext context, String text,
                   }
                 },
                 text: text,
-                style: TextStyle(color: Colors.black,fontSize: 16.sp),
+                style: TextStyle(color: Colors.black, fontSize: 16.sp),
                 linkStyle: TextStyle(color: Colors.blue),
                 // Optional, set to false to disable @mentions
               ),
@@ -214,3 +245,79 @@ getReceiverView(CustomClipper clipper, BuildContext context, String text,
         ),
       ),
     );
+
+enum Menu { preview, share, getLink, remove, download }
+
+class PopupMenuExample extends StatefulWidget {
+  const PopupMenuExample({Key? key}) : super(key: key);
+
+  @override
+  State<PopupMenuExample> createState() => _PopupMenuExampleState();
+}
+
+class _PopupMenuExampleState extends State<PopupMenuExample> {
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<Menu>(
+      icon: const Icon(Icons.more_vert),
+      onSelected: (Menu item) {
+        // Handle the selected menu action
+        switch (item) {
+          case Menu.preview:
+            // Handle preview action
+            break;
+          case Menu.share:
+            // Handle share action
+            break;
+          case Menu.getLink:
+            // Handle get link action
+            break;
+          case Menu.remove:
+            // Handle remove action
+            break;
+          case Menu.download:
+            // Handle download action
+            break;
+        }
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<Menu>>[
+        const PopupMenuItem<Menu>(
+          value: Menu.preview,
+          child: ListTile(
+            leading: Icon(Icons.visibility_outlined),
+            title: Text('Preview'),
+          ),
+        ),
+        const PopupMenuItem<Menu>(
+          value: Menu.share,
+          child: ListTile(
+            leading: Icon(Icons.share_outlined),
+            title: Text('Share'),
+          ),
+        ),
+        const PopupMenuItem<Menu>(
+          value: Menu.getLink,
+          child: ListTile(
+            leading: Icon(Icons.link_outlined),
+            title: Text('Get link'),
+          ),
+        ),
+        const PopupMenuDivider(),
+        const PopupMenuItem<Menu>(
+          value: Menu.remove,
+          child: ListTile(
+            leading: Icon(Icons.delete_outline),
+            title: Text('Remove'),
+          ),
+        ),
+        const PopupMenuItem<Menu>(
+          value: Menu.download,
+          child: ListTile(
+            leading: Icon(Icons.download_outlined),
+            title: Text('Download'),
+          ),
+        ),
+      ],
+    );
+  }
+}

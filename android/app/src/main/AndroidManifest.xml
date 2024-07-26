@@ -12,6 +12,7 @@
     <!-- For apps with targetSDK 31 (Android 12) and newer -->
     <application
 
+
         android:enableOnBackInvokedCallback="false"
         android:label="Thasmai"
         android:name="${applicationName}"
@@ -79,7 +80,10 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-<!--        audio-->
+        <!--        audio-->
+
+<!--Firebase-->
+<!--Firebase-->
 
     </application>
 </manifest>
