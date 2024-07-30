@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
-import 'package:thusmai_appointmrent/pages/notification/notification.dart';
 import 'package:thusmai_appointmrent/pages/videos/videospageone.dart';
 import 'package:thusmai_appointmrent/tabs/hometab.dart';
 import 'package:thusmai_appointmrent/tabs/messsagetab.dart';
@@ -46,7 +45,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                   child: PopupWidget(
                     heading: 'Payment Reminder',
                     subHeading: 'Maintenance Payment',
-                    amount: '500',
+                    amount: "500",
                     buttonOneText: 'Pay now',
                     buttonTwoText: 'Pay later',
                     onPressOne: () {
@@ -99,13 +98,13 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           content: SizedBox(
             height: 350.h,
             child: PopupWidget(
-              heading: 'Exit App',
+              heading: 'Exit',
               subHeading: 'Are you sure you want to exit the app?',
               amount: "",
               buttonOneText: 'Exit',
               buttonTwoText: 'Cancel',
               icon: Icons.exit_to_app,
-              buttonColorOne: red,
+              buttonColorOne: darkShade,
               onPressOne: () {
                 Navigator.of(context).pop(); // Close the dialog
                 SystemNavigator.pop(); // Ex

@@ -33,6 +33,7 @@ class _OverviewState extends State<Overview>
   late Animation<double> _animation;
   late Timer _timer;
 
+
   @override
   void initState() {
     super.initState();
@@ -52,6 +53,7 @@ class _OverviewState extends State<Overview>
             true); // Repeat the animation in reverse to create a heartbeat effect
 
     // Define the scaling animation
+
     _animation = Tween<double>(begin: 1.0, end: 1.2).animate(
       CurvedAnimation(
         parent: _controller,
