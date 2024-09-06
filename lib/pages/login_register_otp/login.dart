@@ -10,28 +10,24 @@ import '../../constant/constant.dart';
 
 import '../../controller/login_register_otp_api.dart';
 
-
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
-
 
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-
   @override
   void initState() {
     super.initState();
-    Provider.of<AppLogin>(context,listen: false).listQuestions();
+    Provider.of<AppLogin>(context, listen: false).listQuestions();
   }
+
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = true;
   late String _email;
   late String _password;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -107,10 +103,15 @@ class _LoginState extends State<Login> {
                           ),
                           Row(
                             children: [
-                              Text("In stillness find the tranquil stream",style: TextStyle(color: Colors.white,fontWeight: FontWeight.w400)),
+                              Text("In stillness find the tranquil stream",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400)),
                             ],
                           ),
-                          SizedBox(height: 20.h,),
+                          SizedBox(
+                            height: 20.h,
+                          ),
                           TextFormField(
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
@@ -122,7 +123,7 @@ class _LoginState extends State<Login> {
                               return null;
                             },
                             onChanged: (value) {
-                              _email = value.trim();
+                              _email = value.replaceAll(' ', '').trim();
                             },
                             style: TextStyle(
                               color: Colors.white,
@@ -141,28 +142,32 @@ class _LoginState extends State<Login> {
                               ),
                               fillColor: darkShade,
                               disabledBorder: InputBorder.none,
-                              focusedErrorBorder:OutlineInputBorder(
+                              focusedErrorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: goldShade, width: 1),
+                                borderSide:
+                                    BorderSide(color: goldShade, width: 1),
                               ),
-                              errorBorder:OutlineInputBorder(
+                              errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: goldShade, width: 1),
+                                borderSide:
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                               filled: true,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: goldShade, width: 1),
+                                borderSide:
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: goldShade, width: 1),
+                                borderSide:
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: goldShade, width: 1),
+                                borderSide:
+                                    BorderSide(color: goldShade, width: 1),
                               ),
-
                             ),
                           ),
                           SizedBox(
@@ -203,23 +208,27 @@ class _LoginState extends State<Login> {
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    _isPasswordVisible = !_isPasswordVisible; // Toggle password visibility
+                                    _isPasswordVisible =
+                                        !_isPasswordVisible; // Toggle password visibility
                                   });
                                 },
                               ),
                               fillColor: darkShade,
                               filled: true,
-                              enabledBorder:OutlineInputBorder(
+                              enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: goldShade,width: 1),
+                                borderSide:
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: goldShade,width: 1),
+                                borderSide:
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(16.0),
-                                borderSide: BorderSide(color: goldShade,width: 1),
+                                borderSide:
+                                    BorderSide(color: goldShade, width: 1),
                               ),
                             ),
                           ),
@@ -235,13 +244,17 @@ class _LoginState extends State<Login> {
                                   // If the form is valid, save the form state
                                   _formKey.currentState!.save();
                                   // Here you can perform your login logic
-                                  Map<String, dynamic> data = {"email": _email, "password": _password};
-                                  Provider.of<AppLogin>(context, listen: false).loginApi(context,data);
-
+                                  Map<String, dynamic> data = {
+                                    "email": _email,
+                                    "password": _password
+                                  };
+                                  Provider.of<AppLogin>(context, listen: false)
+                                      .loginApi(context, data);
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                shadowColor: Colors.black, backgroundColor: goldShade,
+                                shadowColor: Colors.black,
+                                backgroundColor: goldShade,
                                 elevation: 4,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100),
@@ -278,7 +291,6 @@ class _LoginState extends State<Login> {
                                       fontSize: 12.sp,
                                       color: goldShade,
                                       fontWeight: FontWeight.normal,
-
                                       decoration: TextDecoration.underline,
                                     ),
                                   ),
@@ -292,17 +304,19 @@ class _LoginState extends State<Login> {
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: (){
-                                    launchURL(registerUrl);}, child: Text(
-                                  "Register",
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: goldShade,
-                                    fontWeight: FontWeight.normal,
-                                    decoration: TextDecoration.underline,
+                                  onPressed: () {
+                                    launchURL(registerUrl);
+                                  },
+                                  child: Text(
+                                    "Register",
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: goldShade,
+                                      fontWeight: FontWeight.normal,
+                                      decoration: TextDecoration.underline,
+                                    ),
                                   ),
-                                ),)
-
+                                )
                               ],
                             ),
                           ),
@@ -321,7 +335,4 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
 }
-
-
