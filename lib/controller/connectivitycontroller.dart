@@ -1,5 +1,5 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:connectivity/connectivity.dart';
 
 enum ConnectivityStatus {
   WiFi,
@@ -8,7 +8,6 @@ enum ConnectivityStatus {
 }
 
 class ConnectivityProvider extends ChangeNotifier {
-
   late Connectivity _connectivity;
   ConnectivityStatus _status = ConnectivityStatus.Offline;
 
@@ -16,33 +15,38 @@ class ConnectivityProvider extends ChangeNotifier {
 
   ConnectivityProvider() {
     _connectivity = Connectivity();
-    _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      _updateStatus(result);
+    _connectivity.onConnectivityChanged.listen((List<ConnectivityResult> results) {
+      // Assuming you want to handle the first result in the list
+      _updateStatus(results.first);
     });
     initConnectivity();
-    notifyListeners();
   }
 
   Future<void> initConnectivity() async {
-    ConnectivityResult result = await _connectivity.checkConnectivity();
+    ConnectivityResult result = (await _connectivity.checkConnectivity()) as ConnectivityResult;
     _updateStatus(result);
   }
 
   void _updateStatus(ConnectivityResult result) {
+    ConnectivityStatus newStatus;
+
     switch (result) {
       case ConnectivityResult.wifi:
-        _status = ConnectivityStatus.WiFi;
+        newStatus = ConnectivityStatus.WiFi;
         break;
       case ConnectivityResult.mobile:
-        _status = ConnectivityStatus.Cellular;
+        newStatus = ConnectivityStatus.Cellular;
         break;
       case ConnectivityResult.none:
-        _status = ConnectivityStatus.Offline;
+      default:
+        newStatus = ConnectivityStatus.Offline;
         break;
-      // default:
-      //   _status = ConnectivityStatus.Offline;
-      //   break;
     }
-    notifyListeners();
+
+    // Only notify listeners if the status has changed
+    if (newStatus != _status) {
+      _status = newStatus;
+      notifyListeners();
+    }
   }
 }
