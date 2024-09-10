@@ -51,7 +51,7 @@ class PaymentController extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     final response = await http.get(
-      Uri.parse("$baseUrl/transaction_summary"),
+      Uri.parse("$userBaseUrl/transaction_summary"),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         if (cookies != null) 'Cookie': cookies,
@@ -84,7 +84,7 @@ class PaymentController extends ChangeNotifier {
     var cookies = prefs.getString("cookie");
 
     final response = await http.get(
-      Uri.parse("$baseUrl/transaction_list"),
+      Uri.parse("$userBaseUrl/transaction_list"),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         if (cookies != null) 'Cookie': cookies,

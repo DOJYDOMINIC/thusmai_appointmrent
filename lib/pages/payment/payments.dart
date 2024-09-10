@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/pages/payment/paymenttotrust.dart';
 
@@ -33,7 +34,7 @@ class _PaymentPageState extends State<PaymentPage> {
     return DefaultTabController(
       length: 2, // Number of tabs
       child: Scaffold(
-        body: connect.status == ConnectivityStatus.Offline
+        body: false
             ?RefreshPage(
           onTap: () {
             Provider.of<AppLogin>(context, listen: false).getUserByID();
@@ -52,7 +53,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 180,
+                    height: 180.h,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),

@@ -26,7 +26,7 @@ class NotificationPage extends StatelessWidget {
       body: ListView.builder(
         itemCount: 10,
         itemBuilder: (context, index) {
-          final Uri rewardUrl = Uri.parse("https://thasmai.tstsvc.in");
+          // final Uri rewardUrl = Uri.parse("$registerUrl");
           return  rewardWidget(guruji,"Notification","Lorem ipsum dolor sit amet consectetur.");
         },),
     );

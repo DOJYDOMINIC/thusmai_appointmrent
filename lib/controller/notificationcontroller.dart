@@ -19,7 +19,7 @@ class notificationController extends ChangeNotifier{
     print(cookies);
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/"),
+        Uri.parse("$userBaseUrl/"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,

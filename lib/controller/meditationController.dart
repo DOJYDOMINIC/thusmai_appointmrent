@@ -19,7 +19,7 @@ class MeditationController extends ChangeNotifier {
     var cookies = prefs.getString("cookie");
     try {
       var response = await http.post(
-        Uri.parse("$baseUrl/meditation"),
+        Uri.parse("$userBaseUrl/meditation"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -51,7 +51,7 @@ class MeditationController extends ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl/button-block"),
+        Uri.parse("$userBaseUrl/button-block"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -88,7 +88,7 @@ class MeditationController extends ChangeNotifier {
     var cookies = prefs.getString("cookie");
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/meditationTimeDetails"),
+        Uri.parse("$userBaseUrl/meditationTimeDetails"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -138,7 +138,7 @@ class MeditationController extends ChangeNotifier {
     var cookies = prefs.getString("cookie");
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/meditation-date?page=$count"),
+        Uri.parse("$userBaseUrl/meditation-date?page=$count"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -174,7 +174,7 @@ class MeditationController extends ChangeNotifier {
 
     try {
       var response = await http.post(
-        Uri.parse("$baseUrl/messages"),
+        Uri.parse("$userBaseUrl/messages"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -226,7 +226,7 @@ class MeditationController extends ChangeNotifier {
 
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/meditation-time?time=$formattedTime"),
+        Uri.parse("$userBaseUrl/meditation-time?time=$formattedTime"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,

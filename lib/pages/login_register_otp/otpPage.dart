@@ -198,7 +198,7 @@ class _otpPageState extends State<otpPage> {
                             debugPrint('onClipboardFound: $value');
                             pinController.setText(value);
                           },
-                          hapticFeedbackType: HapticFeedbackType.lightImpact,
+                          // hapticFeedbackType: HapticFeedbackType.lightImpact,
                           onCompleted: (pin) {
                             otpNumber = pin;
                             // otpVerification();

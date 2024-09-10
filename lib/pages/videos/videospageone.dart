@@ -221,24 +221,26 @@ class _VideosPageOneState extends State<VideosPageOne> {
                               ),
                             ),
                             SizedBox(width: 10.w),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(8, 16, 8, 16),
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                      "${data.playlists![index].playListHeading}"),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.videocam),
-                                      Text(
-                                          "(${data.playlists![index].videoLinkCount.toString()}) Videos"),
-                                    ],
-                                  ),
-                                ],
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(8, 16, 8, 16),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                        "${data.playlists![index].playListHeading}"),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.videocam),
+                                        Text(
+                                            "(${data.playlists![index].videoLinkCount.toString()}) Videos"),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],

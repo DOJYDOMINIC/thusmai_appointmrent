@@ -23,8 +23,8 @@ class ConnectivityProvider extends ChangeNotifier {
   }
 
   Future<void> initConnectivity() async {
-    ConnectivityResult result = (await _connectivity.checkConnectivity()) as ConnectivityResult;
-    _updateStatus(result);
+    List<ConnectivityResult> result = await _connectivity.checkConnectivity();
+    _updateStatus(result as ConnectivityResult);
   }
 
   void _updateStatus(ConnectivityResult result) {

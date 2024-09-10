@@ -3,21 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 //Const Urls
-const url = "https://starlife.co.in";
-const coreUrl = "$url/api/v1";
-const baseUrl = "$coreUrl/User";
-const  adminBaseUrl = "$coreUrl/admin";
-const  paymentBaseUrl = "$coreUrl/payment";
-const  superAdmin = coreUrl;
+const coreUrl = "https://starlife.co.in";
+const baseUrl = "$coreUrl/api/v1";
+const userBaseUrl = "$baseUrl/User";
+const  adminBaseUrl = "$baseUrl/admin";
+const  paymentBaseUrl = "$baseUrl/payment";
+const  superAdmin = baseUrl;
 
 // Urls Launching
-final Uri registerUrl = Uri.parse(url);
-final Uri privacyPolicy = Uri.parse("$url/privacyPolicy");
+final Uri registerUrl = Uri.parse(coreUrl);
+final Uri privacyPolicy = Uri.parse("$coreUrl/privacyPolicy");
 
-// const baseUrl = "http://192.168.1.53:5000/api/v1/User";
-// const  adminBaseUrl = "http://192.168.1.53:5000/api/v1/admin";
-// const  paymentBaseUrl = "http://192.168.1.53:5000/api/v1/payment";
-// const  superAdmin = "http://192.168.1.53:5000/api/v1";
 
 
 
@@ -33,6 +29,7 @@ const String alertCompleted = "assets/images/Alert Completed.png";
 const String alertDeleted = "assets/images/Alert Delete.png";
 const String logo = "assets/images/Tasmai logo.png";
 const String guruji = "assets/images/guruji.png";
+const String stars_80vector = "assets/images/stars-80vector.png";
 
 
 // svg
@@ -175,7 +172,6 @@ String defaultImage = "/9j/4AAQSkZJRgABAQACWAJYAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQND
 String imgFromFirebase = "https://firebasestorage.googleapis.com/v0/b/thasmai-star-life.appspot.com/o/general_images%2Fistockphoto-1337144146-612x612.jpg?alt=media&token=d9e5ec85-15af-4b48-a96b-4cb5beef82f5";
 String noImage = "https://firebasestorage.googleapis.com/v0/b/thasmai-star-life.appspot.com/o/general_images%2Fpngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg?alt=media&token=708c7abf-84da-4f07-8fa6-a2a82f790cdc";
 
-// Url
 
 // profile
 const String profile = "Profile";

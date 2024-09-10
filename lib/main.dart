@@ -171,7 +171,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   Transform.translate(
                     offset: Offset(-0, 0),
                     child: Image.asset(
-                      "assets/images/stars-80vector.png",
+                      stars_80vector,
                       // Replace with the path to the second logo
                       height: 52.h,
                     ),
@@ -189,7 +189,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                   if (_showBothLogos)
                     Image.asset(
-                      "assets/images/stars-80vector.png",
+                      stars_80vector,
                       // Replace with the path to the second logo
                       height: 52.h,
                     ),

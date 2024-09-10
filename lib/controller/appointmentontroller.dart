@@ -54,7 +54,7 @@ class AppointmentController extends ChangeNotifier {
     var cookies = prefs.getString("cookie");
     print(cookies);
     try {
-      var response = await http.get(Uri.parse("$baseUrl/list-appointment"),
+      var response = await http.get(Uri.parse("$userBaseUrl/list-appointment"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -89,7 +89,7 @@ class AppointmentController extends ChangeNotifier {
     print(cookies);
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/rulesAndConditions"),
+        Uri.parse("$userBaseUrl/rulesAndConditions"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -114,7 +114,7 @@ class AppointmentController extends ChangeNotifier {
 
     try {
       final response = await http.put(
-        Uri.parse("$baseUrl/updateAppointment/${data.id}"),
+        Uri.parse("$userBaseUrl/updateAppointment/${data.id}"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -170,7 +170,7 @@ class AppointmentController extends ChangeNotifier {
     print(cookies);
     try {
       final response = await http.post(
-        Uri.parse("$baseUrl/appointment"),
+        Uri.parse("$userBaseUrl/appointment"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -224,7 +224,7 @@ class AppointmentController extends ChangeNotifier {
     print(cookies);
     try {
       final response = await http.delete(
-        Uri.parse('$baseUrl/delete-appointment/?id=$id'),
+        Uri.parse('$userBaseUrl/delete-appointment/?id=$id'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -260,7 +260,7 @@ class AppointmentController extends ChangeNotifier {
     print(cookies);
     try {
       final response = await http.delete(
-        Uri.parse('$baseUrl/group-members/$id'),
+        Uri.parse('$userBaseUrl/group-members/$id'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -295,7 +295,7 @@ class AppointmentController extends ChangeNotifier {
     print(cookies);
     try {
       final response = await http.put(
-        Uri.parse("$baseUrl/rating"),
+        Uri.parse("$userBaseUrl/rating"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -348,7 +348,7 @@ class AppointmentController extends ChangeNotifier {
     print(cookies);
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/guruji-date"),
+        Uri.parse("$userBaseUrl/guruji-date"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,

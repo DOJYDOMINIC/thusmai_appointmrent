@@ -16,7 +16,7 @@ class ZoomMeetingController extends ChangeNotifier {
     var now = DateTime.now();
     String formattedTime = "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}";
     String formattedDate = "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}";
-    final response = await http.post(Uri.parse("$baseUrl/zoom_Records"),
+    final response = await http.post(Uri.parse("$userBaseUrl/zoom_Records"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -38,7 +38,7 @@ class ZoomMeetingController extends ChangeNotifier {
     var cookies = prefs.getString("cookie");
     var date = DateFormat('yyyy-MM-dd').format(DateTime.now());
     final response = await http.get(
-      Uri.parse("$baseUrl/get-zoomclass?currentDate=$date"),
+      Uri.parse("$userBaseUrl/get-zoomclass?currentDate=$date"),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         if (cookies != null) 'Cookie': cookies,

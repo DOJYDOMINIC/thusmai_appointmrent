@@ -96,7 +96,7 @@ class VideoPlayerStateController extends ChangeNotifier {
     print(cookies);
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/playlists"),
+        Uri.parse("$userBaseUrl/playlists"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -123,7 +123,7 @@ class VideoPlayerStateController extends ChangeNotifier {
     print(cookies);
     try {
       var response = await http.get(
-        Uri.parse("$baseUrl/videos-by-playlist?playList_heading=$category"),
+        Uri.parse("$userBaseUrl/videos-by-playlist?playList_heading=$category"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,

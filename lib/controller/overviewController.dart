@@ -18,7 +18,7 @@ class OverViewController extends ChangeNotifier {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
-      final response = await http.get(Uri.parse("$baseUrl/listevents"),
+      final response = await http.get(Uri.parse("$userBaseUrl/listevents"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -47,7 +47,7 @@ class OverViewController extends ChangeNotifier {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
-      final response = await http.get(Uri.parse("$baseUrl/listblogs"),
+      final response = await http.get(Uri.parse("$userBaseUrl/listblogs"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,

@@ -88,7 +88,7 @@ class AppLogin extends ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.get(
-        Uri.parse("$baseUrl/getUserById"),
+        Uri.parse("$userBaseUrl/getUserById"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -120,7 +120,7 @@ class AppLogin extends ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.get(
-        Uri.parse("$baseUrl/list-questions"),
+        Uri.parse("$userBaseUrl/list-questions"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -151,7 +151,7 @@ class AppLogin extends ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.delete(
-        Uri.parse("$baseUrl/delete-user"),
+        Uri.parse("$userBaseUrl/delete-user"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -186,7 +186,7 @@ class AppLogin extends ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.get(
-        Uri.parse("$baseUrl/validate-session"),
+        Uri.parse("$userBaseUrl/validate-session"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -218,7 +218,7 @@ class AppLogin extends ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.get(
-        Uri.parse("$baseUrl/logout"),
+        Uri.parse("$userBaseUrl/logout"),
         headers: {
           'Content-Type': 'application/json',
           if (cookies != null) 'Cookie': cookies,
@@ -241,7 +241,7 @@ class AppLogin extends ChangeNotifier {
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    final response = await http.post(Uri.parse("$baseUrl/meditation-data"),
+    final response = await http.post(Uri.parse("$userBaseUrl/meditation-data"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -273,7 +273,7 @@ class AppLogin extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     final response = await http.get(
-      Uri.parse("$baseUrl/flag"),
+      Uri.parse("$userBaseUrl/flag"),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         if (cookies != null) 'Cookie': cookies,
@@ -297,7 +297,7 @@ class AppLogin extends ChangeNotifier {
     try {
       final response = await http
           .post(
-            Uri.parse("$baseUrl/login"),
+            Uri.parse("$userBaseUrl/login"),
             headers: {
               'Content-Type': 'application/json; charset=UTF-8',
             },
@@ -373,7 +373,7 @@ class AppLogin extends ChangeNotifier {
   ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    final response = await http.post(Uri.parse("$baseUrl/requestPasswordReset"),
+    final response = await http.post(Uri.parse("$userBaseUrl/requestPasswordReset"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -412,7 +412,7 @@ class AppLogin extends ChangeNotifier {
       BuildContext context, Map<String, dynamic> data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    final response = await http.post(Uri.parse("$baseUrl/verify-userotp"),
+    final response = await http.post(Uri.parse("$userBaseUrl/verify-userotp"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -465,7 +465,7 @@ class AppLogin extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
 
-    final response = await http.post(Uri.parse("$baseUrl/resetPassword"),
+    final response = await http.post(Uri.parse("$userBaseUrl/resetPassword"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         },

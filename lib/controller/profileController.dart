@@ -40,7 +40,7 @@ class ProfileController extends ChangeNotifier{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     if (image != null) {
-    var request = http.MultipartRequest('PUT', Uri.parse('$baseUrl/updateUser'));
+    var request = http.MultipartRequest('PUT', Uri.parse('$userBaseUrl/updateUser'));
     // Add the image file as a MultipartFile
     // File compressedImage = await _compressImage(image!);
     var imageFile = await http.MultipartFile.fromPath(
@@ -91,7 +91,7 @@ class ProfileController extends ChangeNotifier{
     var cookies = prefs.getString("cookie");
     print(cookies);
     try {
-      final response = await http.post(Uri.parse("$baseUrl/appFeedback"),
+      final response = await http.post(Uri.parse("$userBaseUrl/appFeedback"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -137,7 +137,7 @@ class ProfileController extends ChangeNotifier{
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.put(
-        Uri.parse("$baseUrl/updateUserDetails"),
+        Uri.parse("$userBaseUrl/updateUserDetails"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -166,7 +166,7 @@ class ProfileController extends ChangeNotifier{
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.put(
-          Uri.parse("$baseUrl/updteBankDetails"),
+          Uri.parse("$userBaseUrl/updteBankDetails"),
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
             if (cookies != null) 'Cookie': cookies,
@@ -198,7 +198,7 @@ class ProfileController extends ChangeNotifier{
         SharedPreferences prefs = await SharedPreferences.getInstance();
         var cookies = prefs.getString("cookie");
         final response = await http.get(
-            Uri.parse("$baseUrl/getBankDetails"),
+            Uri.parse("$userBaseUrl/getBankDetails"),
             headers: {
               'Content-Type': 'application/json; charset=UTF-8',
               if (cookies != null) 'Cookie': cookies,
@@ -229,7 +229,7 @@ class ProfileController extends ChangeNotifier{
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.get(
-        Uri.parse("$baseUrl/rewardList"),
+        Uri.parse("$userBaseUrl/rewardList"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,

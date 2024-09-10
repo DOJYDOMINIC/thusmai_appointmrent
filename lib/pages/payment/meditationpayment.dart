@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
@@ -58,7 +59,7 @@ class _MeditationPaymentState extends State<MeditationPayment> {
                 MeditationPaymentWidget(
                   url: "maintenance-checkout",
                   icon: Icons.videocam,
-                  amount: "${finData[3].value.toString()}",
+                  amount: "${finData[0].value.toString()}",
                   dueDate: "Funds to enable Messages \nand Classes",
                   paymentType: 'Platform Maintenance',
                   noteIcon: "assets/svgImage/brightness_alert.svg",
@@ -71,7 +72,7 @@ class _MeditationPaymentState extends State<MeditationPayment> {
                   child: MeditationPaymentWidget(
                     icon: Icons.self_improvement,
                     url: "meditation-checkout",
-                    amount: "${finData[2].value.toString()}",
+                    amount: "${finData[1].value.toString()}",
                     dueDate: "Fund to enable Meditation",
                     paymentType: 'Meditation payment',
                     noteIcon: 'assets/svgImage/brightness_alert.svg',
@@ -293,8 +294,8 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
                           // SvgPicture.asset(
                           //     currencyRupee),
                           SizedBox(
-                            height: 45,
-                            width: 150,
+                            height: 45.h,
+                            width: 150.w,
                             child: TextFormField(
                               controller: widget.controller,
                               keyboardType: TextInputType.number,
@@ -338,8 +339,8 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
                 ),
 
                 SizedBox(
-                  height: 40.0,
-                  width: 91.0,
+                  height: 40.h,
+                  width: 91.w,
                   child: ElevatedButton(
                     onPressed: Provider.of<AppLogin>(context).isButtonDisabled ? null : _createOrderAndOpenCheckout,
                     style: ElevatedButton.styleFrom(

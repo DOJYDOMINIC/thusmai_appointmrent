@@ -45,7 +45,7 @@ class MessageController extends ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.get(
-        Uri.parse("$baseUrl/globalMessage/$pageNumber"),
+        Uri.parse("$userBaseUrl/globalMessage/$pageNumber"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -98,7 +98,7 @@ class MessageController extends ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.get(
-        Uri.parse("$baseUrl/privateMessage/$pageNumber"),
+        Uri.parse("$userBaseUrl/privateMessage/$pageNumber"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -153,7 +153,7 @@ class MessageController extends ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.get(
-        Uri.parse("$baseUrl/gurujimessage/$pageNumber"),
+        Uri.parse("$userBaseUrl/gurujimessage/$pageNumber"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
@@ -181,7 +181,7 @@ class MessageController extends ChangeNotifier {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var cookies = prefs.getString("cookie");
       final response = await http.delete(
-        Uri.parse("$baseUrl/deleteMsg/$id"),
+        Uri.parse("$userBaseUrl/deleteMsg/$id"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           if (cookies != null) 'Cookie': cookies,
