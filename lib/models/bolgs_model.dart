@@ -30,31 +30,32 @@ class Welcome {
 
 class Blog {
   int? id;
-  String? blogName;
-  String? blogDescription;
+  String? title;
+  String? description;
   String? date;
+  String? eventTime = "";
   String? image;
 
   Blog({
     this.id,
-    this.blogName,
-    this.blogDescription,
+    this.title,
+    this.description,
     this.date,
     this.image,
   });
 
   factory Blog.fromJson(Map<String, dynamic> json) => Blog(
     id: json["id"],
-    blogName: json["blog_name"],
-    blogDescription: json["blog_description"],
+    title: json["blog_name"],
+    description: json["blog_description"],
     date: json["date"],
     image: json["image"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "blog_name": blogName,
-    "blog_description": blogDescription,
+    "blog_name": title,
+    "blog_description": description,
     "date": date,
     "image": image,
   };

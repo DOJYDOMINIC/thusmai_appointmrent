@@ -1,12 +1,11 @@
 import 'dart:typed_data';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:thusmai_appointmrent/models/appointment_model.dart';
-import 'dart:io';
 import '../../constant/constant.dart';
 
 class AppointmentShare extends StatefulWidget {

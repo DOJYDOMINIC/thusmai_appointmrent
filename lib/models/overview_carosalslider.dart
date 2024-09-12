@@ -28,8 +28,8 @@ class SliderEvents {
 
 class EventData {
   int? id;
-  String? eventName;
-  String? eventDescription;
+  String? title;
+  String? description;
   String? priority;
   String? place;
   String? date;
@@ -38,8 +38,8 @@ class EventData {
 
   EventData({
     this.id,
-    this.eventName,
-    this.eventDescription,
+    this.title,
+    this.description,
     this.priority,
     this.place,
     this.date,
@@ -49,8 +49,8 @@ class EventData {
 
   factory EventData.fromJson(Map<String, dynamic> json) => EventData(
     id: json["id"],
-    eventName: json["event_name"],
-    eventDescription: json["event_description"],
+    title: json["event_name"],
+    description: json["event_description"],
     priority: json["priority"],
     place: json["place"],
     date: json["date"],
@@ -61,8 +61,8 @@ class EventData {
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "event_name": eventName,
-    "event_description": eventDescription,
+    "event_name": title,
+    "event_description": description,
     "priority": priority,
     "place": place,
     "date": date,

@@ -241,9 +241,7 @@ class _LoginState extends State<Login> {
                             child: ElevatedButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  // If the form is valid, save the form state
                                   _formKey.currentState!.save();
-                                  // Here you can perform your login logic
                                   Map<String, dynamic> data = {
                                     "email": _email,
                                     "password": _password
