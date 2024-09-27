@@ -28,9 +28,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
     super.initState();
     final meditationController = Provider.of<MeditationController>(context, listen: false);
     final appLoginProvider = Provider.of<AppLogin>(context, listen: false);
-    Provider.of<ConnectivityProvider>(context, listen: false).initConnectivity();
     Provider.of<AppLogin>(context, listen: false).validateSession(context);
-    Provider.of<ConnectivityProvider>(context, listen: false).status;
     Provider.of<ButtonStateNotifier>(context,listen: false).loadButtonState();
     appLoginProvider.getUserByID();
     appLoginProvider.importantFlags();
@@ -67,7 +65,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
   Widget build(BuildContext context) {
     final buttonStateNotifier = Provider.of<ButtonStateNotifier>(context);
     final appLoginProvider = Provider.of<AppLogin>(context);
-    final connectivityProvider = Provider.of<ConnectivityProvider>(context);
+    // final connectivityProvider = Provider.of<ConnectivityProvider>(context);
     final meditationController = Provider.of<MeditationController>(context);
     final meditationFullTime = meditationController.meditationFullTime;
     final meditationTimeData = meditationController.meditationTimeData;
@@ -78,18 +76,7 @@ class _MeditationCycleState extends State<MeditationCycle> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(right: 20, left: 20),
-          child: connectivityProvider.status == ConnectivityStatus.Offline
-              ? Center(
-                  child: RefreshPage(
-                    onTap: () {
-                      appLoginProvider.getUserByID();
-                      appLoginProvider.importantFlags();
-                      meditationController.meditationTimeDetails(context);
-                      // meditationController.meditationDetailsTime();
-                    },
-                  ),
-                )
-              :SingleChildScrollView(
+          child: SingleChildScrollView(
                   child: Container(
                     height: MediaQuery.of(context).size.height - 250.h,
                     child: Column(

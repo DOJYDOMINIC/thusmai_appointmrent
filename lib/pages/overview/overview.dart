@@ -17,6 +17,7 @@ import '../../controller/zoommeeting_controller.dart';
 import '../../models/hive/meditationdata.dart';
 import '../../widgets/additionnalwidget.dart';
 import '../../widgets/carosal_widget.dart';
+import '../../widgets/homeboxes.dart';
 import '../../widgets/popup_widget.dart';
 import '../profile/profile.dart';
 import '../refreshpage.dart';
@@ -28,8 +29,7 @@ class Overview extends StatefulWidget {
   State<Overview> createState() => _OverviewState();
 }
 
-class _OverviewState extends State<Overview>
-    with SingleTickerProviderStateMixin {
+class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
   late Timer _timer;
@@ -65,7 +65,7 @@ class _OverviewState extends State<Overview>
     Provider.of<AppLogin>(context, listen: false).importantFlags();
     Provider.of<OverViewController>(context, listen: false).eventList();
     Provider.of<OverViewController>(context, listen: false).blogs();
-    Provider.of<ConnectivityProvider>(context, listen: false).initConnectivity();
+    // Provider.of<ConnectivityProvider>(context, listen: false).initConnectivity();
     var id = Provider.of<AppLogin>(context, listen: false).userData?.uId ?? "";
     Provider.of<MeditationController>(context, listen: false)
         .meditationTimeDetails(context);
@@ -75,7 +75,7 @@ class _OverviewState extends State<Overview>
   }
 
   void uploadMeditationTimes() async {
-    if(Provider.of<ConnectivityProvider>(context, listen: false).status != ConnectivityStatus.Offline){
+    // if(Provider.of<ConnectivityProvider>(context, listen: false).status != ConnectivityStatus.Offline){
       var box = await Hive.openBox<MeditationData>('MeditationDataBox');
       print("entered");
       for (int index = 0; index < box.length; index++) {
@@ -86,7 +86,7 @@ class _OverviewState extends State<Overview>
           });
         }
       }
-    }
+    // }
   }
 
   @override
@@ -142,9 +142,9 @@ class _OverviewState extends State<Overview>
     var id = Provider.of<AppLogin>(context, listen: false).userData?.uId ?? "";
     Provider.of<MeditationController>(context, listen: false)
         .meditationTimeDetails(context);
-    var connect = Provider.of<ConnectivityProvider>(context);
+    // var connect = Provider.of<ConnectivityProvider>(context);
     var appLogin = Provider.of<AppLogin>(context);
-    var overView = Provider.of<OverViewController>(context).eventLIst;
+    var eventLIst = Provider.of<OverViewController>(context).eventLIst;
     var blogsLIst = Provider.of<OverViewController>(context).blogsLIst;
     var flagModel = Provider.of<AppLogin>(context).flagModel;
     var zoomMeet = Provider.of<ZoomMeetingController>(context).ZoomClassModelData;
@@ -226,21 +226,7 @@ class _OverviewState extends State<Overview>
                         ),
       backgroundColor: shadeOne,
       body: SafeArea(
-        child: connect.status == ConnectivityStatus.Offline
-            ? Center(child: RefreshPage(
-                onTap: () {
-                  Provider.of<AppLogin>(context, listen: false).getUserByID();
-                  Provider.of<AppLogin>(context, listen: false)
-                      .importantFlags();
-                  Provider.of<OverViewController>(context, listen: false)
-                      .eventList();
-                  Provider.of<ConnectivityProvider>(context, listen: false)
-                      .status;
-                  Provider.of<ZoomMeetingController>(context, listen: false)
-                      .zoomClass();
-                },
-              ))
-            : SingleChildScrollView(
+        child: SingleChildScrollView(
                 child: Column(
                   children: [
                     GestureDetector(
@@ -351,116 +337,57 @@ class _OverviewState extends State<Overview>
                       ),
                     ),
                     spaceBetween,
-                    InkWell(
-                      onTap: (){
-                        indexProvider.currentIndex = 2;
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 16.sp, right: 16.sp),
-                        child: Container(
+                    Row(
+                      children: [
+                        SizedBox(
                           height: 176.h,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Colors.amber.shade100, // Lighter color
-                                Colors.amber.shade50, // Lighter color
-                                Colors.amber.shade50, // Lighter color
-                              ],
-                              // stops: [0.0, 1.0],
-                            ),
-                            border: Border.fromBorderSide(BorderSide.none),
-                            borderRadius: BorderRadius.circular(12.sp),
-                          ),
-                          child: Padding(
-                            padding:
-                                EdgeInsets.fromLTRB(16.sp, 8.sp, 16.sp, 8.sp),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Meditation Cycle"),
-                                spaceBetween,
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Icon(
-                                      Icons.self_improvement,
-                                      size: 80.sp,
-                                    ),
-                                    Container(
-                                      height: 100.h,
-                                      width: 1.w,
-                                      color: brown,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text("Completed Cycle"),
-                                        spaceBetween,
-                                        Text("Current Cycle"),
-                                        spaceBetween,
-                                        Text("Days Completed"),
-                                      ],
-                                    ),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        Text("${appLogin.userData?.cycle ?? 0}"),
-                                        spaceBetween,
-                                        Text("${appLogin.userData?.cycle ?? 0}"),
-                                        spaceBetween,
-                                        Text("${appLogin.userData?.day ?? 0}"),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
+                          width: MediaQuery.of(context).size.width/2,
+                          child: MeditationCard(
+                            iconData: Icons.self_improvement,
+                            title: "Meditation",
+                            background: meditationColor,
+                            valueData: true,
+                            dataStringOne: "Current Cycle",
+                            dataStringTwo: "Days Completed",
+                            onTap: () {
+                              indexProvider.currentIndex = 2;
+                            },
+                            currentCycle: appLogin.userData?.cycle ?? 0,
+                            daysCompleted: appLogin.userData?.day ?? 0,
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Events",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              )),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Blogs",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
-                              )),
+                        SizedBox(
+                          height: 176.h,
+                          width: MediaQuery.of(context).size.width/2,
+                          child: MeditationCard(
+                            iconData: Icons.message_outlined,
+                            title: "t-tok and Guruji",
+                            background: messageGuruColor,
+                            valueData: false,
+                            dataStringOne: "Connecting Hearts and ",
+                            dataStringTwo: "Minds Across the Globe",
+                            onTap: () {
+                              indexProvider.currentIndex = 3;
+                            },
+                            currentCycle: appLogin.userData?.cycle ?? 0,
+                            daysCompleted: appLogin.userData?.day ?? 0,
+                          ),
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: 8.h,
+                    ),
                     Row(
                       children: [
-                        BlogImageCarousel(blogsList: blogsLIst),
-                        BlogImageCarousel(blogsList: overView),
+                        BlogImageCarousel(blogsList: blogsLIst, titleName: 'Recent Blogs',backgroundColor: sliderBackground1,),
+                        BlogImageCarousel(blogsList: eventLIst, titleName: 'Recent Events',backgroundColor: sliderBackground2,),
                       ],
                     ),
                     SizedBox(
-                      height: 16,
+                      height: 8,
                     ),
+
                   ],
                 ),
               ),

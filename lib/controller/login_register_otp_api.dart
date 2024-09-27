@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:thusmai_appointmrent/models/userdata.dart';
 import 'package:thusmai_appointmrent/models/userlogin.dart';
 import 'package:thusmai_appointmrent/pages/profile/profile.dart';
+import '../login/otp_verification.dart';
+import '../login/register.dart';
 import '../models/flagsmode.dart';
 import '../models/listQuestions.dart';
 import '../pages/bottom_navbar.dart';
@@ -36,7 +38,7 @@ class AppLogin extends ChangeNotifier {
 
 // firstLogin check
 
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   int get currentIndex => _currentIndex;
 
@@ -182,35 +184,35 @@ class AppLogin extends ChangeNotifier {
   }
 
   Future<void> validateSession(BuildContext context) async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      var cookies = prefs.getString("cookie");
-      final response = await http.get(
-        Uri.parse("$userBaseUrl/validate-session"),
-        headers: {
-          'Content-Type': 'application/json',
-          if (cookies != null) 'Cookie': cookies,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        print("valid user");
-      } else if (response.statusCode == 401) {
-        _currentIndex = 1;
-        print("Not valid user");
-        prefs.clear();
-        // slidePageRoute(context, Login());
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => Login()),
-          (Route<dynamic> route) => false,
-        );
-      } else {}
-    } catch (e) {
-      if (kDebugMode) {
-        print("getUserByID : $e");
-      }
-    }
+    // try {
+    //   SharedPreferences prefs = await SharedPreferences.getInstance();
+    //   var cookies = prefs.getString("cookie");
+    //   final response = await http.get(
+    //     Uri.parse("$userBaseUrl/validate-session"),
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       if (cookies != null) 'Cookie': cookies,
+    //     },
+    //   );
+    //
+    //   if (response.statusCode == 200) {
+    //     print("valid user");
+    //   } else if (response.statusCode == 401) {
+    //     _currentIndex = 1;
+    //     print("Not valid user");
+    //     prefs.clear();
+    //     // slidePageRoute(context, Login());
+    //     Navigator.pushAndRemoveUntil(
+    //       context,
+    //       MaterialPageRoute(builder: (context) => Login()),
+    //       (Route<dynamic> route) => false,
+    //     );
+    //   } else {}
+    // } catch (e) {
+    //   if (kDebugMode) {
+    //     print("getUserByID : $e");
+    //   }
+    // }
   }
 
   Future<void> backendSessionClear() async {
@@ -327,7 +329,7 @@ class AppLogin extends ChangeNotifier {
           ),
         );
       } else if (response.statusCode == 404) {
-        requestPasswordReset(context, data["email"]);
+        // requestPasswordReset(context, data["email"]);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -367,60 +369,33 @@ class AppLogin extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> requestPasswordReset(
-    BuildContext context,
-    String data,
-  ) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var cookies = prefs.getString("cookie");
-    final response = await http.post(Uri.parse("$userBaseUrl/requestPasswordReset"),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({"email": data}));
-    var decode = jsonDecode(response.body);
-    try {
-      if (response.statusCode == 200) {
-        if (cookies == null || cookies == "" || cookies.isEmpty) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => otpPage(data: data),
-              ));
-        } else {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ResetPageTwo(data: data),
-              ));
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(decode["message"]),
-            duration: Duration(seconds: 1),
-          ),
-        );
-      }
-    } catch (e) {
-      print("requestPasswordReset : $e");
-    }
-  }
+
 
   Future<void> otpVerification(
-      BuildContext context, Map<String, dynamic> data) async {
+      BuildContext context, UserContactInfo data,String otp) async {
+    var otpData  = { "email":data.email??"test@gmail.com", "phone":data.phone??"000000000", "country":data.country,"otp":otp};
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     final response = await http.post(Uri.parse("$userBaseUrl/verify-userotp"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(data));
+
+        body: jsonEncode(otpData));
 
     var decode = jsonDecode(response.body);
     try {
       if (response.statusCode == 200) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        _userLoginData = UserLoginData.fromJson(decode["user"]);
+        final String? specificCookie = response.headers['set-cookie'];
+        final sessionId = specificCookie;
+        prefs.setString("cookie", sessionId!);
+        prefs.setString("isAnswered", _userLoginData!.isans.toString());
+        var isAnswered = prefs.getString("isAnswered");
+        var fCMToken = prefs.getString("fCMToken");
+        if (fCMToken != null) {
+        }
         // ScaffoldMessenger.of(context).showSnackBar(
         //   SnackBar(
         //     backgroundColor: Colors.green,
@@ -428,19 +403,25 @@ class AppLogin extends ChangeNotifier {
         //     duration: Duration(seconds: 2),
         //   ),
         // );
-        if (cookies == null || cookies == "" || cookies.isEmpty) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChangePassword(data: data),
-              ));
-        } else {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ResetPageThree(data: data),
-              ));
+        if (decode["verify"] == true){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomBottomNavBar(),));
+        }else{
+          print("User not registerds");
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterPage(),));
         }
+        // if (cookies == null || cookies == "" || cookies.isEmpty) {
+        //   Navigator.pushReplacement(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder: (context) => ChangePassword(data: data),
+        //       ));
+        // } else {
+        //   Navigator.pushReplacement(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder: (context) => ResetPageThree(data: data),
+        //       ));
+        // }
         // Navigator.pushReplacement(
         //     context,
         //     MaterialPageRoute(
@@ -521,5 +502,92 @@ class AppLogin extends ChangeNotifier {
     } catch (e) {
       print("otpVerification : $e");
     }
+  }
+
+
+  Future<void> sendOtp(BuildContext context, UserContactInfo data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // var cookies = prefs.getString("cookie");
+
+    try {
+      final response = await http.post(
+        Uri.parse("$userBaseUrl/send-otp"),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(data),
+      );
+
+      var decode = jsonDecode(
+          response.body); // Correctly decode the response body
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        if (decode["verify"] == true) {
+          // Handle successful response
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => otpPageData(data: data),
+            ),
+          );
+          print(decode);
+        } else {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => RegisterPage(),));
+        }
+      } else {
+        // Handle non-2xx status codes
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text("Failed to send OTP: ${response.statusCode}"),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle any errors during the request
+      print("Error in sendOtp: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content: Text("An error occurred"),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    }
+  }
+}
+
+
+
+
+
+
+  class UserContactInfo {
+  final String? phone; // Optional
+  final String? email; // Optional
+  final String? country; // Optional
+
+  UserContactInfo({
+    this.phone, // No required keyword
+    this.email, // No required keyword
+    this.country, // No required keyword
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'phone': phone??"0000000000",
+      'email': email??"dasdfghjkl@gmail.com",
+      'country': country??"",
+    };
+  }
+
+  factory UserContactInfo.fromJson(Map<String, dynamic> json) {
+    return UserContactInfo(
+      phone: json['phone'],
+      email: json['email'],
+      country: json['country'],
+    );
   }
 }

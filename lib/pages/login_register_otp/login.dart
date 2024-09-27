@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_auth/smart_auth.dart';
 import 'package:thusmai_appointmrent/pages/login_register_otp/reset_password.dart';
 import 'package:thusmai_appointmrent/widgets/additionnalwidget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,10 +19,22 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final smartAuth = SmartAuth();
+
   @override
   void initState() {
     super.initState();
+    requestHint();
     Provider.of<AppLogin>(context, listen: false).listQuestions();
+  }
+
+  void requestHint() async {
+    final res = await smartAuth.requestHint(
+      isPhoneNumberIdentifierSupported: true,
+      isEmailAddressIdentifierSupported: true,
+      showCancelButton: true,
+    );
+    debugPrint('requestHint: $res');
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -246,8 +259,7 @@ class _LoginState extends State<Login> {
                                     "email": _email,
                                     "password": _password
                                   };
-                                  Provider.of<AppLogin>(context, listen: false)
-                                      .loginApi(context, data);
+                                  Provider.of<AppLogin>(context, listen: false).loginApi(context, data);
                                 }
                               },
                               style: ElevatedButton.styleFrom(
@@ -334,3 +346,5 @@ class _LoginState extends State<Login> {
     );
   }
 }
+
+

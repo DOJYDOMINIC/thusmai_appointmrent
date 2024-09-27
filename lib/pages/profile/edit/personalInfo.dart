@@ -77,7 +77,6 @@ class _PersonalInfoState extends State<PersonalInfo> {
   void initState() {
     super.initState();
     // No need to assign anything to status as it is a getter.
-    Provider.of<ConnectivityProvider>(context, listen: false).status;
   }
 
   @override
@@ -89,7 +88,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
   @override
   Widget build(BuildContext context) {
     var userdata = Provider.of<AppLogin>(context).userData;
-    var connect = Provider.of<ConnectivityProvider>(context);
+    // var connect = Provider.of<ConnectivityProvider>(context);
 
     var sizeHeight = SizedBox(height: 24);
     return Scaffold(
@@ -130,9 +129,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: 57.sp,
-                                child: connect.status == ConnectivityStatus.Offline
-                                    ? Container()
-                                    : Container(
+                                child:Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(

@@ -93,7 +93,7 @@ class _TimerScreenState extends State<TimerScreen> {
     timerProvider = Provider.of<TimerProvider>(context);
     appLogin = Provider.of<AppLogin>(context);
     meditation = Provider.of<MeditationController>(context);
-    var connect = Provider.of<ConnectivityProvider>(context);
+    // var connect = Provider.of<ConnectivityProvider>(context);
     var box = Hive.box<MeditationData>('MeditationDataBox');
     return Scaffold(
       appBar: AppBar(
@@ -218,7 +218,7 @@ class _TimerScreenState extends State<TimerScreen> {
                                     .subtract(Duration(minutes: 46)));
                             String endTime = DateFormat('yyyy-MM-dd HH:mm:ss')
                                 .format(DateTime.now());
-                            if (connect.status == ConnectivityStatus.Offline) {
+                            if (false) {
                               print("object : Offline");
                               var meditationData = MeditationData(
                                   startTime: startTime, endTime: endTime);
@@ -231,13 +231,9 @@ class _TimerScreenState extends State<TimerScreen> {
                               );
                             } else {
                               print("object : else");
-                              meditation.meditationTime(
-                                  startTime.toString(), endTime);
+                              meditation.meditationTime(startTime.toString(), endTime);
                               buttonStateNotifier.disableButton();
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MeditationNote()),
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MeditationNote()),
                               );
                             }
                           },

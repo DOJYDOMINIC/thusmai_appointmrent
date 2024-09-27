@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/pages/payment/paymenttotrust.dart';
-
 import '../../constant/constant.dart';
-import '../../controller/connectivitycontroller.dart';
 import '../../controller/login_register_otp_api.dart';
-import '../../controller/overviewController.dart';
 import '../../controller/payment_controller.dart';
-import '../../controller/zoommeeting_controller.dart';
-import '../refreshpage.dart';
 import 'meditationpayment.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -29,24 +24,12 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    var connect = Provider.of<ConnectivityProvider>(context);
+    // var connect = Provider.of<ConnectivityProvider>(context);
     var transactionSummary = Provider.of<PaymentController>(context).transactionSummary;
     return DefaultTabController(
       length: 2, // Number of tabs
       child: Scaffold(
-        body: false
-            ?RefreshPage(
-          onTap: () {
-            Provider.of<AppLogin>(context, listen: false).getUserByID();
-            Provider.of<AppLogin>(context, listen: false)
-                .importantFlags();
-            Provider.of<OverViewController>(context, listen: false)
-                .eventList();
-            Provider.of<ConnectivityProvider>(context, listen: false)
-                .status;
-            Provider.of<ZoomMeetingController>(context,listen: false).zoomClass();
-
-          },):  SingleChildScrollView(
+        body:   SingleChildScrollView(
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               child: Column(

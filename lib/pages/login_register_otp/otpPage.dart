@@ -280,7 +280,7 @@ class _otpPageState extends State<otpPage> {
                             };
                             print(data.toString());
 
-                            Provider.of<AppLogin>(context, listen: false).otpVerification(context, data);
+                            // Provider.of<AppLogin>(context, listen: false).otpVerification(context, data);
                           },
                           style: ElevatedButton.styleFrom(
                             shadowColor: Colors.black, backgroundColor: 20 == 20 ? goldShade : Colors.grey,
@@ -306,7 +306,7 @@ class _otpPageState extends State<otpPage> {
                       TextButton(
                         onPressed: () {
                           if (enableResend == true) {
-                            Provider.of<AppLogin>(context, listen: false).requestPasswordReset(context,widget.data.toString(),);
+                            // Provider.of<AppLogin>(context, listen: false).requestPasswordReset(context,widget.data.toString(),);
                             _resendCode();
                           }else{
                             null;

@@ -59,7 +59,7 @@ class _MeditationPaymentState extends State<MeditationPayment> {
                 MeditationPaymentWidget(
                   url: "maintenance-checkout",
                   icon: Icons.videocam,
-                  amount: "${finData[0].value.toString()}",
+                  amount: "${finData[3].value.toString()}",
                   dueDate: "Funds to enable Messages \nand Classes",
                   paymentType: 'Platform Maintenance',
                   noteIcon: "assets/svgImage/brightness_alert.svg",
@@ -72,7 +72,7 @@ class _MeditationPaymentState extends State<MeditationPayment> {
                   child: MeditationPaymentWidget(
                     icon: Icons.self_improvement,
                     url: "meditation-checkout",
-                    amount: "${finData[1].value.toString()}",
+                    amount: "${finData[4].value.toString()}",
                     dueDate: "Fund to enable Meditation",
                     paymentType: 'Meditation payment',
                     noteIcon: 'assets/svgImage/brightness_alert.svg',

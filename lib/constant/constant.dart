@@ -15,8 +15,6 @@ final Uri registerUrl = Uri.parse(coreUrl);
 final Uri privacyPolicy = Uri.parse("$coreUrl/privacyPolicy");
 
 
-
-
 final String audioUrl = "https://firebasestorage.googleapis.com/v0/b/thasmai-star-life.appspot.com/o/general_images%2FY2meta.app%20-%20Shivashtakam%20Thasmai%20Namah%20Paramakarana%20written%20by%20Aadi%20Shankaracharya%20(320%20kbps).mp3?alt=media&token=845e902d-dccf-46fb-9a97-1013a6987c04";
 // final String audioUrl = "assets/audio/thasmainamah.mp3";
 
@@ -49,6 +47,12 @@ const String currencyRupee =  "assets/svgImage/currency_rupee.svg";
 
 // New
 Color shadeOne = const Color.fromRGBO(255, 251, 255, 1);
+
+Color meditationColor = const Color.fromRGBO(255, 217, 166, 1);
+
+Color messageGuruColor = const Color.fromRGBO(202, 223, 95, 1);
+Color sliderBackground1 = const Color.fromRGBO(129, 86, 0, 1);
+Color sliderBackground2 = const Color.fromRGBO(55, 47, 38, 1);
 
 Color videoBox = const Color.fromRGBO(255, 248, 244, 1);
 

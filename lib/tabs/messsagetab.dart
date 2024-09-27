@@ -17,72 +17,56 @@ class MessageTab extends StatefulWidget {
 }
 
 class _MessageTabState extends State<MessageTab> {
-
-
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //
-  // }
   @override
   Widget build(BuildContext context) {
     var pro = Provider.of<AppointmentController>(context);
     return DefaultTabController(
       initialIndex: 0,
-       length: 3,
+      length: 3,
       child: Scaffold(
-        backgroundColor:shadeOne,
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                color: shadeOne,
-              )),
-          backgroundColor: darkShade,
-          title: Text(
-            "Message",
-            style: TextStyle(color: shadeOne),
-          ),
-          bottom: TabBar (
-            indicatorColor: goldShade,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorWeight: 2,
-            unselectedLabelColor: Colors.grey,
-            labelColor: shadeOne,
-            tabs: [
-          Tab(
-            child: Text(
-              "My Notes",
-            ),
-          ),
-        Tab(
-          child: Text(
-            "Guruji",
-          ),
-        ),
-        Tab(
-          child: Text(
-            "Global",
-          ),
-        ),
-        ],),
-          // centerTitle: true,
-        ),
+        backgroundColor: shadeOne,
         body: SafeArea(
-          child: TabBarView(
+          child: Column(
             children: [
-              PrivateMessage(),
-              GuruMessage(),
-              GeneralMessage(),
+              // TabBar with no AppBar
+              PreferredSize(
+                preferredSize: Size.fromHeight(kToolbarHeight),
+                child: Container(
+                  color: darkShade, // Background color for the tab bar
+                  child: TabBar(
+                    indicatorColor: goldShade,
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorWeight: 2,
+                    unselectedLabelColor: Colors.grey,
+                    labelColor: shadeOne,
+                    tabs: const [
+                      Tab(
+                        child: Text("My Notes"),
+                      ),
+                      Tab(
+                        child: Text("Guruji"),
+                      ),
+                      Tab(
+                        child: Text("Global"),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // TabBarView
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    PrivateMessage(),
+                    GuruMessage(),
+                    GeneralMessage(),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
-
 }

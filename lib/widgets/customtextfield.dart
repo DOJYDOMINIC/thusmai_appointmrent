@@ -1,21 +1,24 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../constant/constant.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField({super.key,this.validator, required this.hintText, this.onChanged, this.controller, this.keyboardType, this.prefixIcon});
+  const CustomTextField({super.key,this.validator, required this.hintText, this.onChanged, this.controller, this.keyboardType, this.prefixIcon, this.padding});
 
   final String hintText;
   final IconData? prefixIcon;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
   final TextEditingController? controller;
+  final bool? padding;
+
 final TextInputType? keyboardType;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.only(bottom: 16.sp),
+      padding:padding == true ? EdgeInsets.only(bottom: 0.sp) : EdgeInsets.only(bottom: 16.sp),
       child: TextFormField(
         controller: controller,
         validator:validator,
@@ -32,10 +35,10 @@ final TextInputType? keyboardType;
             color: shadeTen,
             fontWeight: FontWeight.normal,
           ),
-          prefixIcon: Icon(
+          prefixIcon: padding == false ? Icon(
            prefixIcon,
             color: shadeTen,
-          ),
+          ):null,
           fillColor: profileTextFieldDillColor,
           filled: true,
           enabledBorder:OutlineInputBorder(

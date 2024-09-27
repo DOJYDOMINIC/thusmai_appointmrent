@@ -1,52 +1,48 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/material.dart';
-
-enum ConnectivityStatus {
-  WiFi,
-  Cellular,
-  Offline,
-}
-
-class ConnectivityProvider extends ChangeNotifier {
-  late Connectivity _connectivity;
-  ConnectivityStatus _status = ConnectivityStatus.Offline;
-
-  ConnectivityStatus get status => _status;
-
-  ConnectivityProvider() {
-    _connectivity = Connectivity();
-    _connectivity.onConnectivityChanged.listen((List<ConnectivityResult> results) {
-      // Assuming you want to handle the first result in the list
-      _updateStatus(results.first);
-    });
-    initConnectivity();
-  }
-
-  Future<void> initConnectivity() async {
-    List<ConnectivityResult> result = await _connectivity.checkConnectivity();
-    _updateStatus(result as ConnectivityResult);
-  }
-
-  void _updateStatus(ConnectivityResult result) {
-    ConnectivityStatus newStatus;
-
-    switch (result) {
-      case ConnectivityResult.wifi:
-        newStatus = ConnectivityStatus.WiFi;
-        break;
-      case ConnectivityResult.mobile:
-        newStatus = ConnectivityStatus.Cellular;
-        break;
-      case ConnectivityResult.none:
-      default:
-        newStatus = ConnectivityStatus.Offline;
-        break;
-    }
-
-    // Only notify listeners if the status has changed
-    if (newStatus != _status) {
-      _status = newStatus;
-      notifyListeners();
-    }
-  }
-}
+// import 'dart:async';
+// import 'package:connectivity_plus/connectivity_plus.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter/services.dart';
+//
+// class ConnectivityProvider extends ChangeNotifier {
+//   ConnectivityResult _connectionStatus = ConnectivityResult.none; // To store the current connection status
+//   final Connectivity _connectivity = Connectivity();
+//   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+//
+//   ConnectivityResult get connectionStatus => _connectionStatus; // Getter for connection status
+//
+//   ConnectivityProvider() {
+//     _initializeConnectivity(); // Call the initialization method in the constructor
+//   }
+//
+//   // Initialize connectivity and start listening for changes
+//   Future<void> _initializeConnectivity() async {
+//     await _checkInitialConnectivity();
+//     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(_updateConnectionStatus as void Function(List<ConnectivityResult> event)?) as StreamSubscription<ConnectivityResult>;
+//   }
+//
+//   // Check the initial connectivity status
+//   Future<void> _checkInitialConnectivity() async {
+//     try {
+//       final result = await _connectivity.checkConnectivity();
+//       _updateConnectionStatus(result as ConnectivityResult); // Update the status when app starts
+//     } on PlatformException catch (e) {
+//       print('Could not check connectivity: $e');
+//       return;
+//     }
+//   }
+//
+//   // Update the connectivity status and notify listeners
+//   void _updateConnectionStatus(ConnectivityResult result) {
+//     if (_connectionStatus != result) { // Update only if the status has changed
+//       _connectionStatus = result;
+//       notifyListeners(); // Notify listeners about the change
+//     }
+//   }
+//
+//   // Dispose of the stream subscription when done
+//   @override
+//   void dispose() {
+//     _connectivitySubscription.cancel();
+//     super.dispose();
+//   }
+// }

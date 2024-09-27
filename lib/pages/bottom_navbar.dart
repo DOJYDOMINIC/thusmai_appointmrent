@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:thusmai_appointmrent/pages/videos/videospageone.dart';
@@ -8,9 +9,10 @@ import 'package:thusmai_appointmrent/tabs/hometab.dart';
 import 'package:thusmai_appointmrent/tabs/messsagetab.dart';
 import 'package:thusmai_appointmrent/pages/profile/profile.dart';
 import 'package:thusmai_appointmrent/widgets/additionnalwidget.dart';
-import '../controller/connectivitycontroller.dart';
 import '../controller/login_register_otp_api.dart';
+import '../health/health_page.dart';
 import '../services/firebase_notification.dart';
+import '../services/permition_service.dart';
 import '../tabs/meditationTab.dart';
 import '../tabs/paymentTab.dart';
 import '../widgets/popup_widget.dart';
@@ -25,10 +27,11 @@ class CustomBottomNavBar extends StatefulWidget {
 }
 
 class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
-  @override
+
   @override
   void initState() {
     super.initState();
+    requestPermissions();
     FirebaseApi().initNotifications();
     Provider.of<AppLogin>(context, listen: false)
         .importantFlags()
@@ -73,9 +76,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   bool _paymentsEnabled = true;
 
   final List<Widget> _pages = [
-    VideosPageOne(),
     HomeTab(),
+    VideosPageOne(),
     MeditationTab(),
+    MessageTab(),
     PaymentTab(),
   ];
 
@@ -83,9 +87,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     final indexProvider = Provider.of<AppLogin>(context, listen: false);
     if (didPop) {
       return;
-    } else if (indexProvider.currentIndex != 1) {
-      indexProvider.currentIndex = 1;
-    } else if (indexProvider.currentIndex == 1) {
+    } else if (indexProvider.currentIndex != 0) {
+      indexProvider.currentIndex = 0;
+    } else if (indexProvider.currentIndex == 0) {
       showExitConfirmationDialog(context);
     }
   }
@@ -123,12 +127,12 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   @override
   Widget build(BuildContext context) {
     var flagModel = Provider.of<AppLogin>(context).flagModel;
-    var connect = Provider.of<ConnectivityProvider>(context);
     var indexProvider = Provider.of<AppLogin>(context);
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) => onPopInvoked(context, didPop),
       child: Scaffold(
+
         backgroundColor: darkShade,
         appBar: AppBar(
           backgroundColor: darkShade,
@@ -139,31 +143,31 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             ),
           ),
           actions: [
-            IconButton(
-              onPressed: () {
-                if (flagModel.maintenancePaymentStatus == true ||
-                    flagModel.meditationFeePaymentStatus == true) {
-                  slidePageRoute(context, MessageTab());
-                } else {
-                  Provider.of<AppLogin>(context, listen: false).currentIndex =
-                      3;
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: Colors.red,
-                      content: Text(enableMessage),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                }
-              },
-              icon: Icon(
-                Icons.message_outlined,
-                color: flagModel.maintenancePaymentStatus == true ||
-                        flagModel.meditationFeePaymentStatus == true
-                    ? shadeSix
-                    : Colors.grey,
-              ),
-            ),
+            // IconButton(
+            //   onPressed: () {
+            //     if (flagModel.maintenancePaymentStatus == true ||
+            //         flagModel.meditationFeePaymentStatus == true) {
+            //       slidePageRoute(context, MessageTab());
+            //     } else {
+            //       Provider.of<AppLogin>(context, listen: false).currentIndex =
+            //           3;
+            //       ScaffoldMessenger.of(context).showSnackBar(
+            //         SnackBar(
+            //           backgroundColor: Colors.red,
+            //           content: Text(enableMessage),
+            //           duration: Duration(seconds: 2),
+            //         ),
+            //       );
+            //     }
+            //   },
+            //   icon: Icon(
+            //     Icons.medical_services_rounded,
+            //     color: flagModel.maintenancePaymentStatus == true ||
+            //             flagModel.meditationFeePaymentStatus == true
+            //         ? shadeSix
+            //         : Colors.grey,
+            //   ),
+            // ),
 
             // IconButton(
             //   onPressed: () {
@@ -174,7 +178,28 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             //     color: shadeSix,
             //   ),
             // ),
-
+            GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => WebView(),));
+              },
+              child: SvgPicture.asset("assets/svgImage/shield_with_heart.svg",),
+            ),
+            SizedBox(width: 32.sp,),
+            GestureDetector(
+              onTap: (){},
+              child: SvgPicture.asset("assets/svgImage/note.svg"),
+            ),
+            // IconButton(
+            //   onPressed: () {
+            //     Provider.of<AppLogin>(context, listen: false).getUserByID();
+            //     slidePageRoute(context, Profile());
+            //   },
+            //   icon: Icon(
+            //     Icons.note_alt_rounded,
+            //     color: shadeSix,
+            //   ),
+            // ),
+            SizedBox(width: 8.sp,),
             IconButton(
               onPressed: () {
                 Provider.of<AppLogin>(context, listen: false).getUserByID();
@@ -197,19 +222,20 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               buildNavBarItem(
                   currentIndex: indexProvider.currentIndex,
                   icon: indexProvider.currentIndex != 0
-                      ? Icons.videocam_outlined
-                      : Icons.videocam,
-                  label: videos,
-                  index: 0,
-                  isEnabled: _videoEnabled),
-              buildNavBarItem(
-                  currentIndex: indexProvider.currentIndex,
-                  icon: indexProvider.currentIndex != 1
                       ? Icons.home_outlined
                       : Icons.home_rounded,
                   label: home,
-                  index: 1,
+                  index: 0,
                   isEnabled: _homeEnabled),
+              buildNavBarItem(
+                  currentIndex: indexProvider.currentIndex,
+                  icon: indexProvider.currentIndex != 1
+                      ? Icons.videocam_outlined
+                      : Icons.videocam,
+                  label: videos,
+                  index: 1,
+                  isEnabled: _videoEnabled),
+
               buildNavBarItem(
                   currentIndex: indexProvider.currentIndex,
                   icon: Icons.self_improvement,
@@ -218,11 +244,17 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                   isEnabled: _meditationEnabled),
               buildNavBarItem(
                   currentIndex: indexProvider.currentIndex,
+                  icon: Icons.chat_outlined,
+                  label: meditation,
+                  index: 3,
+                  isEnabled: _meditationEnabled),
+              buildNavBarItem(
+                  currentIndex: indexProvider.currentIndex,
                   icon: indexProvider.currentIndex != 3
                       ? Icons.payments_outlined
                       : Icons.payments_rounded,
                   label: payment,
-                  index: 3,
+                  index: 4,
                   isEnabled: _paymentsEnabled),
             ],
           ),
@@ -254,7 +286,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             },
       child: Container(
         width:
-            MediaQuery.of(context).size.width / 4, // Divide by number of items
+            MediaQuery.of(context).size.width / 5, // Divide by number of items
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -41,7 +41,7 @@ class _VideosPageOneState extends State<VideosPageOne> {
     var meditation = Provider.of<MeditationController>(context);
     var data = Provider.of<VideoPlayerStateController>(context).playList;
     String currentDate = DateFormat('dd/MM/yy').format(DateTime.now());
-    var connect = Provider.of<ConnectivityProvider>(context);
+    // var connect = Provider.of<ConnectivityProvider>(context);
     return GestureDetector(
       onTap: () {
         if (!FocusScope.of(context).hasPrimaryFocus) {
@@ -50,17 +50,7 @@ class _VideosPageOneState extends State<VideosPageOne> {
       },
       child: Scaffold(
         backgroundColor: shadeOne,
-        body:connect.status == ConnectivityStatus.Offline
-            ? Center(
-          child: RefreshPage(
-            onTap: () {
-              Provider.of<AppLogin>(context, listen: false).validateSession(context);
-              Provider.of<VideoPlayerStateController>(context, listen: false)
-                  .playlistDetails();
-            },
-          ),
-        )
-            : SingleChildScrollView(
+        body: SingleChildScrollView(
           child: Column(
             children: [
               Container(

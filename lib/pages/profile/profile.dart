@@ -9,6 +9,7 @@ import 'package:thusmai_appointmrent/pages/profile/rewardpage.dart';
 import '../../constant/constant.dart';
 import '../../controller/connectivitycontroller.dart';
 import '../../controller/login_register_otp_api.dart';
+import '../../login/new_login.dart';
 import '../../widgets/additionnalwidget.dart';
 import 'app_feedback/app_feedback.dart';
 import 'delete_account.dart';
@@ -26,7 +27,6 @@ class _ProfileState extends State<Profile> {
   initState() {
     super.initState();
     Provider.of<AppLogin>(context, listen: false).getUserByID();
-    Provider.of<ConnectivityProvider>(context, listen: false).status;
   }
 
   @override
@@ -334,11 +334,10 @@ class _ProfileState extends State<Profile> {
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
                             await prefs.clear();
-                            Provider.of<AppLogin>(context, listen: false)
-                                .backendSessionClear();
+                            Provider.of<AppLogin>(context, listen: false).backendSessionClear();
                             Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => Login()),
+                              MaterialPageRoute(builder: (context) => const LoginUpdate()),
                               (Route<dynamic> route) => false,
                             );
                           },

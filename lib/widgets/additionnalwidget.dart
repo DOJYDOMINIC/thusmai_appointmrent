@@ -86,7 +86,7 @@ Widget meditationCycleWidget(
 
 Widget profileCard(BuildContext context) {
   var pro = Provider.of<AppLogin>(context);
-  var connect = Provider.of<ConnectivityProvider>(context);
+  // var connect = Provider.of<ConnectivityProvider>(context);
 
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,9 +120,7 @@ Widget profileCard(BuildContext context) {
             child: CircleAvatar(
               backgroundColor: Colors.white,
               radius: 45.sp,
-              child: connect.status == ConnectivityStatus.Offline
-                  ? Container()
-                  : Container(
+              child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(

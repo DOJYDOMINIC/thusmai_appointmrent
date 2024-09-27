@@ -102,7 +102,7 @@ class _ResetPageOneState extends State<ResetPageOne> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                Provider.of<AppLogin>(context, listen: false).requestPasswordReset(context,_email.text,);
+                                // Provider.of<AppLogin>(context, listen: false).requestPasswordReset(context,_email.text,);
                               }
                             },
                             style: ElevatedButton.styleFrom(

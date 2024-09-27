@@ -84,6 +84,13 @@ dependencies:
   hive_flutter: ^1.1.0
   email_validator: ^3.0.0
   connectivity_plus: ^6.0.5
+  country_picker: ^2.0.26
+  sms_autofill: ^2.4.0
+  smart_auth: ^2.0.0
+  flutter_localization: ^0.2.2
+  mobile_number: ^2.1.1
+  webview_flutter: ^4.9.0
+
 
 
 

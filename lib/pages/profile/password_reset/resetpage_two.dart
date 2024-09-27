@@ -195,7 +195,7 @@ class _ResetPageTwoState extends State<ResetPageTwo> {
                                 "email":pro.userData?.email,
                               };
                               if (_formKey.currentState!.validate()) {
-                                Provider.of<AppLogin>(context, listen: false).otpVerification(context, data);
+                                // Provider.of<AppLogin>(context, listen: false).otpVerification(context, data);
                               }
                             },
                             style: ElevatedButton.styleFrom(

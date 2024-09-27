@@ -37,7 +37,7 @@ class _AppointmentListPageState extends State<AppointmentListPage>
   void initState() {
     super.initState();
     Provider.of<AppLogin>(context, listen: false).validateSession(context);
-    Provider.of<ConnectivityProvider>(context, listen: false).initConnectivity();
+    // Provider.of<ConnectivityProvider>(context, listen: false).initConnectivity();
     // Initialize the AnimationController
     _controller = AnimationController(
       vsync: this, // SingleTickerProviderStateMixin provides vsync
@@ -58,7 +58,7 @@ class _AppointmentListPageState extends State<AppointmentListPage>
         .fetchAppointments();
     Provider.of<AppointmentController>(context, listen: false)
         .termsAndCondition();
-    Provider.of<ConnectivityProvider>(context, listen: false).status;
+    // Provider.of<ConnectivityProvider>(context, listen: false).status;
     Provider.of<AppointmentController>(context,listen: false).disableDates();
   }
 
@@ -119,25 +119,14 @@ class _AppointmentListPageState extends State<AppointmentListPage>
 
   @override
   Widget build(BuildContext context) {
-    var connect = Provider.of<ConnectivityProvider>(context);
+    // var connect = Provider.of<ConnectivityProvider>(context);
     var pro = Provider.of<AppointmentController>(context);
     var flagModel = Provider.of<AppLogin>(context).flagModel;
     var appLogin = Provider.of<AppLogin>(context);
     bool dataPayment = flagModel.meditationFeePaymentStatus ?? false;
     return Scaffold(
       backgroundColor: shadeOne,
-      body: connect.status == ConnectivityStatus.Offline
-          ? Center(child: RefreshPage(
-              onTap: () {
-                Provider.of<AppointmentController>(context, listen: false)
-                    .fetchAppointments();
-                Provider.of<AppointmentController>(context, listen: false)
-                    .termsAndCondition();
-                Provider.of<ConnectivityProvider>(context, listen: false)
-                    .status;
-              },
-            ))
-          : pro.appointments.isEmpty
+      body:  pro.appointments.isEmpty
               ? Center(
                   child: Text(
                     bookAppointment,
