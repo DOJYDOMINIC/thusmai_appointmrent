@@ -184,35 +184,35 @@ class AppLogin extends ChangeNotifier {
   }
 
   Future<void> validateSession(BuildContext context) async {
-    // try {
-    //   SharedPreferences prefs = await SharedPreferences.getInstance();
-    //   var cookies = prefs.getString("cookie");
-    //   final response = await http.get(
-    //     Uri.parse("$userBaseUrl/validate-session"),
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       if (cookies != null) 'Cookie': cookies,
-    //     },
-    //   );
-    //
-    //   if (response.statusCode == 200) {
-    //     print("valid user");
-    //   } else if (response.statusCode == 401) {
-    //     _currentIndex = 1;
-    //     print("Not valid user");
-    //     prefs.clear();
-    //     // slidePageRoute(context, Login());
-    //     Navigator.pushAndRemoveUntil(
-    //       context,
-    //       MaterialPageRoute(builder: (context) => Login()),
-    //       (Route<dynamic> route) => false,
-    //     );
-    //   } else {}
-    // } catch (e) {
-    //   if (kDebugMode) {
-    //     print("getUserByID : $e");
-    //   }
-    // }
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var cookies = prefs.getString("cookie");
+      final response = await http.get(
+        Uri.parse("$userBaseUrl/validate-session"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print("valid user");
+      } else if (response.statusCode == 401) {
+        _currentIndex = 1;
+        print("Not valid user");
+        prefs.clear();
+        // slidePageRoute(context, Login());
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Login()),
+          (Route<dynamic> route) => false,
+        );
+      } else {}
+    } catch (e) {
+      if (kDebugMode) {
+        print("getUserByID : $e");
+      }
+    }
   }
 
   Future<void> backendSessionClear() async {
@@ -371,11 +371,11 @@ class AppLogin extends ChangeNotifier {
 
 
 
-  Future<void> otpVerification(
-      BuildContext context, UserContactInfo data,String otp) async {
-    var otpData  = { "email":data.email??"test@gmail.com", "phone":data.phone??"000000000", "country":data.country,"otp":otp};
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var cookies = prefs.getString("cookie");
+  Future<void> otpVerification(BuildContext context, UserContactInfo data,String otp) async {
+
+    var otpData  = { "email":data.email??"0@gmail.com", "phone":data.phone??"000000000", "country":data.country,"otp":otp};
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // var cookies = prefs.getString("cookie");
     final response = await http.post(Uri.parse("$userBaseUrl/verify-userotp"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
@@ -578,7 +578,7 @@ class AppLogin extends ChangeNotifier {
   Map<String, dynamic> toJson() {
     return {
       'phone': phone??"0000000000",
-      'email': email??"dasdfghjkl@gmail.com",
+      'email': email??"0@gmail.com",
       'country': country??"",
     };
   }

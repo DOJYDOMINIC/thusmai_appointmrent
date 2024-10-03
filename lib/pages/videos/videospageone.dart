@@ -53,120 +53,120 @@ class _VideosPageOneState extends State<VideosPageOne> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: shadeFour),
-                child: Padding(
-                  padding: EdgeInsets.all(8.sp),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(height: 8.h),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("$currentDate : Guruji  Class Notes",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16)),
-                          ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Container(
-                          width: 368.w,
-                          // decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10.sp, right: 10.sp),
-                            child: TextField(
-                              controller: noteController,
-                              style: const TextStyle(color: Colors.black),
-                              decoration: InputDecoration(
-                                  hintText: "5 Class Learnings... ",
-                                  hintStyle: TextStyle(
-                                      color: shadeFive, fontSize: 16.sp),
-                                  border: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  disabledBorder: InputBorder.none,
-                                  fillColor: Colors.white,
-                                  filled: true
-                              ),
-                              maxLength: 500,
-                              cursorColor: Colors.grey,
-                              maxLines: 4,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Text("Send to :"),
-                                  Checkbox(
-                                      side: BorderSide(color: shadeNine, width: 2),
-                                      activeColor: brown,
-                                      value: _global,
-                                      onChanged: (val) {
-                                        setState(() {
-                                          _global = val!;
-                                        });
-                                      }),
-                                  Text("Global"),
-                                ],
-                              ),
-                              SizedBox(
-                                width: 128.w,
-                                child: ElevatedButton(
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                        WidgetStateProperty.all(goldShade)),
-                                    onPressed: () {
-                                      if (noteController.text.isEmpty) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            backgroundColor: Colors.red,
-                                            content: Text("Please Fill Note"),
-                                            duration: Duration(seconds: 1),
-                                          ),
-                                        );
-                                      } else {
-                                        DateTime now = DateTime.now();
-                                        String formattedTime =
-                                        DateFormat('h:mm a').format(now);
-                                        String messageTDate =
-                                        DateFormat('MMMM dd, yyyy')
-                                            .format(DateTime.now());
-                                        meditation.meditationNote(context, "Class Note : ${noteController.text}", _global ? "global" : "private", formattedTime, messageTDate,).then((result) {
-                                          if (meditation.clearNote == true) {
-                                            _global = false;
-                                            noteController.clear();
-                                            slidePageRoute(context, MessageTab());
-                                          }
-                                        });
-                                      }
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Send",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ],
-                                    )),
-                              )
-
-                            ],
-                          ),
-                        ),
-                      ]),
-                ),
-              ),
+              // Container(
+              //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: shadeFour),
+              //   child: Padding(
+              //     padding: EdgeInsets.all(8.sp),
+              //     child: Column(
+              //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //         children: [
+              //           SizedBox(height: 8.h),
+              //           // Padding(
+              //           //   padding: const EdgeInsets.only(left: 16),
+              //           //   child: Align(
+              //           //     alignment: Alignment.centerLeft,
+              //           //     child: Text("$currentDate : Guruji  Class Notes",
+              //           //         style: TextStyle(
+              //           //             fontWeight: FontWeight.bold, fontSize: 16)),
+              //           //   ),
+              //           // ),
+              //           SizedBox(height: 8.h),
+              //           Container(
+              //             width: 368.w,
+              //             // decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+              //             child: Padding(
+              //               padding: EdgeInsets.only(left: 10.sp, right: 10.sp),
+              //               child: TextField(
+              //                 controller: noteController,
+              //                 style: const TextStyle(color: Colors.black),
+              //                 decoration: InputDecoration(
+              //                     hintText: "5 Class Learnings... ",
+              //                     hintStyle: TextStyle(
+              //                         color: shadeFive, fontSize: 16.sp),
+              //                     border: InputBorder.none,
+              //                     focusedBorder: InputBorder.none,
+              //                     enabledBorder: InputBorder.none,
+              //                     errorBorder: InputBorder.none,
+              //                     disabledBorder: InputBorder.none,
+              //                     fillColor: Colors.white,
+              //                     filled: true
+              //                 ),
+              //                 maxLength: 500,
+              //                 cursorColor: Colors.grey,
+              //                 maxLines: 4,
+              //               ),
+              //             ),
+              //           ),
+              //           Padding(
+              //             padding: const EdgeInsets.only(left: 16),
+              //             child: Row(
+              //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //               children: [
+              //                 Row(
+              //                   children: [
+              //                     Text("Send to :"),
+              //                     Checkbox(
+              //                         side: BorderSide(color: shadeNine, width: 2),
+              //                         activeColor: brown,
+              //                         value: _global,
+              //                         onChanged: (val) {
+              //                           setState(() {
+              //                             _global = val!;
+              //                           });
+              //                         }),
+              //                     Text("Global"),
+              //                   ],
+              //                 ),
+              //                 SizedBox(
+              //                   width: 128.w,
+              //                   child: ElevatedButton(
+              //                       style: ButtonStyle(
+              //                           backgroundColor:
+              //                           WidgetStateProperty.all(goldShade)),
+              //                       onPressed: () {
+              //                         if (noteController.text.isEmpty) {
+              //                           ScaffoldMessenger.of(context).showSnackBar(
+              //                             SnackBar(
+              //                               backgroundColor: Colors.red,
+              //                               content: Text("Please Fill Note"),
+              //                               duration: Duration(seconds: 1),
+              //                             ),
+              //                           );
+              //                         } else {
+              //                           DateTime now = DateTime.now();
+              //                           String formattedTime =
+              //                           DateFormat('h:mm a').format(now);
+              //                           String messageTDate =
+              //                           DateFormat('MMMM dd, yyyy')
+              //                               .format(DateTime.now());
+              //                           meditation.meditationNote(context, "Class Note : ${noteController.text}", _global ? "global" : "private", formattedTime, messageTDate,).then((result) {
+              //                             if (meditation.clearNote == true) {
+              //                               _global = false;
+              //                               noteController.clear();
+              //                               slidePageRoute(context, MessageTab());
+              //                             }
+              //                           });
+              //                         }
+              //                       },
+              //                       child: Row(
+              //                         mainAxisAlignment: MainAxisAlignment.center,
+              //                         children: [
+              //                           Text(
+              //                             "Send",
+              //                             style: TextStyle(
+              //                                 color: Colors.white,
+              //                                 fontWeight: FontWeight.w400),
+              //                           ),
+              //                         ],
+              //                       )),
+              //                 )
+              //
+              //               ],
+              //             ),
+              //           ),
+              //         ]),
+              //   ),
+              // ),
               Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(

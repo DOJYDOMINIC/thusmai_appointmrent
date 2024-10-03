@@ -48,7 +48,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                   child: PopupWidget(
                     heading: 'Payment Reminder',
                     subHeading: 'Maintenance Payment',
-                    amount: "500",
+                    amount: "500 INR",
                     buttonOneText: 'Pay now',
                     buttonTwoText: 'Pay later',
                     onPressOne: () {
@@ -180,7 +180,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             // ),
             GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => WebView(),));
+                launchURL(Uri.parse("https://starlife.co.in/health/"));
+
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => WebView(),));
               },
               child: SvgPicture.asset("assets/svgImage/shield_with_heart.svg",),
             ),

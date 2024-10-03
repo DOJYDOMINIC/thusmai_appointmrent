@@ -34,11 +34,13 @@ class ZoomMeetingController extends ChangeNotifier {
   ZoomClassModel get ZoomClassModelData => _ZoomClassModelData;
 
   Future<void> zoomClass() async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('EEEE').format(now);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     var date = DateFormat('yyyy-MM-dd').format(DateTime.now());
     final response = await http.get(
-      Uri.parse("$userBaseUrl/get-zoomclass?currentDate=$date"),
+      Uri.parse("$userBaseUrl/get-zoomclass?currentDate=$date&currentDay=$formattedDate"),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
         if (cookies != null) 'Cookie': cookies,

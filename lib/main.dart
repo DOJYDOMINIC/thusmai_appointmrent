@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:thusmai_appointmrent/login/new_login.dart';
+import 'package:thusmai_appointmrent/rnd/guruji_questions.dart';
+import 'package:thusmai_appointmrent/rnd/stress_data.dart';
 import 'package:thusmai_appointmrent/services/firebase_notification.dart';
 import 'package:workmanager/workmanager.dart';
 import 'constant/constant.dart';
@@ -15,12 +17,9 @@ import 'controller/disable_meditation.dart';
 import 'controller/login_register_otp_api.dart';
 import 'controller/timer_controller.dart';
 import 'controller/zoommeeting_controller.dart';
-import 'login/testdata.dart';
 import 'models/hive/meditationdata.dart';
 import 'pages/bottom_navbar.dart';
-import 'pages/login_register_otp/login.dart';
 import 'controller/appointmentontroller.dart';
-import 'controller/connectivitycontroller.dart';
 import 'controller/meditationController.dart';
 import 'controller/message_controller.dart';
 import 'controller/overviewController.dart';
@@ -96,7 +95,7 @@ class MyApp extends StatelessWidget {
               '/': (context) => SplashScreen(),
               // Define '/' route to SplashScreen
               '/home': (context) => cookies!.length > 4 && cookies != "1"
-                  ? CustomBottomNavBar()
+                  ? SleepData()
                   : LoginUpdate(),
             },
           );
