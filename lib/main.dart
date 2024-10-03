@@ -94,8 +94,9 @@ class MyApp extends StatelessWidget {
             routes: {
               '/': (context) => SplashScreen(),
               // Define '/' route to SplashScreen
+              // Define '/' route to SplashScreen
               '/home': (context) => cookies!.length > 4 && cookies != "1"
-                  ? SleepData()
+                  ? CustomBottomNavBar()
                   : LoginUpdate(),
             },
           );
