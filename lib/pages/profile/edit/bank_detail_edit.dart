@@ -79,6 +79,8 @@ class _BankDetailEditState extends State<BankDetailEdit> {
                     validator: (val) {
                       if (val!.isEmpty) {
                         return 'Please enter branch name';
+                      } else if (!RegExp(r'^[a-zA-Z0-9\s]+$').hasMatch(val)) {
+                        return 'Branch name can contain letters and numbers only';
                       }
                       return null;
                     },
@@ -89,6 +91,8 @@ class _BankDetailEditState extends State<BankDetailEdit> {
                     validator: (val) {
                       if (val!.isEmpty) {
                         return 'Please enter bank name';
+                      } else if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(val)) {
+                        return 'Bank name can contain letters only';
                       }
                       return null;
                     },
@@ -99,6 +103,8 @@ class _BankDetailEditState extends State<BankDetailEdit> {
                     validator: (val) {
                       if (val!.isEmpty) {
                         return 'Please enter account name';
+                      } else if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(val)) {
+                        return 'Account name can contain letters only';
                       }
                       return null;
                     },
@@ -107,7 +113,14 @@ class _BankDetailEditState extends State<BankDetailEdit> {
                     hintText: 'Account Number',
                     controller: _accountNumber,
                     keyboardType: TextInputType.number,
-                    validator: (val) => validateAccountNumber(val!),
+                    validator: (val) {
+                      if (val!.isEmpty) {
+                        return 'Please Enter Account Number';
+                      } else if (!RegExp(r'^[0-9]{9,18}$').hasMatch(val)) {
+                        return 'Account Number must be between 9 and 18 digits';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 24),
                   CustomButton(
@@ -159,17 +172,6 @@ String? validateIFSC(String value) {
     return 'Please Enter IFSC';
   } else if (!regExp.hasMatch(value)) {
     return 'Please Enter valid IFSC';
-  }
-  return null;
-}
-
-String? validateAccountNumber(String value) {
-  String pattern = '[0-9]{9,18}';
-  RegExp regExp = RegExp(pattern);
-  if (value.isEmpty) {
-    return 'Please Enter Account Number';
-  } else if (!regExp.hasMatch(value)) {
-    return 'Please Enter Valid Account Number';
   }
   return null;
 }
