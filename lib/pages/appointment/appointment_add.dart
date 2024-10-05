@@ -52,10 +52,10 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<AppLogin>(context,listen: false).importantFlags();
+    Provider.of<AppLogin>(context, listen: false).importantFlags();
     // Provider.of<AppointmentController>(context,listen: false).disableDates();
-     disabledDates = Provider.of<AppointmentController>(context,listen: false).disabledDates;
-
+    disabledDates = Provider.of<AppointmentController>(context, listen: false)
+        .disabledDates;
   }
 
   // dispose controllers
@@ -150,7 +150,6 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
   // WidgetTree
   @override
   Widget build(BuildContext context) {
-
     var appointmentController = Provider.of<AppointmentController>(context);
     List<GroupMemberAdd> dataList = [];
 // Iterate through each index
@@ -293,9 +292,11 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                     appointmentController.countOfPeople--;
                                     appointmentController.countOfPeople = 0;
                                   }
-                                  itemExpandedList.removeAt(appointmentController.countOfPeople);
-                                  _noOfPeople.text =
-                                      appointmentController.countOfPeople.toString();
+                                  itemExpandedList.removeAt(
+                                      appointmentController.countOfPeople);
+                                  _noOfPeople.text = appointmentController
+                                      .countOfPeople
+                                      .toString();
                                   _GroupMembersDataControllers.removeAt(
                                       appointmentController.countOfPeople);
                                   _GroupMembersDataAgeControllers.removeAt(
@@ -324,18 +325,22 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                   });
                                   itemExpandedList.add(false);
                                   print(itemExpandedList.toString());
-                                  _noOfPeople.text =
-                                      appointmentController.countOfPeople.toString();
+                                  _noOfPeople.text = appointmentController
+                                      .countOfPeople
+                                      .toString();
                                 },
                                 child: Container(
-                                    color: appointmentController.countOfPeople != 5
-                                        ? darkShade
-                                        : Colors.grey,
+                                    color:
+                                        appointmentController.countOfPeople != 5
+                                            ? darkShade
+                                            : Colors.grey,
                                     child: Icon(
                                       Icons.add,
-                                      color: appointmentController.countOfPeople != 5
-                                          ? Colors.white
-                                          : Colors.grey.shade700,
+                                      color:
+                                          appointmentController.countOfPeople !=
+                                                  5
+                                              ? Colors.white
+                                              : Colors.grey.shade700,
                                     )),
                               ),
                             ),
@@ -783,8 +788,8 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Padding(
-                                        padding: EdgeInsets.only(
-                                            top: 23, right: 10),
+                                        padding:
+                                            EdgeInsets.only(top: 23, right: 10),
                                         child: Text("#${index + 1}"),
                                       ),
                                       Expanded(
@@ -971,7 +976,9 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                         style: ElevatedButton
                                                             .styleFrom(
                                                           shadowColor:
-                                                              Colors.black, backgroundColor: darkShade,
+                                                              Colors.black,
+                                                          backgroundColor:
+                                                              darkShade,
                                                           elevation: 4,
                                                           shape:
                                                               RoundedRectangleBorder(
@@ -1003,7 +1010,9 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                         style: ElevatedButton
                                                             .styleFrom(
                                                           shadowColor:
-                                                              Colors.black, backgroundColor: darkShade,
+                                                              Colors.black,
+                                                          backgroundColor:
+                                                              darkShade,
                                                           elevation: 4,
                                                           shape:
                                                               RoundedRectangleBorder(
@@ -1099,7 +1108,8 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                                                 _GroupMembersDataRelationControllers
                                                     .removeAt(index);
                                                 // // You also need to decrement the countOfPeople variable if needed
-                                                appointmentController.countOfPeople -= 1;
+                                                appointmentController
+                                                    .countOfPeople -= 1;
                                                 itemExpandedList
                                                     .removeAt(index);
                                                 calculateTotalHeight(
@@ -1307,35 +1317,37 @@ class _AppointmentAddPageState extends State<AppointmentAddPage> {
                         onPressed: _termsAndCondition != true
                             ? null
                             : () async {
-                          if(appointmentController.countOfPeople != 0){
-                            if (_formKey.currentState!.validate()) {
-                              for (int i = 0; i < appointmentController.countOfPeople; i++) {
-                                // Create a map to store data for each index
-                                GroupMemberAdd dataMap = GroupMemberAdd(
-                                  name:
-                                  _GroupMembersDataControllers[i].text,
-                                  age: _GroupMembersDataAgeControllers[i]
-                                      .text,
-                                  relation:
-                                  _GroupMembersDataRelationControllers[
-                                  i]
-                                      .text,
-                                );
-                                // Add the map to the list
-                                dataList.add(dataMap);
-                              }
-                              await _submitForm(dataList);
-                              itemExpandedList.clear();
-                            }
-                          }else{
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("The number of people cannot be zero."),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
-
+                                if (appointmentController.countOfPeople != 0) {
+                                  if (_formKey.currentState!.validate()) {
+                                    for (int i = 0;
+                                        i < appointmentController.countOfPeople;
+                                        i++) {
+                                      // Create a map to store data for each index
+                                      GroupMemberAdd dataMap = GroupMemberAdd(
+                                        name: _GroupMembersDataControllers[i]
+                                            .text,
+                                        age: _GroupMembersDataAgeControllers[i]
+                                            .text,
+                                        relation:
+                                            _GroupMembersDataRelationControllers[
+                                                    i]
+                                                .text,
+                                      );
+                                      // Add the map to the list
+                                      dataList.add(dataMap);
+                                    }
+                                    await _submitForm(dataList);
+                                    itemExpandedList.clear();
+                                  }
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          "The number of people cannot be zero."),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
                               },
                         style: ElevatedButton.styleFrom(
                           shadowColor: Colors.black, backgroundColor: goldShade,

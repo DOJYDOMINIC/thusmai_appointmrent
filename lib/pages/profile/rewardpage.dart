@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/pages/profile/profile.dart';
@@ -14,45 +15,59 @@ class RewardPage extends StatefulWidget {
 }
 
 class _RewardPageState extends State<RewardPage> {
-
   @override
   void initState() {
-
     super.initState();
- Provider.of<ProfileController>(context,listen: false).rewardList();
-
+    Provider.of<ProfileController>(context, listen: false).rewardList();
   }
+
   @override
   Widget build(BuildContext context) {
-
- var  rewardListData = Provider.of<ProfileController>(context).rewardListData;
- // print(rewardListData![0].distributionTime.toString());
+    var rewardListData = Provider.of<ProfileController>(context).rewardListData;
+    // print(rewardListData![0].distributionTime.toString());
     return Scaffold(
-      backgroundColor: shadeOne,
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  Profile(),));
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: shadeOne,
-            )),
-        backgroundColor: darkShade,
-        title: Text(
-          "Reward",
-          style: TextStyle(color: shadeOne),
+        backgroundColor: shadeOne,
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Profile(),
+                    ));
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                color: shadeOne,
+              )),
+          backgroundColor: darkShade,
+          title: Text(
+            "Reward",
+            style: TextStyle(color: shadeOne),
+          ),
         ),
-      ),
-      body:rewardListData?.length != null? ListView.builder(
-        itemCount: rewardListData?.length,
-        itemBuilder: (context, index) {
-          DateTime dateTime = DateTime.parse(rewardListData?[index].distributionTime.toString()??"");
-          String formattedDate = DateFormat('yyyy/MM/dd').format(dateTime);
-          String formattedTime = DateFormat('hh:mm:ss a').format(dateTime);
-        return  rewardWidget(formattedTime, "Rs : ${rewardListData?[index].reward.toString()}",formattedDate);
-      },): CircularProgressIndicator(),
-    );
+        body: rewardListData?.length != null
+            ? ListView.builder(
+                itemCount: rewardListData?.length,
+                itemBuilder: (context, index) {
+                  DateTime dateTime = DateTime.parse(
+                      rewardListData?[index].distributionTime.toString() ?? "");
+                  String formattedDate =
+                      DateFormat('yyyy/MM/dd').format(dateTime);
+                  String formattedTime =
+                      DateFormat('hh:mm:ss a').format(dateTime);
+                  return rewardWidget(
+                      formattedTime,
+                      "Rs : ${rewardListData?[index].reward.toString()}",
+                      formattedDate);
+                },
+              )
+            : Center(
+                child: Text(
+                "No data found",
+                style: GoogleFonts.schoolbell(
+                  textStyle: TextStyle(color: Color(0xFF432C00), fontSize: 24),
+                ),
+              )));
   }
 }
-

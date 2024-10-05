@@ -27,7 +27,6 @@ class CustomBottomNavBar extends StatefulWidget {
 }
 
 class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
-
   @override
   void initState() {
     super.initState();
@@ -38,7 +37,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         .then((value) {
       Future.delayed(Duration(seconds: 1), () {
         final indexProvider = Provider.of<AppLogin>(context, listen: false);
-        if (Provider.of<AppLogin>(context, listen: false).flagModel.maintenancePaymentStatus == false) {
+        if (Provider.of<AppLogin>(context, listen: false)
+                .flagModel
+                .maintenancePaymentStatus ==
+            false) {
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -52,14 +54,15 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                     buttonOneText: 'Pay now',
                     buttonTwoText: 'Pay later',
                     onPressOne: () {
-                      indexProvider.currentIndex = 3;
+                      indexProvider.currentIndex = 4;
                       Navigator.pop(context);
                     },
                     onPressTwo: () {
                       Navigator.pop(context);
                     },
                     icon: Icons.self_improvement,
-                    buttonColorOne: goldShade, buttonColorTwo: shadeOne,
+                    buttonColorOne: goldShade,
+                    buttonColorTwo: shadeOne,
                   ),
                 ),
               );
@@ -115,8 +118,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               },
               onPressTwo: () {
                 Navigator.pop(context);
-              }, buttonColorTwo: shadeOne,
-
+              },
+              buttonColorTwo: shadeOne,
             ),
           ),
         );
@@ -132,7 +135,6 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       canPop: false,
       onPopInvoked: (didPop) => onPopInvoked(context, didPop),
       child: Scaffold(
-
         backgroundColor: darkShade,
         appBar: AppBar(
           backgroundColor: darkShade,
@@ -179,16 +181,20 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             //   ),
             // ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 launchURL(Uri.parse("https://starlife.co.in/health/"));
 
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => WebView(),));
               },
-              child: SvgPicture.asset("assets/svgImage/shield_with_heart.svg",),
+              child: SvgPicture.asset(
+                "assets/svgImage/shield_with_heart.svg",
+              ),
             ),
-            SizedBox(width: 32.sp,),
+            SizedBox(
+              width: 32.sp,
+            ),
             GestureDetector(
-              onTap: (){},
+              onTap: () {},
               child: SvgPicture.asset("assets/svgImage/note.svg"),
             ),
             // IconButton(
@@ -201,7 +207,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             //     color: shadeSix,
             //   ),
             // ),
-            SizedBox(width: 8.sp,),
+            SizedBox(
+              width: 8.sp,
+            ),
             IconButton(
               onPressed: () {
                 Provider.of<AppLogin>(context, listen: false).getUserByID();
@@ -237,7 +245,6 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                   label: videos,
                   index: 1,
                   isEnabled: _videoEnabled),
-
               buildNavBarItem(
                   currentIndex: indexProvider.currentIndex,
                   icon: Icons.self_improvement,
@@ -247,7 +254,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               buildNavBarItem(
                   currentIndex: indexProvider.currentIndex,
                   icon: Icons.chat_outlined,
-                  label: meditation,
+                  label: message,
                   index: 3,
                   isEnabled: _meditationEnabled),
               buildNavBarItem(

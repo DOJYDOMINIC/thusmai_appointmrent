@@ -26,7 +26,8 @@ class _BankDetailEditState extends State<BankDetailEdit> {
   @override
   void initState() {
     super.initState();
-    var bankDataDetails = Provider.of<ProfileController>(context, listen: false).bankDataDetails;
+    var bankDataDetails =
+        Provider.of<ProfileController>(context, listen: false).bankDataDetails;
     _aadharNumber = TextEditingController(text: bankDataDetails?.aadarNo);
     _ifscCode = TextEditingController(text: bankDataDetails?.ifscCode);
     _branchName = TextEditingController(text: bankDataDetails?.branchName);
@@ -49,7 +50,7 @@ class _BankDetailEditState extends State<BankDetailEdit> {
             )),
         backgroundColor: darkShade,
         title: Text(
-          "Edit personal info",
+          "Edit Bank Details ",
           style: TextStyle(color: shadeOne),
         ),
       ),
@@ -70,7 +71,7 @@ class _BankDetailEditState extends State<BankDetailEdit> {
                   CustomTextField(
                     hintText: 'IFSC Code',
                     controller: _ifscCode,
-                    validator: (val)=> validateIFSC(val!),
+                    validator: (val) => validateIFSC(val!),
                   ),
                   CustomTextField(
                     hintText: 'Branch Name',
@@ -106,7 +107,7 @@ class _BankDetailEditState extends State<BankDetailEdit> {
                     hintText: 'Account Number',
                     controller: _accountNumber,
                     keyboardType: TextInputType.number,
-                    validator: (val) =>validateAccountNumber(val!),
+                    validator: (val) => validateAccountNumber(val!),
                   ),
                   SizedBox(height: 24),
                   CustomButton(
@@ -151,7 +152,6 @@ String? validateAadharcard(String value) {
   return null;
 }
 
-
 String? validateIFSC(String value) {
   String pattern = '^[A-Z]{4}0[A-Z0-9]{6}\$';
   RegExp regExp = RegExp(pattern);
@@ -163,7 +163,6 @@ String? validateIFSC(String value) {
   return null;
 }
 
-
 String? validateAccountNumber(String value) {
   String pattern = '[0-9]{9,18}';
   RegExp regExp = RegExp(pattern);
@@ -174,7 +173,6 @@ String? validateAccountNumber(String value) {
   }
   return null;
 }
-
 
 class VerhoeffAlgorithm {
   static final List<List<int>> d = [
@@ -213,7 +211,8 @@ class VerhoeffAlgorithm {
   }
 
   static List<int> stringToReversedIntArray(String num) {
-    List<int> myArray = List<int>.generate(num.length, (i) => int.parse(num[i]));
+    List<int> myArray =
+        List<int>.generate(num.length, (i) => int.parse(num[i]));
     return myArray.reversed.toList();
   }
 }

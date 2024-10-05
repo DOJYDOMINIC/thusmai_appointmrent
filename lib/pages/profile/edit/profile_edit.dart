@@ -16,14 +16,17 @@ class ProfileDetailsEdit extends StatefulWidget {
 }
 
 class _ProfileDetailsEditState extends State<ProfileDetailsEdit> {
+  String? _dobError;
+  String? _emailError;
   @override
   void initState() {
     super.initState();
-var userdata = Provider.of<AppLogin>(context,listen: false).userData;
+    var userdata = Provider.of<AppLogin>(context, listen: false).userData;
     _firstName = TextEditingController(text: userdata?.firstName);
     _lastName = TextEditingController(text: userdata?.lastName);
     _phoneNo = TextEditingController(text: userdata?.phone);
-    _dateofBirth = TextEditingController(text: userdata?.dob?.replaceAll('-', '/'));
+    _dateofBirth =
+        TextEditingController(text: userdata?.dob?.replaceAll('-', '/'));
     _email = TextEditingController(text: userdata?.email);
     _pinCode = TextEditingController(text: userdata?.pincode.toString());
     _state = TextEditingController(text: userdata?.state);
@@ -88,6 +91,7 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                   hintText: 'Date of Birth',
                   controller: _dateofBirth,
                   prefixIcon: Icons.cake,
+                  errorText: _dobError,
                 ),
                 CustomTextField(
                   hintText: 'Email',
@@ -99,6 +103,7 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                   hintText: 'Address',
                   controller: _address,
                   prefixIcon: Icons.pin_drop_outlined,
+                  errorText: _emailError,
                 ),
                 CustomTextField(
                   hintText: 'PIN Code',
@@ -125,9 +130,52 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                 SizedBox(
                   height: 24,
                 ),
+                // CustomButton(
+                //   onPressed: () {
+                //     UpdateUserDetail data = UpdateUserDetail(
+                //         firstName: _firstName.text.toUpperCase(),
+                //         lastName: _lastName.text.toUpperCase(),
+                //         phone: _phoneNo.text,
+                //         dob: _dateofBirth.text,
+                //         email: _email.text,
+                //         pincode: int.parse(_pinCode.text),
+                //         state: _state.text.toUpperCase(),
+                //         district: _district.text.toUpperCase(),
+                //         address: _address.text.toUpperCase(),
+                //       country: _country.text
+                //     );
+                //     Provider.of<ProfileController>(context,listen: false).profileEdit(context,data);
+                //   },
+                //   buttonColor: goldShade,
+                //   buttonText: "Save",
+                // )
                 CustomButton(
                   onPressed: () {
-                    UpdateUserDetail data = UpdateUserDetail(
+                    String dob = _dateofBirth.text.trim();
+                    String email = _email.text.trim();
+
+                    // Validate dob
+                    setState(() {
+                      // Validate Date of Birth format
+                      if (!RegExp(r'^\d{2}/\d{2}/\d{4}$').hasMatch(dob) ||
+                          dob == '00/00/0000') {
+                        _dobError = "Please enter a valid Date of Birth";
+                      } else {
+                        _dobError = null; // Clear error if valid
+                      }
+
+                      // Validate email format
+                      if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                          .hasMatch(email)) {
+                        _emailError = "Please enter a valid email address";
+                      } else {
+                        _emailError = null; // Clear error if valid
+                      }
+                    });
+
+                    // If no errors, proceed with profile update
+                    if (_dobError == null && _emailError == null) {
+                      UpdateUserDetail data = UpdateUserDetail(
                         firstName: _firstName.text.toUpperCase(),
                         lastName: _lastName.text.toUpperCase(),
                         phone: _phoneNo.text,
@@ -137,9 +185,13 @@ var userdata = Provider.of<AppLogin>(context,listen: false).userData;
                         state: _state.text.toUpperCase(),
                         district: _district.text.toUpperCase(),
                         address: _address.text.toUpperCase(),
-                      country: _country.text
-                    );
-                    Provider.of<ProfileController>(context,listen: false).profileEdit(context,data);
+                        country: _country.text,
+                      );
+
+                      // Call to profile edit method
+                      Provider.of<ProfileController>(context, listen: false)
+                          .profileEdit(context, data);
+                    }
                   },
                   buttonColor: goldShade,
                   buttonText: "Save",

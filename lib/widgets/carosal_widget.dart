@@ -95,14 +95,14 @@ class BlogImageCarousel extends StatelessWidget {
     return GestureDetector(
       onTap: () => _showBlogDetails(context, blog),
       child: Padding(
-        padding: EdgeInsets.all( 8.sp),
+        padding: EdgeInsets.all(8.sp),
         child: Container(
           decoration: BoxDecoration(
               color: videoBox, borderRadius: BorderRadius.circular(8)),
           child: Column(
             children: [
               Container(
-                height: 100.h,
+                height: 80.h,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.withOpacity(.5)),
                   borderRadius: BorderRadius.circular(8),
@@ -123,8 +123,7 @@ class BlogImageCarousel extends StatelessWidget {
                     : null,
               ),
               Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 8.sp, vertical: 4.sp),
+                padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 4.sp),
                 child: Column(
                   children: [
                     Align(
@@ -178,14 +177,14 @@ class BlogImageCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 18.sp,vertical: 12.sp),
+        padding: EdgeInsets.symmetric(horizontal: 18.sp, vertical: 12.sp),
         child: Container(
             decoration: BoxDecoration(
                 color: backgroundColor,
                 borderRadius: const BorderRadius.all(Radius.circular(8))),
             child: Column(children: [
               Padding(
-                padding:  EdgeInsets.all(8.sp),
+                padding: EdgeInsets.all(8.sp),
                 child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(titleName,

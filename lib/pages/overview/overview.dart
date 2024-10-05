@@ -29,19 +29,20 @@ class Overview extends StatefulWidget {
   State<Overview> createState() => _OverviewState();
 }
 
-class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin {
+class _OverviewState extends State<Overview>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
   late Timer _timer;
 
-
   @override
   void initState() {
     super.initState();
-    Provider.of<ButtonStateNotifier>(context,listen: false).loadButtonState();
+    Provider.of<ButtonStateNotifier>(context, listen: false).loadButtonState();
     Provider.of<AppLogin>(context, listen: false).validateSession(context);
     Provider.of<ZoomMeetingController>(context, listen: false).zoomClass();
-    Provider.of<PaymentController>(context, listen: false).financialConfiguration();
+    Provider.of<PaymentController>(context, listen: false)
+        .financialConfiguration();
     _timer = Timer.periodic(Duration(minutes: 15), (timer) {
       Provider.of<ZoomMeetingController>(context, listen: false).zoomClass();
     });
@@ -76,16 +77,19 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
 
   void uploadMeditationTimes() async {
     // if(Provider.of<ConnectivityProvider>(context, listen: false).status != ConnectivityStatus.Offline){
-      var box = await Hive.openBox<MeditationData>('MeditationDataBox');
-      print("entered");
-      for (int index = 0; index < box.length; index++) {
-        MeditationData? db = box.getAt(index);
-        if (db != null) {
-          print("check data : ${db.startTime}, ${db.endTime}");
-          Provider.of<MeditationController>(context, listen: false).meditationTime(db.startTime, db.endTime).then((_) {box.deleteAt(index);
-          });
-        }
+    var box = await Hive.openBox<MeditationData>('MeditationDataBox');
+    print("entered");
+    for (int index = 0; index < box.length; index++) {
+      MeditationData? db = box.getAt(index);
+      if (db != null) {
+        print("check data : ${db.startTime}, ${db.endTime}");
+        Provider.of<MeditationController>(context, listen: false)
+            .meditationTime(db.startTime, db.endTime)
+            .then((_) {
+          box.deleteAt(index);
+        });
       }
+    }
     // }
   }
 
@@ -147,7 +151,8 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
     var eventLIst = Provider.of<OverViewController>(context).eventLIst;
     var blogsLIst = Provider.of<OverViewController>(context).blogsLIst;
     var flagModel = Provider.of<AppLogin>(context).flagModel;
-    var zoomMeet = Provider.of<ZoomMeetingController>(context).ZoomClassModelData;
+    var zoomMeet =
+        Provider.of<ZoomMeetingController>(context).ZoomClassModelData;
 
     // String? firstName =
     //     appLogin.userData?.firstName; // Get the first name, if available
@@ -227,170 +232,172 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
       backgroundColor: shadeOne,
       body: SafeArea(
         child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        slidePageRoute(context, Profile());
-                        // Navigator.push(context,MaterialPageRoute(builder: (context) => Profile(),));
-                      },
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  slidePageRoute(context, Profile());
+                  // Navigator.push(context,MaterialPageRoute(builder: (context) => Profile(),));
+                },
+                child: Padding(
+                  padding:
+                      EdgeInsets.only(left: 16.sp, right: 16.sp, top: 16.sp),
+                  child: Container(
+                    height: 192.h,
+                    decoration: BoxDecoration(
+                      border: Border.fromBorderSide(BorderSide.none),
+                      image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage("assets/images/overviewimg1.jpg")),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        gradient: LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: <Color>[
+                            Colors.white.withOpacity(1),
+                            Colors.white.withOpacity(.6),
+                            Colors.white.withOpacity(.0),
+                            Colors.white.withOpacity(.0),
+                            Colors.white.withOpacity(.0),
+                            Colors.white.withOpacity(.0),
+                          ],
+                          // Gradient from https://learnui.design/tools/gradient-generator.html
+                          tileMode: TileMode.mirror,
+                        ),
+                      ),
                       child: Padding(
-                        padding: EdgeInsets.only(
-                            left: 16.sp, right: 16.sp, top: 16.sp),
-                        child: Container(
-                          height: 192.h,
-                          decoration: BoxDecoration(
-                            border: Border.fromBorderSide(BorderSide.none),
-                            image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage(
-                                    "assets/images/overviewimg1.jpg")),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              gradient: LinearGradient(
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                                colors: <Color>[
-                                  Colors.white.withOpacity(1),
-                                  Colors.white.withOpacity(.6),
-                                  Colors.white.withOpacity(.0),
-                                  Colors.white.withOpacity(.0),
-                                  Colors.white.withOpacity(.0),
-                                  Colors.white.withOpacity(.0),
-                                ],
-                                // Gradient from https://learnui.design/tools/gradient-generator.html
-                                tileMode: TileMode.mirror,
-                              ),
+                        padding:
+                            EdgeInsets.fromLTRB(16.sp, 16.sp, 32.sp, 16.sp),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      Icons.account_box,
+                                      size: 30.sp,
+                                    ),
+                                    SizedBox(
+                                      width: 2.sp,
+                                    ),
+                                    Text(
+                                      "${appLogin.userData?.firstName}  ${appLogin.userData?.lastName}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12.sp),
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      "Card No : TSL${appLogin.userData?.uId}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12.sp),
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(
-                                  16.sp, 16.sp, 32.sp, 16.sp),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Icon(
-                                            Icons.account_box,
-                                            size: 30.sp,
-                                          ),
-                                          SizedBox(
-                                            width: 2.sp,
-                                          ),
-                                          Text(
-                                            "${appLogin.userData?.firstName}  ${appLogin.userData?.lastName}",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 12.sp),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            "Card No : TSL${appLogin.userData?.uId}",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 12.sp),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "DOJ : ${appLogin.userData?.doj != null ? DateFormat('dd/MM/yyyy').format(appLogin.userData!.doj!) : 'N/A'}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12.sp),
-                                      ),
-                                      SizedBox(
-                                        height: 2,
-                                      ),
-                                      Text(
-                                        "VALID :  ${appLogin.userData?.expiredDate != null ? DateFormat('dd/MM/yyyy').format(appLogin.userData!.expiredDate!) : 'N/A'}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12.sp),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "DOJ : ${appLogin.userData?.doj != null ? DateFormat('dd/MM/yyyy').format(appLogin.userData!.doj!) : 'N/A'}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.sp),
+                                ),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                                Text(
+                                  "VALID :  ${appLogin.userData?.expiredDate != null ? DateFormat('dd/MM/yyyy').format(appLogin.userData!.expiredDate!) : 'N/A'}",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12.sp),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     ),
-                    spaceBetween,
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 176.h,
-                          width: MediaQuery.of(context).size.width/2,
-                          child: MeditationCard(
-                            iconData: Icons.self_improvement,
-                            title: "Meditation",
-                            background: meditationColor,
-                            valueData: true,
-                            dataStringOne: "Current Cycle",
-                            dataStringTwo: "Days Completed",
-                            onTap: () {
-                              indexProvider.currentIndex = 2;
-                            },
-                            currentCycle: appLogin.userData?.cycle ?? 0,
-                            daysCompleted: appLogin.userData?.day ?? 0,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 176.h,
-                          width: MediaQuery.of(context).size.width/2,
-                          child: MeditationCard(
-                            iconData: Icons.message_outlined,
-                            title: "t-tok and Guruji",
-                            background: messageGuruColor,
-                            valueData: false,
-                            dataStringOne: "Connecting Hearts and ",
-                            dataStringTwo: "Minds Across the Globe",
-                            onTap: () {
-                              indexProvider.currentIndex = 3;
-                            },
-                            currentCycle: appLogin.userData?.cycle ?? 0,
-                            daysCompleted: appLogin.userData?.day ?? 0,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 8.h,
-                    ),
-                    Row(
-                      children: [
-                        BlogImageCarousel(blogsList: blogsLIst, titleName: 'Recent Blogs',backgroundColor: sliderBackground1,),
-                        BlogImageCarousel(blogsList: eventLIst, titleName: 'Recent Events',backgroundColor: sliderBackground2,),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-
-                  ],
+                  ),
                 ),
               ),
+              spaceBetween,
+              Row(
+                children: [
+                  SizedBox(
+                    height: 176.h,
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: MeditationCard(
+                      iconData: Icons.self_improvement,
+                      title: "Meditation",
+                      background: meditationColor,
+                      valueData: true,
+                      dataStringOne: "Current Cycle",
+                      dataStringTwo: "Days Completed",
+                      onTap: () {
+                        indexProvider.currentIndex = 2;
+                      },
+                      currentCycle: appLogin.userData?.cycle ?? 0,
+                      daysCompleted: appLogin.userData?.day ?? 0,
+                    ),
+                  ),
+                  BlogImageCarousel(
+                    blogsList: blogsLIst,
+                    titleName: 'Recent Blogs',
+                    backgroundColor: sliderBackground1,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 8.h,
+              ),
+              Row(
+                children: [
+                  BlogImageCarousel(
+                    blogsList: eventLIst,
+                    titleName: 'Recent Events',
+                    backgroundColor: sliderBackground2,
+                  ),
+                  SizedBox(
+                    height: 176.h,
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: MeditationCard(
+                      iconData: Icons.message_outlined,
+                      title: "t-tok and Guruji",
+                      background: messageGuruColor,
+                      valueData: false,
+                      dataStringOne: "Connecting Hearts and ",
+                      dataStringTwo: "Minds Across the Globe",
+                      onTap: () {
+                        indexProvider.currentIndex = 3;
+                      },
+                      currentCycle: appLogin.userData?.cycle ?? 0,
+                      daysCompleted: appLogin.userData?.day ?? 0,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 8,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -401,4 +408,3 @@ class _OverviewState extends State<Overview> with SingleTickerProviderStateMixin
     }
   }
 }
-
