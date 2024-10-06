@@ -32,7 +32,6 @@ class _MeditationPaymentState extends State<MeditationPayment> {
   Widget build(BuildContext context) {
     var flagModel = Provider.of<AppLogin>(context).flagModel;
   var   finData = Provider.of<PaymentController>(context).financialConfig;
-
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -144,6 +143,7 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
+
     var pro = Provider.of<AppLogin>(context, listen: false);
 
     // Handle payment success
@@ -187,17 +187,32 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
 
   }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
-    // Handle payment error
-    print("Payment Error: $response");
+  void _handlePaymentError(BuildContext context, PaymentFailureResponse response) {
+    // Show SnackBar for payment error
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Payment Error: ${response.message}'),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    // Handle external wallet
-    print("External Wallet Selected: $response");
+  void _handleExternalWallet(BuildContext context, ExternalWalletResponse response) {
+    // Show SnackBar for external wallet selection
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('External Wallet Selected: ${response.walletName}'),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
+
 
   Future<void> _createOrderAndOpenCheckout() async {
+    var userData =  Provider.of<AppLogin>(context,listen: false).userData;
+
     Provider.of<AppLogin>(context,listen: false).disableButton();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
@@ -223,14 +238,14 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
         final orderData = jsonDecode(response.body);
         final String orderId = orderData['order']["id"];
         var options = {
-          'key': 'rzp_test_iupJrCXb3OkViV',
+          'key': widget.paymentType == "Guru Dakshina" ? 'rzp_live_6HCUMMvTKrRJrA' : "rzp_live_pUPUZItNLjg8oO",
           'amount': total, // Amount is in paise
           'name': widget.paymentType,
           'order_id': orderId,
           'description': 'Payment for ${widget.paymentType}',
           'prefill': {
-            'contact': '8888888888',
-            'email': 'test@razorpay.com',
+            'contact':userData?.phone,
+            'email': userData?.email,
           },
           'external': {
             'wallets': ['paytm'],

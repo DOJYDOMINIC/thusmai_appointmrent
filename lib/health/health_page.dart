@@ -4,6 +4,7 @@ import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 import '../constant/constant.dart';
+import '../pages/bottom_navbar.dart';
 
 class WebView extends StatefulWidget {
   const WebView({super.key});
@@ -86,7 +87,7 @@ class _WebViewState extends State<WebView> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomBottomNavBar(),));
           },
           icon: Icon(
             Icons.arrow_back,

@@ -126,8 +126,8 @@ class FirebaseApi {
     final fCMToken = await _firebaseMessaging.getToken();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('fCMToken', fCMToken!);
-    var token = prefs.getString("fCMToken");
-    print('Token NOT: $token');
+    // var token = prefs.getString("fCMToken");
+    // print('Token NOT: $token');
     // add token to database
     initPushNotifications();
     initNotification(_localNotifications);

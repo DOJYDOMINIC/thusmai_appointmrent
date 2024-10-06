@@ -22,7 +22,7 @@ class _MessageTabState extends State<MessageTab> {
     var pro = Provider.of<AppointmentController>(context);
     return DefaultTabController(
       initialIndex: 0,
-      length: 3,
+      length: 2,
       child: Scaffold(
         backgroundColor: shadeOne,
         body: SafeArea(
@@ -40,14 +40,14 @@ class _MessageTabState extends State<MessageTab> {
                     unselectedLabelColor: Colors.grey,
                     labelColor: shadeOne,
                     tabs: const [
-                      Tab(
-                        child: Text("My Notes"),
-                      ),
+                      // Tab(
+                      //   child: Text("My Notes"),
+                      // ),
                       Tab(
                         child: Text("Guruji"),
                       ),
                       Tab(
-                        child: Text("Global"),
+                        child: Text("t-tok"),
                       ),
                     ],
                   ),
@@ -57,7 +57,7 @@ class _MessageTabState extends State<MessageTab> {
               Expanded(
                 child: TabBarView(
                   children: [
-                    PrivateMessage(),
+                    // PrivateMessage(),
                     GuruMessage(),
                     GeneralMessage(),
                   ],

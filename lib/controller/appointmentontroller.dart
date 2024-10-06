@@ -86,7 +86,7 @@ class AppointmentController extends ChangeNotifier {
   Future<void> termsAndCondition() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    print(cookies);
+    // print(cookies);
     try {
       var response = await http.get(
         Uri.parse("$userBaseUrl/rulesAndConditions"),
@@ -167,7 +167,7 @@ class AppointmentController extends ChangeNotifier {
     print(data.toString());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    print(cookies);
+    // print(cookies);
     try {
       final response = await http.post(
         Uri.parse("$userBaseUrl/appointment"),
@@ -221,7 +221,7 @@ class AppointmentController extends ChangeNotifier {
   Future<void> deleteAppointment(BuildContext context, String id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    print(cookies);
+    // print(cookies);
     try {
       final response = await http.delete(
         Uri.parse('$userBaseUrl/delete-appointment/?id=$id'),
@@ -257,7 +257,7 @@ class AppointmentController extends ChangeNotifier {
   Future<void> deleteMember(BuildContext context, int? id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    print(cookies);
+    // print(cookies);
     try {
       final response = await http.delete(
         Uri.parse('$userBaseUrl/group-members/$id'),
@@ -292,7 +292,7 @@ class AppointmentController extends ChangeNotifier {
   Future<void> appointmentFeedback(BuildContext context, var data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    print(cookies);
+    // print(cookies);
     try {
       final response = await http.put(
         Uri.parse("$userBaseUrl/rating"),
@@ -345,7 +345,7 @@ class AppointmentController extends ChangeNotifier {
   Future<void> disableDates() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    print(cookies);
+    // print(cookies);
     try {
       var response = await http.get(
         Uri.parse("$userBaseUrl/guruji-date"),

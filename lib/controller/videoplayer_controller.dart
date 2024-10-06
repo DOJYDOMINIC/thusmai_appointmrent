@@ -93,7 +93,7 @@ class VideoPlayerStateController extends ChangeNotifier {
   Future<void> playlistDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    print(cookies);
+    // print(cookies);
     try {
       var response = await http.get(
         Uri.parse("$userBaseUrl/playlists"),
@@ -120,7 +120,7 @@ class VideoPlayerStateController extends ChangeNotifier {
   Future<void> videoPlaylistDetails(String category ) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    print(cookies);
+    // print(cookies);
     try {
       var response = await http.get(
         Uri.parse("$userBaseUrl/videos-by-playlist?playList_heading=$category"),

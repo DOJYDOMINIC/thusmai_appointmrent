@@ -220,7 +220,7 @@ class MeditationController extends ChangeNotifier {
   Future<void> meditationTimeDetails(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    print(cookies);
+    // print(cookies);
     var time = DateTime.now();
     String formattedTime = "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
 

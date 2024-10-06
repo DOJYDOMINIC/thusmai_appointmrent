@@ -29,6 +29,7 @@ class _GuruMessageState extends State<GuruMessage> {
 
 
     return Scaffold(
+      backgroundColor: shadeOne,
       body: Column(
         children: [
           Expanded(
@@ -47,8 +48,8 @@ class _GuruMessageState extends State<GuruMessage> {
           ),
           SizedBox(height: 8.sp,),
           Container(
-            color: Colors.white,
-            height: 96.h,
+            color: shadeOne,
+            height: 46.h,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

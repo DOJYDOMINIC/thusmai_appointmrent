@@ -51,7 +51,7 @@ class _RewardPageState extends State<RewardPage> {
           String formattedDate = DateFormat('yyyy/MM/dd').format(dateTime);
           String formattedTime = DateFormat('hh:mm:ss a').format(dateTime);
         return  rewardWidget(formattedTime, "Rs : ${rewardListData?[index].reward.toString()}",formattedDate);
-      },): CircularProgressIndicator(),
+      },): Center(child: CircularProgressIndicator()),
     );
   }
 }

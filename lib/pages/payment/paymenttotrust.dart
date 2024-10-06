@@ -57,17 +57,29 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
     payment.paymentSuccess(context, "donation-paymentVerification", data);
 
     // Handle payment success
-    print("Payment Successful: $response");
+    // print("Payment Successful: $response");
   }
 
-  void _handlePaymentError(PaymentFailureResponse response) {
-    // Handle payment error
-    print("Payment Error: $response");
+  void _handlePaymentError(BuildContext context, PaymentFailureResponse response) {
+    // Show SnackBar for payment error
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Payment Error: ${response.message}'),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    // Handle external wallet
-    print("External Wallet Selected: $response");
+  void _handleExternalWallet(BuildContext context, ExternalWalletResponse response) {
+    // Show SnackBar for external wallet selection
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('External Wallet Selected: ${response.walletName}'),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   // void _openCheckout() {
@@ -97,6 +109,7 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
   // }
 
   Future<void> _createOrderAndOpenCheckout() async {
+    var userData =  Provider.of<AppLogin>(context,listen: false).userData;
     Provider.of<AppLogin>(context,listen: false).disableButton();
     try {
       var amount = double.parse(donationController.text);
@@ -116,14 +129,14 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
         final orderData = jsonDecode(response.body);
         final String orderId = orderData['order']["id"];
         var options = {
-          'key': 'rzp_test_iupJrCXb3OkViV',
+          'key': 'rzp_live_pUPUZItNLjg8oO',
           'amount': total, // Amount is in paise
           'name': 'Meditation Payment',
           'order_id': orderId,
           'description': 'Meditation second payment',
           'prefill': {
-            'contact': '1234567890',
-            'email': 'test@razorpay.com',
+            'contact':userData?.phone,
+            'email': userData?.email,
           },
           'external': {
             'wallets': ['paytm']

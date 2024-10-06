@@ -295,79 +295,79 @@ class AppLogin extends ChangeNotifier {
 
   UserLoginData? get userLoginData => _userLoginData;
 
-  Future<void> loginApi(BuildContext context, Map<String, dynamic> data) async {
-    try {
-      final response = await http
-          .post(
-            Uri.parse("$userBaseUrl/login"),
-            headers: {
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(data),
-          )
-          .timeout(Duration(seconds: 3)); // Set timeout to 5 seconds
-
-      var decode = jsonDecode(response.body);
-
-      if (response.statusCode == 200) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        _userLoginData = UserLoginData.fromJson(decode["user"]);
-        final String? specificCookie = response.headers['set-cookie'];
-        final sessionId = specificCookie;
-        prefs.setString("cookie", sessionId!);
-        prefs.setString("isAnswered", _userLoginData!.isans.toString());
-        var isAnswered = prefs.getString("isAnswered");
-        var fCMToken = prefs.getString("fCMToken");
-        if (fCMToken != null) {
-          print(data);
-        }
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                isAnswered != "true" ? MeditationData() : CustomBottomNavBar(),
-          ),
-        );
-      } else if (response.statusCode == 404) {
-        // requestPasswordReset(context, data["email"]);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => otpPage(),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.red,
-            content: Text(decode["message"]),
-            duration: Duration(seconds: 1),
-          ),
-        );
-      }
-    } on http.ClientException catch (e) {
-      // Handle timeout or other http client exceptions
-      print("HTTP Client Exception: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text("Request timed out or other network error occurred."),
-          duration: Duration(seconds: 3),
-        ),
-      );
-    } catch (e) {
-      // Handle other exceptions
-      print("Other Exception: $e");
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.red,
-          content: Text("Something wentwrong"),
-          duration: Duration(seconds: 1),
-        ),
-      );
-    }
-    notifyListeners();
-  }
+  // Future<void> loginApi(BuildContext context, Map<String, dynamic> data) async {
+  //   try {
+  //     final response = await http
+  //         .post(
+  //           Uri.parse("$userBaseUrl/login"),
+  //           headers: {
+  //             'Content-Type': 'application/json; charset=UTF-8',
+  //           },
+  //           body: jsonEncode(data),
+  //         )
+  //         .timeout(Duration(seconds: 3)); // Set timeout to 5 seconds
+  //
+  //     var decode = jsonDecode(response.body);
+  //
+  //     if (response.statusCode == 200) {
+  //       SharedPreferences prefs = await SharedPreferences.getInstance();
+  //       _userLoginData = UserLoginData.fromJson(decode["user"]);
+  //       final String? specificCookie = response.headers['set-cookie'];
+  //       final sessionId = specificCookie;
+  //       prefs.setString("cookie", sessionId!);
+  //       prefs.setString("isAnswered", _userLoginData!.isans.toString());
+  //       var isAnswered = prefs.getString("isAnswered");
+  //       var fCMToken = prefs.getString("fCMToken");
+  //       if (fCMToken != null) {
+  //         print(data);
+  //       }
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) =>
+  //               isAnswered != "true" ? MeditationData() : CustomBottomNavBar(),
+  //         ),
+  //       );
+  //     } else if (response.statusCode == 404) {
+  //       // requestPasswordReset(context, data["email"]);
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //           builder: (context) => otpPage(),
+  //         ),
+  //       );
+  //     } else {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           backgroundColor: Colors.red,
+  //           content: Text(decode["message"]),
+  //           duration: Duration(seconds: 1),
+  //         ),
+  //       );
+  //     }
+  //   } on http.ClientException catch (e) {
+  //     // Handle timeout or other http client exceptions
+  //     print("HTTP Client Exception: $e");
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         backgroundColor: Colors.red,
+  //         content: Text("Request timed out or other network error occurred."),
+  //         duration: Duration(seconds: 3),
+  //       ),
+  //     );
+  //   } catch (e) {
+  //     // Handle other exceptions
+  //     print("Other Exception: $e");
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         backgroundColor: Colors.red,
+  //         content: Text("Something wentwrong"),
+  //         duration: Duration(seconds: 1),
+  //       ),
+  //     );
+  //   }
+  //   notifyListeners();
+  // }
 
 
 
@@ -385,7 +385,7 @@ class AppLogin extends ChangeNotifier {
 
     var decode = jsonDecode(response.body);
     try {
-      if (response.statusCode == 200) {
+      if (response.statusCode < 300) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         _userLoginData = UserLoginData.fromJson(decode["user"]);
         final String? specificCookie = response.headers['set-cookie'];
@@ -404,9 +404,14 @@ class AppLogin extends ChangeNotifier {
         //   ),
         // );
         if (decode["verify"] == true){
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomBottomNavBar(),));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+              isAnswered != "true" ? MeditationData() : CustomBottomNavBar(),
+            ),
+          );
         }else{
-          print("User not registerds");
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterPage(),));
         }
         // if (cookies == null || cookies == "" || cookies.isEmpty) {
@@ -489,7 +494,7 @@ class AppLogin extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     var token = prefs.getString("fCMToken");
-    print(token);
+    // print(token);
     final response = await http.post(Uri.parse("$paymentBaseUrl/save-token"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
@@ -532,7 +537,7 @@ class AppLogin extends ChangeNotifier {
           );
           print(decode);
         } else {
-          Navigator.push(context,
+          Navigator.pushReplacement( context,
               MaterialPageRoute(builder: (context) => RegisterPage(),));
         }
       } else {

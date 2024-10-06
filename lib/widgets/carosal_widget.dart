@@ -10,12 +10,13 @@ class BlogImageCarousel extends StatelessWidget {
   final List<dynamic> blogsList;
   final String titleName;
   final Color backgroundColor;
+  final int second;
 
   BlogImageCarousel(
       {super.key,
       required this.blogsList,
       required this.titleName,
-      required this.backgroundColor});
+      required this.backgroundColor, required this.second});
 
   // Method to show the bottom sheet with blog details
   void _showBlogDetails(BuildContext context, dynamic blog) {
@@ -90,85 +91,30 @@ class BlogImageCarousel extends StatelessWidget {
   }
 
   // Helper method to build each carousel item
-  Widget _buildCarouselItem(BuildContext context, dynamic blog, int index,
-      String titleName, Color backgroundColor) {
+  Widget _buildCarouselItem(BuildContext context, dynamic blog, int index,) {
     return GestureDetector(
       onTap: () => _showBlogDetails(context, blog),
       child: Padding(
         padding: EdgeInsets.all( 8.sp),
         child: Container(
           decoration: BoxDecoration(
-              color: videoBox, borderRadius: BorderRadius.circular(8)),
-          child: Column(
-            children: [
-              Container(
-                height: 100.h,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.withOpacity(.5)),
-                  borderRadius: BorderRadius.circular(8),
-                  image: blog.image != null
-                      ? DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(blog.image),
-                        )
-                      : null,
-                ),
-                child: blog.image == null
-                    ? Center(
-                        child: Text(
-                          "No Image Available",
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    : null,
-              ),
-              Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 8.sp, vertical: 4.sp),
-                child: Column(
-                  children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        blog.title,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12.sp,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines:
-                            1, // Ensures only one line of text is displayed
-                      ),
-                    ),
-                    if (blog.eventTime != null && blog.eventTime.isNotEmpty)
-                      Text(
-                        '${blog.date ?? 'N/A'} (${blog.eventTime})',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12.sp,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    if (blog.eventTime == null || blog.eventTime.isEmpty)
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          blog.description,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12.sp,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines:
-                              1, // Ensures only one line of text is displayed
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ],
+            border: Border.all(color: Colors.grey.withOpacity(.5)),
+            borderRadius: BorderRadius.circular(8),
+            image: blog.image != null
+                ? DecorationImage(
+                    fit: BoxFit.fill,
+                    image: NetworkImage(blog.image),
+                  )
+                : null,
           ),
+          child: blog.image == null
+              ? Center(
+                  child: Text(
+                    "No Image Available",
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : null,
         ),
       ),
     );
@@ -178,7 +124,7 @@ class BlogImageCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 18.sp,vertical: 12.sp),
+        padding: EdgeInsets.symmetric(horizontal: 18.sp,vertical: 10.sp),
         child: Container(
             decoration: BoxDecoration(
                 color: backgroundColor,
@@ -195,15 +141,14 @@ class BlogImageCarousel extends StatelessWidget {
               CarouselSlider.builder(
                 itemCount: blogsList.length,
                 itemBuilder: (context, index, _) {
-                  return _buildCarouselItem(context, blogsList[index], index,
-                      titleName, backgroundColor);
+                  return _buildCarouselItem(context, blogsList[index], index);
                 },
                 options: CarouselOptions(
-                  aspectRatio: 1,
+                  aspectRatio: 1.2,
                   viewportFraction: 1,
                   enableInfiniteScroll: blogsList.length > 1,
                   autoPlay: blogsList.length > 1,
-                  autoPlayInterval: const Duration(seconds: 3),
+                  autoPlayInterval: Duration(milliseconds: second),
                   scrollDirection: Axis.vertical,
                 ),
               ),
@@ -219,8 +164,8 @@ class BlogImageCarousel extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.sp),
         child: Container(
-          height: 150.h,
-          width: MediaQuery.of(context).size.width / 2,
+          height: 100.h,
+          width: MediaQuery.of(context).size.width / 3,
           decoration: BoxDecoration(
             border: Border.all(color: Colors.black, width: 1),
             color: Colors.white,

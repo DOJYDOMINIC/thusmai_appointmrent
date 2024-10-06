@@ -90,8 +90,8 @@ class NextPage extends StatelessWidget {
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: DeclarationPage(),
-  ));
-}
+// void main() {
+//   runApp(MaterialApp(
+//     home: DeclarationPage(),
+//   ));
+// }

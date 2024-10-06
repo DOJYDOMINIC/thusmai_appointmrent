@@ -188,40 +188,40 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                             Divider(),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ResetPageTwo(),
-                                    ));
-                              },
-                              child: Container(
-                                height: 48.h,
-                                color: shadeOne,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Icon(Icons.lock_reset),
-                                        SizedBox(
-                                          width: 16.sp,
-                                        ),
-                                        Text(resetPassword,
-                                            style: TextStyle(fontSize: 16.sp)),
-                                      ],
-                                    ),
-                                    Icon(
-                                      Icons.chevron_right,
-                                      size: 22.sp,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Divider(),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //           builder: (context) => ResetPageTwo(),
+                            //         ));
+                            //   },
+                            //   child: Container(
+                            //     height: 48.h,
+                            //     color: shadeOne,
+                            //     child: Row(
+                            //       mainAxisAlignment:
+                            //           MainAxisAlignment.spaceBetween,
+                            //       children: [
+                            //         Row(
+                            //           children: [
+                            //             Icon(Icons.lock_reset),
+                            //             SizedBox(
+                            //               width: 16.sp,
+                            //             ),
+                            //             Text(resetPassword,
+                            //                 style: TextStyle(fontSize: 16.sp)),
+                            //           ],
+                            //         ),
+                            //         Icon(
+                            //           Icons.chevron_right,
+                            //           size: 22.sp,
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
+                            // Divider(),
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(

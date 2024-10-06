@@ -34,9 +34,27 @@ class _PrivateMessageState extends State<PrivateMessage> {
     var meditation = Provider.of<MeditationController>(context);
     var messageController = Provider.of<MessageController>(context);
     return Scaffold(
+      backgroundColor: shadeOne,
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: shadeOne,
+            )),
+        backgroundColor: darkShade,
+        title: Text(
+          "Notes",
+          style: TextStyle(color: shadeOne),
+        ),
+        // centerTitle: true,
+      ),
       body: Column(
           children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
                 onPressed: () {
@@ -81,15 +99,15 @@ class _PrivateMessageState extends State<PrivateMessage> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20, right: 5, top: 5, bottom: 5),
                     child: Container(
-                      child: new ConstrainedBox(
+                      child:  ConstrainedBox(
                         constraints: BoxConstraints(
                           maxHeight: 130.h,
                         ),
-                        child: new Scrollbar(
-                          child: new SingleChildScrollView(
+                        child:  Scrollbar(
+                          child:  SingleChildScrollView(
                             scrollDirection: Axis.vertical,
                             reverse: true,
-                            child: new TextField(
+                            child:  TextField(
                               maxLines: null,
                         keyboardType: TextInputType.multiline,
                         cursorColor: Colors.black,

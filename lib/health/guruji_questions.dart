@@ -2,100 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // For date formatting
 import 'dart:convert'; // For JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:thusmai_appointmrent/controller/healt_controller.dart';
+import 'package:thusmai_appointmrent/health/health_page.dart';
+import 'package:thusmai_appointmrent/widgets/additionnalwidget.dart';
 
 import '../constant/constant.dart';
+import '../pages/bottom_navbar.dart';
 
-class SleepData extends StatefulWidget {
+class gurujiDataCollection extends StatefulWidget {
   @override
-  _SleepDataState createState() => _SleepDataState();
+  _gurujiDataCollectionState createState() => _gurujiDataCollectionState();
 }
 
-class _SleepDataState extends State<SleepData> {
+class _gurujiDataCollectionState extends State<gurujiDataCollection> {
   // Controllers for date fields
   TextEditingController _dateOfJoiningController = TextEditingController();
   TextEditingController _dateOfStartingController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
 
-  // Updated sample data for the new data structure
-  List<dynamic> sampleData = [
-    {
-      "question": "How often do you feel overwhelmed by stress?",
-      "ans": ["Yes", "No"]
-    },
-    {
-      "question": "Which of the following causes you the most stress?",
-      "ans": ["Yes", "No"]
-    },
-    {
-      "question": "How do you usually cope with stress?",
-      "ans": ["Yes", "No"]
-    },
-    {
-      "question": "Describe a recent situation that made you feel stressed.",
-      "ans": ["Yes", "No"]
-    },
-    {
-      "question": "How often do you feel anxious?",
-      "ans": ["Yes", "No"]
-    },
-    {
-      "question": "Do you take time for self-care activities?",
-      "ans": ["Yes", "No"]
-    },
-    {
-      "question": "What activities help you relax?",
-      "ans": ["Yes", "No"]
-    },
-    {
-      "question": "How well do you sleep when stressed?",
-      "ans": ["Yes", "No"]
-    },
-    {
-      "question": "How frequently do you experience physical symptoms of stress?",
-      "ans": ["Yes", "No"]
-    },
-    {
-      "question": "What changes would you like to make to reduce your stress levels?",
-      "ans": ["Very bad", "Bad", "Good", "Very Good"]
-    }
-  ];
-
-
-  // Data for the dynamic list
   List<dynamic> formData = [];
   bool _isAgreed = false;
-  // Mock API Call to fetch data
-  Future<void> fetchData() async {
-    // Simulating network delay
-    await Future.delayed(Duration(seconds: 1));
 
-    // Set the form data with sample data
-    setState(() {
-      formData = sampleData;
-    });
-  }
-
-  // Function to send POST request with collected form data
-  Future<void> sendSleepData() async {
-    Map<String, dynamic> postData = {
-      'answers': formData.map((item) {
-        return {
-          'question': item['question'],
-          'answer': item['selected'] ?? 'No',
-        };
-      }).toList(),
-    };
-
-print(postData);
-    // Simulating POST request response
-    await Future.delayed(Duration(seconds: 1)); // Simulating network delay
-    print('Data submitted successfully');
-  }
 
   @override
   void initState() {
     super.initState();
-    fetchData(); // Fetch API data when page loads
+    // Provider.of<HealthController>(context, listen: false).healthPostQuestion();
+  Provider.of<HealthController>(context, listen: false).healthQuestion();
   }
 
   // Date picker function
@@ -113,14 +48,58 @@ print(postData);
     }
   }
 
+  Future<void> sendSleepData() async {
+    Map<String, dynamic> postData = {
+      'answers': formData.map((item) {
+        return {
+          'question': item['question'],
+          'answer': item['selected'] ?? 'No',
+        };
+      }).toList(),
+    };
+    postHealthData(postData);
+  }
+
+  Future<void> postHealthData(Map<String, dynamic> data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var cookies = prefs.getString("cookie");
+
+    try {
+      var response = await http.post(
+        Uri.parse("$baseUrl/rnd/submit-health-data"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies, // Add cookie if present
+        },
+        body: jsonEncode(data), // Convert model to JSON
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WebView(),));
+        launchURL(Uri.parse("https://starlife.co.in/health/"));
+
+        print('Health data submitted successfully');
+      } else {
+        print('Failed to submit health data: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Error submitting health data: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+ formData  = Provider.of<HealthController>(context).questions;
+
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
+        leading: IconButton(onPressed: (){
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomBottomNavBar(),));
+
+        }, icon: Icon(Icons.arrow_back_ios,color: Colors.white,)),
         backgroundColor: darkShade,
         title: Text(
-          "Data Collection",
+          "",
           style: TextStyle(color: shadeOne),
         ),
         // centerTitle: true,
@@ -184,7 +163,7 @@ print(postData);
             ),
             SizedBox(height: 16),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Checkbox(
                   value: _isAgreed,
@@ -195,10 +174,15 @@ print(postData);
                   },
                 ),
                 // Text label for consent
-                Text(
-                  'I agree to the terms and conditions',
-                  style: TextStyle(fontSize: 16),
+                Container(
+                  width: MediaQuery.of(context).size.width - 100,
+                  child: Text(
+                    'I agree to share my physical and mental health details with Tasmai spiritual researchers',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.justify, // Justifies the text
+                  ),
                 ),
+
               ],
             ),
             SizedBox(height: 16),

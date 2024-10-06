@@ -259,7 +259,7 @@ class _LoginState extends State<Login> {
                                     "email": _email,
                                     "password": _password
                                   };
-                                  Provider.of<AppLogin>(context, listen: false).loginApi(context, data);
+                                  // Provider.of<AppLogin>(context, listen: false).loginApi(context, data);
                                 }
                               },
                               style: ElevatedButton.styleFrom(

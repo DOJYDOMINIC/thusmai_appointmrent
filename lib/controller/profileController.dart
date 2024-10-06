@@ -89,7 +89,7 @@ class ProfileController extends ChangeNotifier{
   Future<void> appFeedback(BuildContext context,var data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    print(cookies);
+    // print(cookies);
     try {
       final response = await http.post(Uri.parse("$userBaseUrl/appFeedback"),
         headers: {

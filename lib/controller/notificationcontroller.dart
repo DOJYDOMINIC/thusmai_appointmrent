@@ -16,7 +16,7 @@ class notificationController extends ChangeNotifier{
   Future<void> fetchAppointments() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
-    print(cookies);
+    // print(cookies);
     try {
       var response = await http.get(
         Uri.parse("$userBaseUrl/"),
