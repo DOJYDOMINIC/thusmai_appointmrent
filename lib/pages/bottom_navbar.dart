@@ -76,7 +76,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
   bool _videoEnabled = true;
   bool _homeEnabled = true;
-  bool _meditationEnabled = true;
+  bool _meditationEnabled = false;
+  bool _message = false;
   bool _paymentsEnabled = true;
 
   final List<Widget> _pages = [
@@ -133,6 +134,23 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     bool? rndStatus = Provider.of<HealthController>(context).rndPreQuestion;
     var flagModel = Provider.of<AppLogin>(context).flagModel;
     var indexProvider = Provider.of<AppLogin>(context);
+    if ( flagModel.meditationFeePaymentStatus == true || flagModel.maintenancePaymentStatus == true){
+      _meditationEnabled = true;
+      _message = true;
+    }else{
+      _meditationEnabled = false;
+      _message = false;
+    }
+    // bool checkCondition() {
+    //   // Check if the status code is less than 300 (indicating success)
+    //   if (flagModel.maintenancePaymentStatus == true || flagModel.meditationFeePaymentStatus == true) {
+    //     return true;  // Success flag
+    //   } else {
+    //     indexProvider.currentIndex = 4;
+    //     return false; // Failure flag
+    //   }
+    // }
+
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) => onPopInvoked(context, didPop),
@@ -281,7 +299,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                   icon: Icons.chat_outlined,
                   label: "Messages",
                   index: 3,
-                  isEnabled: _meditationEnabled),
+                  isEnabled:_message ),
               buildNavBarItem(
                   currentIndex: indexProvider.currentIndex,
                   icon: indexProvider.currentIndex != 3
@@ -307,10 +325,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     return GestureDetector(
       onTap: isEnabled
           ? () {
-              Provider.of<AppLogin>(context, listen: false).currentIndex =
-                  index;
+              Provider.of<AppLogin>(context, listen: false).currentIndex = index;
             }
           : () {
+        Provider.of<AppLogin>(context, listen: false).currentIndex = 4;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(enable),
