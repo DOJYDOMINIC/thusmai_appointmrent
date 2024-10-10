@@ -75,11 +75,17 @@ class ApiService {
         print('Response: $responseString');
 
         UserContactInfo data = UserContactInfo(
-          phone: country == "India" ? phone : null,
+          phone: country == "India" ? phone : phone,
           country: country,
-          email: country != "India" ? email : null,
+          email: country == "India" ? email : email,
         );
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>otpPageData(data: data,) ,));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => otpPageData(
+                data: data,
+              ),
+            ));
       } else {
         print('Error: ${response.statusCode}');
       }
@@ -88,4 +94,3 @@ class ApiService {
     }
   }
 }
-

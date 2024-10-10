@@ -26,7 +26,8 @@ class _BankDetailEditState extends State<BankDetailEdit> {
   @override
   void initState() {
     super.initState();
-    var bankDataDetails = Provider.of<ProfileController>(context, listen: false).bankDataDetails;
+    var bankDataDetails =
+        Provider.of<ProfileController>(context, listen: false).bankDataDetails;
     _aadharNumber = TextEditingController(text: bankDataDetails?.aadarNo);
     _ifscCode = TextEditingController(text: bankDataDetails?.ifscCode);
     _branchName = TextEditingController(text: bankDataDetails?.branchName);
@@ -49,7 +50,7 @@ class _BankDetailEditState extends State<BankDetailEdit> {
             )),
         backgroundColor: darkShade,
         title: Text(
-          "Edit personal info",
+          "Edit Bank Details",
           style: TextStyle(color: shadeOne),
         ),
       ),
@@ -70,43 +71,46 @@ class _BankDetailEditState extends State<BankDetailEdit> {
                   CustomTextField(
                     hintText: 'IFSC Code',
                     controller: _ifscCode,
-                    validator: (val)=> validateIFSC(val!),
+                    validator: (val) => validateIFSC(val!),
                   ),
                   CustomTextField(
                     hintText: 'Branch Name',
                     controller: _branchName,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return 'Please enter branch name';
-                      }
-                      return null;
-                    },
+                    validator: (val) => validateBranchName(val!),
+                    // validator: (val) {
+                    //   if (val!.isEmpty) {
+                    //     return 'Please enter branch name';
+                    //   }
+                    //   return null;
+                    // },
                   ),
                   CustomTextField(
                     hintText: 'Bank Name',
                     controller: _bankName,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return 'Please enter bank name';
-                      }
-                      return null;
-                    },
+                    validator: (val) => validateBankName(val!),
+                    // validator: (val) {
+                    //   if (val!.isEmpty) {
+                    //     return 'Please enter bank name';
+                    //   }
+                    //   return null;
+                    // },
                   ),
                   CustomTextField(
                     hintText: 'Account name',
                     controller: _accountName,
-                    validator: (val) {
-                      if (val!.isEmpty) {
-                        return 'Please enter account name';
-                      }
-                      return null;
-                    },
+                    validator: (val) => validateAccountName(val!),
+                    // validator: (val) {
+                    //   if (val!.isEmpty) {
+                    //     return 'Please enter account name';
+                    //   }
+                    //   return null;
+                    // },
                   ),
                   CustomTextField(
                     hintText: 'Account Number',
                     controller: _accountNumber,
                     keyboardType: TextInputType.number,
-                    validator: (val) =>validateAccountNumber(val!),
+                    validator: (val) => validateAccountNumber(val!),
                   ),
                   SizedBox(height: 24),
                   CustomButton(
@@ -151,7 +155,6 @@ String? validateAadharcard(String value) {
   return null;
 }
 
-
 String? validateIFSC(String value) {
   String pattern = '^[A-Z]{4}0[A-Z0-9]{6}\$';
   RegExp regExp = RegExp(pattern);
@@ -163,18 +166,49 @@ String? validateIFSC(String value) {
   return null;
 }
 
-
-String? validateAccountNumber(String value) {
-  String pattern = '[0-9]{9,18}';
+String? validateBranchName(String value) {
+  String pattern = r'^[a-zA-Z0-9\s]+$'; // Allows alphabets, numbers, and spaces
   RegExp regExp = RegExp(pattern);
   if (value.isEmpty) {
-    return 'Please Enter Account Number';
+    return 'Please enter branch name';
   } else if (!regExp.hasMatch(value)) {
-    return 'Please Enter Valid Account Number';
+    return 'Branch name should contain only alphabets, numbers, and spaces';
   }
   return null;
 }
 
+String? validateBankName(String value) {
+  String pattern = r'^[a-zA-Z\s]+$'; // Allows only alphabets and spaces
+  RegExp regExp = RegExp(pattern);
+  if (value.isEmpty) {
+    return 'Please enter bank name';
+  } else if (!regExp.hasMatch(value)) {
+    return 'Bank name should contain only alphabets and spaces';
+  }
+  return null;
+}
+
+String? validateAccountName(String value) {
+  String pattern = r'^[a-zA-Z\s]+$'; // Allows only alphabets and spaces
+  RegExp regExp = RegExp(pattern);
+  if (value.isEmpty) {
+    return 'Please enter account name';
+  } else if (!regExp.hasMatch(value)) {
+    return 'Account name should contain only alphabets and spaces';
+  }
+  return null;
+}
+
+String? validateAccountNumber(String value) {
+  String pattern = r'^\d{9,18}$'; // Allows only numbers between 9 and 18 digits
+  RegExp regExp = RegExp(pattern);
+  if (value.isEmpty) {
+    return 'Please Enter Account Number';
+  } else if (!regExp.hasMatch(value)) {
+    return 'Account Number must be between 9 and 18 digits';
+  }
+  return null;
+}
 
 class VerhoeffAlgorithm {
   static final List<List<int>> d = [
@@ -213,7 +247,8 @@ class VerhoeffAlgorithm {
   }
 
   static List<int> stringToReversedIntArray(String num) {
-    List<int> myArray = List<int>.generate(num.length, (i) => int.parse(num[i]));
+    List<int> myArray =
+        List<int>.generate(num.length, (i) => int.parse(num[i]));
     return myArray.reversed.toList();
   }
 }

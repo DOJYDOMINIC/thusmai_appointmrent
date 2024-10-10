@@ -26,10 +26,11 @@ class _MeditationCycleState extends State<MeditationCycle> {
   @override
   void initState() {
     super.initState();
-    final meditationController = Provider.of<MeditationController>(context, listen: false);
+    final meditationController =
+        Provider.of<MeditationController>(context, listen: false);
     final appLoginProvider = Provider.of<AppLogin>(context, listen: false);
     Provider.of<AppLogin>(context, listen: false).validateSession(context);
-    Provider.of<ButtonStateNotifier>(context,listen: false).loadButtonState();
+    Provider.of<ButtonStateNotifier>(context, listen: false).loadButtonState();
     appLoginProvider.getUserByID();
     appLoginProvider.importantFlags();
     meditationController.meditationTimeDetails(context);
@@ -50,10 +51,10 @@ class _MeditationCycleState extends State<MeditationCycle> {
 
   String getYoutubeThumbnail(String url) {
     final uri = Uri.parse(url);
-    final videoId = uri.queryParameters['v']?.trim() ?? uri.pathSegments.last.trim();
+    final videoId =
+        uri.queryParameters['v']?.trim() ?? uri.pathSegments.last.trim();
     return 'https://img.youtube.com/vi/$videoId/0.jpg';
   }
-
 
   Future<void> launchURL(Uri url) async {
     if (!await launchUrl(url)) {
@@ -77,29 +78,31 @@ class _MeditationCycleState extends State<MeditationCycle> {
         child: Padding(
           padding: const EdgeInsets.only(right: 20, left: 20),
           child: SingleChildScrollView(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height - 250.h,
-                    child: Column(
-                      children: [
-                        spaceBetween,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            meditationCycleWidget(
-                                "Meditation Cycle",
-                                "${appLoginProvider.userData?.day ?? 0}",
-                                "${appLoginProvider.userData?.cycle ?? 0}",
-                                "${appLoginProvider.userData?.cycle ?? 0}"),
-                            Container(
-                              width: 2,
-                              height: 208,
-                              color: shadeEight,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                meditationFullTime.morningTimeTo== null ? ShimmerContainer(width: 90.w, height: 90.h):   Row(
+            child: Container(
+              height: MediaQuery.of(context).size.height - 250.h,
+              child: Column(
+                children: [
+                  spaceBetween,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      meditationCycleWidget(
+                          "Meditation Cycle",
+                          "${appLoginProvider.userData?.day ?? 0}",
+                          "${appLoginProvider.userData?.cycle ?? 0}",
+                          "${appLoginProvider.userData?.cycle ?? 0}"),
+                      Container(
+                        width: 2,
+                        height: 208,
+                        color: shadeEight,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          meditationFullTime.morningTimeTo == null
+                              ? ShimmerContainer(width: 90.w, height: 90.h)
+                              : Row(
                                   children: [
                                     timeSetup(
                                         "Morning",
@@ -129,11 +132,11 @@ class _MeditationCycleState extends State<MeditationCycle> {
                                               width: 4.w,
                                               color: isCurrentTimeBetween(
                                                       meditationFullTime
-                                                                  .morningTimeFrom ??
-                                                              "",
-                                                    meditationFullTime
-                                                                  .morningTimeTo ??
-                                                              "")
+                                                              .morningTimeFrom ??
+                                                          "",
+                                                      meditationFullTime
+                                                              .morningTimeTo ??
+                                                          "")
                                                   ? amberColor
                                                   : Colors.grey),
                                         ),
@@ -146,14 +149,16 @@ class _MeditationCycleState extends State<MeditationCycle> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 8),
-                                Container(
-                                  width: 176.w,
-                                  height: 1.h,
-                                  color: shadeEight,
-                                ),
-                                SizedBox(height: 8.h),
-                                meditationFullTime.morningTimeTo== null ? ShimmerContainer(width: 90.w, height: 90.h):  Row(
+                          SizedBox(height: 8),
+                          Container(
+                            width: 176.w,
+                            height: 1.h,
+                            color: shadeEight,
+                          ),
+                          SizedBox(height: 8.h),
+                          meditationFullTime.morningTimeTo == null
+                              ? ShimmerContainer(width: 90.w, height: 90.h)
+                              : Row(
                                   children: [
                                     timeSetup(
                                         "Evening",
@@ -209,107 +214,122 @@ class _MeditationCycleState extends State<MeditationCycle> {
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        spaceBetween,
-                        GestureDetector(
-                          onTap: () {
-                            final videoUrl = Uri.parse(meditationTimeData.video ?? "");
-                            meditationTimeData.video == null ?null: launchURL(videoUrl);
-                          },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(15.0),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                meditationTimeData.video == null ? ShimmerContainer(width: MediaQuery.of(context).size.width, height: 200.h): Container(
+                        ],
+                      ),
+                    ],
+                  ),
+                  spaceBetween,
+                  GestureDetector(
+                    onTap: () {
+                      final videoUrl =
+                          Uri.parse(meditationTimeData.video ?? "");
+                      meditationTimeData.video == null
+                          ? null
+                          : launchURL(videoUrl);
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          meditationTimeData.video == null
+                              ? ShimmerContainer(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 200.h)
+                              : Container(
                                   height: 210.h,
                                   width: MediaQuery.of(context).size.width,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       fit: BoxFit.cover,
                                       image: NetworkImage(
-                                          meditationTimeData.video == null ? imgFromFirebase:getYoutubeThumbnail(
-                                            meditationTimeData.video ?? ""),
+                                        meditationTimeData.video == null
+                                            ? imgFromFirebase
+                                            : getYoutubeThumbnail(
+                                                meditationTimeData.video ?? ""),
                                       ),
                                     ),
                                   ),
                                 ),
-                                meditationTimeData.video == null ? Container():Icon(
+                          meditationTimeData.video == null
+                              ? Container()
+                              : Icon(
                                   Icons.play_arrow,
                                   size: 50.0,
                                   color: Colors.white,
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Spacer(),
-                        SizedBox(
-                          height: 56.h,
-                          width: 304.w,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (flagModel.meditationFeePaymentStatus == true) {
-                                if (buttonStateNotifier.meditationDisable == false) {
-                                  if (isCurrentTimeBetween(meditationTimeData.fromTime ?? "", meditationTimeData.toTime ?? "")) {
-                                    slidePageRoute(context, TimerScreen());
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text("Sorry, you are not able to meditate now"),
-                                        backgroundColor: Colors.red,
-                                      ),
-                                    );
-                                  }
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text("Sorry, your meditation is already completed."),
-                                      backgroundColor: Colors.green,
-                                    ),
-                                  );
-                                }
-                              } else {
-                                appLoginProvider.currentIndex = 3;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    backgroundColor: Colors.red,
-                                    content: Text(enable),
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shadowColor: Colors.black,
-                              backgroundColor:
-                                  flagModel.meditationFeePaymentStatus == true
-                                      && buttonStateNotifier.meditationDisable != true
-                                      ? goldShade
-                                      : Colors.grey,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Start Meditation",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Spacer(),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
+                  Spacer(),
+                  SizedBox(
+                    height: 56.h,
+                    width: 304.w,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (flagModel.meditationFeePaymentStatus == true) {
+                          if (buttonStateNotifier.meditationDisable == false) {
+                            if (isCurrentTimeBetween(
+                                meditationTimeData.fromTime ?? "",
+                                meditationTimeData.toTime ?? "")) {
+                              slidePageRoute(context, TimerScreen());
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "Sorry, you are not able to meditate now"),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    "Sorry, your meditation is already completed."),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          }
+                        } else {
+                          appLoginProvider.currentIndex = 4;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(enable),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shadowColor: Colors.black,
+                        backgroundColor: flagModel.meditationFeePaymentStatus ==
+                                    true &&
+                                buttonStateNotifier.meditationDisable != true
+                            ? goldShade
+                            : Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Start Meditation",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Spacer(),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

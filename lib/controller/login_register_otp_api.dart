@@ -369,18 +369,20 @@ class AppLogin extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-
-
-  Future<void> otpVerification(BuildContext context, UserContactInfo data,String otp) async {
-
-    var otpData  = { "email":data.email??"0@gmail.com", "phone":data.phone??"000000000", "country":data.country,"otp":otp};
+  Future<void> otpVerification(
+      BuildContext context, UserContactInfo data, String otp) async {
+    var otpData = {
+      "email": data.email ?? "0@gmail.com",
+      "phone": data.phone ?? "000000000",
+      "country": data.country,
+      "otp": otp
+    };
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // var cookies = prefs.getString("cookie");
     final response = await http.post(Uri.parse("$userBaseUrl/verify-userotp"),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
         },
-
         body: jsonEncode(otpData));
 
     var decode = jsonDecode(response.body);
@@ -394,25 +396,37 @@ class AppLogin extends ChangeNotifier {
         prefs.setString("isAnswered", _userLoginData!.isans.toString());
         var isAnswered = prefs.getString("isAnswered");
         var fCMToken = prefs.getString("fCMToken");
-        if (fCMToken != null) {
-        }
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(
-        //     backgroundColor: Colors.green,
-        //     content: Text(decode["message"]),
-        //     duration: Duration(seconds: 2),
-        //   ),
-        // );
-        if (decode["verify"] == true){
+        if (fCMToken != null) {}
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Center(
+              child: Text(
+                decode["message"],
+                textAlign: TextAlign
+                    .center, // This ensures text remains centered in case of multi-line messages.
+              ),
+            ),
+            duration: Duration(seconds: 1),
+          ),
+        );
+
+        if (decode["verify"] == true) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-              isAnswered != "true" ? MeditationData() : CustomBottomNavBar(),
+              builder: (context) => isAnswered != "true"
+                  ? MeditationData()
+                  : CustomBottomNavBar(),
             ),
           );
-        }else{
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterPage(),));
+          print(decode["message"]);
+        } else {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RegisterPage(),
+              ));
         }
         // if (cookies == null || cookies == "" || cookies.isEmpty) {
         //   Navigator.pushReplacement(
@@ -436,13 +450,32 @@ class AppLogin extends ChangeNotifier {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red,
-            content: Text(decode["error"]),
+            content: Container(
+              alignment: Alignment.center, // Aligns the content to the center
+              child: Text(
+                decode["error"] ?? "Invalid OTP",
+                textAlign:
+                    TextAlign.center, // Center the text within the SnackBar
+                style: TextStyle(
+                  color: Colors
+                      .white, // Optional: change the text color for better visibility
+                ),
+              ),
+            ),
             duration: Duration(seconds: 1),
           ),
         );
       }
     } catch (e) {
       print("otpVerification : $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          content:
+              Text("An unexpected error occurred"), // Generic error message
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -509,7 +542,6 @@ class AppLogin extends ChangeNotifier {
     }
   }
 
-
   Future<void> sendOtp(BuildContext context, UserContactInfo data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // var cookies = prefs.getString("cookie");
@@ -523,8 +555,8 @@ class AppLogin extends ChangeNotifier {
         body: jsonEncode(data),
       );
 
-      var decode = jsonDecode(
-          response.body); // Correctly decode the response body
+      var decode =
+          jsonDecode(response.body); // Correctly decode the response body
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         if (decode["verify"] == true) {
@@ -537,8 +569,11 @@ class AppLogin extends ChangeNotifier {
           );
           print(decode);
         } else {
-          Navigator.pushReplacement( context,
-              MaterialPageRoute(builder: (context) => RegisterPage(),));
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RegisterPage(),
+              ));
         }
       } else {
         // Handle non-2xx status codes
@@ -564,12 +599,7 @@ class AppLogin extends ChangeNotifier {
   }
 }
 
-
-
-
-
-
-  class UserContactInfo {
+class UserContactInfo {
   final String? phone; // Optional
   final String? email; // Optional
   final String? country; // Optional
@@ -582,9 +612,9 @@ class AppLogin extends ChangeNotifier {
 
   Map<String, dynamic> toJson() {
     return {
-      'phone': phone??"0000000000",
-      'email': email??"0@gmail.com",
-      'country': country??"",
+      'phone': phone ?? "0000000000",
+      'email': email ?? "0@gmail.com",
+      'country': country ?? "",
     };
   }
 
