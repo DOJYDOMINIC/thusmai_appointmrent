@@ -13,7 +13,9 @@ class EventCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     // Check if the eventList is empty
     if (eventList.isEmpty) {
-      return Center(child: Text("No events available.")); // Placeholder when there are no events
+      return Center(
+          child: Text(
+              "No events available.")); // Placeholder when there are no events
     }
 
     return CarouselSlider.builder(
@@ -40,13 +42,134 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return Container(
+              height: MediaQuery.of(context).size.height *
+                  .6, // Adjust the height as needed
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      event.title != null
+                          ? Text(
+                              event.title!,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black, // Adjust the text color
+                              ),
+                            )
+                          : Text(
+                              'No title available',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue, // Adjust the text color
+                              ),
+                            ),
+                      SizedBox(height: 16),
+                      event.image != null
+                          ? Image.network(
+                              event.image!,
+                              width: 350, // Adjust the image width
+                              height: 220, // Adjust the image height
+                              fit: BoxFit.fill, // Adjust the image fit
+                            )
+                          : Container(), // Show the image if it's not null
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          event.date != null
+                              ? Text(
+                                  'Date: ${event.date}',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight
+                                          .bold // Adjust the text color
+                                      ),
+                                )
+                              : Text(
+                                  'No date available',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey, // Adjust the text color
+                                  ),
+                                ),
+                          SizedBox(width: 18),
+                          event.eventTime != null
+                              ? Text(
+                                  'Time: ${event.eventTime}',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : Text(
+                                  'No time available',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey, // Adjust the text color
+                                  ),
+                                ),
+                        ],
+                      ),
+                      SizedBox(height: 13),
+                      event.place != null
+                          ? Text(
+                              'Location: ${event.place}',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          : Text(
+                              'No location available',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey, // Adjust the text color
+                              ),
+                            ),
+                      SizedBox(height: 18),
+                      event.description != null
+                          ? Text(
+                              event.description!,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black, // Adjust the text color
+                              ),
+                            )
+                          : Text(
+                              'No description available',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey, // Adjust the text color
+                              ),
+                            ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
       },
       child: Card(
         color: shadeOne,
         elevation: 5,
-
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -61,11 +184,13 @@ class EventCard extends StatelessWidget {
                   bottomLeft: Radius.circular(8),
                 ),
                 child: Image.network(
-                  event.image ?? 'https://via.placeholder.com/150', // Placeholder if image is null
+                  event.image ??
+                      'https://via.placeholder.com/150', // Placeholder if image is null
                   fit: BoxFit.cover,
                   height: double.infinity,
                   errorBuilder: (context, error, stackTrace) {
-                    return Image.network('https://via.placeholder.com/150'); // Show placeholder on error
+                    return Image.network(
+                        'https://via.placeholder.com/150'); // Show placeholder on error
                   },
                 ),
               ),

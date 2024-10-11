@@ -14,12 +14,14 @@ import '../../constant/constant.dart';
 import '../../controller/login_register_otp_api.dart';
 import '../services/permition_service.dart';
 import 'otp_verification.dart';
+
 class LoginUpdate extends StatefulWidget {
   const LoginUpdate({Key? key}) : super(key: key);
 
   @override
   State<LoginUpdate> createState() => _LoginUpdateState();
 }
+
 class _LoginUpdateState extends State<LoginUpdate> {
   final smartAuth = SmartAuth();
   late final SmsRetriever smsRetriever;
@@ -44,7 +46,9 @@ class _LoginUpdateState extends State<LoginUpdate> {
   final TextEditingController _phoneController = TextEditingController();
 
   TextInputType getKeyboardType() {
-    return _selectedCountry?.name == "India" ? TextInputType.phone : TextInputType.emailAddress;
+    return _selectedCountry?.name == "India"
+        ? TextInputType.phone
+        : TextInputType.emailAddress;
   }
 
   List<TextInputFormatter> getInputFormatters() {
@@ -87,7 +91,6 @@ class _LoginUpdateState extends State<LoginUpdate> {
       for (var sim in _simCard) {
         print('Phone number available: ${sim.number}');
       }
-
     } on PlatformException catch (e) {
       debugPrint("Failed to get mobile number because of '${e.message}'");
     }
@@ -96,7 +99,6 @@ class _LoginUpdateState extends State<LoginUpdate> {
     setState(() {});
     fillCards();
   }
-
 
   // Future<void> initMobileNumberState() async {
   //
@@ -120,8 +122,8 @@ class _LoginUpdateState extends State<LoginUpdate> {
   Widget fillCards() {
     List<Widget> widgets = _simCard
         .map((SimCard sim) => Text(
-      'Sim Card Number: (${sim.countryPhonePrefix}) - ${sim.number}\nCarrier Name: ${sim.carrierName}\nCountry Iso: ${sim.countryIso}\nDisplay Name: ${sim.displayName}\nSim Slot Index: ${sim.slotIndex}\n\n',
-    ))
+              'Sim Card Number: (${sim.countryPhonePrefix}) - ${sim.number}\nCarrier Name: ${sim.carrierName}\nCountry Iso: ${sim.countryIso}\nDisplay Name: ${sim.displayName}\nSim Slot Index: ${sim.slotIndex}\n\n',
+            ))
         .toList();
     return Column(children: widgets);
   }
@@ -150,7 +152,9 @@ class _LoginUpdateState extends State<LoginUpdate> {
   Widget build(BuildContext context) {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     final bottomNavBarHeight = MediaQuery.of(context).padding.bottom;
-    final screen = MediaQuery.of(context).size.height - statusBarHeight + bottomNavBarHeight;
+    final screen = MediaQuery.of(context).size.height -
+        statusBarHeight +
+        bottomNavBarHeight;
     ScreenUtil.init(context, designSize: const Size(400, 880));
 
     return GestureDetector(
@@ -220,7 +224,8 @@ class _LoginUpdateState extends State<LoginUpdate> {
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
                               color: darkShade,
-                              borderRadius: BorderRadius.all(Radius.circular(radiusData)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(radiusData)),
                               border: Border.all(color: goldShade),
                             ),
                             child: Row(
@@ -230,10 +235,12 @@ class _LoginUpdateState extends State<LoginUpdate> {
                                     showCountryPicker(
                                       favorite: ['IN'],
                                       context: context,
-                                      showPhoneCode: false, // Set to true if you want to show phone code
+                                      showPhoneCode:
+                                          false, // Set to true if you want to show phone code
                                       onSelect: (Country country) {
                                         setState(() {
-                                          _selectedCountry = country; // Update selected country
+                                          _selectedCountry =
+                                              country; // Update selected country
                                         });
                                       },
                                     );
@@ -244,8 +251,12 @@ class _LoginUpdateState extends State<LoginUpdate> {
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
-                                            _selectedCountry?.flagEmoji ?? "", // Displays the flag emoji or 'Country' if null
-                                            style: TextStyle(color: Colors.white, fontSize: 24), // Adjust font size as needed
+                                            _selectedCountry?.flagEmoji ??
+                                                "", // Displays the flag emoji or 'Country' if null
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize:
+                                                    24), // Adjust font size as needed
                                           ),
                                         ),
                                       if (_selectedCountry == null)
@@ -264,16 +275,27 @@ class _LoginUpdateState extends State<LoginUpdate> {
                                   ),
                                 ),
                                 SizedBox(width: 8.w),
-                                Container(height: 45.h, width: 1, color: goldShade.withOpacity(.5)),
+                                Container(
+                                    height: 45.h,
+                                    width: 1,
+                                    color: goldShade.withOpacity(.5)),
                                 SizedBox(width: 16.w),
                                 Expanded(
                                   child: TextFormField(
-                                    autofillHints:  [AutofillHints.telephoneNumber],
-                                    controller: _selectedCountry?.name == "India" ? _phoneController : null, // Use the controller for India
-                                    keyboardType: getKeyboardType(), // Dynamically set keyboard type
-                                    inputFormatters: getInputFormatters(), // Dynamically set input formatters
+                                    autofillHints: [
+                                      AutofillHints.telephoneNumber
+                                    ],
+                                    controller: _selectedCountry?.name ==
+                                            "India"
+                                        ? _phoneController
+                                        : null, // Use the controller for India
+                                    keyboardType:
+                                        getKeyboardType(), // Dynamically set keyboard type
+                                    inputFormatters:
+                                        getInputFormatters(), // Dynamically set input formatters
                                     validator: (value) {
-                                      if (value == null || value.trim().isEmpty) {
+                                      if (value == null ||
+                                          value.trim().isEmpty) {
                                         return _selectedCountry?.name == "India"
                                             ? 'Please enter your phone'
                                             : 'Please enter your email';
@@ -282,13 +304,15 @@ class _LoginUpdateState extends State<LoginUpdate> {
                                         if (value.trim().length != 10) {
                                           return 'Please enter a valid 10-digit phone number';
                                         }
-                                      } else if (!EmailValidator.validate(value.trim())) {
+                                      } else if (!EmailValidator.validate(
+                                          value.trim())) {
                                         return 'Please enter a valid email';
                                       }
                                       return null;
                                     },
                                     onChanged: (value) {
-                                      _inputValue = value.replaceAll(' ', '').trim();
+                                      _inputValue =
+                                          value.replaceAll(' ', '').trim();
                                     },
                                     style: TextStyle(
                                       color: Colors.white,
@@ -296,7 +320,10 @@ class _LoginUpdateState extends State<LoginUpdate> {
                                     ),
                                     cursorColor: Colors.white,
                                     decoration: InputDecoration(
-                                      hintText: _selectedCountry?.name == "India" ? "Phone" : "Email",
+                                      hintText:
+                                          _selectedCountry?.name == "India"
+                                              ? "Phone"
+                                              : "Email",
                                       hintStyle: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.normal,
@@ -304,7 +331,8 @@ class _LoginUpdateState extends State<LoginUpdate> {
                                       fillColor: darkShade,
                                       filled: true,
                                       border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(radiusData)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(radiusData)),
                                         borderSide: BorderSide.none,
                                       ),
                                     ),
@@ -322,12 +350,17 @@ class _LoginUpdateState extends State<LoginUpdate> {
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
                                   _formKey.currentState!.save();
-                                  Provider.of<AppLogin>(context, listen: false).sendOtp(
+                                  Provider.of<AppLogin>(context, listen: false)
+                                      .sendOtp(
                                     context,
                                     UserContactInfo(
-                                      phone: _selectedCountry?.name == "India" ? _inputValue : null,
+                                      phone: _selectedCountry?.name == "India"
+                                          ? _inputValue
+                                          : null,
                                       country: _selectedCountry?.name,
-                                      email: _selectedCountry?.name != "India" ? _inputValue : null,
+                                      email: _selectedCountry?.name != "India"
+                                          ? _inputValue
+                                          : null,
                                     ),
                                   );
                                 }
@@ -343,7 +376,8 @@ class _LoginUpdateState extends State<LoginUpdate> {
                               child: Center(
                                 child: Text(
                                   "Proceed",
-                                  style: TextStyle(color: Colors.black, fontSize: 14.sp),
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 14.sp),
                                 ),
                               ),
                             ),
@@ -361,4 +395,3 @@ class _LoginUpdateState extends State<LoginUpdate> {
     );
   }
 }
-

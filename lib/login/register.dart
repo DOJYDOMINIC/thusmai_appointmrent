@@ -49,7 +49,8 @@ class _RegisterPageState extends State<RegisterPage> {
   String _inputValue = '';
   double radiusData = 16.sp;
 
-  final TextEditingController _phoneController = TextEditingController(text: "");
+  final TextEditingController _phoneController =
+      TextEditingController(text: "");
 
   TextInputType getKeyboardType() {
     return _selectedCountry?.name == "India"
@@ -82,10 +83,15 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  // Validation helper function
+  // Validation helper function to restrict special characters and spaces
   String? validateField(String? value, String fieldName) {
-    if (value == null || value.isEmpty) {
+    final RegExp nameRegExp =
+        RegExp(r"^[A-Za-z\s]+$"); // Only allows alphabets and spaces
+    if (value == null || value.trim().isEmpty) {
       return '$fieldName is required';
+    }
+    if (!nameRegExp.hasMatch(value.trim())) {
+      return '$fieldName can only contain alphabets and spaces';
     }
     return null;
   }
@@ -127,7 +133,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           padding: true,
                           hintText: 'First name',
                           controller: _firstName,
-                          validator: (value) => validateField(value, 'First name'),
+                          validator: (value) =>
+                              validateField(value, 'First name'),
+                          required: true,
                         ),
                       ),
                       Padding(
@@ -136,7 +144,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           padding: true,
                           hintText: 'Last name',
                           controller: _lastName,
-                          validator: (value) => validateField(value, 'Last name'),
+                          validator: (value) =>
+                              validateField(value, 'Last name'),
+                          required: true,
                         ),
                       ),
                       Padding(
@@ -154,6 +164,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             }
                             return null;
                           },
+                          required: true,
                         ),
                       ),
                       Padding(
@@ -163,7 +174,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             Expanded(
                               flex: 1,
                               child: DatePickerField(
-                                hintText: 'DOB',
+                                hintText: 'Date of Birth',
                                 controller: _dateController,
                               ),
                             ),
@@ -205,17 +216,27 @@ class _RegisterPageState extends State<RegisterPage> {
                             decoration: BoxDecoration(
                               color: profileTextFieldDillColor,
                               border: Border.all(color: shadeNine),
-                              borderRadius: BorderRadius.all(Radius.circular(16)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16)),
                             ),
                             child: Row(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
                                   child: Text(
                                     "${_selectedCountry?.name ?? "Select Country"}",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.normal),
+                                    style: TextStyle(
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.normal),
                                   ),
+                                ),
+                                Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child:
+                                      Icon(Icons.arrow_drop_down, size: 18.sp),
                                 ),
                               ],
                             ),
@@ -227,7 +248,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: Container(
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(radiusData)),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(radiusData)),
                           ),
                           child: Row(
                             children: [
@@ -235,13 +257,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                 decoration: BoxDecoration(
                                   color: profileTextFieldDillColor,
                                   border: Border.all(color: shadeNine),
-                                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16)),
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 8.sp),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.sp),
                                   child: Text(
                                     _selectedCountry?.flagEmoji ?? "🇮🇳",
-                                    style: TextStyle(color: Colors.white, fontSize: 36),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 36),
                                   ),
                                 ),
                               ),
@@ -249,6 +274,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               Expanded(
                                 child: CustomTextField(
                                   hintText: 'Phone',
+                                  required: true,
                                   padding: true,
                                   controller: _phone,
                                   validator: (value) {
@@ -259,9 +285,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                       if (value.trim().length != 10) {
                                         return 'Please enter a valid 10-digit phone number';
                                       }
-                                    }else{
-                                      if (value.trim().length >= 9 && value.trim().length <= 13){
-                                        return 'Please enter a valid number';
+                                    } else {
+                                      if (value.trim().length < 9 ||
+                                          value.trim().length > 13) {
+                                        return 'Please enter a valid phone number with 9-13 digits';
                                       }
                                     }
                                     return null;
@@ -275,10 +302,17 @@ class _RegisterPageState extends State<RegisterPage> {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 8.sp),
                         child: DropdownTextField(
-                          hintText: 'Select language for Zoom class',
+                          hintText: 'Select language for Online Zoom class',
                           controller: _zoomlanguage,
-                          items: ['English', 'Hindi', 'Kannada', 'Malayalam', 'Tamil', 'Telugu'],
-                          dropdownHint: 'Select language',
+                          items: [
+                            'English',
+                            'Hindi',
+                            'Kannada',
+                            'Malayalam',
+                            'Tamil',
+                            'Telugu'
+                          ],
+                          dropdownHint: 'Select language for Zoom class',
                           onItemSelected: (val) => print(val.toString()),
                         ),
                       ),
@@ -294,7 +328,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: ElevatedButton(
                           onPressed: () async {
                             if (_formKey.currentState?.validate() ?? false) {
-                              await ApiService().registerUser(
+                              await ApiService()
+                                  .registerUser(
                                 firstName: _firstName.text,
                                 lastName: _lastName.text,
                                 email: _email.text,
@@ -306,9 +341,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                 refId: '00000',
                                 languages: _zoomlanguage.text,
                                 remark: _rematrk.text,
-                                profilePic: null, context: context,
-                              ).then((value) {
-                              },);
+                                profilePic: null,
+                                context: context,
+                              )
+                                  .then((dynamic value) {
+                                print(
+                                    'Response: $value'); // Print the response in console
+                              }).catchError((error) {
+                                print(
+                                    'Error: $error'); // Print any error in console
+                              });
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -322,12 +364,15 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Submit", style: TextStyle(color: darkShade)),
+                              Text("Submit",
+                                  style: TextStyle(color: darkShade)),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(height: 36.h,)
+                      SizedBox(
+                        height: 36.h,
+                      )
                     ],
                   ),
                 ),
@@ -350,8 +395,10 @@ class CurvedBottomClipper extends CustomClipper<Path> {
 
     // Draw a quadratic curve for the curved bottom
     path.quadraticBezierTo(
-      controlPoint.dx, controlPoint.dy,
-      endPoint.dx, endPoint.dy,
+      controlPoint.dx,
+      controlPoint.dy,
+      endPoint.dx,
+      endPoint.dy,
     );
 
     path.lineTo(size.width, 0); // Complete the path by going to the top-right

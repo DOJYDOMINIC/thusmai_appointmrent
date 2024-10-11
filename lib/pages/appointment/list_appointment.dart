@@ -41,7 +41,8 @@ class _AppointmentListPageState extends State<AppointmentListPage>
     // Initialize the AnimationController
     _controller = AnimationController(
       vsync: this, // SingleTickerProviderStateMixin provides vsync
-      duration: const Duration(milliseconds: 500), // Duration of one heartbeat cycle
+      duration:
+          const Duration(milliseconds: 500), // Duration of one heartbeat cycle
     )..repeat(
         reverse:
             true); // Repeat the animation in reverse to create a heartbeat effect
@@ -59,7 +60,7 @@ class _AppointmentListPageState extends State<AppointmentListPage>
     Provider.of<AppointmentController>(context, listen: false)
         .termsAndCondition();
     // Provider.of<ConnectivityProvider>(context, listen: false).status;
-    Provider.of<AppointmentController>(context,listen: false).disableDates();
+    Provider.of<AppointmentController>(context, listen: false).disableDates();
   }
 
   @override
@@ -126,134 +127,129 @@ class _AppointmentListPageState extends State<AppointmentListPage>
     bool dataPayment = flagModel.meditationFeePaymentStatus ?? false;
     return Scaffold(
       backgroundColor: shadeOne,
-      body:  pro.appointments.isEmpty
-              ? Center(
-                  child: Text(
-                    bookAppointment,
-                    style: TextStyle(
-                        fontSize: 24.sp, color: Color.fromRGBO(67, 44, 0, .3)),
-                  ),
-                )
-              : ListView.builder(
-                  itemCount: pro.appointments.length,
-                  itemBuilder: (context, index) {
-                    final appointment =
-                        pro.appointments.reversed.toList()[index];
-                    return Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            appointment.appointmentStatus == "Not Arrived"
-                                ? slidePageRoute(
-                                    context,
-                                    AppointmentShare(appointment: appointment),
-                                  )
-                                : null;
-                          },
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: ListTile(
-                                  title: Text(
-                                    'Booking Date (${appointment.registerDate ?? 'N/A'})',
-                                    style: TextStyle(
-                                        color: darkShade, fontSize: 16.sp),
-                                  ),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Check-in date : ${appointment.appointmentDate ?? 'N/A'}',
-                                        style: TextStyle(
-                                            color: shadeTen, fontSize: 13.sp),
-                                      ),
-                                      Text(
-                                        'Check-out date : ${appointment.checkOut ?? 'N/A'}',
-                                        style: TextStyle(
-                                            color: shadeTen, fontSize: 13.sp),
-                                      ),
-                                      Text(
-                                        'No. of people : ${appointment.numOfPeople}',
-                                        style: TextStyle(
-                                            color: shadeTen, fontSize: 13.sp),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+      body: pro.appointments.isEmpty
+          ? Center(
+              child: Text(
+                bookAppointment,
+                style: TextStyle(
+                    fontSize: 24.sp, color: Color.fromRGBO(67, 44, 0, .3)),
+              ),
+            )
+          : ListView.builder(
+              itemCount: pro.appointments.length,
+              itemBuilder: (context, index) {
+                final appointment = pro.appointments.reversed.toList()[index];
+                return Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        appointment.appointmentStatus == "Not Arrived"
+                            ? slidePageRoute(
+                                context,
+                                AppointmentShare(appointment: appointment),
+                              )
+                            : null;
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: ListTile(
+                              title: Text(
+                                'Booking Date (${appointment.registerDate ?? 'N/A'})',
+                                style: TextStyle(
+                                    color: darkShade, fontSize: 16.sp),
                               ),
-                              appointment.appointmentStatus == "Not Arrived"
-                                  ? Row(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              0.sp, 10, 0, 0),
-                                          child: IconButton(
-                                              onPressed: () {
-                                                slidePageRoute(
-                                                    context,
-                                                    AppointmentEditPage(
-                                                        data: appointment));
-                                              },
-                                              icon: Icon(Icons.edit,
-                                                  color: shadeTen)),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              0.sp, 10, 0, 0),
-                                          child: IconButton(
-                                            onPressed: () async {
-                                              await _authenticate(
-                                                  appointment.id.toString());
-                                            },
-                                            icon:
-                                                Icon(Icons.delete, color: red),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : GestureDetector(
-                                      onTap: () {
-                                        slidePageRoute(context,
-                                            FeedBack(id: appointment.id));
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            right: 16.sp, top: 8.sp),
-                                        child: Container(
-                                          height: 24,
-                                          width: 87,
-                                          child: Center(
-                                              child: Text(
-                                            "Feedback",
-                                            style: TextStyle(
-                                                color: darkShade,
-                                                fontSize: 12.sp),
-                                          )),
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                              border:
-                                                  Border.all(color: goldShade)),
-                                        ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Check-in date : ${appointment.appointmentDate ?? 'N/A'}',
+                                    style: TextStyle(
+                                        color: shadeTen, fontSize: 13.sp),
+                                  ),
+                                  Text(
+                                    'Check-out date : ${appointment.checkOut ?? 'N/A'}',
+                                    style: TextStyle(
+                                        color: shadeTen, fontSize: 13.sp),
+                                  ),
+                                  Text(
+                                    'No. of people : ${appointment.numOfPeople}',
+                                    style: TextStyle(
+                                        color: shadeTen, fontSize: 13.sp),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          appointment.appointmentStatus == "Not Arrived"
+                              ? Row(
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(0.sp, 10, 0, 0),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            slidePageRoute(
+                                                context,
+                                                AppointmentEditPage(
+                                                    data: appointment));
+                                          },
+                                          icon: Icon(Icons.edit,
+                                              color: shadeTen)),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(0.sp, 10, 0, 0),
+                                      child: IconButton(
+                                        onPressed: () async {
+                                          await _authenticate(
+                                              appointment.id.toString());
+                                        },
+                                        icon: Icon(Icons.delete, color: red),
                                       ),
                                     ),
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          color: shadeFour,
-                          thickness: 1,
-                        ),
-                        if (index ==
-                            pro.appointments.length -
-                                1) // Add SizedBox only for the last item
-                          SizedBox(height: 70.h),
-                      ],
-                    );
-                  },
-                ),
+                                  ],
+                                )
+                              : GestureDetector(
+                                  onTap: () {
+                                    slidePageRoute(
+                                        context, FeedBack(id: appointment.id));
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        right: 16.sp, top: 8.sp),
+                                    child: Container(
+                                      height: 24,
+                                      width: 87,
+                                      child: Center(
+                                          child: Text(
+                                        "Feedback",
+                                        style: TextStyle(
+                                            color: darkShade, fontSize: 12.sp),
+                                      )),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          border: Border.all(color: goldShade)),
+                                    ),
+                                  ),
+                                ),
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      color: shadeFour,
+                      thickness: 1,
+                    ),
+                    if (index ==
+                        pro.appointments.length -
+                            1) // Add SizedBox only for the last item
+                      SizedBox(height: 70.h),
+                  ],
+                );
+              },
+            ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -321,7 +317,7 @@ class _AppointmentListPageState extends State<AppointmentListPage>
             backgroundColor: dataPayment == false ? Colors.grey : goldShade,
             onPressed: dataPayment == false
                 ? () {
-                    appLogin.currentIndex = 3;
+                    appLogin.currentIndex = 4;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: Colors.red,

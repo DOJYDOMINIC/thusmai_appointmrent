@@ -16,12 +16,12 @@ class ReferPage extends StatefulWidget {
 }
 
 class _ReferPageState extends State<ReferPage> {
-
   @override
   void initState() {
     super.initState();
-    Provider.of<ProfileController>(context,listen: false).getBankDetails();
+    Provider.of<ProfileController>(context, listen: false).getBankDetails();
   }
+
   @override
   Widget build(BuildContext context) {
     var pro = Provider.of<AppLogin>(context);
@@ -29,7 +29,11 @@ class _ReferPageState extends State<ReferPage> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Profile(),));
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Profile(),
+                  ));
             },
             icon: Icon(
               Icons.arrow_back,
@@ -48,7 +52,7 @@ class _ReferPageState extends State<ReferPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Transform.rotate(
-              angle:12, // Specify the angle in radians
+              angle: 12, // Specify the angle in radians
               child: SvgPicture.asset(
                 megaphone,
                 color: darkShade,
@@ -56,20 +60,31 @@ class _ReferPageState extends State<ReferPage> {
                 height: 80.h,
               ),
             ),
-            Text("Refer your friends and family to find the inner peace in them.",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
-            SizedBox(height: 16.h,),
-            Text("Lorem ipsum dolor sit amet consectetur. Nibh duis diam dignissim turpis lorem gravida enim sed tincidunt. Arcu tortor odio facilisis viverra feugiat vel auctor diam. ",textAlign: TextAlign.center,style: TextStyle(fontSize: 16)),
+            Text(
+              "✨ Bring a Friend, Elevate Together! ✨",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+            ),
+            SizedBox(
+              height: 16.h,
+            ),
+            Text(
+                "Refer a friend to our spiritual family, and watch your blessings multiply as you both embark on a transformative journey filled with joy and enlightenment!",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16)),
             SizedBox(
               height: 40.h,
             ),
             SizedBox(
               height: 56.h,
               child: ElevatedButton(
-                onPressed: (){
-                    Share.share('$coreUrl/?id=${pro.userData?.uId}', subject:  'Thasmai');
+                onPressed: () {
+                  Share.share('$coreUrl/?id=${pro.userData?.uId}',
+                      subject: 'Thasmai');
                 },
                 style: ElevatedButton.styleFrom(
-                  shadowColor: Colors.black, backgroundColor: goldShade,
+                  shadowColor: Colors.black,
+                  backgroundColor: goldShade,
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100),
@@ -92,4 +107,3 @@ class _ReferPageState extends State<ReferPage> {
     );
   }
 }
-

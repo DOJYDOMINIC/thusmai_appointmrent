@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_common/get_reset.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../constant/constant.dart';
 
@@ -16,7 +17,8 @@ class BlogImageCarousel extends StatelessWidget {
       {super.key,
       required this.blogsList,
       required this.titleName,
-      required this.backgroundColor, required this.second});
+      required this.backgroundColor,
+      required this.second});
 
   // Method to show the bottom sheet with blog details
   void _showBlogDetails(BuildContext context, dynamic blog) {
@@ -91,11 +93,15 @@ class BlogImageCarousel extends StatelessWidget {
   }
 
   // Helper method to build each carousel item
-  Widget _buildCarouselItem(BuildContext context, dynamic blog, int index,) {
+  Widget _buildCarouselItem(
+    BuildContext context,
+    dynamic blog,
+    int index,
+  ) {
     return GestureDetector(
       onTap: () => _showBlogDetails(context, blog),
       child: Padding(
-        padding: EdgeInsets.all( 8.sp),
+        padding: EdgeInsets.all(8.sp),
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.withOpacity(.5)),
@@ -124,14 +130,14 @@ class BlogImageCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 18.sp,vertical: 10.sp),
+        padding: EdgeInsets.symmetric(horizontal: 18.sp, vertical: 10.sp),
         child: Container(
             decoration: BoxDecoration(
                 color: backgroundColor,
                 borderRadius: const BorderRadius.all(Radius.circular(8))),
             child: Column(children: [
               Padding(
-                padding:  EdgeInsets.all(8.sp),
+                padding: EdgeInsets.all(8.sp),
                 child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(titleName,
@@ -185,6 +191,111 @@ class BlogImageCarousel extends StatelessWidget {
               "No Data",
               style: TextStyle(fontSize: 16.sp),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class VideoImageCarousel extends StatelessWidget {
+  final List<dynamic> videoList;
+  final String titleName;
+  final Color backgroundColor;
+  final int second;
+
+  VideoImageCarousel({
+    super.key,
+    required this.videoList,
+    required this.titleName,
+    required this.backgroundColor,
+    required this.second,
+  });
+
+  // Helper method to build each carousel item
+  Widget _buildCarouselItem(BuildContext context, dynamic video, int index) {
+    return GestureDetector(
+      onTap: () {
+        launch(video.videoLink ?? '');
+      },
+      child: Padding(
+        padding: EdgeInsets.all(8.sp),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.withOpacity(.5)),
+            borderRadius: BorderRadius.circular(8),
+            image: video.videoLink != null
+                ? DecorationImage(
+                    fit: BoxFit.fill,
+                    image: NetworkImage(
+                        getYoutubeThumbnail(video.videoLink.toString())),
+                  )
+                : null,
+          ),
+          child: video.videoLink == null
+              ? Center(
+                  child: Text(
+                    "No Image Available",
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : null,
+        ),
+      ),
+    );
+  }
+
+  String getYoutubeThumbnail(String videoLink) {
+    if (videoLink.isEmpty) {
+      return 'no_image'; // replace with your default image
+    }
+    final uri = Uri.parse(videoLink);
+    final videoId =
+        uri.queryParameters['v']?.trim() ?? uri.pathSegments.last.trim();
+    return 'https://img.youtube.com/vi/$videoId/0.jpg';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 18.sp, vertical: 10.sp),
+        child: Container(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.sp),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    titleName,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              CarouselSlider.builder(
+                itemCount: videoList.length,
+                itemBuilder: (context, index, _) {
+                  return _buildCarouselItem(context, videoList[index], index);
+                },
+                options: CarouselOptions(
+                  aspectRatio: 1.2,
+                  viewportFraction: 1,
+                  enableInfiniteScroll: videoList.length > 1,
+                  autoPlay: videoList.length > 1,
+                  autoPlayInterval: Duration(milliseconds: second),
+                  scrollDirection: Axis.vertical,
+                ),
+              ),
+            ],
           ),
         ),
       ),

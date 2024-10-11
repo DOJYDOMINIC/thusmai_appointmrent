@@ -15,12 +15,11 @@ class MeditationData extends StatefulWidget {
 }
 
 class _MeditationDataState extends State<MeditationData> {
-
   @override
   void initState() {
     super.initState();
     FirebaseApi().initNotifications();
-    Provider.of<AppLogin>(context,listen: false).listQuestions();
+    Provider.of<AppLogin>(context, listen: false).listQuestions();
   }
 
   @override
@@ -31,7 +30,9 @@ class _MeditationDataState extends State<MeditationData> {
     final statusBarHeight = MediaQuery.of(context).padding.top;
     // Get the height of the bottom navigation bar (if present)
     final bottomNavBarHeight = MediaQuery.of(context).padding.bottom;
-    final screen = MediaQuery.of(context).size.height- statusBarHeight + bottomNavBarHeight;
+    final screen = MediaQuery.of(context).size.height -
+        statusBarHeight +
+        bottomNavBarHeight;
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -120,7 +121,7 @@ class _MeditationDataState extends State<MeditationData> {
                               Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "Reference : N/A",
+                                    "Referral : N/A",
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),
@@ -142,14 +143,14 @@ class _MeditationDataState extends State<MeditationData> {
                             child: Column(
                               children: [
                                 Text(
-                                  "${pro.listQuestion.question??"N/A"}",
+                                  "${pro.listQuestion.question ?? "N/A"}",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 SizedBox(
                                   height: 16.h,
                                 ),
                                 Text(
-                                  "Please drag and arrange your opnion from the list below in an orderly manner.",
+                                  "Please drag and arrange your opinion from the list below in an orderly manner.",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 SizedBox(
@@ -159,7 +160,9 @@ class _MeditationDataState extends State<MeditationData> {
                                   child: ReorderableListView(
                                     onReorder: pro.updateMyTile,
                                     children: [
-                                      for (int i = 0; i < pro.myTiles.length; i++)
+                                      for (int i = 0;
+                                          i < pro.myTiles.length;
+                                          i++)
                                         Column(
                                           key: ValueKey(pro.myTiles[i]),
                                           children: [
@@ -212,7 +215,7 @@ class _MeditationDataState extends State<MeditationData> {
                         width: 304.w,
                         child: ElevatedButton(
                           onPressed: () {
-                            pro.meditationData(context,pro.myTiles );
+                            pro.meditationData(context, pro.myTiles);
                             // print(pro.myTiles);
                             Navigator.pushReplacement(
                                 context,
@@ -221,7 +224,8 @@ class _MeditationDataState extends State<MeditationData> {
                                 ));
                           },
                           style: ElevatedButton.styleFrom(
-                            shadowColor: Colors.black, backgroundColor: goldShade,
+                            shadowColor: Colors.black,
+                            backgroundColor: goldShade,
                             elevation: 4,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(100),

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:thusmai_appointmrent/constant/constant.dart';
 import 'package:thusmai_appointmrent/controller/payment_controller.dart';
+import 'package:thusmai_appointmrent/controller/videoplayer_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../controller/connectivitycontroller.dart';
 import '../../controller/disable_meditation.dart';
@@ -22,6 +23,7 @@ import '../../widgets/homeboxes.dart';
 import '../../widgets/popup_widget.dart';
 import '../profile/profile.dart';
 import '../refreshpage.dart';
+import 'dart:math';
 
 class Overview extends StatefulWidget {
   const Overview({super.key});
@@ -42,7 +44,8 @@ class _OverviewState extends State<Overview>
     Provider.of<ButtonStateNotifier>(context, listen: false).loadButtonState();
     Provider.of<AppLogin>(context, listen: false).validateSession(context);
     Provider.of<ZoomMeetingController>(context, listen: false).zoomClass();
-    Provider.of<PaymentController>(context, listen: false).financialConfiguration();
+    Provider.of<PaymentController>(context, listen: false)
+        .financialConfiguration();
     _timer = Timer.periodic(Duration(minutes: 15), (timer) {
       Provider.of<ZoomMeetingController>(context, listen: false).zoomClass();
     });
@@ -164,8 +167,14 @@ class _OverviewState extends State<Overview>
     // String capitalizedLastName = lastName != null
     //     ? lastName[0].toUpperCase() + lastName.substring(1)
     //     : ""; // Capitalize the first letter of last name if not null
+
+    print("Zoom link: ${zoomMeet.zoomLink}");
+    // print("Stop time: ${zoomMeet.zoomStopTime}");
+    // print(
+    //     "isBeforeStopTime result: ${isBeforeStopTime(zoomMeet.zoomStopTime.toString())}");
+
     return Scaffold(
-      floatingActionButton: flagModel.maintenancePaymentStatus == false
+      floatingActionButton: flagModel.maintenancePaymentStatus == true
           ? null
           : zoomMeet.zoomLink == ""
               ? null
@@ -201,7 +210,7 @@ class _OverviewState extends State<Overview>
                               onPressed:
                                   flagModel.meditationFeePaymentStatus == false
                                       ? () {
-                                          appLogin.currentIndex = 3;
+                                          appLogin.currentIndex = 4;
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(
@@ -352,7 +361,7 @@ class _OverviewState extends State<Overview>
                       onTap: () {
                         indexProvider.currentIndex = 2;
                       },
-                      currentCycle: appLogin.userData?.cycle ?? 0,
+                      //currentCycle: appLogin.userData?.cycle ?? 0,
                       daysCompleted: appLogin.userData?.day ?? 0,
                     ),
                   ),
@@ -369,9 +378,16 @@ class _OverviewState extends State<Overview>
               ),
               Row(
                 children: [
-                  BlogImageCarousel(
-                    blogsList: eventLIst,
-                    titleName: 'Recent Events',
+                  VideoImageCarousel(
+                    videoList: Provider.of<VideoPlayerStateController>(context)
+                        .videoPlayList
+                        .sublist(max(
+                            0,
+                            Provider.of<VideoPlayerStateController>(context)
+                                    .videoPlayList
+                                    .length -
+                                3)),
+                    titleName: 'Recent Videos',
                     backgroundColor: sliderBackground2,
                     second: 3500,
                   ),
@@ -383,12 +399,13 @@ class _OverviewState extends State<Overview>
                       title: "t-tok and Guruji",
                       background: messageGuruColor,
                       valueData: false,
-                      dataStringOne: "Connecting Hearts and ",
-                      dataStringTwo: "Minds Across the Globe",
+                      dataStringOne: "",
+                      dataStringTwo:
+                          "Connecting Hearts and \n Minds Across the Globe",
                       onTap: () {
                         indexProvider.currentIndex = 3;
                       },
-                      currentCycle: appLogin.userData?.cycle ?? 0,
+                      // currentCycle: appLogin.userData?.cycle ?? 0,
                       daysCompleted: appLogin.userData?.day ?? 0,
                     ),
                   ),
@@ -397,14 +414,14 @@ class _OverviewState extends State<Overview>
               SizedBox(
                 height: 8,
               ),
-
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 child: SizedBox(
                     height: 150,
                     width: MediaQuery.of(context).size.width,
-
-                    child: EventCarousel(eventList: eventLIst,)),
+                    child: EventCarousel(
+                      eventList: eventLIst,
+                    )),
               )
             ],
           ),

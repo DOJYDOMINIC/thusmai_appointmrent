@@ -14,13 +14,13 @@ class MeditationLog extends StatefulWidget {
 }
 
 class _MeditationLogState extends State<MeditationLog> {
-
   @override
   void initState() {
     super.initState();
     final DateTime now = DateTime.now();
     // WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<MeditationController>(context, listen: false).meditatedDates("1");
+    Provider.of<MeditationController>(context, listen: false)
+        .meditatedDates("1");
     // });
   }
 
@@ -29,12 +29,17 @@ class _MeditationLogState extends State<MeditationLog> {
     var meditation = Provider.of<MeditationController>(context);
     var data = meditation.medDates;
     // Find the minimum date from your data
-    DateTime minDate = DateTime.now(); // Initialize with current date as fallback,
+    DateTime minDate =
+        DateTime.now(); // Initialize with current date as fallback,
     if (data.isNotEmpty) {
-      minDate = data.map((item) => DateTime.parse(item.medStarttime.toString())).reduce((value, element) => value.isBefore(element) ? value : element);
+      minDate = data
+          .map((item) => DateTime.parse(item.medStarttime.toString()))
+          .reduce(
+              (value, element) => value.isBefore(element) ? value : element);
     }
     // Calculate the number of days to display in the calendar
-    DateTime startDate = minDate.subtract(Duration(days: 1)); // Subtract one day to include the starting date
+    DateTime startDate = minDate.subtract(
+        Duration(days: 1)); // Subtract one day to include the starting date
 
     return Scaffold(
       backgroundColor: shadeOne,
@@ -76,24 +81,28 @@ class _MeditationLogState extends State<MeditationLog> {
                 // physics: NeverScrollableScrollPhysics(),
                 crossAxisCount: 5,
                 children: List.generate(
-                  data.length+meditation.redCount,
-                      (index) {
+                  data.length + meditation.redCount,
+                  (index) {
                     DateTime currentDate = startDate.add(Duration(days: index));
                     bool isGreen = data.any((item) {
                       if (item.medStarttime != null) {
-                        DateTime medDate = DateTime.parse(item.medStarttime.toString());
-                        return medDate.day == currentDate.day && medDate.month == currentDate.month;
+                        DateTime medDate =
+                            DateTime.parse(item.medStarttime.toString());
+                        return medDate.day == currentDate.day &&
+                            medDate.month == currentDate.month;
                       }
                       return false;
                     });
-                    String formattedDate = DateFormat('MMM\ndd').format(currentDate);
+                    String formattedDate =
+                        DateFormat('MMM\ndd').format(currentDate);
 
                     return Padding(
                       padding: const EdgeInsets.all(4),
                       child: Container(
                         width: 64.w,
                         decoration: BoxDecoration(
-                          color: isGreen ? meditationLogGreen : meditationLogRed,
+                          color:
+                              isGreen ? meditationLogGreen : meditationLogRed,
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Center(
@@ -116,22 +125,24 @@ class _MeditationLogState extends State<MeditationLog> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Spacer(flex: 4),
-                  Text("${meditation.meditatedDatesIndex} of ${meditation.meditatedDatesTotalPage}"),
+                  Text(
+                      "${meditation.meditatedDatesIndex} of ${meditation.meditatedDatesTotalPage}"),
                   Spacer(flex: 1),
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: Row(
                       children: [
                         IconButton(
-                          onPressed: ()  {
-                             meditation.meditatedDatesSubtract();
+                          onPressed: () {
+                            meditation.meditatedDatesSubtract();
                           },
                           icon: Icon(Icons.chevron_left),
                         ),
                         SizedBox(width: 20),
                         IconButton(
-                          onPressed: ()  {
-                             meditation.meditatedDatesAdd(meditation.meditatedDatesTotalPage - 1);
+                          onPressed: () {
+                            meditation.meditatedDatesAdd(
+                                meditation.meditatedDatesTotalPage - 1);
                           },
                           icon: Icon(Icons.chevron_right),
                         ),

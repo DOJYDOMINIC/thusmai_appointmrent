@@ -60,7 +60,8 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
     // print("Payment Successful: $response");
   }
 
-  void _handlePaymentError(BuildContext context, PaymentFailureResponse response) {
+  void _handlePaymentError(
+      BuildContext context, PaymentFailureResponse response) {
     // Show SnackBar for payment error
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -71,7 +72,8 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
     );
   }
 
-  void _handleExternalWallet(BuildContext context, ExternalWalletResponse response) {
+  void _handleExternalWallet(
+      BuildContext context, ExternalWalletResponse response) {
     // Show SnackBar for external wallet selection
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -109,8 +111,8 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
   // }
 
   Future<void> _createOrderAndOpenCheckout() async {
-    var userData =  Provider.of<AppLogin>(context,listen: false).userData;
-    Provider.of<AppLogin>(context,listen: false).disableButton();
+    var userData = Provider.of<AppLogin>(context, listen: false).userData;
+    Provider.of<AppLogin>(context, listen: false).disableButton();
     try {
       var amount = double.parse(donationController.text);
       double total = amount * 100;
@@ -135,7 +137,7 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
           'order_id': orderId,
           'description': 'Meditation second payment',
           'prefill': {
-            'contact':userData?.phone,
+            'contact': userData?.phone,
             'email': userData?.email,
           },
           'external': {
@@ -192,7 +194,7 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
               // mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                    "Lorem ipsum dolor sit amet consectetur. Mauris condimentum vulputate rhoncus nisl iaculis aliquam."),
+                    "Join our sacred space, where every contribution fuels your spiritual journey and supports our mission to spread light and wisdom."),
                 SizedBox(height: 20),
                 Column(
                   children: [
@@ -253,10 +255,15 @@ class _PaymentToTrustState extends State<PaymentToTrust> {
                 SizedBox(
                   height: 56.h,
                   child: ElevatedButton(
-                    onPressed:Provider.of<AppLogin>(context).isButtonDisabled ? null :  _createOrderAndOpenCheckout,
+                    onPressed: Provider.of<AppLogin>(context).isButtonDisabled
+                        ? null
+                        : _createOrderAndOpenCheckout,
                     style: ElevatedButton.styleFrom(
                       shadowColor: Colors.black,
-                      backgroundColor:Provider.of<AppLogin>(context).isButtonDisabled ? null : goldShade,
+                      backgroundColor:
+                          Provider.of<AppLogin>(context).isButtonDisabled
+                              ? null
+                              : goldShade,
                       elevation: 4,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100),

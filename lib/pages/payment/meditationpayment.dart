@@ -18,12 +18,12 @@ class MeditationPayment extends StatefulWidget {
 }
 
 class _MeditationPaymentState extends State<MeditationPayment> {
-
   @override
   void initState() {
     super.initState();
-    Provider.of<PaymentController>(context, listen: false).financialConfiguration();
-    Provider.of<AppLogin>(context,listen: false).importantFlags();
+    Provider.of<PaymentController>(context, listen: false)
+        .financialConfiguration();
+    Provider.of<AppLogin>(context, listen: false).importantFlags();
   }
 
   TextEditingController dakshinaController = TextEditingController();
@@ -31,7 +31,7 @@ class _MeditationPaymentState extends State<MeditationPayment> {
   @override
   Widget build(BuildContext context) {
     var flagModel = Provider.of<AppLogin>(context).flagModel;
-  var   finData = Provider.of<PaymentController>(context).financialConfig;
+    var finData = Provider.of<PaymentController>(context).financialConfig;
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -53,42 +53,47 @@ class _MeditationPaymentState extends State<MeditationPayment> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(height: 8,),
-                if(flagModel.maintenancePaymentStatus == false)
-                MeditationPaymentWidget(
-                  url: "maintenance-checkout",
-                  icon: Icons.videocam,
-                  amount: "${finData[3].value.toString()}",
-                  dueDate: "Funds to enable Messages \nand Classes",
-                  paymentType: 'Platform Maintenance',
-                  noteIcon: "assets/svgImage/brightness_alert.svg",
+                SizedBox(
+                  height: 8,
                 ),
-                if(flagModel.meditationFeePaymentStatus != false)
-                SizedBox(height: 8,),
-                if(flagModel.meditationFeePaymentStatus == false)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0,8,0,8),
-                  child: MeditationPaymentWidget(
-                    icon: Icons.self_improvement,
-                    url: "meditation-checkout",
-                    amount: "${finData[4].value.toString()}",
-                    dueDate: "Fund to enable Meditation",
-                    paymentType: 'Meditation payment',
-                    noteIcon: 'assets/svgImage/brightness_alert.svg',
-                  ),
-                ),
-                // if(flagModel.meditationFeePaymentStatus == false)
+                if (flagModel.maintenancePaymentStatus == false)
                   MeditationPaymentWidget(
-                    icon: Icons.volunteer_activism,
-                    url: "dekshina-checkout",
-                    amount: "",
-                    dueDate: "Sincerely appreciate your \nkindness.",
-                    paymentType: 'Guru Dakshina',
-                    noteIcon: "assets/svgImage/person_play.svg",
-                    controller: dakshinaController,
+                    url: "maintenance-checkout",
+                    icon: Icons.videocam,
+                    amount: "${finData[3].value.toString()}",
+                    dueDate: "Funds to enable Messages \nand Classes",
+                    paymentType: 'Platform Maintenance',
+                    noteIcon: "assets/svgImage/brightness_alert.svg",
                   ),
-                SizedBox(height: 20,),
-
+                if (flagModel.meditationFeePaymentStatus != false)
+                  SizedBox(
+                    height: 8,
+                  ),
+                if (flagModel.meditationFeePaymentStatus == false)
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: MeditationPaymentWidget(
+                      icon: Icons.self_improvement,
+                      url: "meditation-checkout",
+                      amount: "${finData[2].value.toString()}",
+                      dueDate: "Fund to enable Meditation",
+                      paymentType: 'Meditation payment',
+                      noteIcon: 'assets/svgImage/brightness_alert.svg',
+                    ),
+                  ),
+                // if(flagModel.meditationFeePaymentStatus == false)
+                MeditationPaymentWidget(
+                  icon: Icons.volunteer_activism,
+                  url: "dekshina-checkout",
+                  amount: "",
+                  dueDate: "Sincerely appreciate your \nkindness.",
+                  paymentType: 'Guru Dakshina',
+                  noteIcon: "assets/svgImage/person_play.svg",
+                  controller: dakshinaController,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
               ],
             ),
           ),
@@ -101,14 +106,14 @@ class _MeditationPaymentState extends State<MeditationPayment> {
 class MeditationPaymentWidget extends StatefulWidget {
   const MeditationPaymentWidget(
       {super.key,
-        required this.icon,
-        required this.amount,
-        required this.dueDate,
-        this.onPressed,
-        required this.paymentType,
-        required this.noteIcon,
-        this.controller,
-        required this.url});
+      required this.icon,
+      required this.amount,
+      required this.dueDate,
+      this.onPressed,
+      required this.paymentType,
+      required this.noteIcon,
+      this.controller,
+      required this.url});
 
   final IconData icon;
   final String noteIcon;
@@ -143,7 +148,6 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-
     var pro = Provider.of<AppLogin>(context, listen: false);
 
     // Handle payment success
@@ -184,10 +188,10 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
 
     payment.paymentSuccess(context, url, data);
     print(url);
-
   }
 
-  void _handlePaymentError(BuildContext context, PaymentFailureResponse response) {
+  void _handlePaymentError(
+      BuildContext context, PaymentFailureResponse response) {
     // Show SnackBar for payment error
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -198,7 +202,8 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
     );
   }
 
-  void _handleExternalWallet(BuildContext context, ExternalWalletResponse response) {
+  void _handleExternalWallet(
+      BuildContext context, ExternalWalletResponse response) {
     // Show SnackBar for external wallet selection
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -209,11 +214,10 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
     );
   }
 
-
   Future<void> _createOrderAndOpenCheckout() async {
-    var userData =  Provider.of<AppLogin>(context,listen: false).userData;
+    var userData = Provider.of<AppLogin>(context, listen: false).userData;
 
-    Provider.of<AppLogin>(context,listen: false).disableButton();
+    Provider.of<AppLogin>(context, listen: false).disableButton();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var cookies = prefs.getString("cookie");
     try {
@@ -238,13 +242,15 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
         final orderData = jsonDecode(response.body);
         final String orderId = orderData['order']["id"];
         var options = {
-          'key': widget.paymentType == "Guru Dakshina" ? 'rzp_live_6HCUMMvTKrRJrA' : "rzp_live_pUPUZItNLjg8oO",
+          'key': widget.paymentType == "Guru Dakshina"
+              ? 'rzp_live_6HCUMMvTKrRJrA'
+              : "rzp_live_pUPUZItNLjg8oO",
           'amount': total, // Amount is in paise
           'name': widget.paymentType,
           'order_id': orderId,
           'description': 'Payment for ${widget.paymentType}',
           'prefill': {
-            'contact':userData?.phone,
+            'contact': userData?.phone,
             'email': userData?.email,
           },
           'external': {
@@ -352,15 +358,19 @@ class _MeditationPaymentWidgetState extends State<MeditationPaymentWidget> {
                     ],
                   ),
                 ),
-
                 SizedBox(
                   height: 40.h,
                   width: 91.w,
                   child: ElevatedButton(
-                    onPressed: Provider.of<AppLogin>(context).isButtonDisabled ? null : _createOrderAndOpenCheckout,
+                    onPressed: Provider.of<AppLogin>(context).isButtonDisabled
+                        ? null
+                        : _createOrderAndOpenCheckout,
                     style: ElevatedButton.styleFrom(
                       shadowColor: Colors.black,
-                      backgroundColor:Provider.of<AppLogin>(context).isButtonDisabled ? null :  goldShade,
+                      backgroundColor:
+                          Provider.of<AppLogin>(context).isButtonDisabled
+                              ? null
+                              : goldShade,
                       elevation: 4,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),

@@ -30,7 +30,6 @@ class CustomBottomNavBar extends StatefulWidget {
 }
 
 class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
-
   @override
   void initState() {
     super.initState();
@@ -42,7 +41,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         .then((value) {
       Future.delayed(Duration(seconds: 1), () {
         final indexProvider = Provider.of<AppLogin>(context, listen: false);
-        if (Provider.of<AppLogin>(context, listen: false).flagModel.maintenancePaymentStatus == false) {
+        if (Provider.of<AppLogin>(context, listen: false)
+                .flagModel
+                .maintenancePaymentStatus ==
+            false) {
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -50,20 +52,22 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                 content: SizedBox(
                   height: 350.h,
                   child: PopupWidget(
-                    heading: 'Payment Reminder',
-                    subHeading: 'Maintenance Payment',
+                    heading: 'Zoom Class Payment',
+                    subHeading:
+                        'Payment for Online Zoom class and monthly maintenance fee',
                     amount: "500 INR",
                     buttonOneText: 'Pay now',
                     buttonTwoText: 'Pay later',
                     onPressOne: () {
-                      indexProvider.currentIndex = 3;
+                      indexProvider.currentIndex = 4;
                       Navigator.pop(context);
                     },
                     onPressTwo: () {
                       Navigator.pop(context);
                     },
                     icon: Icons.self_improvement,
-                    buttonColorOne: goldShade, buttonColorTwo: shadeOne,
+                    buttonColorOne: goldShade,
+                    buttonColorTwo: shadeOne,
                   ),
                 ),
               );
@@ -120,8 +124,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
               },
               onPressTwo: () {
                 Navigator.pop(context);
-              }, buttonColorTwo: shadeOne,
-
+              },
+              buttonColorTwo: shadeOne,
             ),
           ),
         );
@@ -134,10 +138,11 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     bool? rndStatus = Provider.of<HealthController>(context).rndPreQuestion;
     var flagModel = Provider.of<AppLogin>(context).flagModel;
     var indexProvider = Provider.of<AppLogin>(context);
-    if ( flagModel.meditationFeePaymentStatus == true || flagModel.maintenancePaymentStatus == true){
+    if (flagModel.meditationFeePaymentStatus == true ||
+        flagModel.maintenancePaymentStatus == true) {
       _meditationEnabled = true;
       _message = true;
-    }else{
+    } else {
       _meditationEnabled = false;
       _message = false;
     }
@@ -155,7 +160,6 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       canPop: false,
       onPopInvoked: (didPop) => onPopInvoked(context, didPop),
       child: Scaffold(
-
         backgroundColor: darkShade,
         appBar: AppBar(
           backgroundColor: darkShade,
@@ -202,38 +206,54 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             //   ),
             // ),
             GestureDetector(
-              onTap: (){
-                if (flagModel.maintenancePaymentStatus == true ||
-                            flagModel.meditationFeePaymentStatus == true) {
-                  rndStatus == true? launchURL(Uri.parse("https://starlife.co.in/health/")): Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => gurujiDataCollection(),));
-                } else {
-                          Provider.of<AppLogin>(context, listen: false).currentIndex =
-                              4;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: Colors.red,
-                              content: Text("Please pay the platform maintenance fee of 500 to enable RnD."),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        }
-                // launchURL(Uri.parse("https://starlife.co.in/health/"));
-              },
-              child: SvgPicture.asset("assets/svgImage/shield_with_heart.svg",),
-            ),
-            SizedBox(width: 32.sp,),
-            GestureDetector(
-              onTap: (){
+              onTap: () {
                 if (flagModel.maintenancePaymentStatus == true ||
                     flagModel.meditationFeePaymentStatus == true) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => PrivateMessage(),));
+                  rndStatus == true
+                      ? launchURL(Uri.parse("https://starlife.co.in/health/"))
+                      : Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => gurujiDataCollection(),
+                          ));
                 } else {
                   Provider.of<AppLogin>(context, listen: false).currentIndex =
-                  4;
+                      4;
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: Colors.red,
-                      content: Text("Please pay the platform maintenance fee of 500 to enable RnD."),
+                      content: Text(
+                          "Please pay the platform maintenance fee of 500 to enable RnD."),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
+                // launchURL(Uri.parse("https://starlife.co.in/health/"));
+              },
+              child: SvgPicture.asset(
+                "assets/svgImage/shield_with_heart.svg",
+              ),
+            ),
+            SizedBox(
+              width: 32.sp,
+            ),
+            GestureDetector(
+              onTap: () {
+                if (flagModel.maintenancePaymentStatus == true ||
+                    flagModel.meditationFeePaymentStatus == true) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PrivateMessage(),
+                      ));
+                } else {
+                  Provider.of<AppLogin>(context, listen: false).currentIndex =
+                      4;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text(
+                          "Please pay the platform maintenance fee of 500 to enable RnD."),
                       duration: Duration(seconds: 2),
                     ),
                   );
@@ -251,7 +271,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             //     color: shadeSix,
             //   ),
             // ),
-            SizedBox(width: 8.sp,),
+            SizedBox(
+              width: 8.sp,
+            ),
             IconButton(
               onPressed: () {
                 Provider.of<AppLogin>(context, listen: false).getUserByID();
@@ -287,7 +309,6 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                   label: videos,
                   index: 1,
                   isEnabled: _videoEnabled),
-
               buildNavBarItem(
                   currentIndex: indexProvider.currentIndex,
                   icon: Icons.self_improvement,
@@ -299,7 +320,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                   icon: Icons.chat_outlined,
                   label: "Messages",
                   index: 3,
-                  isEnabled:_message ),
+                  isEnabled: _message),
               buildNavBarItem(
                   currentIndex: indexProvider.currentIndex,
                   icon: indexProvider.currentIndex != 3
@@ -325,10 +346,11 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     return GestureDetector(
       onTap: isEnabled
           ? () {
-              Provider.of<AppLogin>(context, listen: false).currentIndex = index;
+              Provider.of<AppLogin>(context, listen: false).currentIndex =
+                  index;
             }
           : () {
-        Provider.of<AppLogin>(context, listen: false).currentIndex = 4;
+              Provider.of<AppLogin>(context, listen: false).currentIndex = 4;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(enable),
@@ -375,4 +397,3 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     );
   }
 }
-

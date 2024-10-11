@@ -16,7 +16,6 @@ class otpPageData extends StatefulWidget {
   State<otpPageData> createState() => _otpPageDataState();
 }
 
-
 class _otpPageDataState extends State<otpPageData> {
   var focusedBorderColor = goldShade;
   var fillColor = darkShade;
@@ -130,16 +129,20 @@ class _otpPageDataState extends State<otpPageData> {
                         children: [
                           IconButton(
                               onPressed: () => Navigator.pop(context),
-                              icon: Icon(Icons.arrow_back_ios, color: Colors.white)),
+                              icon: Icon(Icons.arrow_back_ios,
+                                  color: Colors.white)),
                           SizedBox(width: 20.w),
-                          Text("OTP Verification", style: TextStyle(color: Colors.white)),
+                          Text("OTP Verification",
+                              style: TextStyle(color: Colors.white)),
                         ],
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: Row(
                           children: [
-                            Text("Enter the four digit code we sent to", style: TextStyle(fontSize: 12.sp, color: Colors.white)),
+                            Text("Enter the four digit code we sent to",
+                                style: TextStyle(
+                                    fontSize: 12.sp, color: Colors.white)),
                           ],
                         ),
                       ),
@@ -177,18 +180,22 @@ class _otpPageDataState extends State<otpPageData> {
                             ],
                           ),
                           focusedPinTheme: defaultPinTheme.copyWith(
-                            textStyle: TextStyle(color: Colors.white, fontSize: 24),
+                            textStyle:
+                                TextStyle(color: Colors.white, fontSize: 24),
                             decoration: defaultPinTheme.decoration!.copyWith(
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: focusedBorderColor, width: 2),
+                              border: Border.all(
+                                  color: focusedBorderColor, width: 2),
                             ),
                           ),
                           submittedPinTheme: defaultPinTheme.copyWith(
-                            textStyle: TextStyle(color: Colors.white, fontSize: 24),
+                            textStyle:
+                                TextStyle(color: Colors.white, fontSize: 24),
                             decoration: defaultPinTheme.decoration!.copyWith(
                               color: fillColor,
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: focusedBorderColor, width: 2),
+                              border: Border.all(
+                                  color: focusedBorderColor, width: 2),
                             ),
                           ),
                           enabled: true,
@@ -203,7 +210,8 @@ class _otpPageDataState extends State<otpPageData> {
                         children: [
                           Text(
                             enableResend ? 'Resend OTP in ' : 'Resend OTP in ',
-                            style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 16.sp),
                           ),
                           Text(
                             enableResend ? '00:30' : '00:$secondsRemaining',
@@ -217,7 +225,9 @@ class _otpPageDataState extends State<otpPageData> {
                         width: 304.w,
                         child: ElevatedButton(
                           onPressed: () {
-                            Provider.of<AppLogin>(context, listen: false).otpVerification(context,widget.data,otpNumber);
+                            Provider.of<AppLogin>(context, listen: false)
+                                .otpVerification(
+                                    context, widget.data, otpNumber);
                             // print(widget.data.toString());
                             // Map<String, dynamic> data = {
                             //   "otp": otpNumber,
@@ -237,7 +247,8 @@ class _otpPageDataState extends State<otpPageData> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Verify", style: TextStyle(color: Colors.white)),
+                              Text("Verify",
+                                  style: TextStyle(color: Colors.white)),
                             ],
                           ),
                         ),
@@ -246,7 +257,9 @@ class _otpPageDataState extends State<otpPageData> {
                       TextButton(
                         onPressed: () {
                           if (enableResend) {
-                            Provider.of<AppLogin>(context, listen: false).otpVerification(context,widget.data,otpNumber);
+                            Provider.of<AppLogin>(context, listen: false)
+                                .sendOtp(context, widget.data);
+
                             // _resendCode();
                           }
                         },
@@ -270,7 +283,6 @@ class _otpPageDataState extends State<otpPageData> {
       ),
     );
   }
-
 }
 
 class SmsRetrieverImpl implements SmsRetriever {

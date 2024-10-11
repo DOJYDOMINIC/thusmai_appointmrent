@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-MeditationLodData meditationLodDataFromJson(String str) => MeditationLodData.fromJson(json.decode(str));
+MeditationLodData meditationLodDataFromJson(String str) =>
+    MeditationLodData.fromJson(json.decode(str));
 
-String meditationLodDataToJson(MeditationLodData data) => json.encode(data.toJson());
+String meditationLodDataToJson(MeditationLodData data) =>
+    json.encode(data.toJson());
 
 class MeditationLodData {
   int? totalPages;
@@ -21,19 +23,24 @@ class MeditationLodData {
     this.data,
   });
 
-  factory MeditationLodData.fromJson(Map<String, dynamic> json) => MeditationLodData(
-    totalPages: json["totalPages"],
-    currentPage: json["currentPage"],
-    totalCount: json["totalCount"],
-    data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
-  );
+  factory MeditationLodData.fromJson(Map<String, dynamic> json) =>
+      MeditationLodData(
+        totalPages: json["totalPages"],
+        currentPage: json["currentPage"],
+        totalCount: json["totalCount"],
+        data: json["data"] == null
+            ? []
+            : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "totalPages": totalPages,
-    "currentPage": currentPage,
-    "totalCount": totalCount,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
-  };
+        "totalPages": totalPages,
+        "currentPage": currentPage,
+        "totalCount": totalCount,
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
 }
 
 class Datum {
@@ -50,16 +57,17 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    uId: json["UId"],
-    medStarttime: json["med_starttime"] == null ? null : DateTime.parse(json["med_starttime"]),
-    timeEstimate: json["timeEstimate"],
-    ismeditated: json["ismeditated"],
-  );
+        uId: json["UId"],
+        medStarttime:
+            json["date"] == null ? null : DateTime.parse(json["date"]),
+        // timeEstimate: json["timeEstimate"],
+        ismeditated: json["ismeditated"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "UId": uId,
-    "med_starttime": medStarttime?.toIso8601String(),
-    "timeEstimate": timeEstimate,
-    "ismeditated": ismeditated,
-  };
+        "UId": uId,
+        "date": medStarttime?.toIso8601String(),
+        // "timeEstimate": timeEstimate,
+        "ismeditated": ismeditated,
+      };
 }

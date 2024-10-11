@@ -325,6 +325,9 @@ class _ProfileState extends State<Profile> {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        height: 40,
+                      ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(16.sp, 0.sp, 16.sp, 8.sp),
                         child: GestureDetector(
@@ -332,10 +335,12 @@ class _ProfileState extends State<Profile> {
                             SharedPreferences prefs =
                                 await SharedPreferences.getInstance();
                             await prefs.clear();
-                            Provider.of<AppLogin>(context, listen: false).backendSessionClear();
+                            Provider.of<AppLogin>(context, listen: false)
+                                .backendSessionClear();
                             Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(builder: (context) => const LoginUpdate()),
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginUpdate()),
                               (Route<dynamic> route) => false,
                             );
                           },
@@ -354,6 +359,9 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        height: 20,
                       ),
                     ],
                   ),

@@ -59,8 +59,8 @@ Widget meditationCycleWidget(
           ),
           spaceBetween,
           Text("Day"),
-          spaceBetween,
-          Text("Current Cycle"),
+          // spaceBetween,
+          // Text("Current Cycle"),
           spaceBetween,
           Text("Cycle Completed"),
         ],
@@ -74,8 +74,8 @@ Widget meditationCycleWidget(
           Text(""),
           spaceBetween,
           Text(day),
-          spaceBetween,
-          Text(currentCycle),
+          // spaceBetween,
+          // Text(currentCycle),
           spaceBetween,
           Text(cycleCompeted),
         ],
@@ -121,16 +121,16 @@ Widget profileCard(BuildContext context) {
               backgroundColor: Colors.white,
               radius: 45.sp,
               child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: pro.userData?.profilePicUrl != null
-                              ? NetworkImage("${pro.userData?.profilePicUrl}")
-                              : NetworkImage(imgFromFirebase),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: pro.userData?.profilePicUrl != null
+                        ? NetworkImage("${pro.userData?.profilePicUrl}")
+                        : NetworkImage(imgFromFirebase),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
           ),
           Text(
@@ -423,8 +423,6 @@ Widget rewardWidget(String title, String description, days) {
 }
 
 launchURL(Uri url) async {
-
-
   if (!await launchUrl(url)) {
     throw Exception('Could not launch url');
   }

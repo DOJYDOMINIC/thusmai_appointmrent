@@ -32,9 +32,8 @@ class _VideosPageOneState extends State<VideosPageOne> {
     Provider.of<AppLogin>(context, listen: false).validateSession(context);
     Provider.of<VideoPlayerStateController>(context, listen: false)
         .playlistDetails();
-    Provider.of<ZoomMeetingController>(context,listen: false).zoomClass();
+    Provider.of<ZoomMeetingController>(context, listen: false).zoomClass();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +170,7 @@ class _VideosPageOneState extends State<VideosPageOne> {
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding:
-                    const EdgeInsets.only(bottom: 16, top: 16, left: 16),
+                        const EdgeInsets.only(bottom: 16, top: 16, left: 16),
                     child: Text(
                       "Video Playlist",
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -179,68 +178,85 @@ class _VideosPageOneState extends State<VideosPageOne> {
                   )),
               data.playlists?.length != null
                   ? ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: data.playlists!.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 8),
-                    child: GestureDetector(
-                      onTap: () {
-                        Provider.of<VideoPlayerStateController>(context, listen: false).videoPlaylistDetails("${data.playlists![index].playListHeading.toString()}");
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => VideoList()),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: data.playlists!.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 8),
+                          child: GestureDetector(
+                            onTap: () {
+                              Provider.of<VideoPlayerStateController>(context,
+                                      listen: false)
+                                  .videoPlaylistDetails(
+                                      "${data.playlists![index].playListHeading.toString()}");
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => VideoList()),
+                              );
+                            },
+                            child: Container(
+                              height: 120.h,
+                              decoration: BoxDecoration(
+                                color: shadeFour,
+                              ),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 16.sp),
+                                    child: Container(
+                                      height: 100.h,
+                                      width: 100.w,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                  "${data.playlists![index].playListImage ?? noImage}"),
+                                              fit: BoxFit.fill)),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10.w),
+                                  Expanded(
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(8, 16, 8, 16),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Text(
+                                              "${data.playlists![index].playListHeading}"),
+                                          Row(
+                                            children: [
+                                              Icon(Icons.videocam),
+                                              Text(
+                                                  "(${data.playlists![index].videoLinkCount.toString()}) Videos"),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         );
                       },
-                      child: Container(
-                        height: 120.h,
-                        decoration: BoxDecoration(
-                          color: shadeFour,
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 16.sp),
-                              child: Container(
-                                height: 100.h,
-                                width: 100.w,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            "${data.playlists![index].playListImage ?? noImage}"),
-                                        fit: BoxFit.fill)),
-                              ),
-                            ),
-                            SizedBox(width: 10.w),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(8, 16, 8, 16),
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                        "${data.playlists![index].playListHeading}"),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.videocam),
-                                        Text(
-                                            "(${data.playlists![index].videoLinkCount.toString()}) Videos"),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              )
+                    )
                   : Center(child: CircularProgressIndicator()),
+              Center(
+                child: Text(
+                  'No data found',
+                  style: TextStyle(
+                    fontSize: 18, // Adjust the font size as needed
+                    fontWeight: FontWeight.bold, // Optionally make it bold
+                    color: Colors.grey, // Adjust the color as needed
+                  ),
+                ),
+              ),
             ],
           ),
         ),

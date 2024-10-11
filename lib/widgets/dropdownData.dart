@@ -32,9 +32,9 @@ class _DropdownTextFieldState extends State<DropdownTextField> {
       children: [
         DropdownButtonFormField<String>(
           value: _selectedItem,
-          hint: Text(widget.dropdownHint,
-          style:TextStyle(fontWeight: FontWeight.normal),
-
+          hint: Text(
+            widget.dropdownHint,
+            style: TextStyle(fontWeight: FontWeight.normal),
           ),
           icon: Icon(Icons.arrow_drop_down), // Dropdown icon
           decoration: InputDecoration(
@@ -44,24 +44,27 @@ class _DropdownTextFieldState extends State<DropdownTextField> {
             fillColor: profileTextFieldDillColor,
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.sp),
-                borderSide: BorderSide(color: shadeNine)
-            ),
+                borderSide: BorderSide(color: shadeNine)),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.sp),
-                borderSide: BorderSide(color: shadeNine)
-            ),
+                borderSide: BorderSide(color: shadeNine)),
           ),
           items: widget.items.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,
-              child: Text(value,style:TextStyle(fontWeight: FontWeight.normal),),
+              child: Text(
+                value,
+                style: TextStyle(fontWeight: FontWeight.normal),
+              ),
             );
           }).toList(),
           onChanged: (String? newValue) {
             setState(() {
               _selectedItem = newValue; // Update the selected item
-              widget.controller.text = newValue ?? ''; // Update the text field with selected value
-              widget.onItemSelected(newValue); // Trigger the callback to pass the selected item
+              widget.controller.text =
+                  newValue ?? ''; // Update the text field with selected value
+              widget.onItemSelected(
+                  newValue); // Trigger the callback to pass the selected item
             });
           },
         ),

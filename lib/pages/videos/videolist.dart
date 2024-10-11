@@ -23,18 +23,17 @@ class _VideoListState extends State<VideoList> {
 
   @override
   Widget build(BuildContext context) {
-
     List data = Provider.of<VideoPlayerStateController>(context).videoPlayList;
 
     return PopScope(
-        canPop: false,
-        onPopInvoked: (bool didPop) async {
-      if (didPop) {
-        return;
-      }else{
-        Navigator.pop(context);
-      }
-    },
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        if (didPop) {
+          return;
+        } else {
+          Navigator.pop(context);
+        }
+      },
       child: Scaffold(
         backgroundColor: shadeTwo,
         appBar: AppBar(
@@ -59,7 +58,7 @@ class _VideoListState extends State<VideoList> {
             itemCount: data.length,
             itemBuilder: (BuildContext context, int index) {
               String getYoutubeThumbnail(String videoLink) {
-                if(videoLink.isEmpty){
+                if (videoLink.isEmpty) {
                   return noImage;
                 }
                 final uri = Uri.parse(videoLink);
@@ -92,7 +91,8 @@ class _VideoListState extends State<VideoList> {
                               borderRadius: BorderRadius.circular(8),
                               image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: NetworkImage(getYoutubeThumbnail(data[index].videoLink.toString())),
+                                image: NetworkImage(getYoutubeThumbnail(
+                                    data[index].videoLink.toString())),
                               ),
                             ),
                           ),

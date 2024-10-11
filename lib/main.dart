@@ -64,7 +64,11 @@ class MyApp extends StatelessWidget {
   final String? cookies;
   final String? isAnswered;
 
-  const MyApp({Key? key, this.cookies, this.isAnswered,}) : super(key: key);
+  const MyApp({
+    Key? key,
+    this.cookies,
+    this.isAnswered,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +79,8 @@ class MyApp extends StatelessWidget {
         // ChangeNotifierProvider(create: (context) => ConnectivityProvider()),
         ChangeNotifierProvider(create: (context) => PaymentController()),
         ChangeNotifierProvider(create: (context) => MeditationController()),
-        ChangeNotifierProvider(create: (context) => VideoPlayerStateController()),
+        ChangeNotifierProvider(
+            create: (context) => VideoPlayerStateController()),
         ChangeNotifierProvider(create: (context) => MessageController()),
         ChangeNotifierProvider(create: (context) => OverViewController()),
         ChangeNotifierProvider(create: (context) => ProfileController()),
@@ -194,7 +199,8 @@ class _SplashScreenState extends State<SplashScreen> {
                     Image.asset(
                       stars_80vector,
                       // Replace with the path to the second logo
-                      height: 52.h,
+                      height: 60.h,
+                      width: 60.w,
                     ),
                 ],
               );

@@ -21,11 +21,10 @@ class _MeditationNoteState extends State<MeditationNote> {
 
   bool _global = false;
 
-
   @override
   Widget build(BuildContext context) {
     var meditation = Provider.of<MeditationController>(context);
-    var  timerProvider = Provider.of<TimerProvider>(context);
+    var timerProvider = Provider.of<TimerProvider>(context);
 
     var pro = Provider.of<AppLogin>(context);
     return GestureDetector(
