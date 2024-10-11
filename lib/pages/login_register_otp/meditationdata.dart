@@ -20,6 +20,7 @@ class _MeditationDataState extends State<MeditationData> {
     super.initState();
     FirebaseApi().initNotifications();
     Provider.of<AppLogin>(context, listen: false).listQuestions();
+    Provider.of<AppLogin>(context, listen: false).fetchReferralName();
   }
 
   @override
@@ -121,7 +122,7 @@ class _MeditationDataState extends State<MeditationData> {
                               Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "Referral : N/A",
+                                    "Referral : ${Provider.of<AppLogin>(context).referralName}",
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),
@@ -150,7 +151,7 @@ class _MeditationDataState extends State<MeditationData> {
                                   height: 16.h,
                                 ),
                                 Text(
-                                  "Please drag and arrange your opinion from the list below in an orderly manner.",
+                                  "Please press and drag your opinion from the list below in an orderly manner.",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 SizedBox(

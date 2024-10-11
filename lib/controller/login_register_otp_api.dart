@@ -36,6 +36,37 @@ class AppLogin extends ChangeNotifier {
     });
   }
 
+  //reffererl name
+  String _referralName = 'N/A';
+
+  String get referralName => _referralName;
+
+  void setReferralName(String name) {
+    _referralName = name;
+    notifyListeners();
+  }
+
+  Future<void> fetchReferralName() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var cookies = prefs.getString("cookie");
+      final response = await http.get(
+        Uri.parse("$userBaseUrl/reference"),
+        headers: {
+          'Content-Type': 'application/json',
+          if (cookies != null) 'Cookie': cookies,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var decode = jsonDecode(response.body);
+        setReferralName(decode["full_name"]);
+      } else {}
+    } catch (e) {
+      print("fetchReferralName : $e");
+    }
+  }
+
 // firstLogin check
 
   int _currentIndex = 0;

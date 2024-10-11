@@ -349,7 +349,7 @@ class _OverviewState extends State<Overview>
               Row(
                 children: [
                   SizedBox(
-                    height: 176.h,
+                    height: 175.h,
                     width: MediaQuery.of(context).size.width / 2,
                     child: MeditationCard(
                       iconData: Icons.self_improvement,
@@ -392,7 +392,7 @@ class _OverviewState extends State<Overview>
                     second: 3500,
                   ),
                   SizedBox(
-                    height: 176.h,
+                    height: 175.h,
                     width: MediaQuery.of(context).size.width / 2,
                     child: MeditationCard(
                       iconData: Icons.message_outlined,
