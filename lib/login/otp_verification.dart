@@ -258,8 +258,7 @@ class _otpPageDataState extends State<otpPageData> {
                         onPressed: () {
                           if (enableResend) {
                             Provider.of<AppLogin>(context, listen: false)
-                                .otpVerification(
-                                    context, widget.data, otpNumber);
+                                .sendOtp(context, widget.data);
 
                             // _resendCode();
                           }

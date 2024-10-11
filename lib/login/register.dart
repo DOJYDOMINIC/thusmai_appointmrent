@@ -232,10 +232,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                         fontWeight: FontWeight.normal),
                                   ),
                                 ),
-                                SizedBox(
-                                  width: 10,
+                                Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child:
+                                      Icon(Icons.arrow_drop_down, size: 18.sp),
                                 ),
-                                Icon(Icons.arrow_drop_down, size: 18.sp),
                               ],
                             ),
                           ),

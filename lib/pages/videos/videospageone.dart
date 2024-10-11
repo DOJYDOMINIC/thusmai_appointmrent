@@ -246,19 +246,17 @@ class _VideosPageOneState extends State<VideosPageOne> {
                         );
                       },
                     )
-                  :
-                  //Center(child: CircularProgressIndicator()),
-                  Center(
-                      child: Text(
-                        'No data found',
-                        style: TextStyle(
-                          fontSize: 18, // Adjust the font size as needed
-                          fontWeight:
-                              FontWeight.bold, // Optionally make it bold
-                          color: Colors.grey, // Adjust the color as needed
-                        ),
-                      ),
-                    ),
+                  : Center(child: CircularProgressIndicator()),
+              Center(
+                child: Text(
+                  'No data found',
+                  style: TextStyle(
+                    fontSize: 18, // Adjust the font size as needed
+                    fontWeight: FontWeight.bold, // Optionally make it bold
+                    color: Colors.grey, // Adjust the color as needed
+                  ),
+                ),
+              ),
             ],
           ),
         ),
