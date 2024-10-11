@@ -63,7 +63,7 @@ class _ReferPageState extends State<ReferPage> {
             Text(
               "✨ Bring a Friend, Elevate Together! ✨",
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.sp),
             ),
             SizedBox(
               height: 16.h,
