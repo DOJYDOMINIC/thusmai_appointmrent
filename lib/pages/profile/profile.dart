@@ -332,17 +332,122 @@ class _ProfileState extends State<Profile> {
                         padding: EdgeInsets.fromLTRB(16.sp, 0.sp, 16.sp, 8.sp),
                         child: GestureDetector(
                           onTap: () async {
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            await prefs.clear();
-                            Provider.of<AppLogin>(context, listen: false)
-                                .backendSessionClear();
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginUpdate()),
-                              (Route<dynamic> route) => false,
+                            // Show customized confirmation dialog
+                            bool? confirmLogout = await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.warning_amber_rounded,
+                                          size: 48,
+                                          color: Colors.orangeAccent,
+                                        ),
+                                        SizedBox(height: 16),
+                                        Text(
+                                          "Confirm Logout",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                        SizedBox(height: 12),
+                                        Text(
+                                          "Are you sure you want to log out?",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.grey[600],
+                                          ),
+                                        ),
+                                        SizedBox(height: 24),
+                                        Column(
+                                          children: [
+                                            // Cancel Button
+                                            SizedBox(
+                                              width: 272,
+                                              height: 50,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop(false);
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      Color(0xFF516440),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  "Cancel",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(height: 16),
+                                            SizedBox(
+                                              width: 272,
+                                              height: 50,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop(true);
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  // backgroundColor: Colors.white,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    side: BorderSide(
+                                                        color: Colors.red,
+                                                        width: 1),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  "Logout",
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
                             );
+
+                            // If confirmed, perform logout
+                            if (confirmLogout == true) {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              await prefs.clear();
+                              Provider.of<AppLogin>(context, listen: false)
+                                  .backendSessionClear();
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginUpdate()),
+                                (Route<dynamic> route) => false,
+                              );
+                            }
                           },
                           child: Container(
                             height: 56.h,

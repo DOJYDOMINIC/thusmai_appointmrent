@@ -25,6 +25,7 @@ class LoginUpdate extends StatefulWidget {
 class _LoginUpdateState extends State<LoginUpdate> {
   final smartAuth = SmartAuth();
   late final SmsRetriever smsRetriever;
+  Key textFieldKey = UniqueKey();
 
   Country? _selectedCountry = Country(
     phoneCode: "91",
@@ -232,6 +233,7 @@ class _LoginUpdateState extends State<LoginUpdate> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
+                                    FocusScope.of(context).unfocus();
                                     showCountryPicker(
                                       favorite: ['IN'],
                                       context: context,
@@ -241,6 +243,7 @@ class _LoginUpdateState extends State<LoginUpdate> {
                                         setState(() {
                                           _selectedCountry =
                                               country; // Update selected country
+                                          textFieldKey = UniqueKey();
                                         });
                                       },
                                     );
@@ -282,6 +285,7 @@ class _LoginUpdateState extends State<LoginUpdate> {
                                 SizedBox(width: 16.w),
                                 Expanded(
                                   child: TextFormField(
+                                    key: textFieldKey,
                                     autofillHints: [
                                       AutofillHints.telephoneNumber
                                     ],

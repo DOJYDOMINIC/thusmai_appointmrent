@@ -181,7 +181,8 @@ class _SplashScreenState extends State<SplashScreen> {
                     child: Image.asset(
                       stars_80vector,
                       // Replace with the path to the second logo
-                      height: 52.h,
+                      height: 150.h, // Increased height
+                      width: 150.w,
                     ),
                   ),
                 ],
@@ -199,8 +200,8 @@ class _SplashScreenState extends State<SplashScreen> {
                     Image.asset(
                       stars_80vector,
                       // Replace with the path to the second logo
-                      height: 60.h,
-                      width: 60.w,
+                      height: 150.h, // Increased height
+                      width: 150.w,
                     ),
                 ],
               );

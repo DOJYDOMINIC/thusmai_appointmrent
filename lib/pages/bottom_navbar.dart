@@ -253,7 +253,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
                     SnackBar(
                       backgroundColor: Colors.red,
                       content: Text(
-                          "Please pay the platform maintenance fee of 500 to enable RnD."),
+                          "Please pay the platform maintenance fee of 500 to enable Notes."),
                       duration: Duration(seconds: 2),
                     ),
                   );
@@ -351,9 +351,21 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
             }
           : () {
               Provider.of<AppLogin>(context, listen: false).currentIndex = 4;
+              String errorMessage;
+              if (index == 2) {
+                errorMessage =
+                    'Please pay the Meditation fee to enable access to Meditation.';
+              } else if (index == 3) {
+                errorMessage =
+                    'Please pay the platform maintenance fee of 500 to enable messaging.';
+              } else {
+                errorMessage = 'Default error message for other items';
+              }
+
+              // Show the error message as a SnackBar
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(enable),
+                  content: Text(errorMessage),
                   duration: Duration(seconds: 2),
                 ),
               );

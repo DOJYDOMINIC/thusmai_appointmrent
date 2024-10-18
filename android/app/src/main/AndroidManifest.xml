@@ -28,7 +28,7 @@
 
 
         android:enableOnBackInvokedCallback="true"
-        android:label="Thasmai"
+        android:label="Thasmai StarLife"
         android:name="${applicationName}"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher">

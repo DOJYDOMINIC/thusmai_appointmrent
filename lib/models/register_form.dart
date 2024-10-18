@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -56,8 +57,10 @@ class ApiService {
 
       var response = await request.send();
       final responseData = await response.stream.toBytes();
+      final responseString = String.fromCharCodes(responseData);
 
       if (response.statusCode == 200) {
+        print('Response: $responseString');
         // SharedPreferences prefs = await SharedPreferences.getInstance();
         // final String? specificCookie = response.headers['set-cookie'];
         // if (specificCookie != null) {
@@ -70,7 +73,7 @@ class ApiService {
         //   prefs.setString("isAnswered", _userLoginData!.isans.toString());
         // }
 
-        final responseString = String.fromCharCodes(responseData);
+        // final responseString = String.fromCharCodes(responseData);
 
         print('Response: $responseString');
 
@@ -86,6 +89,18 @@ class ApiService {
                 data: data,
               ),
             ));
+      } else if (response.statusCode == 400) {
+        // Parse the response body to extract the message
+        final errorResponse = jsonDecode(responseString);
+        final errorMessage = errorResponse['message'] ?? 'An error occurred';
+
+        // Show the message in a Snackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Center(child: Text(errorMessage)),
+            backgroundColor: Colors.red, // Change to your preferred color
+          ),
+        );
       } else {
         print('Error: ${response.statusCode}');
       }

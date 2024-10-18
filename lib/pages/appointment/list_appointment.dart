@@ -321,7 +321,8 @@ class _AppointmentListPageState extends State<AppointmentListPage>
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         backgroundColor: Colors.red,
-                        content: Text(enable),
+                        content: Text(
+                            'Please pay platform meditation fee to enable access to Appointment'),
                         duration: Duration(seconds: 2),
                       ),
                     );

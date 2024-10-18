@@ -80,7 +80,7 @@ class EventCard extends StatelessWidget {
                 height: MediaQuery.of(context).size.height *
                     .6, // Adjust the height as needed
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 235, 225, 140),
+                  // color: const Color.fromARGB(255, 235, 225, 140),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25),

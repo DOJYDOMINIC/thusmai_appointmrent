@@ -64,8 +64,9 @@ class _ProfileDetailsEditState extends State<ProfileDetailsEdit> {
     if (value == null || value.isEmpty) {
       return 'Phone number is required';
     }
-    if (!RegExp(r'^[0-9]{1,15}$').hasMatch(value)) {
-      return 'Enter a valid phone number (up to 15 digits)';
+    // Updated regex to match the criteria: starting with '+' (optional) followed by 9 to 15 digits
+    if (!RegExp(r'^\+?[0-9]{9,15}$').hasMatch(value)) {
+      return 'Enter a valid phone number';
     }
     return null;
   }
@@ -76,7 +77,7 @@ class _ProfileDetailsEditState extends State<ProfileDetailsEdit> {
       return 'This field is required';
     }
     if (!RegExp(r'^[a-zA-Z0-9\s.,]+$').hasMatch(value)) {
-      return 'Address can only contain letters, numbers, dots, and commas';
+      return 'Enter Valid Address';
     }
     return null;
   }
